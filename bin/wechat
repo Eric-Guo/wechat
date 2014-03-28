@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+
+lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
+$LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
+
+require 'thor'
+require "wechat-rails"
+require 'json'  
+require "active_resource/railtie"
+require 'fileutils'
+
+
+
+class App < Thor                                                 
+  class Helper
+    def self.with(options)
+      appid =  ENV["WECHAT_APPID"]
+      secret = ENV["WECHAT_SECRET"]
+      token_file = options[:toke_file] ||  ENV["WECHAT_ACCESS_TOKEN"]
+
+      if (appid.nil? || secret.nil? || token_file.nil?)
+      puts <<-HELP
+You need set wechat appid and secret in environment variables.
+
+  export WECHAT_APPID=<appid>
+  export WECHAT_SECRET=<secret>
+  export WECHAT_ACCESS_TOKEN=<file location for storing access token>
+
+HELP
+      exit 1
+      end
+      WechatRails::Api.new(appid, secret, token_file)
+    end
+  end
+
+  package_name "WechatRails"
+  option :toke_file, :aliases=>"-t", :desc => "File to store access token"
+
+  desc "users", "关注者列表"
+  def users
+    puts Helper.with(options).users
+  end
+
+  desc "user [OPEN_ID]", "查找关注者"
+  def user(open_id)
+    puts Helper.with(options).user(open_id)
+  end
+
+  desc "menu", "当前菜单"
+  def menu
+    puts Helper.with(options).menu
+  end
+
+  desc "menu_delete", "删除菜单"
+  def menu_delete
+    puts "Menu deleted" if Helper.with(options).menu_delete
+  end
+
+  desc "menu_create [MENU_YAML]", "删除菜单"
+  def menu_create(menu_yaml)
+    menu = YAML.load(File.new(menu_yaml).read)
+    puts "Menu created" if Helper.with(options).menu_create(menu)
+  end
+
+  desc "media [MEDIA_ID, PATH]", "媒体下载"
+  def media(media_id, path)
+    tmp_file = Helper.with(options).media(media_id)
+    FileUtils.mv(tmp_file.path, path)
+    puts "File downloaded"
+  end
+
+  desc "media_create [MEDIA_ID, PATH]", "媒体上传"
+  def media_create(type, path)
+    file = File.new(path)
+    puts Helper.with(options).media_create(type, file)
+  end
+
+  desc "custom_text_message [OPENID, TEXT_MESSAGE]", "发送文字客服消息"
+  def custom_text_message(openid, text_message)
+    puts Helper.with(options).custom_text_message(openid, text_message)
+  end
+end
+
+App.start
