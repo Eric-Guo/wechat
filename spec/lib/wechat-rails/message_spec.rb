@@ -64,6 +64,29 @@ describe WechatRails::Message do
       message = WechatRails::Message.from_hash(text_request)
       expect(message.as(:text)).to eq("text message")
     end
+
+    specify "will get image file" do
+      message = WechatRails::Message.from_hash(image_request)
+      WechatRails.should_receive(:media).with("media_id")
+      message.as(:image)
+    end
+
+    specify "will get voice file" do
+      message = WechatRails::Message.from_hash(voice_request)
+      WechatRails.should_receive(:media).with("media_id")
+      message.as(:voice)
+    end
+
+    specify "will get video file" do
+      message = WechatRails::Message.from_hash(video_request)
+      WechatRails.should_receive(:media).with("media_id")
+      message.as(:video)
+    end
+
+    specify "will get location information" do
+      message = WechatRails::Message.from_hash(location_request)
+      expect(message.as :location).to eq(location_x: "location_x", location_y: "location_y", scale: "scale", label: "label")
+    end
   end
 
 

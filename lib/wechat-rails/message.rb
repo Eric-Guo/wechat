@@ -46,6 +46,13 @@ module WechatRails
       case type
       when :text
         message_hash[:Content]
+
+      when :image, :voice, :video
+        WechatRails.media(message_hash[:MediaId])
+
+      when :location
+        message_hash.slice(:Location_X, :Location_Y, :Scale, :Label).inject({}){|results, value| 
+          results[value[0].to_s.underscore.to_sym] = value[1]; results}
       else
         raise "Don't know how to parse message as #{type}"
       end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe WechatRails::AccessToken do
   let(:token_content){{"access_token" => "12345", "expires_in" => 7200}}
-  let(:token_file){Rails.root.join("tmp/access_token")}
+  let(:token_file){Rails.root.join("access_token")}
   let(:client){double(:client)}
 
   subject do 
