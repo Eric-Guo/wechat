@@ -1,6 +1,7 @@
 require "wechat-rails/api"
 
 module WechatRails
+  autoload :Message, "wechat-rails/message"
   autoload :Handler, "wechat-rails/handler"
   autoload :Response, "wechat-rails/response"
 

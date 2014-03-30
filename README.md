@@ -1,3 +1,5 @@
-= WechatRails
+Wechat Rails
+======================
 
-This project rocks and uses MIT-LICENSE.
+[![Build Status](https://travis-ci.org/skinnyworm/omniauth-wechat-oauth2.svg)](https://travis-ci.org/skinnyworm/omniauth-wechat-oauth2)
+
