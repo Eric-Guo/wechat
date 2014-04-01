@@ -226,9 +226,9 @@ describe Wechat::Message do
           "touser" => "toUser",
           "msgtype" => "video",
           "video" => {
+            "media_id" => "media_id",
             "title" => "title",
-            "description" => "description",
-            "media_id" => "media_id"
+            "description" => "description"
           }
         }.to_json)
       end

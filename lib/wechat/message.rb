@@ -80,7 +80,7 @@ module Wechat
     end
 
     def video media_id, opts={}
-      video_fields = camelize_hash_keys(opts.slice(:title, :description).merge(media_id: media_id))
+      video_fields = camelize_hash_keys({media_id: media_id}.merge(opts.slice(:title, :description)))
       update(:MsgType=>"video", :Video=>video_fields)
     end
 
