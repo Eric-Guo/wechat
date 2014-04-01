@@ -1,9 +1,5 @@
-if ENV["COVERAGE"]
-  require 'simplecov'
-  SimpleCov.start do
-    add_group 'Libraries', 'lib'
-  end
-end
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
 
 ENV["RAILS_ENV"] ||= 'test'
 
