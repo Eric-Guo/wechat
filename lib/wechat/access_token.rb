@@ -1,4 +1,4 @@
-module WechatRails
+module Wechat
   class AccessToken
     attr_reader :client, :appid, :secret, :token_file, :token_data
 

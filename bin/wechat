@@ -6,7 +6,7 @@ $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 require 'thor'
 require "wechat-rails"
 require 'json'  
-require "active_resource/railtie"
+require "active_support/core_ext"
 require 'fileutils'
 
 
@@ -29,11 +29,11 @@ You need set wechat appid and secret in environment variables.
 HELP
       exit 1
       end
-      WechatRails::Api.new(appid, secret, token_file)
+      Wechat::Api.new(appid, secret, token_file)
     end
   end
 
-  package_name "WechatRails"
+  package_name "Wechat"
   option :toke_file, :aliases=>"-t", :desc => "File to store access token"
 
   desc "users", "关注者列表"
@@ -74,11 +74,61 @@ HELP
     file = File.new(path)
     puts Helper.with(options).media_create(type, file)
   end
-
-  desc "custom_text_message [OPENID, TEXT_MESSAGE]", "发送文字客服消息"
-  def custom_text_message(openid, text_message)
-    puts Helper.with(options).custom_text_message(openid, text_message)
+  
+  desc "custom_text [OPENID, TEXT_MESSAGE]", "发送文字客服消息"
+  def custom_text openid, text_message
+    puts Helper.with(options).custom_message_send Wechat::Message.to(openid).text(text_message)
   end
+
+  desc "custom_image [OPENID, IMAGE_PATH]", "发送图片客服消息"
+  def custom_image openid, image_path
+    file = File.new(image_path)
+    api = Helper.with(options)
+
+    media_id = api.media_create("image", file)["media_id"]
+    puts api.custom_message_send Wechat::Message.to(openid).image(media_id)
+  end
+
+  desc "custom_voice [OPENID, VOICE_PATH]", "发送语音客服消息"
+  def custom_voice openid, voice_path
+    file = File.new(voice_path)
+    api = Helper.with(options)
+
+    media_id = api.media_create("voice", file)["media_id"]
+    puts api.custom_message_send Wechat::Message.to(openid).voice(media_id)
+  end
+
+  desc "custom_video [OPENID, VIDEO_PATH]", "发送视频客服消息"
+  method_option :title, :aliases => "-h", :desc => "视频标题"
+  method_option :description, :aliases => "-d", :desc => "视频描述"
+  def custom_video openid, video_path
+    file = File.new(video_path)
+    api = Helper.with(options)
+
+    api_opts = options.slice(:title, :description)
+    media_id = api.media_create("video", file)["media_id"]
+    puts api.custom_message_send Wechat::Message.to(openid).video(media_id, api_opts)
+  end
+
+  desc "custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]", "发送音乐客服消息"
+  method_option :title, :aliases => "-h", :desc => "音乐标题"
+  method_option :description, :aliases => "-d", :desc => "音乐描述"
+  method_option :HQ_music_url, :aliases => "-u", :desc => "高质量音乐URL链接"
+  def custom_music openid, thumbnail_path, music_url
+    file = File.new(thumbnail_path)
+    api = Helper.with(options)
+
+    api_opts = options.slice(:title, :description, :HQ_music_url)
+    thumb_media_id = api.media_create("thumb", file)["thumb_media_id"]
+    puts api.custom_message_send Wechat::Message.to(openid).music(thumb_media_id, music_url, api_opts)
+  end
+
+  desc "custom_news [OPENID, NEWS_YAML_FILE]", "发送图文客服消息"
+  def custom_news openid, news_yaml
+    articles = YAML.load(File.new(news_yaml).read)
+    puts Helper.with(options).custom_message_send Wechat::Message.to(openid).news(articles["articles"])
+  end
+
 end
 
 App.start

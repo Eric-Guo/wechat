@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe WechatRails::AccessToken do
+describe Wechat::AccessToken do
   let(:token_content){{"access_token" => "12345", "expires_in" => 7200}}
   let(:token_file){Rails.root.join("access_token")}
   let(:client){double(:client)}
 
   subject do 
-    WechatRails::AccessToken.new(client, "appid", "secret", token_file)
+    Wechat::AccessToken.new(client, "appid", "secret", token_file)
   end
 
   before :each do 

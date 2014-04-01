@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe WechatRails::Api do
+describe Wechat::Api do
   let(:toke_file){Rails.root.join("tmp/access_token")}
 
   subject do 
-    WechatRails::Api.new("appid", "secret", toke_file)
+    Wechat::Api.new("appid", "secret", toke_file)
   end  
 
   before :each do
@@ -74,9 +74,8 @@ describe WechatRails::Api do
     end
   end
 
-  describe "#custom_text_message" do
+  describe "#custom_message_send" do
     specify "will post message/custom/send with access_token, and json payload" do
-      
       payload = {
         :touser => "openid",
         :msgtype => "text",
@@ -86,7 +85,7 @@ describe WechatRails::Api do
       subject.client.should_receive(:post).with("message/custom/send", 
         payload.to_json,  params:{access_token: "access_token"}, content_type: :json).and_return(true)
 
-      expect(subject.custom_text_message("openid", "message content")).to be_true
+      expect(subject.custom_message_send Wechat::Message.to("openid").text("message content")).to be_true
     end
   end
 

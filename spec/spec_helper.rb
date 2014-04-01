@@ -6,6 +6,11 @@ if ENV["COVERAGE"]
 end
 
 ENV["RAILS_ENV"] ||= 'test'
+
+ENV["WECHAT_APPID"] = "appid"
+ENV["WECHAT_SECRET"] = "secret"
+ENV["WECHAT_TOKEN"] = "token"
+
 require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 

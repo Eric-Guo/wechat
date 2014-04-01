@@ -1,6 +1,11 @@
-module WechatRails
+module Wechat
   class Message
-    
+
+    JSON_KEY_MAP = {
+      "ToUserName" => "touser",
+      "MediaId" => "media_id",
+      "ThumbMediaId" => "thumb_media_id"
+    }
 
     class << self
       def from_hash message_hash
@@ -12,7 +17,7 @@ module WechatRails
       end
     end
 
-    class ArticalBuilder
+    class ArticleBuilder
       attr_reader :items
       delegate :count, to: :items
       def initialize 
@@ -48,7 +53,7 @@ module WechatRails
         message_hash[:Content]
 
       when :image, :voice, :video
-        WechatRails.media(message_hash[:MediaId])
+        Wechat.api.media(message_hash[:MediaId])
 
       when :location
         message_hash.slice(:Location_X, :Location_Y, :Scale, :Label).inject({}){|results, value| 
@@ -86,30 +91,72 @@ module WechatRails
 
     def news collection, &block
       if block_given?
-        artical = ArticalBuilder.new
-        collection.each{|item| yield(artical, item)}
-        items = artical.items
+        article = ArticleBuilder.new
+        collection.each{|item| yield(article, item)}
+        items = article.items
       else
         items = collection.collect do |item| 
-         camelize_hash_keys(item.slice(:title, :description, :pic_url, :url))
+         camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url))
         end
       end
 
       update(:MsgType=>"news", :ArticleCount=> items.count, 
-        :Articles=> items.collect{|item| {:item => camelize_hash_keys(item)} })
+        :Articles=> items.collect{|item| camelize_hash_keys(item)})
+    end
+
+    def to_xml
+      message_hash.to_xml(root: "xml", children: "item", skip_instruct: true, skip_types: true)
+    end
+
+    def to_json
+      json_hash = deep_recursive(message_hash) do |key, value|
+        key = key.to_s
+        [(JSON_KEY_MAP[key] || key.downcase), value]
+      end
+
+      json_hash.slice!("touser", "msgtype", "content", "image", "voice", "video", "music", "news", "articles").to_hash
+      case json_hash["msgtype"]
+      when "text"
+        json_hash["text"] = {"content" => json_hash.delete("content")}
+      when "news"
+        json_hash["news"] = {"articles" => json_hash.delete("articles")}
+      end
+      JSON.generate(json_hash)
+    end
+
+    def save_to! model_class
+      model = model_class.new(underscore_hash_keys(message_hash))
+      model.save!
+      return self
     end
 
     private
     def camelize_hash_keys hash
-      hash.inject({}) do |memo, val|
-        memo[val.first.to_s.camelize.to_sym] = val.second
-        memo
-      end
+      deep_recursive(hash){|key, value| [key.to_s.camelize.to_sym, value]} 
+    end
+
+    def underscore_hash_keys hash
+      deep_recursive(hash){|key, value| [key.to_s.underscore.to_sym, value]} 
     end
 
     def update fields={}
       message_hash.merge!(fields)
       return self
+    end
+
+    def deep_recursive hash, &block
+      hash.inject({}) do |memo, val|
+        key,value = *val
+        case value.class.name
+        when "Hash"
+          value = deep_recursive(value, &block)
+        when "Array"
+          value = value.collect{|item| item.is_a?(Hash) ? deep_recursive(item, &block) : item}
+        end
+
+        key,value = yield(key, value)
+        memo.merge!(key => value)
+      end
     end
 
   end

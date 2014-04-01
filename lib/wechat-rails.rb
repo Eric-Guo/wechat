@@ -1,9 +1,9 @@
-require "wechat-rails/api"
+require "wechat/api"
 
-module WechatRails
-  autoload :Message, "wechat-rails/message"
-  autoload :Handler, "wechat-rails/handler"
-  autoload :Response, "wechat-rails/response"
+module Wechat
+  autoload :Message, "wechat/message"
+  autoload :Responder, "wechat/responder"
+  autoload :Response, "wechat/response"
 
   class AccessTokenExpiredError < StandardError; end
   class ResponseError < StandardError
@@ -17,21 +17,23 @@ module WechatRails
   attr_reader :config
 
   def self.config
-    @config ||= begin
-      yaml = ERB.new(File.new(Rails.root.join("config/wechat.yml")).read).result
-      OpenStruct.new YAML.load(yaml)[Rails.env]
-    end
+    @config ||= OpenStruct.new(
+      app_id: ENV["WECHAT_APPID"],
+      secret: ENV["WECHAT_SECRET"],
+      token: ENV["WECHAT_TOKEN"],
+      access_token: ENV["WECHAT_ACCESS_TOKEN"]
+    )
   end
 
   def self.api
-    @api ||= WechatRails::Api.new(self.config.app_id, self.config.secret)
+    @api ||= Wechat::Api.new(self.config.app_id, self.config.secret, self.config.access_token)
   end
 end
 
 if defined? ActionController::Base
   class ActionController::Base
     def self.wechat_rails
-      self.send(:include, WechatRails::Handler)
+      self.send(:include, Wechat::Responder)
     end
   end
 end

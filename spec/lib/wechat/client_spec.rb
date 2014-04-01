@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe WechatRails::Client do
+describe Wechat::Client do
   subject do
-    WechatRails::Client.new("http://host/")
+    Wechat::Client.new("http://host/")
   end
 
   let(:response_params) do
@@ -80,12 +80,12 @@ describe WechatRails::Client do
     context "json error" do
       specify "raise ResponseError given response has error json" do
         response_json.stub(:body => {errcode: 1106, errmsg: "error message"}.to_json)
-        expect{subject.request("image", :as=>:file){response_json}}.to raise_error(WechatRails::ResponseError)
+        expect{subject.request("image", :as=>:file){response_json}}.to raise_error(Wechat::ResponseError)
       end
 
       specify "raise AccessTokenExpiredError given response has error json with errorcode 40014" do
         response_json.stub(:body => {errcode: 40014, errmsg: "error message"}.to_json)
-        expect{subject.request("image", :as=>:file){response_json}}.to raise_error(WechatRails::AccessTokenExpiredError)
+        expect{subject.request("image", :as=>:file){response_json}}.to raise_error(Wechat::AccessTokenExpiredError)
       end
     end
 

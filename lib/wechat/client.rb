@@ -1,6 +1,6 @@
 require 'rest_client'
 
-module WechatRails
+module Wechat
   class Client
 
     attr_reader :base
