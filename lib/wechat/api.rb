@@ -2,14 +2,14 @@ require 'wechat/client'
 require 'wechat/access_token'
 
 class Wechat::Api
-  attr_reader :app_id, :secret, :access_token, :client
+  attr_reader :access_token, :client
 
   API_BASE = "https://api.weixin.qq.com/cgi-bin/"
   FILE_BASE = "http://file.api.weixin.qq.com/cgi-bin/"
 
-  def initialize app_id, secret, token_file
+  def initialize appid, secret, token_file
     @client = Wechat::Client.new(API_BASE)
-    @access_token = Wechat::AccessToken.new(@client, app_id, secret, token_file)
+    @access_token = Wechat::AccessToken.new(@client, appid, secret, token_file)
   end
 
   def users

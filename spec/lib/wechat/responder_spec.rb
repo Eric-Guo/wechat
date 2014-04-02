@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class WechatController < ApplicationController
-  wechat_rails
+  wechat_responder 
 end
 
 describe WechatController, type: :controller do
@@ -29,6 +29,24 @@ describe WechatController, type: :controller do
   end
 
   let(:text_message){message_base.merge(:MsgType => "text", :Content => "text message")}
+
+  specify "config responder using global config" do
+    expect(controller.class.wechat).to eq(Wechat.api)
+    expect(controller.class.token).to eq(Wechat.config.token)
+  end
+
+  describe "config responder using per controller configuration" do 
+    controller do
+      wechat_responder appid: "controller_appid", secret: "controller_secret", token: "controller_token", access_token:"controller_access_token"
+    end
+    specify "will set controller wechat api and token" do
+      access_token = controller.class.wechat.access_token
+      expect(access_token.appid).to eq("controller_appid")
+      expect(access_token.secret).to eq("controller_secret")
+      expect(access_token.token_file).to eq("controller_access_token")
+      expect(controller.class.token).to eq("controller_token")
+    end
+  end
 
   describe "Verify signature" do
     specify "on show action" do
@@ -67,6 +85,7 @@ describe WechatController, type: :controller do
 
   describe "responder_for" do
     controller do
+      wechat_responder 
       on :text,  with: "command", respond: "string matched"
       on :text,  with: /^cmd:(.*)$/, respond: "regex matched"
       on :text,  respond: "text content"
@@ -114,6 +133,7 @@ describe WechatController, type: :controller do
 
   describe "fallback responder" do
     controller do
+      wechat_responder 
       on :fallback, respond: "fallback responder"
     end
 
@@ -127,6 +147,7 @@ describe WechatController, type: :controller do
   describe "#create use cases" do
 
     controller do
+      wechat_responder 
       on :text, respond: "text message" do |message, content|
         message.replay.text("should not be here")
       end

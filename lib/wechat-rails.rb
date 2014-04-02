@@ -17,23 +17,34 @@ module Wechat
   attr_reader :config
 
   def self.config
-    @config ||= OpenStruct.new(
-      app_id: ENV["WECHAT_APPID"],
-      secret: ENV["WECHAT_SECRET"],
-      token: ENV["WECHAT_TOKEN"],
-      access_token: ENV["WECHAT_ACCESS_TOKEN"]
-    )
+    @config ||= begin
+      if defined? Rails
+        config_file = Rails.root.join("config/wechat.yml")
+        config = YAML.load(ERB.new(File.new(config_file).read).result)[Rails.env] if (File.exist?(config_file))
+      end
+
+      config ||= {appid: ENV["WECHAT_APPID"], secret: ENV["WECHAT_SECRET"], token: ENV["WECHAT_TOKEN"], access_token: ENV["WECHAT_ACCESS_TOKEN"]}
+      config[:access_token] ||= Rails.root.join("tmp/access_token").to_s
+      OpenStruct.new(config)
+    end
   end
 
   def self.api
-    @api ||= Wechat::Api.new(self.config.app_id, self.config.secret, self.config.access_token)
+    @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token)
   end
 end
 
 if defined? ActionController::Base
   class ActionController::Base
-    def self.wechat_rails
+    def self.wechat_responder opts={}
       self.send(:include, Wechat::Responder)
+      if (opts.empty?)
+        self.wechat = Wechat.api
+        self.token = Wechat.config.token
+      else
+        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token])
+        self.token = opts[:token]
+      end
     end
   end
 end

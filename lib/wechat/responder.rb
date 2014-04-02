@@ -5,9 +5,12 @@ module Wechat
     included do 
       self.skip_before_filter :verify_authenticity_token
       self.before_filter :verify_signature, only: [:show, :create]
+      #delegate :wehcat, to: :class
     end
 
     module ClassMethods
+
+      attr_accessor :wechat, :token
 
       def on message_type, with: nil, respond: nil, &block
         raise "Unknow message type" unless message_type.in? [:text, :image, :voice, :video, :location, :link, :event, :fallback]
@@ -91,7 +94,7 @@ module Wechat
 
     private
     def verify_signature
-      array = [Wechat.config.token, params[:timestamp], params[:nonce]].compact.sort
+      array = [self.class.token, params[:timestamp], params[:nonce]].compact.sort
       render :text => "Forbidden", :status => 403 if params[:signature] != Digest::SHA1.hexdigest(array.join)
     end
   end

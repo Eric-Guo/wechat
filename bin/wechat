@@ -14,17 +14,21 @@ require 'fileutils'
 class App < Thor                                                 
   class Helper
     def self.with(options)
-      appid =  ENV["WECHAT_APPID"]
-      secret = ENV["WECHAT_SECRET"]
-      token_file = options[:toke_file] ||  ENV["WECHAT_ACCESS_TOKEN"]
+      config_file = File.join(Dir.home, ".wechat.yml")
+      config = YAML.load(File.new(config_file).read) if File.exist?(config_file)
+
+      config ||= {}
+      appid =  config["appid"]
+      secret = config["secret"]
+      token_file = options[:toke_file] ||  config["access_token"] || "/var/tmp/wechat_access_token"
 
       if (appid.nil? || secret.nil? || token_file.nil?)
       puts <<-HELP
-You need set wechat appid and secret in environment variables.
+You need create ~/.wechat.yml with wechat appid and secret. For example:
 
-  export WECHAT_APPID=<appid>
-  export WECHAT_SECRET=<secret>
-  export WECHAT_ACCESS_TOKEN=<file location for storing access token>
+  appid: <wechat appid>
+  secret: <wechat secret>
+  access_toke: "/var/tmp/wechat_access_token"
 
 HELP
       exit 1
@@ -56,7 +60,7 @@ HELP
     puts "Menu deleted" if Helper.with(options).menu_delete
   end
 
-  desc "menu_create [MENU_YAML]", "删除菜单"
+  desc "menu_create [MENU_YAML]", "创建菜单"
   def menu_create(menu_yaml)
     menu = YAML.load(File.new(menu_yaml).read)
     puts "Menu created" if Helper.with(options).menu_create(menu)
