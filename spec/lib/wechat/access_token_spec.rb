@@ -5,14 +5,14 @@ describe Wechat::AccessToken do
   let(:token_file){Rails.root.join("access_token")}
   let(:client){double(:client)}
 
-  subject do 
+  subject do
     Wechat::AccessToken.new(client, "appid", "secret", token_file)
   end
 
-  before :each do 
+  before :each do
     client.stub(:get).with("token", params:{
-      grant_type: "client_credential", 
-      appid: "appid", 
+      grant_type: "client_credential",
+      appid: "appid",
       secret: "secret"}).and_return(token_content)
   end
 
@@ -27,9 +27,9 @@ describe Wechat::AccessToken do
     end
 
     specify "refresh access_token if token file didn't exist" do
-      expect(File.exist? token_file).to be_false
+      expect(File.exist? token_file).to be_falsey
       expect(subject.token).to eq("12345")
-      expect(File.exist? token_file).to be_true
+      expect(File.exist? token_file).to be_truthy
     end
 
     specify "refresh access_token if token file is invalid" do
