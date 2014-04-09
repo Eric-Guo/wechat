@@ -27,9 +27,9 @@ describe Wechat::AccessToken do
     end
 
     specify "refresh access_token if token file didn't exist" do
-      expect(File.exist? token_file).to be_falsey
+      expect(File.exist? token_file).to be false
       expect(subject.token).to eq("12345")
-      expect(File.exist? token_file).to be_truthy
+      expect(File.exist? token_file).to be true
     end
 
     specify "refresh access_token if token file is invalid" do

@@ -38,7 +38,7 @@ describe Wechat::Api do
   describe "#menu_delete" do
     specify "will get menu/delete with access_token" do
       expect(subject.client).to receive(:get).with("menu/delete", params:{access_token: "access_token"}).and_return(true)
-      expect(subject.menu_delete).to be_truthy
+      expect(subject.menu_delete).to be true
     end
   end
 
@@ -46,7 +46,7 @@ describe Wechat::Api do
     specify "will post menu/create with access_token and json_data" do
       menu = {buttons: ["a_button"]}
       expect(subject.client).to receive(:post).with("menu/create", menu.to_json, params:{access_token: "access_token"}).and_return(true)
-      expect(subject.menu_create(menu)).to be_truthy
+      expect(subject.menu_create(menu)).to be true
     end
   end
 
@@ -70,7 +70,7 @@ describe Wechat::Api do
         params:{type: "image", access_token: "access_token"},
         base:"http://file.api.weixin.qq.com/cgi-bin/").and_return(true)
 
-      expect(subject.media_create("image", file)).to be_truthy
+      expect(subject.media_create("image", file)).to be true
     end
   end
 
@@ -85,7 +85,7 @@ describe Wechat::Api do
       expect(subject.client).to receive(:post).with("message/custom/send",
         payload.to_json,  params:{access_token: "access_token"}, content_type: :json).and_return(true)
 
-      expect(subject.custom_message_send Wechat::Message.to("openid").text("message content")).to be_truthy
+      expect(subject.custom_message_send Wechat::Message.to("openid").text("message content")).to be true
     end
   end
 
