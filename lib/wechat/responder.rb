@@ -41,8 +41,11 @@ module Wechat
           yield(* match_responders(responders, message[:Content]))
 
         when :event
-          yield(* match_responders(responders, message[:Event]))
-
+          if message[:Event] == 'CLICK'
+            yield(* match_responders(responders, message[:EventKey]))
+          else
+            yield(* match_responders(responders, message[:Event]))
+          end
         else
           yield(responders.first)
         end
