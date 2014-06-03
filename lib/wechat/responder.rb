@@ -76,7 +76,7 @@ module Wechat
     end
 
     def create
-      request = Wechat::Message.from_hash(params[:xml])
+      request = Wechat::Message.from_hash(params[:xml] || post_xml)
       response = self.class.responder_for(request) do |responder, *args|
         responder ||= self.class.responders(:fallback).first
 
@@ -96,6 +96,12 @@ module Wechat
     def verify_signature
       array = [self.class.token, params[:timestamp], params[:nonce]].compact.sort
       render :text => "Forbidden", :status => 403 if params[:signature] != Digest::SHA1.hexdigest(array.join)
+    end
+
+    private
+    def post_xml
+      data = Hash.from_xml(request.raw_post)
+      HashWithIndifferentAccess.new_from_hash_copying_default data.fetch('xml', {})
     end
   end
 end
