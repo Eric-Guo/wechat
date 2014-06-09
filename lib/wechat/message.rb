@@ -20,12 +20,25 @@ module Wechat
     class ArticleBuilder
       attr_reader :items
       delegate :count, to: :items
-      def initialize 
+      def initialize
         @items=Array.new
       end
 
-      def item title: "title", description: nil, pic_url: nil, url: nil
-        items << {:Title=> title, :Description=> description, :PicUrl=> pic_url, :Url=> url}
+      def item options
+        default_options = {
+          :title => 'title',
+          :description => nil,
+          :pic_url => nil,
+          :url => nil
+        }
+        options.reverse_merge!(default_options)
+
+        items << {
+          :Title=> options[:title],
+          :Description=> options[:description],
+          :PicUrl=> options[:pic_url],
+          :Url=> options[:url]
+        }
       end
     end
 
@@ -41,8 +54,8 @@ module Wechat
 
     def reply
       Message.new(
-        :ToUserName=>message_hash[:FromUserName], 
-        :FromUserName=>message_hash[:ToUserName], 
+        :ToUserName=>message_hash[:FromUserName],
+        :FromUserName=>message_hash[:ToUserName],
         :CreateTime=>Time.now.to_i
       )
     end
@@ -56,7 +69,7 @@ module Wechat
         Wechat.api.media(message_hash[:MediaId])
 
       when :location
-        message_hash.slice(:Location_X, :Location_Y, :Scale, :Label).inject({}){|results, value| 
+        message_hash.slice(:Location_X, :Location_Y, :Scale, :Label).inject({}){|results, value|
           results[value[0].to_s.underscore.to_sym] = value[1]; results}
       else
         raise "Don't know how to parse message as #{type}"
@@ -95,12 +108,12 @@ module Wechat
         collection.each{|item| yield(article, item)}
         items = article.items
       else
-        items = collection.collect do |item| 
-         camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url))
+        items = collection.collect do |item|
+          camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url))
         end
       end
 
-      update(:MsgType=>"news", :ArticleCount=> items.count, 
+      update(:MsgType=>"news", :ArticleCount=> items.count,
         :Articles=> items.collect{|item| camelize_hash_keys(item)})
     end
 
@@ -132,11 +145,11 @@ module Wechat
 
     private
     def camelize_hash_keys hash
-      deep_recursive(hash){|key, value| [key.to_s.camelize.to_sym, value]} 
+      deep_recursive(hash){|key, value| [key.to_s.camelize.to_sym, value]}
     end
 
     def underscore_hash_keys hash
-      deep_recursive(hash){|key, value| [key.to_s.underscore.to_sym, value]} 
+      deep_recursive(hash){|key, value| [key.to_s.underscore.to_sym, value]}
     end
 
     def update fields={}
