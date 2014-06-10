@@ -4,7 +4,7 @@ version = File.read(File.expand_path('../VERSION', __FILE__)).strip
 Gem::Specification.new do |s|
   s.author       = 'Skinnyworm'
   s.email        = 'askinnyworm@gmail.com'
-  s.homepage     = 'https://github.com/skinnyworm/wechat-rails'
+  s.homepage     = 'https://github.com/airbnb/wechat-rails'
 
   s.name        = "wechat-rails"
   s.version     = version
