@@ -10,13 +10,9 @@ require_relative "wechat-rails"
 class App < Thor                                                 
   class Helper
     def self.with(options)
-      config_file = File.join(Dir.home, ".wechat.yml")
-      config = YAML.load(File.new(config_file).read) if File.exist?(config_file)
-
-      config ||= {}
-      appid =  config["appid"]
-      secret = config["secret"]
-      token_file = options[:toke_file] ||  config["access_token"] || "/var/tmp/wechat_access_token"
+      appid =  Wechat.config.appid
+      secret = Wechat.config.secret
+      token_file = options[:toke_file] || Wechat.config.access_token
 
       if (appid.nil? || secret.nil? || token_file.nil?)
       puts <<-HELP
