@@ -93,7 +93,7 @@ module Wechat
 
         next if responder.nil?
         next request.reply.text responder[:respond] if (responder[:respond])
-        next responder[:proc].call(*args.unshift(request)) if (responder[:proc])
+        next responder[:proc].call(*args.unshift(request, view_context)) if (responder[:proc])
       end
 
       if response.respond_to? :to_xml
