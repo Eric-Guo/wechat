@@ -6,9 +6,9 @@ Wechat Rails
 
 Wechat-rails 可以帮助开发者方便地在Rails环境中集成微信公众平台提供的所有服务，目前微信公众平台提供了以下几种类型的服务。
 
-- ##### 微信公众平台基本API, 无需Web环境。
-- ##### 消息处理机制, 需运行在Web环境中。
-- ##### OAuth 2.0认证机制
+- 微信公众平台基本API, 无需Web环境。
+- 消息处理机制, 需运行在Web环境中。
+- OAuth 2.0认证机制
 
 Wechat-rails gem 包含了一个命令行程序可以调用各种无需web环境的API。同时它也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理机制。如果你的App还需要集成微信OAuth2.0, 你可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 这个gem可以方便地和devise集成提供完整的用户认证.
 
@@ -119,14 +119,6 @@ $ wechat user "oCfEht9***********"
 
 ```
 
-#####获取用户的信息
-
-```
-$ wechat user "oCfEht9***********"
-
-{"subscribe"=>1, "openid"=>"oCfEht9***********", "nickname"=>"Nickname", "sex"=>1, "language"=>"zh_CN", "city"=>"徐汇", "province"=>"上海", "country"=>"中国", "headimgurl"=>"http://wx.qlogo.cn/mmopen/ajNVdqHZLLBd0SG8NjV3UpXZuiaGGPDcaKHebTKiaTyof*********/0", "subscribe_time"=>1395715239}
-```
-
 ##### 获取当前菜单
 ```
 $ wechat menu
@@ -227,13 +219,13 @@ class WechatsController < ApplicationController
 
   # 处理视频信息
   on :video do |request|
-    nickname = wechat.user(request[:FromUserName])["nickname"] #调用 api 获得发送者的nickname
-    request.reply.video(request[:MediaId], title: "回声", description: "#{nickname}发来的视频请求") #直接视频返回给用户
+    request.reply.video(request[:MediaId], title: "回声", description: "发来的视频请求") #直接视频返回给用户
   end
 
   # 处理地理位置信息
   on :location do |request|
-    request.reply.text("#{request[:Location_X]}, #{request[:Location_Y]}") #回复地理位置
+    nickname = wechat.user(request[:FromUserName])["nickname"] #呼叫 api 获得发送者的nickname
+    request.reply.text("#{nickname}在 #{request[:Location_X]}, #{request[:Location_Y]}") #回复地理位置
   end
 
   # 当无任何responder处理用户信息时,使用这个responder处理
@@ -267,7 +259,3 @@ end
 
 Wechat-rails 的核心是一个Message DSL,帮助开发者构建各种类型的消息，包括主动推送的和被动响应的。
 ....
-
-  
-
-
