@@ -81,8 +81,16 @@ module Wechat
         responder ||= self.class.responders(:fallback).first
 
         next if responder.nil?
-        next request.reply.text responder[:respond] if (responder[:respond])
-        next responder[:proc].call(*args.unshift(request)) if (responder[:proc])
+
+        case
+        when (responder[:respond])
+          request.reply.text responder[:respond]
+        when (responder[:proc])
+          define_singleton_method :process, responder[:proc]
+          send(:process, *args.unshift(request))
+        else
+          next
+        end
       end
 
       if response.respond_to? :to_xml
