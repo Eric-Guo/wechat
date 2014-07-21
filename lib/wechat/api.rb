@@ -34,7 +34,7 @@ class Wechat::Api
   end
 
   def media media_id
-    response = get "media/get", params:{media_id: media_id}, base: FILE_BASE, as: :file
+    get "media/get", params:{media_id: media_id}, base: FILE_BASE, as: :file
   end
 
   def media_create type, file
@@ -44,7 +44,10 @@ class Wechat::Api
   def custom_message_send message
     post "message/custom/send", message.to_json, content_type: :json
   end
-  
+
+  def create_ticket qrcode_info
+    post "qrcode/create", qrcode_info.to_json, content_type: :json 
+  end  
 
   protected
   def get path, headers={}
