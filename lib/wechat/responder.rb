@@ -96,6 +96,10 @@ module Wechat
         next responder[:proc].call(*args.unshift(request, view_context)) if (responder[:proc])
       end
 
+      if self.class.respond_to? :log_request
+        self.class.log_request request, response
+      end
+
       if response.respond_to? :to_xml
         render xml: response.to_xml
       else
