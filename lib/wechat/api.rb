@@ -12,8 +12,9 @@ class Wechat::Api
     @access_token = Wechat::AccessToken.new(@client, appid, secret, token_file)
   end
 
-  def users
-    get("user/get")
+  def users nextid = nil
+    params = {params: {next_openid: nextid}} if nextid.present?
+    get('user/get', params||{})
   end
 
   def user openid
