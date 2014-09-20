@@ -2,7 +2,7 @@ module Wechat
   module Responder
     extend ActiveSupport::Concern
 
-    included do 
+    included do
       self.skip_before_filter :verify_authenticity_token
       self.before_filter :verify_signature, only: [:show, :create]
       #delegate :wehcat, to: :class
@@ -12,12 +12,24 @@ module Wechat
 
       attr_accessor :wechat, :token
 
-      def on message_type, with: nil, respond: nil, &block
-        raise "Unknow message type" unless message_type.in? [:text, :image, :voice, :video, :location, :link, :event, :fallback]
-        config=respond.nil? ? {} : {:respond=>respond}
-        config.merge!(:proc=>block) if block_given?
+      def on message_type, options={}, &block
+        default_options = {
+          :with => nil,
+          :respond => nil,
+        }
+        options.reverse_merge!(default_options)
 
-        if (with.present? && !message_type.in?([:text, :event]))
+        raise "Unknow message type" unless [:text, :image, :voice, :video, :location, :link, :event, :fallback].include? message_type
+
+        with = options[:with]
+        respond = options[:respond]
+
+        config = {}
+        config.merge!(:proc=>block) if block_given?
+        config.merge!(:respond=>resond) if respond.present?
+        config.merge!(:with=>with) if with.present?
+
+        if (with.present? && !([:text, :event].include?(message_type)))
           raise "Only text and event message can take :with parameters"
         else
           config.merge!(:with=>with) if with.present?
@@ -48,7 +60,7 @@ module Wechat
         end
       end
 
-      private 
+      private
 
       def match_responders responders, value
         matched = responders.inject({scoped:nil, general:nil}) do |matched, responder|
@@ -58,7 +70,7 @@ module Wechat
             matched[:general] ||= [responder, value]
             next matched
           end
-          
+
           if condition.is_a? Regexp
             matched[:scoped] ||= [responder] + $~.captures if(value =~ condition)
           else
@@ -66,11 +78,10 @@ module Wechat
           end
           matched
         end
-        return matched[:scoped] || matched[:general] 
+        return matched[:scoped] || matched[:general]
       end
     end
 
-    
     def show
       render :text => params[:echostr]
     end
@@ -82,7 +93,11 @@ module Wechat
 
         next if responder.nil?
         next request.reply.text responder[:respond] if (responder[:respond])
-        next responder[:proc].call(*args.unshift(request)) if (responder[:proc])
+        next responder[:proc].call(*args.unshift(request, view_context)) if (responder[:proc])
+      end
+
+      if self.class.respond_to? :log_request
+        self.class.log_request request, response
       end
 
       if response.respond_to? :to_xml

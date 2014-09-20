@@ -4,7 +4,7 @@ version = File.read(File.expand_path('../VERSION', __FILE__)).strip
 Gem::Specification.new do |s|
   s.author       = 'Skinnyworm'
   s.email        = 'askinnyworm@gmail.com'
-  s.homepage     = 'https://github.com/skinnyworm/wechat-rails'
+  s.homepage     = 'https://github.com/airbnb/wechat-rails'
 
   s.name        = "wechat-rails"
   s.version     = version
@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{bin app,config,lib}/**/*"] + ["LICENSE", "Rakefile", "README.md"]
   s.executables << 'wechat'
 
-  s.add_dependency "rails", ">= 3.2.14"
-  s.add_dependency "nokogiri", '>=1.6.0'
+  s.add_dependency "rails", ">= 3.0"
+  s.add_dependency "nokogiri", '>=1.5.5'
   s.add_dependency 'rest-client'
   s.add_development_dependency 'rspec-rails'
 end
