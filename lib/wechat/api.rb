@@ -49,6 +49,21 @@ class Wechat::Api
     post "qrcode/create", qrcode_info.to_json, content_type: :json 
   end  
 
+  def get_groups
+    res = get("groups/get")
+    res
+  end
+
+  def get_user_group open_id
+    res = post "groups/getid", open_id.to_json, content_type: :json
+    res
+  end
+
+  def change_group update_info
+    res = post "groups/members/update", update_info.to_json, content_type: :json
+    res
+  end
+
   protected
   def get path, headers={}
     with_access_token(headers[:params]){|params| client.get path, headers.merge(params: params)}
