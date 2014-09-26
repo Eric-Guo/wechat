@@ -12,8 +12,8 @@ class Wechat::Api
     @access_token = Wechat::AccessToken.new(@client, appid, secret, token_file)
   end
 
-  def users
-    get("user/get")
+  def users next_openid = nil
+    get("user/get", params: {next_openid: next_openid})
   end
 
   def user openid
@@ -34,7 +34,7 @@ class Wechat::Api
   end
 
   def media media_id
-    response = get "media/get", params:{media_id: media_id}, base: FILE_BASE, as: :file
+    get "media/get", params:{media_id: media_id}, base: FILE_BASE, as: :file
   end
 
   def media_create type, file
@@ -44,7 +44,22 @@ class Wechat::Api
   def custom_message_send message
     post "message/custom/send", message.to_json, content_type: :json
   end
-  
+
+  def create_ticket qrcode_info
+    post "qrcode/create", qrcode_info.to_json, content_type: :json 
+  end  
+
+  def get_groups
+    get("groups/get")
+  end
+
+  def get_user_group open_id
+    post "groups/getid", open_id.to_json, content_type: :json
+  end
+
+  def change_group update_info
+    post "groups/members/update", update_info.to_json, content_type: :json
+  end
 
   protected
   def get path, headers={}
@@ -59,7 +74,7 @@ class Wechat::Api
     begin
       params ||= {}
       yield(params.merge(access_token: access_token.token))
-    rescue Wechat::AccessTokenExpiredError => ex
+    rescue
       access_token.refresh
       retry unless (tries -= 1).zero?
     end 

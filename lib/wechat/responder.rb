@@ -51,7 +51,7 @@ module Wechat
       private 
 
       def match_responders responders, value
-        matched = responders.inject({scoped:nil, general:nil}) do |matched, responder|
+        outer_matched = responders.inject({scoped:nil, general:nil}) do |matched, responder|
           condition = responder[:with]
 
           if condition.nil?
@@ -66,7 +66,7 @@ module Wechat
           end
           matched
         end
-        return matched[:scoped] || matched[:general] 
+        return outer_matched[:scoped] || outer_matched[:general] 
       end
     end
 
@@ -76,13 +76,21 @@ module Wechat
     end
 
     def create
-      request = Wechat::Message.from_hash(params[:xml])
+      request = Wechat::Message.from_hash(params[:xml] || post_xml)
       response = self.class.responder_for(request) do |responder, *args|
         responder ||= self.class.responders(:fallback).first
 
         next if responder.nil?
-        next request.reply.text responder[:respond] if (responder[:respond])
-        next responder[:proc].call(*args.unshift(request)) if (responder[:proc])
+
+        case
+        when (responder[:respond])
+          request.reply.text responder[:respond]
+        when (responder[:proc])
+          define_singleton_method :process, responder[:proc]
+          send(:process, *args.unshift(request))
+        else
+          next
+        end
       end
 
       if response.respond_to? :to_xml
@@ -96,6 +104,12 @@ module Wechat
     def verify_signature
       array = [self.class.token, params[:timestamp], params[:nonce]].compact.sort
       render :text => "Forbidden", :status => 403 if params[:signature] != Digest::SHA1.hexdigest(array.join)
+    end
+
+    private
+    def post_xml
+      data = Hash.from_xml(request.raw_post)
+      HashWithIndifferentAccess.new_from_hash_copying_default data.fetch('xml', {})
     end
   end
 end
