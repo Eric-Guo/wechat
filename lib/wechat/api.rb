@@ -50,18 +50,15 @@ class Wechat::Api
   end  
 
   def get_groups
-    res = get("groups/get")
-    res
+    get("groups/get")
   end
 
   def get_user_group open_id
-    res = post "groups/getid", open_id.to_json, content_type: :json
-    res
+    post "groups/getid", open_id.to_json, content_type: :json
   end
 
   def change_group update_info
-    res = post "groups/members/update", update_info.to_json, content_type: :json
-    res
+    post "groups/members/update", update_info.to_json, content_type: :json
   end
 
   protected
