@@ -8,7 +8,7 @@ require "wechat-rails"
 require 'json'  
 require "active_support/core_ext"
 require 'fileutils'
-
+require 'yaml'
 
 
 class App < Thor                                                 
