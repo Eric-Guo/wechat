@@ -25,7 +25,7 @@ module Wechat
       end
 
       def item title: "title", description: nil, pic_url: nil, url: nil
-        items << {:Title=> title, :Description=> description, :PicUrl=> pic_url, :Url=> url}
+        items << {:Title=> title, :Description=> description, :PicUrl=> pic_url, :Url=> url}.reject{|k,v| v.nil? }
       end
     end
 
@@ -96,7 +96,7 @@ module Wechat
         items = article.items
       else
         items = collection.collect do |item| 
-         camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url))
+         camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url).reject{|k,v| v.nil? })
         end
       end
 

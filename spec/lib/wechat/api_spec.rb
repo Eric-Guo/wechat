@@ -17,6 +17,12 @@ describe Wechat::Api do
       expect(subject.client).to receive(:get).with("user/get", params:{access_token: "access_token"}).and_return(users_result)
       expect(subject.users).to eq(users_result)
     end
+
+    specify "will get user/get with access_token and next_openid" do
+      users_result = "users_result"
+      expect(subject.client).to receive(:get).with("user/get", params:{access_token: "access_token", next_openid: 'next_openid'}).and_return(users_result)
+      expect(subject.users('next_openid')).to eq(users_result)
+    end
   end
 
   describe "#user" do
