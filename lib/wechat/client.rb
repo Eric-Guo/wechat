@@ -61,7 +61,7 @@ module Wechat
         data = file
 
       when :json
-        data = JSON.parse(response.body)
+        data = JSON.parse(response.body.gsub /[\u0000-\u001f]+/, '')
 
       else
         data = response.body
