@@ -102,7 +102,7 @@ module Wechat
 
     private
     def verify_signature
-      array = [self.class.token, params[:timestamp], params[:nonce]].compact.sort
+      array = [self.class.token, params[:timestamp], params[:nonce]].compact.collect(&:to_s).sort
       render :text => "Forbidden", :status => 403 if params[:signature] != Digest::SHA1.hexdigest(array.join)
     end
 

@@ -4,7 +4,8 @@ module Wechat
     JSON_KEY_MAP = {
       "ToUserName" => "touser",
       "MediaId" => "media_id",
-      "ThumbMediaId" => "thumb_media_id"
+      "ThumbMediaId" => "thumb_media_id",
+      "TemplateId"=>"template_id"
     }
 
     class << self
@@ -25,7 +26,7 @@ module Wechat
       end
 
       def item title: "title", description: nil, pic_url: nil, url: nil
-        items << {:Title=> title, :Description=> description, :PicUrl=> pic_url, :Url=> url}
+        items << {:Title=> title, :Description=> description, :PicUrl=> pic_url, :Url=> url}.reject{|k,v| v.nil? }
       end
     end
 
@@ -96,12 +97,17 @@ module Wechat
         items = article.items
       else
         items = collection.collect do |item| 
-         camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url))
+         camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url).reject{|k,v| v.nil? })
         end
       end
 
       update(:MsgType=>"news", :ArticleCount=> items.count, 
         :Articles=> items.collect{|item| camelize_hash_keys(item)})
+    end
+
+    def template opts={}
+      template_fields = camelize_hash_keys(opts.symbolize_keys.slice(:template_id, :topcolor, :url, :data))
+      update(:MsgType=>"template",:Template=> template_fields)
     end
 
     def to_xml
@@ -114,12 +120,14 @@ module Wechat
         [(JSON_KEY_MAP[key] || key.downcase), value]
       end
 
-      json_hash.slice!("touser", "msgtype", "content", "image", "voice", "video", "music", "news", "articles").to_hash
+      json_hash.slice!("touser", "msgtype", "content", "image", "voice", "video", "music", "news", "articles","template").to_hash
       case json_hash["msgtype"]
       when "text"
         json_hash["text"] = {"content" => json_hash.delete("content")}
       when "news"
         json_hash["news"] = {"articles" => json_hash.delete("articles")}
+      when "template"
+        json_hash.merge! json_hash['template']
       end
       JSON.generate(json_hash)
     end

@@ -8,7 +8,7 @@ require "wechat-rails"
 require 'json'  
 require "active_support/core_ext"
 require 'fileutils'
-
+require 'yaml'
 
 
 class App < Thor                                                 
@@ -131,6 +131,12 @@ HELP
   def custom_news openid, news_yaml
     articles = YAML.load(File.new(news_yaml).read)
     puts Helper.with(options).custom_message_send Wechat::Message.to(openid).news(articles["articles"])
+  end
+
+  desc "template_message [OPENID, TEMPLATE_YAML_FILE]", "模板消息接口"
+  def template_message openid, template_yaml
+    template = YAML.load(File.new(template_yaml).read)
+    puts Helper.with(options).template_message_send Wechat::Message.to(openid).template(template["template"])    
   end
 
 end

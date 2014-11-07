@@ -87,6 +87,7 @@ Wechat commands:
   wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
   wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
   wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息
+  wechat template_message [OPENID, TEMPLATE_YAML_FILE]     # 发送模板消息
   wechat help [COMMAND]                                    # Describe available commands or one specific command
   wechat media [MEDIA_ID, PATH]                            # 媒体下载
   wechat media_create [MEDIA_ID, PATH]                     # 媒体上传
@@ -171,7 +172,40 @@ $ wechat custom_news oCfEht9oM*********** articles.yml
 
 ```
 
+##### 发送模板消息
+需定义一个模板消息内容的yaml文件，比如
+template.yml
 
+```
+template:
+  template_id: "o64KQ62_xxxxxxxxxxxxxxx-Qz-MlNcRKteq8"
+  url: "http://weixin.qq.com/download"
+  topcolor: "#FF0000"
+  data:
+    first: 
+      value: "你好，你已报名成功"
+      color: "#0A0A0A"      
+    keynote1:
+      value: "XX活动"
+      color: "#CCCCCC"      
+    keynote2:
+      value: "2014年9月16日"
+      color: "#CCCCCC"     
+    keynote3:
+      value: "上海徐家汇xxx城"
+      color: "#CCCCCC"                 
+    remark:
+      value: "欢迎再次使用。"
+      color: "#173177"          
+
+```
+
+然后执行命令行
+
+```
+$ wechat template_message oCfEht9oM*********** template.yml
+
+```
 
 ## Rails Responder Controller DSL
 

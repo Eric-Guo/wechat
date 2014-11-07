@@ -148,15 +148,21 @@ describe Wechat::Message do
     end
 
     describe "#news" do
-      let(:items){ [{title: "title", description: "description", url: "url", pic_url: "pic_url"}] }
+      let(:items){ 
+        [
+          {title: "title", description: "description", url: "url", pic_url: "pic_url"},
+          {title: "title", description: "description", url: nil, pic_url: "pic_url"}
+        ] 
+      }
 
       after :each do
         expect(message[:MsgType]).to eq("news")
-        expect(message[:ArticleCount]).to eq(1)
+        expect(message[:ArticleCount]).to eq(2)
         expect(message[:Articles][0][:Title]).to eq("title")
         expect(message[:Articles][0][:Description]).to eq("description")
         expect(message[:Articles][0][:Url]).to eq("url")
         expect(message[:Articles][0][:PicUrl]).to eq("pic_url")
+        expect(message[:Articles][1].key?(:Url)).to eq(false)
       end
 
       specify "when no block is given, whill take the items argument as an array articals hash" do
