@@ -79,7 +79,7 @@ class Wechat::Api
     begin
       params ||= {}
       yield(params.merge(access_token: access_token.token))
-    rescue
+    rescue AccessTokenExpiredError
       access_token.refresh
       retry unless (tries -= 1).zero?
     end 
