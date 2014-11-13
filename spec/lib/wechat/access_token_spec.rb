@@ -5,14 +5,14 @@ describe Wechat::AccessToken do
   let(:token_file){Rails.root.join("access_token")}
   let(:client){double(:client)}
 
-  subject do 
+  subject do
     Wechat::AccessToken.new(client, "appid", "secret", token_file)
   end
 
-  before :each do 
-    client.stub(:get).with("token", params:{
-      grant_type: "client_credential", 
-      appid: "appid", 
+  before :each do
+    allow(client).to receive(:get).with("token", params:{
+      grant_type: "client_credential",
+      appid: "appid",
       secret: "secret"}).and_return(token_content)
   end
 
@@ -27,9 +27,9 @@ describe Wechat::AccessToken do
     end
 
     specify "refresh access_token if token file didn't exist" do
-      expect(File.exist? token_file).to be_false
+      expect(File.exist? token_file).to be false
       expect(subject.token).to eq("12345")
-      expect(File.exist? token_file).to be_true
+      expect(File.exist? token_file).to be true
     end
 
     specify "refresh access_token if token file is invalid" do
@@ -38,7 +38,7 @@ describe Wechat::AccessToken do
     end
 
     specify "raise exception if refresh failed " do
-      client.stub(:get).and_raise("error")
+      allow(client).to receive(:get).and_raise("error")
       expect{subject.token}.to raise_error("error")
     end
   end
@@ -50,14 +50,14 @@ describe Wechat::AccessToken do
     end
 
     specify "won't set token_data if request failed" do
-      client.stub(:get).and_raise("error")
+      allow(client).to receive(:get).and_raise("error")
 
       expect{subject.refresh}.to raise_error("error")
       expect(subject.token_data).to be_nil
     end
 
     specify "won't set token_data if response value invalid" do
-      client.stub(:get).and_return("rubbish")
+      allow(client).to receive(:get).and_return("rubbish")
 
       expect{subject.refresh}.to raise_error
       expect(subject.token_data).to be_nil

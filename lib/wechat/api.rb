@@ -12,8 +12,9 @@ class Wechat::Api
     @access_token = Wechat::AccessToken.new(@client, appid, secret, token_file)
   end
 
-  def users
-    get("user/get")
+  def users nextid = nil
+    params = {params: {next_openid: nextid}} if nextid.present?
+    get('user/get', params||{})
   end
 
   def user openid
@@ -45,6 +46,9 @@ class Wechat::Api
     post "message/custom/send", message.to_json, content_type: :json
   end
   
+  def template_message_send message
+    post "message/template/send", message.to_json, content_type: :json
+  end  
 
   protected
   def get path, headers={}

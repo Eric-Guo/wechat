@@ -28,7 +28,7 @@ describe Wechat::Message do
       expect(message.message_hash.size).to eq(6)
     end
   end
-  
+
   describe "to" do
     let(:message){Wechat::Message.from_hash(text_request)}
     specify "will create base message" do
@@ -67,19 +67,19 @@ describe Wechat::Message do
 
     specify "will get image file" do
       message = Wechat::Message.from_hash(image_request)
-      Wechat.api.should_receive(:media).with("media_id")
+      expect(Wechat.api).to receive(:media).with("media_id")
       message.as(:image)
     end
 
     specify "will get voice file" do
       message = Wechat::Message.from_hash(voice_request)
-      Wechat.api.should_receive(:media).with("media_id")
+      expect(Wechat.api).to receive(:media).with("media_id")
       message.as(:voice)
     end
 
     specify "will get video file" do
       message = Wechat::Message.from_hash(video_request)
-      Wechat.api.should_receive(:media).with("media_id")
+      expect(Wechat.api).to receive(:media).with("media_id")
       message.as(:video)
     end
 
@@ -148,15 +148,21 @@ describe Wechat::Message do
     end
 
     describe "#news" do
-      let(:items){ [{title: "title", description: "description", url: "url", pic_url: "pic_url"}] }
+      let(:items){ 
+        [
+          {title: "title", description: "description", url: "url", pic_url: "pic_url"},
+          {title: "title", description: "description", url: nil, pic_url: "pic_url"}
+        ] 
+      }
 
       after :each do
         expect(message[:MsgType]).to eq("news")
-        expect(message[:ArticleCount]).to eq(1)
+        expect(message[:ArticleCount]).to eq(2)
         expect(message[:Articles][0][:Title]).to eq("title")
         expect(message[:Articles][0][:Description]).to eq("description")
         expect(message[:Articles][0][:Url]).to eq("url")
         expect(message[:Articles][0][:PicUrl]).to eq("pic_url")
+        expect(message[:Articles][1].key?(:Url)).to eq(false)
       end
 
       specify "when no block is given, whill take the items argument as an array articals hash" do
@@ -245,7 +251,7 @@ describe Wechat::Message do
             "description" => "description",
             "hqmusicurl" => "hq_music_url",
             "musicurl" => "music_url",
-            "thumb_media_id" => "thumb_media_id" 
+            "thumb_media_id" => "thumb_media_id"
           }
         }.to_json)
       end
@@ -277,13 +283,13 @@ describe Wechat::Message do
         model = double("Model Instance")
 
         message = Wechat::Message.to("toUser")
-        model_class.should_receive(:new).with({
+        expect(model_class).to receive(:new).with({
           to_user_name: "toUser",
           msg_type: "text",
           content: "text message",
           create_time: message[:CreateTime]
         }).and_return(model)
-        model.should_receive(:save!).and_return(true)
+        expect(model).to receive(:save!).and_return(true)
 
         expect(message.text("text message").save_to!(model_class)).to eq(message)
       end

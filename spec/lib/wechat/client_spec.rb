@@ -18,14 +18,14 @@ describe Wechat::Client do
 
   describe "#get" do
     specify "Will use http get method to request data" do
-      RestClient.should_receive(:get).with("http://host/token", accept: :json).and_return(response_json)
+      expect(RestClient).to receive(:get).with("http://host/token", accept: :json).and_return(response_json)
       subject.get("token")
     end
   end
 
   describe "#post" do
     specify "Will use http post method to request data" do
-      RestClient.should_receive(:post).with("http://host/token", "some_data", accept: :json).and_return(response_json)
+      expect(RestClient).to receive(:post).with("http://host/token", "some_data", accept: :json).and_return(response_json)
       subject.post("token", "some_data")
     end
   end
@@ -79,12 +79,12 @@ describe Wechat::Client do
 
     context "json error" do
       specify "raise ResponseError given response has error json" do
-        response_json.stub(:body => {errcode: 1106, errmsg: "error message"}.to_json)
+        allow(response_json).to receive(:body).and_return({errcode: 1106, errmsg: "error message"}.to_json)
         expect{subject.request("image", :as=>:file){response_json}}.to raise_error(Wechat::ResponseError)
       end
 
       specify "raise AccessTokenExpiredError given response has error json with errorcode 40014" do
-        response_json.stub(:body => {errcode: 40014, errmsg: "error message"}.to_json)
+        allow(response_json).to receive(:body).and_return({errcode: 40014, errmsg: "error message"}.to_json)
         expect{subject.request("image", :as=>:file){response_json}}.to raise_error(Wechat::AccessTokenExpiredError)
       end
     end
