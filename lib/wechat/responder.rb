@@ -79,6 +79,7 @@ module Wechat
     end
 
     def create
+      logger.info request.raw_post
       request = Wechat::Message.from_hash(params[:xml] || post_xml)
       response = self.class.responder_for(request) do |responder, *args|
         responder ||= self.class.responders(:fallback).first
@@ -97,8 +98,23 @@ module Wechat
 
     private
     def verify_signature
-      array = [self.class.token, params[:timestamp], params[:nonce]].compact.collect(&:to_s).sort
-      render :text => "Forbidden", :status => 403 if params[:signature] != Digest::SHA1.hexdigest(array.join)
+      array = [self.class.token, params[:timestamp], params[:nonce]]
+      signature = params[:signature]
+
+      # 明文或者兼容模式
+      if params[:signature]
+
+      # 加密模式(包括企业号)
+      elsif params[:msg_signature]
+        signature = params[:msg_signature]
+        if params[:echostr]
+          array << params[:echostr]
+        else
+          array << Hash.from_xml(request.raw_post)['xml']['Encrypt']
+        end
+      end
+      str = array.compact.collect(&:to_s).sort.join
+      render :text => "Forbidden", :status => 403 if signature != Digest::SHA1.hexdigest(str)
     end
 
     private
