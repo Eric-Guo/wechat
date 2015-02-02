@@ -4,6 +4,7 @@ module Wechat
   autoload :Message, "wechat/message"
   autoload :Responder, "wechat/responder"
   autoload :Response, "wechat/response"
+  autoload :Cipher, "wechat/cipher"
 
   class AccessTokenExpiredError < StandardError; end
   class ResponseError < StandardError
@@ -42,9 +43,13 @@ if defined? ActionController::Base
       if (opts.empty?)
         self.wechat = Wechat.api
         self.token = Wechat.config.token
+        self.type = Wechat.config.type
+        self.encoding_aes_key = Wechat.config.encoding_aes_key
       else
         self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token])
         self.token = opts[:token]
+        self.type = opts[:type]
+        self.encoding_aes_key = opts[:encoding_aes_key]
       end
     end
   end

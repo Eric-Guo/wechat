@@ -1,6 +1,7 @@
 module Wechat
   module Responder
     extend ActiveSupport::Concern
+    include Cipher
 
     included do 
       self.skip_before_filter :verify_authenticity_token
@@ -10,7 +11,7 @@ module Wechat
 
     module ClassMethods
 
-      attr_accessor :wechat, :token
+      attr_accessor :wechat, :token, :type, :encoding_aes_key
 
       def on message_type, with: nil, respond: nil, &block
         raise "Unknow message type" unless message_type.in? [:text, :image, :voice, :video, :location, :link, :event, :fallback]
@@ -75,7 +76,13 @@ module Wechat
 
     
     def show
-      render :text => params[:echostr]
+      # 企业号
+      if self.class.type == 'corp'
+        echostr, corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), self.class.encoding_aes_key))
+        render :text => echostr
+      else
+        render :text => params[:echostr]
+      end
     end
 
     def create
@@ -101,11 +108,8 @@ module Wechat
       array = [self.class.token, params[:timestamp], params[:nonce]]
       signature = params[:signature]
 
-      # 明文或者兼容模式
-      if params[:signature]
-
-      # 加密模式(包括企业号)
-      elsif params[:msg_signature]
+      # 默认使用明文方式验证, 企业号验证加密签名
+      if params[:signature].blank? && params[:msg_signature]
         signature = params[:msg_signature]
         if params[:echostr]
           array << params[:echostr]
@@ -113,6 +117,7 @@ module Wechat
           array << Hash.from_xml(request.raw_post)['xml']['Encrypt']
         end
       end
+
       str = array.compact.collect(&:to_s).sort.join
       render :text => "Forbidden", :status => 403 if signature != Digest::SHA1.hexdigest(str)
     end
