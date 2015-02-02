@@ -34,10 +34,21 @@ module Wechat
       decode_padding(plain)
     end
 
-    def pack
+    # app_id or corp_id
+    def pack(content, app_id)
+      random = SecureRandom.hex(8)
+      msg_len = [content.length].pack('V').reverse
+
+      [random, msg_len, content, app_id].join
     end
 
-    def unpack
+    def unpack(msg)
+      random = msg[0..16]
+      msg_len = msg[16, 4].reverse.unpack('V')[0]
+      content = msg[20, msg_len]
+      app_id = msg[(20 + msg_len)..-1]
+
+      return content, app_id
     end
 
 
