@@ -1,13 +1,37 @@
+require 'openssl/cipher'
+require 'securerandom'
+require 'base64'
+
 module Wechat
   module Cipher
     extend ActiveSupport::Concern
 
     BLOCK_SIZE = 32
+    CIPHER = 'AES-256-CBC'
 
-    def encrypt(plain, key)
+    def encrypt(plain, encoding_aes_key)
+      cipher = OpenSSL::Cipher.new(CIPHER)
+      cipher.encrypt
+
+      cipher.padding = 0
+      key_data = Base64.decode64(encoding_aes_key)
+      cipher.key = key_data
+      cipher.iv = key_data[0..16]
+
+      cipher.update(encode_padding(plain)) + cipher.final
     end
 
-    def decrypt(msg, key)
+    def decrypt(msg, encoding_aes_key)
+      cipher = OpenSSL::Cipher.new(CIPHER)
+      cipher.decrypt
+
+      cipher.padding = 0
+      key_data = Base64.decode64(encoding_aes_key)
+      cipher.key = key_data
+      cipher.iv = key_data[0..16]
+
+      plain = cipher.update(msg) + cipher.final
+      decode_padding(plain)
     end
 
     def pack
