@@ -37,7 +37,7 @@ module Wechat
     # app_id or corp_id
     def pack(content, app_id)
       random = SecureRandom.hex(8)
-      msg_len = [content.length].pack('V').reverse
+      msg_len = [content.bytes.length].pack('V').reverse
 
       [random, msg_len, content, app_id].join
     end
@@ -54,7 +54,7 @@ module Wechat
 
     private
     def encode_padding(data)
-      length = data.length
+      length = data.bytes.length
       amount_to_pad = BLOCK_SIZE - (length % BLOCK_SIZE)
       amount_to_pad = BLOCK_SIZE if amount_to_pad == 0
       padding = ([amount_to_pad].pack('c') * amount_to_pad)
