@@ -11,7 +11,7 @@ module Wechat
 
     module ClassMethods
 
-      attr_accessor :wechat, :token, :type, :encoding_aes_key
+      attr_accessor :wechat, :token, :type, :encrypt_mode, :encoding_aes_key
 
       def on message_type, with: nil, respond: nil, &block
         raise "Unknow message type" unless message_type.in? [:text, :image, :voice, :video, :location, :link, :event, :fallback]
@@ -86,8 +86,7 @@ module Wechat
     end
 
     def create
-      logger.info request.raw_post
-      request = Wechat::Message.from_hash(params[:xml] || post_xml)
+      request = Wechat::Message.from_hash(post_xml)
       response = self.class.responder_for(request) do |responder, *args|
         responder ||= self.class.responders(:fallback).first
 
@@ -97,7 +96,7 @@ module Wechat
       end
 
       if response.respond_to? :to_xml
-        render xml: response.to_xml
+        render xml: process_response(response)
       else
         render :nothing => true, :status => 200, :content_type => 'text/html'
       end
@@ -122,10 +121,45 @@ module Wechat
       render :text => "Forbidden", :status => 403 if signature != Digest::SHA1.hexdigest(str)
     end
 
-    private
     def post_xml
-      data = Hash.from_xml(request.raw_post)
+      data = params[:xml].present? ? {'xml' => params[:xml]} : Hash.from_xml(request.raw_post)
+
+      # 如果是加密模式解密
+      if self.class.encrypt_mode || self.class.type == 'corp'
+        if encrypt_msg = data['xml']['Encrypt']
+          content, @app_id = unpack(decrypt(Base64.decode64(encrypt_msg), self.class.encoding_aes_key))
+          data = Hash.from_xml(content)
+        end
+      end
+
       HashWithIndifferentAccess.new_from_hash_copying_default data.fetch('xml', {})
+    end
+
+    def process_response(response)
+      msg = response.to_xml
+
+      # 返回加密消息
+      if self.class.encrypt_mode || self.class.type == 'corp'
+        data = Hash.from_xml(request.raw_post)
+        if data['xml']['Encrypt']
+          encrypt = Base64.strict_encode64(
+              encrypt(pack(msg, @app_id), self.class.encoding_aes_key)
+          )
+          msg = gen_msg(encrypt, params[:timestamp], params[:nonce])
+        end
+      end
+
+      msg
+    end
+
+    def gen_msg(encrypt, timestamp, nonce)
+      msg_sign = Digest::SHA1.hexdigest [self.class.token, encrypt, timestamp, nonce].compact.collect(&:to_s).sort.join
+
+      { Encrypt: encrypt,
+        MsgSignature: msg_sign,
+        TimeStamp: timestamp,
+        Nonce: nonce
+      }.to_xml(root: "xml", children: "item", skip_instruct: true, skip_types: true)
     end
   end
 end

@@ -24,7 +24,8 @@ module Wechat
         config = YAML.load(ERB.new(File.new(config_file).read).result)[Rails.env] if (File.exist?(config_file))
       end
 
-      config ||= {appid: ENV["WECHAT_APPID"], secret: ENV["WECHAT_SECRET"], token: ENV["WECHAT_TOKEN"], access_token: ENV["WECHAT_ACCESS_TOKEN"]}
+      config ||= {appid: ENV["WECHAT_APPID"], secret: ENV["WECHAT_SECRET"], token: ENV["WECHAT_TOKEN"], access_token: ENV["WECHAT_ACCESS_TOKEN"],
+                  type: ENV["WECHAT_TYPE"], encrypt_mode: ENV["WECHAT_ENCRYPT_MODE"], encoding_aes_key: ENV["WECHAT_ENCODING_AES_KEY"]}
       config.symbolize_keys!
       config[:access_token] ||= Rails.root.join("tmp/access_token").to_s
       OpenStruct.new(config)
@@ -44,11 +45,13 @@ if defined? ActionController::Base
         self.wechat = Wechat.api
         self.token = Wechat.config.token
         self.type = Wechat.config.type
+        self.encrypt_mode = Wechat.config.encrypt_mode
         self.encoding_aes_key = Wechat.config.encoding_aes_key
       else
         self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token])
         self.token = opts[:token]
         self.type = opts[:type]
+        self.encrypt_mode = opts[:encrypt_mode]
         self.encoding_aes_key = opts[:encoding_aes_key]
       end
     end
