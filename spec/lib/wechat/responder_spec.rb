@@ -37,7 +37,8 @@ describe WechatController, type: :controller do
 
   describe "config responder using per controller configuration" do 
     controller do
-      wechat_responder appid: "controller_appid", secret: "controller_secret", token: "controller_token", access_token:"controller_access_token"
+      wechat_responder appid: "controller_appid", secret: "controller_secret", token: "controller_token", access_token:"controller_access_token",
+                       type: "corp", encrypt_mode: false, encoding_aes_key: "encoding_aes_key"
     end
     specify "will set controller wechat api and token" do
       access_token = controller.class.wechat.access_token
@@ -45,6 +46,9 @@ describe WechatController, type: :controller do
       expect(access_token.secret).to eq("controller_secret")
       expect(access_token.token_file).to eq("controller_access_token")
       expect(controller.class.token).to eq("controller_token")
+      expect(controller.class.type).to eq("corp")
+      expect(controller.class.encrypt_mode).to eq(false)
+      expect(controller.class.encoding_aes_key).to eq("encoding_aes_key")
     end
   end
 
