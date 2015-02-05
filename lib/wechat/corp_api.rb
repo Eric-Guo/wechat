@@ -28,6 +28,10 @@ class Wechat::CorpApi
     post("menu/create", JSON.generate(menu), {params: {agentid: agentid}})
   end
 
+  def message_send(message)
+    post "message/send", message.to_json, content_type: :json
+  end
+
   protected
   def get path, headers={}
     with_access_token(headers[:params]){|params| client.get path, headers.merge(params: params)}
