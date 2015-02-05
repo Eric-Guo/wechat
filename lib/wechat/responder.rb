@@ -113,7 +113,7 @@ module Wechat
         if params[:echostr]
           array << params[:echostr]
         else
-          array << Hash.from_xml(request.raw_post)['xml']['Encrypt']
+          array << request_content['xml']['Encrypt']
         end
       end
 
@@ -122,7 +122,7 @@ module Wechat
     end
 
     def post_xml
-      data = params[:xml].present? ? {'xml' => params[:xml]} : Hash.from_xml(request.raw_post)
+      data = request_content
 
       # 如果是加密模式解密
       if self.class.encrypt_mode || self.class.type == 'corp'
@@ -140,7 +140,7 @@ module Wechat
 
       # 返回加密消息
       if self.class.encrypt_mode || self.class.type == 'corp'
-        data = Hash.from_xml(request.raw_post)
+        data = request_content
         if data['xml']['Encrypt']
           encrypt = Base64.strict_encode64(
               encrypt(pack(msg, @app_id), self.class.encoding_aes_key)
@@ -160,6 +160,10 @@ module Wechat
         TimeStamp: timestamp,
         Nonce: nonce
       }.to_xml(root: "xml", children: "item", skip_instruct: true, skip_types: true)
+    end
+
+    def request_content
+      params[:xml].nil? ? Hash.from_xml(request.raw_post) : {'xml' => params[:xml]}
     end
   end
 end
