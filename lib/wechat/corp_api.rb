@@ -23,6 +23,11 @@ class Wechat::CorpApi
     get('user/get', params: {userid: userid})
   end
 
+  def menu_create menu, agentid
+    # 微信不接受7bit escaped json(eg \uxxxx), 中文必须UTF-8编码, 这可能是个安全漏洞
+    post("menu/create", JSON.generate(menu), {params: {agentid: agentid}})
+  end
+
   protected
   def get path, headers={}
     with_access_token(headers[:params]){|params| client.get path, headers.merge(params: params)}
