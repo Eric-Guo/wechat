@@ -42,7 +42,7 @@ module Wechat
           yield(* match_responders(responders, message[:Content]))
 
         when :event
-          if message[:Event] == 'CLICK'
+          if message[:Event] == 'click'
             yield(* match_responders(responders, message[:EventKey]))
           else
             yield(* match_responders(responders, message[:Event]))
@@ -132,7 +132,9 @@ module Wechat
         end
       end
 
-      HashWithIndifferentAccess.new_from_hash_copying_default data.fetch('xml', {})
+      HashWithIndifferentAccess.new_from_hash_copying_default(data.fetch('xml', {})).tap do |msg|
+        msg[:Event].downcase! if msg[:Event]
+      end
     end
 
     def process_response(response)
