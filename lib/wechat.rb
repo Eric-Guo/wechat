@@ -1,11 +1,8 @@
-
 require 'thor'
 require 'json'  
 require "active_support/core_ext"
 require 'fileutils'
-
 require_relative "wechat-rails"
-
 
 class App < Thor                                                 
   class Helper
@@ -20,7 +17,7 @@ You need create ~/.wechat.yml with wechat appid and secret. For example:
 
   appid: <wechat appid>
   secret: <wechat secret>
-  access_toke: "/var/tmp/wechat_access_token"
+  access_token: "/var/tmp/wechat_access_token"
 
 HELP
       exit 1
