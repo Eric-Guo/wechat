@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 class WechatController < ApplicationController
-  wechat_responder 
+  wechat_responder
+
+  before_filter :print
+
 end
 
 describe WechatController, type: :controller do
@@ -129,6 +132,21 @@ describe WechatController, type: :controller do
     post :create, signature_params.merge(xml: text_message)
     expect(response.code).to eq("200")
     expect(response.body.strip).to be_empty
+  end
+
+  describe "respond_to wechat_url helper" do
+    controller do
+      wechat_responder
+      on :text do |message, content|
+        wechat_url
+      end
+    end
+
+    specify "will return normal" do
+      expect do
+        post :create, signature_params.merge(xml: text_message)
+      end.not_to raise_error
+    end
   end
 
   describe "fallback responder" do

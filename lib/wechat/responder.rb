@@ -54,7 +54,7 @@ module Wechat
       private 
 
       def match_responders responders, value
-        matched = responders.inject({scoped:nil, general:nil}) do |matched, responder|
+        outer_matched = responders.inject({scoped:nil, general:nil}) do |matched, responder|
           condition = responder[:with]
 
           if condition.nil?
@@ -69,7 +69,7 @@ module Wechat
           end
           matched
         end
-        return matched[:scoped] || matched[:general] 
+        return outer_matched[:scoped] || outer_matched[:general] 
       end
     end
 
@@ -84,8 +84,16 @@ module Wechat
         responder ||= self.class.responders(:fallback).first
 
         next if responder.nil?
-        next request.reply.text responder[:respond] if (responder[:respond])
-        next responder[:proc].call(*args.unshift(request)) if (responder[:proc])
+
+        case
+        when (responder[:respond])
+          request.reply.text responder[:respond]
+        when (responder[:proc])
+          define_singleton_method :process, responder[:proc]
+          send(:process, *args.unshift(request))
+        else
+          next
+        end
       end
 
       if response.respond_to? :to_xml
