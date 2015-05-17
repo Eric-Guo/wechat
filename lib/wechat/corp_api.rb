@@ -3,7 +3,7 @@ require 'wechat/access_token'
 
 class Wechat::CorpAccessToken < Wechat::AccessToken
   def refresh
-    data = client.get("gettoken", params:{corpid: appid, corpsecret: secret})
+    data = client.get("gettoken", { params: { corpid: appid, corpsecret: secret }}, false)
     File.open(token_file, 'w'){|f| f.write(data.to_s)} if valid_token(data)
     return @token_data = data
   end
@@ -34,11 +34,15 @@ class Wechat::CorpApi
 
   protected
   def get path, headers={}
-    with_access_token(headers[:params]){|params| client.get path, headers.merge(params: params)}
+    with_access_token(headers[:params]) do |params|
+      client.get path, headers.merge(params: params), false
+    end
   end
 
   def post path, payload, headers = {}
-    with_access_token(headers[:params]){|params| client.post path, payload, headers.merge(params: params)}
+    with_access_token(headers[:params]) do |params|
+      client.post path, payload, headers.merge(params: params), false
+    end
   end
 
   def with_access_token params={}, tries=2
