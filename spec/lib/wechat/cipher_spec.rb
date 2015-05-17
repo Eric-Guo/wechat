@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Wechat::Cipher do
 
-  subject { Class.new.include(Wechat::Cipher) }
+  subject { Class.new.send(:include, Wechat::Cipher) }
 
   it '#encode_padding' do
     result = subject.new.instance_eval { encode_padding('abcd') }
