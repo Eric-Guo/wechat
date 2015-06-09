@@ -6,6 +6,7 @@ class Wechat::Api
 
   API_BASE = "https://api.weixin.qq.com/cgi-bin/"
   FILE_BASE = "http://file.api.weixin.qq.com/cgi-bin/"
+  MP_BASE = "https://mp.weixin.qq.com/cgi-bin/"
 
   def initialize appid, secret, token_file
     @client = Wechat::Client.new(API_BASE)
@@ -45,12 +46,36 @@ class Wechat::Api
   def custom_message_send message
     post "message/custom/send", message.to_json, content_type: :json
   end
-  
+
   def template_message_send message
     post "message/template/send", message.to_json, content_type: :json
-  end  
+  end
+
+  def qrcode_create_scene scene_id, expire_seconds = 604800
+    data = {expire_seconds: expire_seconds,
+            action_name: "QR_SCENE",
+            action_info: {scene: {scene_id: scene_id}}}
+    post "qrcode/create", data.to_json, content_type: :json
+  end
+
+  def qrcode_create_limit_scene scene_id
+    data = {action_name: "QR_LIMIT_SCENE",
+            action_info: {scene: {scene_id: scene_id}}}
+    post "qrcode/create", data.to_json, content_type: :json
+  end
+
+  def qrcode_create_limit_str_scene scene_str
+    data = {action_name: "QR_LIMIT_STR_SCENE",
+            action_info: {scene: {scene_str: scene_str}}}
+    post "qrcode/create", data.to_json, content_type: :json
+  end
+
+  def qrcode_url ticket
+    "#{MP_BASE}showqrcode?ticket=#{ticket}"
+  end
 
   protected
+
   def get path, headers={}
     with_access_token(headers[:params]){|params| client.get path, headers.merge(params: params)}
   end
@@ -66,7 +91,7 @@ class Wechat::Api
     rescue Wechat::AccessTokenExpiredError => ex
       access_token.refresh
       retry unless (tries -= 1).zero?
-    end 
+    end
   end
 
 end
