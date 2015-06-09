@@ -2,7 +2,7 @@ module Wechat
   module Responder
     extend ActiveSupport::Concern
 
-    included do 
+    included do
       self.skip_before_filter :verify_authenticity_token
       self.before_filter :verify_signature, only: [:show, :create]
       #delegate :wehcat, to: :class
@@ -39,19 +39,14 @@ module Wechat
         case message_type
         when :text
           yield(* match_responders(responders, message[:Content]))
-
         when :event
-          if message[:Event] == 'CLICK'
-            yield(* match_responders(responders, message[:EventKey]))
-          else
-            yield(* match_responders(responders, message[:Event]))
-          end
+          yield(* match_responders(responders, message[:Event]))
         else
           yield(responders.first)
         end
       end
 
-      private 
+      private
 
       def match_responders responders, value
         matched = responders.inject({scoped:nil, general:nil}) do |matched, responder|
@@ -61,7 +56,7 @@ module Wechat
             matched[:general] ||= [responder, value]
             next matched
           end
-          
+
           if condition.is_a? Regexp
             matched[:scoped] ||= [responder] + $~.captures if(value =~ condition)
           else
@@ -69,11 +64,11 @@ module Wechat
           end
           matched
         end
-        return matched[:scoped] || matched[:general] 
+        return matched[:scoped] || matched[:general]
       end
     end
 
-    
+
     def show
       render :text => params[:echostr]
     end
