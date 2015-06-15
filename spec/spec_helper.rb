@@ -17,3 +17,5 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = true
   config.order = "random"
 end
+
+RSpec::Expectations.configuration.warn_about_potential_false_positives = false
