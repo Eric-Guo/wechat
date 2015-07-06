@@ -18,7 +18,12 @@ class Wechat::Api
   end
 
   def user openid
-    get("user/info", params:{openid: openid})
+    get("user/info", params: {openid: openid})
+  end
+
+  def user_batch openids
+    payload = openids.map { |openid| {openid: openid} }
+    post "user/info/batchget", {user_list: payload}.to_json, content_type: :json
   end
 
   def menu
@@ -35,28 +40,28 @@ class Wechat::Api
   end
 
   def media media_id
-    response = get "media/get", params:{media_id: media_id}, base: FILE_BASE, as: :file
+    response = get "media/get", params: {media_id: media_id}, base: FILE_BASE, as: :file
   end
 
   def media_create type, file
-    post "media/upload", {upload:{media: file}}, params:{type: type}, base: FILE_BASE
+    post "media/upload", {upload: {media: file}}, params: {type: type}, base: FILE_BASE
   end
 
   def custom_message_send message
     post "message/custom/send", message.to_json, content_type: :json
   end
-  
+
   def template_message_send message
     post "message/template/send", message.to_json, content_type: :json
-  end  
+  end
 
   protected
   def get path, headers={}
-    with_access_token(headers[:params]){|params| client.get path, headers.merge(params: params)}
+    with_access_token(headers[:params]) { |params| client.get path, headers.merge(params: params) }
   end
 
   def post path, payload, headers = {}
-    with_access_token(headers[:params]){|params| client.post path, payload, headers.merge(params: params)}
+    with_access_token(headers[:params]) { |params| client.post path, payload, headers.merge(params: params) }
   end
 
   def with_access_token params={}, tries=2
@@ -66,7 +71,7 @@ class Wechat::Api
     rescue Wechat::AccessTokenExpiredError => ex
       access_token.refresh
       retry unless (tries -= 1).zero?
-    end 
+    end
   end
 
 end
