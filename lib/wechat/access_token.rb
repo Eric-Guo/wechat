@@ -1,3 +1,4 @@
+require 'json'
 module Wechat
   class AccessToken
     attr_reader :client, :appid, :secret, :token_file, :token_data
@@ -19,7 +20,7 @@ module Wechat
     end
 
     def refresh
-      data = client.get("token", params:{grant_type: "client_credential", appid: appid, secret: secret})
+      data = JSON client.get("token", params:{grant_type: "client_credential", appid: appid, secret: secret})
       File.open(token_file, 'w'){|f| f.write(data.to_s)} if valid_token(data)
       return @token_data = data
     end
