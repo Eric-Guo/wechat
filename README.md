@@ -31,12 +31,13 @@ gem "wechat-rails", git:"https://github.com/skinnyworm/wechat-rails"
 
 #### 命令行程序的配置
 
-要使用命令行程序，你需要在你的home目录中创建一个`~/.wechat.yml`，包含以下内容。其中`access_token`是存放access_token的文件位置。
+要使用命令行程序，你需要在你的home目录中创建一个`~/.wechat.yml`，包含以下内容。其中`access_token`是存放access_token的文件位置,`js_ticket`是存放js sdk ticket的文件位置。
 
 ```
 appid: "my_appid"
 secret: "my_secret"
 access_token: "/var/tmp/wechat_access_token"
+js_ticket: "/var/tmp/wechat_js_ticket"
 ```
 
 #### Rails 全局配置
@@ -48,12 +49,14 @@ default: &default
   secret: "app_secret"
   token:  "app_token"
   access_token: "/var/tmp/wechat_access_token"
+  js_ticket: "/var/tmp/wechat_js_ticket"
 
 production: 
   appid: <%= ENV['WECHAT_APPID'] %>
   secret: <%= ENV['WECHAT_APP_SECRET'] %>
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
+  js_ticket: "/var/tmp/wechat_js_ticket"
 
 staging: 
   <<: *default
@@ -296,6 +299,20 @@ end
 - :link 响应链接消息
 - :event 响应事件消息, 可以用`:with`参数来匹配事件类型
 - :fallback 默认响应，当收到的消息无法被其他responder响应时，会使用这个responder.
+
+## JS SDK
+js_sdk 提供了获取 js_sdk configuration的接口，可以在controller中直接调用
+```ruby
+class WelcomeController < ApplicationController
+  def index
+    #index of config : :debug, :appId, :nonceStr, :timestamp, :url, :signature, :rawString
+    config = Wechat::js_sdk.get_jssdk_config(root_url)
+  end
+end
+
+```
+
+
 
 ## Message DSL
 
