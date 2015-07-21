@@ -1,13 +1,15 @@
 require "wechat/api"
-
+require "wechat/js_sdk"
 module Wechat
   autoload :Message, "wechat/message"
   autoload :Responder, "wechat/responder"
   autoload :Response, "wechat/response"
 
-  class AccessTokenExpiredError < StandardError; end
+  class AccessTokenExpiredError < StandardError;
+  end
   class ResponseError < StandardError
     attr_reader :error_code
+
     def initialize(errcode, errmsg)
       error_code = errcode
       super "#{errmsg}(#{error_code})"
@@ -23,15 +25,20 @@ module Wechat
         config = YAML.load(ERB.new(File.new(config_file).read).result)[Rails.env] if (File.exist?(config_file))
       end
 
-      config ||= {appid: ENV["WECHAT_APPID"], secret: ENV["WECHAT_SECRET"], token: ENV["WECHAT_TOKEN"], access_token: ENV["WECHAT_ACCESS_TOKEN"]}
+      config ||= {appid: ENV["WECHAT_APPID"], secret: ENV["WECHAT_SECRET"], token: ENV["WECHAT_TOKEN"], access_token: ENV["WECHAT_ACCESS_TOKEN"], js_ticket: ENV["WECHAT_JS_TICKET"]}
       config.symbolize_keys!
       config[:access_token] ||= Rails.root.join("tmp/access_token").to_s
+      config[:js_ticket] ||= Rails.root.join("tmp/js_ticket").to_s
       OpenStruct.new(config)
     end
   end
 
   def self.api
     @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token)
+  end
+
+  def self.js_sdk
+    @js_sdk ||= Wechat::JsSdk.new(self.config.appid, self.config.secret, self.config.access_token, self.config.js_ticket)
   end
 end
 
