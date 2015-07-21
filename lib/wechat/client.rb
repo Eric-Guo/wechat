@@ -32,39 +32,40 @@ module Wechat
         break data unless (parse_as == :json && data["errcode"].present?)
 
         case data["errcode"]
-        when 0 # for request didn't expect results
-          true
+          # for js sdk api , the errcode exists with results , so return data instead of true
+          when 0 # for request didn't expect results
+            data
 
-        when 42001, 40014, 40001 #42001: access_token超时, 40014:不合法的access_token
-          raise AccessTokenExpiredError
-          
-        else
-          raise ResponseError.new(data['errcode'], data['errmsg'])
+          when 42001, 40014, 40001 #42001: access_token超时, 40014:不合法的access_token
+            raise AccessTokenExpiredError
+
+          else
+            raise ResponseError.new(data['errcode'], data['errmsg'])
         end
       end
     end
 
     private
     def parse_response response, as
-      content_type = response.headers[:content_type] 
+      content_type = response.headers[:content_type]
       parse_as = {
-        /^application\/json/ => :json,
-        /^image\/.*/ => :file
-      }.inject([]){|memo, match| memo<<match[1] if content_type =~ match[0]; memo}.first || as || :text
+          /^application\/json/ => :json,
+          /^image\/.*/ => :file
+      }.inject([]) { |memo, match| memo<<match[1] if content_type =~ match[0]; memo }.first || as || :text
 
       case parse_as
-      when :file
-        file = Tempfile.new("tmp")
-        file.binmode
-        file.write(response.body)
-        file.close
-        data = file
+        when :file
+          file = Tempfile.new("tmp")
+          file.binmode
+          file.write(response.body)
+          file.close
+          data = file
 
-      when :json
-        data = JSON.parse(response.body.gsub /[\u0000-\u001f]+/, '')
+        when :json
+          data = JSON.parse(response.body.gsub /[\u0000-\u001f]+/, '')
 
-      else
-        data = response.body
+        else
+          data = response.body
       end
 
       return yield(parse_as, data)

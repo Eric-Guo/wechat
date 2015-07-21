@@ -37,13 +37,19 @@ module Wechat
       begin
         data = @client.get('ticket/getticket', params: {access_token: @access_token.token, type: 'jsapi'})
         require "json"
-        @ticket_info = {:ticket => data[:ticket], :expired_at => data[:expires_in] + Time.now.to_i}
-        File.open(@ticket_file, 'w') { |f| f.write(@ticket_info.to_json) }
+        @ticket_info = {:ticket => data["ticket"], :expired_at => data["expires_in"] + Time.now.to_i}
+        File.open(@ticket_file, 'w') { |f| f.write(@ticket_info.to_json) } if valid_ticket(data)
       rescue AccessTokenExpiredError
         @access_token.refresh
         retry unless (tries -= 1).zero?
       end
+    end
 
+    protected
+    def valid_ticket data
+      ticket = data["ticket"]
+      raise "Response didn't have ticket" if  ticket.blank?
+      return ticket
     end
 
   end
