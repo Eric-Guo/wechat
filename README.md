@@ -306,7 +306,7 @@ js_sdk 提供了获取 js_sdk configuration的接口，可以在controller中直
 class WelcomeController < ApplicationController
   def index
     #index of config : :debug, :appId, :nonceStr, :timestamp, :url, :signature, :rawString
-    config = Wechat::js_sdk.get_jssdk_config(root_url)
+    config = Wechat.js.config(root_url)
   end
 end
 

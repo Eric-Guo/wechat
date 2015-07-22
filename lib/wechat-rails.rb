@@ -37,8 +37,8 @@ module Wechat
     @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token)
   end
 
-  def self.js_sdk
-    @js_sdk ||= Wechat::JsSdk.new(self.config.appid, self.config.secret, self.config.access_token, self.config.js_ticket)
+  def self.js
+    @js ||= Wechat::JsSdk.new(self.config.appid, self.config.secret, self.config.access_token, self.config.js_ticket)
   end
 end
 

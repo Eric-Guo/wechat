@@ -12,7 +12,7 @@ class Wechat::JsSdk
     @app_id = app_id
   end
 
-  def get_jssdk_config (url, debug = false)
+  def config (url, debug = false)
     timestamp = Time.now.to_i
     noncestr = SecureRandom.hex(16)
     # sorted parameter str
