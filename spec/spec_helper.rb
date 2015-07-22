@@ -1,4 +1,5 @@
 require "codeclimate-test-reporter"
+require 'wechat-rails'
 CodeClimate::TestReporter.start
 
 ENV["RAILS_ENV"] ||= 'test'

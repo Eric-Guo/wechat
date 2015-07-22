@@ -43,6 +43,10 @@ module Wechat
         @access_token.refresh
         retry unless (tries -= 1).zero?
       end
+      # raise exception if retry fails
+      if tries.zero?
+        raise AccessTokenExpiredError
+      end
     end
 
     protected

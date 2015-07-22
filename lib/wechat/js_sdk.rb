@@ -20,12 +20,12 @@ class Wechat::JsSdk
     signature = Digest::SHA1.hexdigest(str)
     {
         :debug => debug,
-        :appId => @app_id,
-        :nonceStr => noncestr,
+        :app_id => @app_id,
+        :nonce_str => noncestr,
         :timestamp => timestamp,
         :url => url,
         :signature => signature,
-        :rawString => str
+        :raw_string => str
     }
 
   end
