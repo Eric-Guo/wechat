@@ -26,12 +26,13 @@ module Wechat
       config ||= {appid: ENV["WECHAT_APPID"], secret: ENV["WECHAT_SECRET"], token: ENV["WECHAT_TOKEN"], access_token: ENV["WECHAT_ACCESS_TOKEN"]}
       config.symbolize_keys!
       config[:access_token] ||= Rails.root.join("tmp/access_token").to_s
+      config[:jsapi_ticket] ||= Rails.root.join("tmp/jsapi_ticket").to_s
       OpenStruct.new(config)
     end
   end
 
   def self.api
-    @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token)
+    @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token, self.config.jsapi_ticket)
   end
 end
 
@@ -43,7 +44,7 @@ if defined? ActionController::Base
         self.wechat = Wechat.api
         self.token = Wechat.config.token
       else
-        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token])
+        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], opts[:jsapi_ticket])
         self.token = opts[:token]
       end
     end

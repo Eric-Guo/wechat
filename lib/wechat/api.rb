@@ -1,15 +1,17 @@
 require 'wechat/client'
 require 'wechat/access_token'
+require 'wechat/jsapi_ticket'
 
 class Wechat::Api
-  attr_reader :access_token, :client
+  attr_reader :access_token, :client, :jsapi_ticket
 
   API_BASE = "https://api.weixin.qq.com/cgi-bin/"
   FILE_BASE = "http://file.api.weixin.qq.com/cgi-bin/"
 
-  def initialize appid, secret, token_file
+  def initialize appid, secret, token_file, jsapi_ticket_file="/var/tmp/wechat_jsapi_ticket"
     @client = Wechat::Client.new(API_BASE)
     @access_token = Wechat::AccessToken.new(@client, appid, secret, token_file)
+    @jsapi_ticket = Wechat::JsapiTicket.new(self, jsapi_ticket_file)
   end
 
   def users nextid = nil
