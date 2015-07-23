@@ -1,9 +1,10 @@
 module Wechat
   class JsapiTicket
-    attr_reader :api, :jsapi_ticket_file, :jsapi_ticket_data
+    attr_reader :client, :access_token, :jsapi_ticket_file, :jsapi_ticket_data
 
-    def initialize(api, jsapi_ticket_file)
-      @api = api
+    def initialize(client, access_token, jsapi_ticket_file)
+      @client = client
+      @access_token = access_token
       @jsapi_ticket_file = jsapi_ticket_file
     end
 
@@ -17,7 +18,7 @@ module Wechat
     end
 
     def refresh
-      data = api.get("ticket/getticket", params: {type: "jsapi"})
+      data = client.get("ticket/getticket", params: { access_token: access_token, type: "jsapi"})
       File.open(jsapi_ticket_file, 'w'){|f| f.write(data.to_s)} if valid_ticket(data)
       return @jsapi_ticket_data = data
     end
