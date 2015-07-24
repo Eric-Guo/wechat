@@ -37,7 +37,6 @@ module Wechat
 
         when 42001, 40014 #42001: access_token超时, 40014:不合法的access_token
           raise AccessTokenExpiredError
-          
         else
           raise ResponseError.new(data['errcode'], data['errmsg'])
         end
@@ -46,7 +45,7 @@ module Wechat
 
     private
     def parse_response response, as
-      content_type = response.headers[:content_type] 
+      content_type = response.headers[:content_type]
       parse_as = {
         /^application\/json/ => :json,
         /^image\/.*/ => :file

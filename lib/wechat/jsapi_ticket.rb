@@ -19,7 +19,7 @@ module Wechat
 
     def refresh
       data = client.get("ticket/getticket", params: { access_token: access_token, type: "jsapi"})
-      File.open(jsapi_ticket_file, 'w'){|f| f.write(data.to_s)} if valid_ticket(data)
+      File.open(jsapi_ticket_file, 'w'){|f| f.write(data.to_json)} if valid_ticket(data)
       return @jsapi_ticket_data = data
     end
 
