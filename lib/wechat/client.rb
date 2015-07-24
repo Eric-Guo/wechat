@@ -32,9 +32,8 @@ module Wechat
         break data unless (parse_as == :json && data["errcode"].present?)
 
         case data["errcode"]
-        when 0 # for request didn't expect results
-          true
-
+        when 0 # jsapi_ticket need data
+          data
         when 42001, 40014 #42001: access_token超时, 40014:不合法的access_token
           raise AccessTokenExpiredError
         else
