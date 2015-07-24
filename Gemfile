@@ -6,4 +6,5 @@ gemspec
 gem "jquery-rails"
 gem "rake", "~> 0.9.6"
 gem "codeclimate-test-reporter", group: :test, require: nil
+gem "byebug", group: :test, require: nil
 
