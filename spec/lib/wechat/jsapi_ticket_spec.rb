@@ -44,4 +44,10 @@ describe Wechat::JsapiTicket do
       expect(subject.jsapi_ticket_data).to eq(ticket_content)
     end
   end
+  describe "#signature" do
+    specify "will get signature" do
+      url = 'http://www.baidu.com?q=ming'
+      expect(subject.signature(url)[:url]).to eq(url)
+    end
+  end
 end

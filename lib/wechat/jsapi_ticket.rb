@@ -55,7 +55,7 @@ module Wechat
     def generate_noncestr(length=16)
       chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
       str = "";
-      chars.each_with_index do |c, index|
+      chars.chars.each_with_index do |c, index|
         str += chars[rand(chars.length)]
       end
       str
