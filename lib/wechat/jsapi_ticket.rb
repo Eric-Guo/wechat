@@ -25,12 +25,15 @@ module Wechat
       return @jsapi_ticket_data = data
     end
 
-    def signature
+    # 获取 jsapi_ticket 签名, 并返回所有必要参数
+    def signature(url)
+      timestamp = Time.now.to_i
+      noncestr = generate_noncestr
       params = {
-        noncestr: 'Wm3WZYTPz0wzccnW',
-        timestamp: 1414587457,
-        jsapi_ticket: 'sM4AOVdWfPE4DxkXGEs8VMCPGGVi4C3VM0P37wVUCFvkVAy_90u5h9nbSlYy3-Sl-HhTdfl2fzFy1AOcHKP7qg',
-        url: 'http://mp.weixin.qq.com?params=value'
+        noncestr: noncestr,
+        timestamp: timestamp,
+        jsapi_ticket: ticket,
+        url: url
       }
       pairs = params.keys.sort.map do |key|
         "#{key}=#{params[key]}"
@@ -39,12 +42,23 @@ module Wechat
       params.merge(signature: result)
     end
 
-    private 
+    private
     def valid_ticket jsapi_ticket_data
-      ticket = jsapi_ticket_data["ticket"]
+      ticket = jsapi_ticket_data["ticket"] || jsapi_ticket_data[:ticket]
       raise "Response didn't have ticket" if  ticket.blank?
       return ticket
     end
 
+    # 生成随机字符串
+    # @param  Integer length 长度, 默认为16
+    # @return String
+    def generate_noncestr(length=16)
+      chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      str = "";
+      chars.each_with_index do |c, index|
+        str += chars[rand(chars.length)]
+      end
+      str
+    end
   end
 end
