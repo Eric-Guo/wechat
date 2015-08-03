@@ -13,6 +13,11 @@ module Wechat
     def ticket
       begin
         @jsapi_ticket_data ||= JSON.parse(File.read(jsapi_ticket_file))
+        created_at = jsapi_ticket_data["created_at"].to_i
+        expires_in = jsapi_ticket_data["expires_in"].to_i
+        if Time.now.to_i - created_at >= expires_in - 3*60
+          raise "jsapi_ticket may be expired"
+        end
       rescue
         self.refresh
       end
@@ -21,6 +26,7 @@ module Wechat
 
     def refresh
       data = client.get("ticket/getticket", params: { access_token: access_token.token, type: "jsapi"})
+      data.merge("created_at": Time.now.to_i)
       File.open(jsapi_ticket_file, 'w'){|f| f.write(data.to_json)} if valid_ticket(data)
       return @jsapi_ticket_data = data
     end
