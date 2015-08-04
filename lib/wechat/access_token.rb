@@ -12,6 +12,11 @@ module Wechat
     def token
       begin
         @token_data ||= JSON.parse(File.read(token_file))
+        created_at = token_data["created_at"].to_i
+        expires_in = token_data["expires_in"].to_i
+        if Time.now.to_i - created_at >= expires_in - 3*60
+          raise "token_data may be expired"
+        end
       rescue
         self.refresh
       end
@@ -20,6 +25,7 @@ module Wechat
 
     def refresh
       data = client.get("token", params:{grant_type: "client_credential", appid: appid, secret: secret})
+      data.merge!("created_at": Time.now.to_i)
       File.open(token_file, 'w'){|f| f.write(data.to_json)} if valid_token(data)
       return @token_data = data
     end
