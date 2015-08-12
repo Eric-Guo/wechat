@@ -56,7 +56,13 @@ class Wechat::Api
   # http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html
   # 第二步：通过code换取网页授权access_token
   def web_access_token code
-     get "access_token", params: {code: code, grant_type: 'authorization_code'}, base: OAUTH2_BASE
+    params = {
+      appid: access_token.appid,
+      secret: access_token.secret,
+      code: code,
+      grant_type: 'authorization_code'
+    }
+    get "access_token", params: params, base: OAUTH2_BASE
   end
 
   protected
