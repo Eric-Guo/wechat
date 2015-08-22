@@ -12,7 +12,7 @@ require 'fileutils'
 require 'yaml'
 
 
-class App < Thor                                                 
+class App < Thor
   class Helper
     def self.with(options)
       config_file = File.join(Dir.home, ".wechat.yml")
@@ -21,10 +21,16 @@ class App < Thor
       config ||= {}
       appid =  config["appid"]
       secret = config["secret"]
-      token_file = options[:toke_file] ||  config["access_token"] || "/var/tmp/wechat_access_token"
+      corpid = config["corpid"]
+      corpsecret = config["corpsecret"]
+      token_file = options[:toke_file] || config["access_token"] || "/var/tmp/wechat_access_token"
 
-      if (appid.nil? || secret.nil? || token_file.nil?)
-      puts <<-HELP
+      if appid.present? && secret.present? && token_file.present?
+        Wechat::Api.new(appid, secret, token_file)
+      elsif corpid.present? && corpsecret.present? && token_file.present?
+        Wechat::Api.new(corpid, corpsecret, token_file)
+      else
+        puts <<-HELP
 You need create ~/.wechat.yml with wechat appid and secret. For example:
 
   appid: <wechat appid>
@@ -32,9 +38,8 @@ You need create ~/.wechat.yml with wechat appid and secret. For example:
   access_toke: "/var/tmp/wechat_access_token"
 
 HELP
-      exit 1
+        exit 1
       end
-      Wechat::Api.new(appid, secret, token_file)
     end
   end
 
@@ -79,7 +84,7 @@ HELP
     file = File.new(path)
     puts Helper.with(options).media_create(type, file)
   end
-  
+
   desc "custom_text [OPENID, TEXT_MESSAGE]", "发送文字客服消息"
   def custom_text openid, text_message
     puts Helper.with(options).custom_message_send Wechat::Message.to(openid).text(text_message)
@@ -137,7 +142,7 @@ HELP
   desc "template_message [OPENID, TEMPLATE_YAML_FILE]", "模板消息接口"
   def template_message openid, template_yaml
     template = YAML.load(File.new(template_yaml).read)
-    puts Helper.with(options).template_message_send Wechat::Message.to(openid).template(template["template"])    
+    puts Helper.with(options).template_message_send Wechat::Message.to(openid).template(template["template"])
   end
 
 end
