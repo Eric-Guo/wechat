@@ -29,12 +29,13 @@ module Wechat
                   type: ENV["WECHAT_TYPE"], encrypt_mode: ENV["WECHAT_ENCRYPT_MODE"], encoding_aes_key: ENV["WECHAT_ENCODING_AES_KEY"]}
       config.symbolize_keys!
       config[:access_token] ||= Rails.root.join("tmp/access_token").to_s
+      config[:jsapi_ticket] ||= Rails.root.join("tmp/jsapi_ticket").to_s
       OpenStruct.new(config)
     end
   end
 
   def self.api
-    @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token)
+    @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token, self.config.jsapi_ticket)
   end
 end
 
@@ -49,7 +50,7 @@ if defined? ActionController::Base
         self.encrypt_mode = Wechat.config.encrypt_mode
         self.encoding_aes_key = Wechat.config.encoding_aes_key
       else
-        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token])
+        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], opts[:jsapi_ticket])
         self.token = opts[:token]
         self.type = opts[:type]
         self.encrypt_mode = opts[:encrypt_mode]

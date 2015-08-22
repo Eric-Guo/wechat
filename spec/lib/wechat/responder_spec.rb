@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class WechatController < ApplicationController
-  wechat_responder 
+  wechat_responder
 end
 
 describe WechatController, type: :controller do

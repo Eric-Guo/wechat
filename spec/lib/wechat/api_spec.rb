@@ -2,13 +2,15 @@ require 'spec_helper'
 
 describe Wechat::Api do
   let(:toke_file){Rails.root.join("tmp/access_token")}
+  let(:jsapi_ticket_file){Rails.root.join("tmp/jsapi_ticket")}
 
   subject do
-    Wechat::Api.new("appid", "secret", toke_file)
+    Wechat::Api.new("appid", "secret", toke_file, jsapi_ticket_file)
   end
 
   before :each do
     allow(subject.access_token).to receive(:token).and_return("access_token")
+    allow(subject.jsapi_ticket).to receive(:jsapi_ticket).and_return("jsapi_ticket")
   end
 
   describe "#users" do

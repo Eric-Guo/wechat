@@ -1,15 +1,18 @@
 require 'wechat/client'
 require 'wechat/access_token'
+require 'wechat/jsapi_ticket'
 
 class Wechat::Api
-  attr_reader :access_token, :client
+  attr_reader :access_token, :client, :jsapi_ticket
 
   API_BASE = "https://api.weixin.qq.com/cgi-bin/"
   FILE_BASE = "http://file.api.weixin.qq.com/cgi-bin/"
+  OAUTH2_BASE = "https://api.weixin.qq.com/sns/oauth2/"
 
-  def initialize appid, secret, token_file
+  def initialize appid, secret, token_file, jsapi_ticket_file="/var/tmp/wechat_jsapi_ticket"
     @client = Wechat::Client.new(API_BASE)
     @access_token = Wechat::AccessToken.new(@client, appid, secret, token_file)
+    @jsapi_ticket = Wechat::JsapiTicket.new(@client, @access_token, jsapi_ticket_file)
   end
 
   def users nextid = nil
@@ -45,10 +48,22 @@ class Wechat::Api
   def custom_message_send message
     post "message/custom/send", message.to_json, content_type: :json
   end
-  
+
   def template_message_send message
     post "message/template/send", message.to_json, content_type: :json
-  end  
+  end
+
+  # http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html
+  # 第二步：通过code换取网页授权access_token
+  def web_access_token code
+    params = {
+      appid: access_token.appid,
+      secret: access_token.secret,
+      code: code,
+      grant_type: 'authorization_code'
+    }
+    get "access_token", params: params, base: OAUTH2_BASE
+  end
 
   protected
   def get path, headers={}
@@ -66,7 +81,7 @@ class Wechat::Api
     rescue Wechat::AccessTokenExpiredError => ex
       access_token.refresh
       retry unless (tries -= 1).zero?
-    end 
+    end
   end
 
 end
