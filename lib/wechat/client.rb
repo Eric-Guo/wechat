@@ -9,15 +9,23 @@ module Wechat
       @base = base
     end
 
-    def get path, header={}
+    def get path, header={}, verify_ssl = true
       request(path, header) do |url, header|
-        RestClient.get(url, header)
+        if verify_ssl
+          RestClient.get(url, header)
+        else
+          RestClient::Request.execute(url: url, method: :get, headers: header, verify_ssl: OpenSSL::SSL::VERIFY_NONE)
+        end
       end
     end
 
-    def post path, payload, header = {}
+    def post path, payload, header = {}, verify_ssl = true
       request(path, header) do |url, header|
-        RestClient.post(url, payload, header)
+        if verify_ssl
+          RestClient.post(url, payload, header)
+        else
+          RestClient::Request.execute(url: url, method: :post, payload: payload, headers: header, verify_ssl: OpenSSL::SSL::VERIFY_NONE)
+        end
       end
     end
 
@@ -33,7 +41,7 @@ module Wechat
 
         case data["errcode"]
         when 0 # for request didn't expect results
-          true
+          data
 
         when 42001, 40014 #42001: access_token超时, 40014:不合法的access_token
           raise AccessTokenExpiredError
