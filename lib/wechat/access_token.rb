@@ -25,7 +25,7 @@ module Wechat
 
     def refresh
       data = client.get("token", params:{grant_type: "client_credential", appid: appid, secret: secret})
-      data.merge!("created_at": Time.now.to_i)
+      data.merge!(created_at: Time.now.to_i)
       File.open(token_file, 'w'){|f| f.write(data.to_json)} if valid_token(data)
       return @token_data = data
     end

@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Wechat::JsapiTicket do
   let(:ticket_content){
     {
-      "errcode": 0,
-      "errmsg": "ok",
-      "ticket": "bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA",
-      "expires_in": 7200
+      errcode: 0,
+      errmsg: "ok",
+      ticket: "bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA",
+      expires_in: 7200
     }
   }
   let(:jsapi_ticket_file){Rails.root.join("tmp/jsapi_ticket_file")}

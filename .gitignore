@@ -17,4 +17,4 @@ spec/dummy/.sass-cache
 Thumbs.db
 coverage
 pkg
-
+*.sublime-workspace
