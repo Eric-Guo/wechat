@@ -28,7 +28,7 @@ class App < Thor
       if appid.present? && secret.present? && token_file.present?
         Wechat::Api.new(appid, secret, token_file)
       elsif corpid.present? && corpsecret.present? && token_file.present?
-        Wechat::Api.new(corpid, corpsecret, token_file)
+        Wechat::CorpApi.new(corpid, corpsecret, token_file)
       else
         puts <<-HELP
 You need create ~/.wechat.yml with wechat appid and secret. For example:
