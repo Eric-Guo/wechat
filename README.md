@@ -44,6 +44,7 @@ Windows或者使用企业号，需要存放在`C:/Users/[user_name]/`下，配�
 ```
 corpid: "my_appid"
 corpsecret: "my_secret"
+agentid: "1" # 企业应用的id，整型。可在应用的设置页面查看
 access_token: "C:/Users/[user_name]/wechat_access_token"
 ```
 
@@ -92,6 +93,7 @@ Wechat commands:
   wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
   wechat custom_news [OPENID, NEWS_YAML_FILE]              # 发送图文客服消息
+  wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息(仅企业号)
   wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
   wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
   wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息

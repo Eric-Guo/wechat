@@ -10,13 +10,14 @@ class Wechat::CorpAccessToken < Wechat::AccessToken
 end
 
 class Wechat::CorpApi
-  attr_reader :access_token, :client
+  attr_reader :access_token, :client, :agentid
 
   API_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
 
-  def initialize(appid, secret, token_file)
+  def initialize(appid, secret, token_file, agentid)
     @client = Wechat::Client.new(API_BASE)
     @access_token = Wechat::CorpAccessToken.new(@client, appid, secret, token_file)
+    @agentid = agentid
   end
 
   def user(userid)
@@ -29,7 +30,7 @@ class Wechat::CorpApi
   end
 
   def message_send(message)
-    post 'message/send', message.to_json, content_type: :json
+    post 'message/send', message.agent_id(agentid).to_json, content_type: :json
   end
 
   protected
