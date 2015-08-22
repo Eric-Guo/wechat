@@ -4,26 +4,25 @@ lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
 $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 
 require 'thor'
-require "wechat-rails"
+require 'wechat-rails'
 require 'json'
-require "active_support"
-require "active_support/core_ext"
+require 'active_support'
+require 'active_support/core_ext'
 require 'fileutils'
 require 'yaml'
-
 
 class App < Thor
   class Helper
     def self.with(options)
-      config_file = File.join(Dir.home, ".wechat.yml")
+      config_file = File.join(Dir.home, '.wechat.yml')
       config = YAML.load(File.new(config_file).read) if File.exist?(config_file)
 
       config ||= {}
-      appid =  config["appid"]
-      secret = config["secret"]
-      corpid = config["corpid"]
-      corpsecret = config["corpsecret"]
-      token_file = options[:toke_file] || config["access_token"] || "/var/tmp/wechat_access_token"
+      appid =  config['appid']
+      secret = config['secret']
+      corpid = config['corpid']
+      corpsecret = config['corpsecret']
+      token_file = options[:toke_file] || config['access_token'] || '/var/tmp/wechat_access_token'
 
       if appid.present? && secret.present? && token_file.present?
         Wechat::Api.new(appid, secret, token_file)
@@ -43,7 +42,7 @@ HELP
     end
   end
 
-  package_name "Wechat"
+  package_name 'Wechat'
   option :toke_file, :aliases=>"-t", :desc => "File to store access token"
 
   desc "users", "关注者列表"
