@@ -43,7 +43,11 @@ module Wechat
   end
 
   def self.api
-    @api ||= Wechat::Api.new(config.appid, config.secret, config.access_token, config.jsapi_ticket)
+    if config.corpid.present?
+      @api ||= Wechat::CorpApi.new(config.corpid, config.corpsecret, config.access_token, config.agentid)
+    else
+      @api ||= Wechat::Api.new(config.appid, config.secret, config.access_token, config.jsapi_ticket)
+    end
   end
 end
 
@@ -52,15 +56,21 @@ if defined? ActionController::Base
     def self.wechat_responder(opts = {})
       send(:include, Wechat::Responder)
       if opts.empty?
+        self.corpid = Wechat.config.corpid
         self.wechat = Wechat.api
+        self.agentid = Wechat.config.agentid
         self.token = Wechat.config.token
-        self.type = Wechat.config.type
         self.encrypt_mode = Wechat.config.encrypt_mode
         self.encoding_aes_key = Wechat.config.encoding_aes_key
       else
-        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], opts[:jsapi_ticket])
+        self.corpid = opts[:corpid]
+        if corpid.present?
+          self.wechat = Wechat::CorpApi.new(opts[:corpid], opts[:corpsecret], opts[:access_token], opts[:agentid])
+        else
+          self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], opts[:jsapi_ticket])
+        end
+        self.agentid = opts[:agentid]
         self.token = opts[:token]
-        self.type = opts[:type]
         self.encrypt_mode = opts[:encrypt_mode]
         self.encoding_aes_key = opts[:encoding_aes_key]
       end

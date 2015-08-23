@@ -38,11 +38,11 @@ describe WechatCorpController, type: :controller do
   end
 
 
-  describe 'corp type' do
+  describe 'corp' do
 
     controller do
-      wechat_responder appid: "appid", secret: "secret", token: "token", access_token:"controller_access_token",
-                       type: "corp", encrypt_mode: false, encoding_aes_key: ENCODING_AES_KEY
+      wechat_responder corpid: "corpid", corpsecret: "corpsecret", token: "token", access_token:"controller_access_token",
+                       agentid: 1, encrypt_mode: false, encoding_aes_key: ENCODING_AES_KEY
 
       on :text do |request, content|
         request.reply.text "echo: #{content}"

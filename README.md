@@ -51,6 +51,8 @@ access_token: "C:/Users/[user_name]/wechat_access_token"
 #### Rails 全局配置
 Rails环境中, 你可以在config中创建wechat.yml, 为每个rails environment创建不同的配置。
 
+公众号配置：
+
 ```
 default: &default
   appid: "app_id"
@@ -64,13 +66,32 @@ production:
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
 
-staging: 
-  <<: *default
-
 development: 
   <<: *default
 
 test: 
+  <<: *default
+```
+
+企业号配置：
+
+```
+default: &default
+  corpid: "corpid"
+  corpsecret: "corpsecret"
+  agentid:  "3"
+  access_token: "C:/Users/6749/wechat_access_token"
+
+production:
+  corpid:     <%= ENV['WECHAT_CORPID'] %>
+  corpsecret: <%= ENV['WECHAT_CORPSECRET'] %>
+  agentid:    <%= ENV['WECHAT_AGENTID'] %>
+  access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
+
+development:
+  <<: *default
+
+test:
   <<: *default
 ```
 

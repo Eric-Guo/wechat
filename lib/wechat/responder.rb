@@ -10,7 +10,7 @@ module Wechat
     end
 
     module ClassMethods
-      attr_accessor :wechat, :token, :type, :encrypt_mode, :encoding_aes_key
+      attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :encoding_aes_key
 
       def on(message_type, with: nil, respond: nil, &block)
         raise 'Unknow message type' unless message_type.in? [:text, :image, :voice, :video, :location, :link, :event, :fallback]
@@ -75,7 +75,7 @@ module Wechat
 
     def show
       # 企业号
-      if self.class.type == 'corp'
+      if self.class.corpid.present?
         echostr, corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), self.class.encoding_aes_key))
         render :text => echostr
       else
@@ -124,7 +124,7 @@ module Wechat
       data = request_content
 
       # 如果是加密模式解密
-      if self.class.encrypt_mode || self.class.type == 'corp'
+      if self.class.encrypt_mode || self.class.corpid.present?
         encrypt_msg = data['xml']['Encrypt']
         if encrypt_msg.present?
           content, @app_id = unpack(decrypt(Base64.decode64(encrypt_msg), self.class.encoding_aes_key))
@@ -141,7 +141,7 @@ module Wechat
       msg = response.to_xml
 
       # 返回加密消息
-      if self.class.encrypt_mode || self.class.type == 'corp'
+      if self.class.encrypt_mode || self.class.corpid.present?
         data = request_content
         if data['xml']['Encrypt']
           encrypt = Base64.strict_encode64 encrypt(pack(msg, @app_id), self.class.encoding_aes_key)
