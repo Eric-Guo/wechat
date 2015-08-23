@@ -4,7 +4,7 @@ lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
 $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 
 require 'thor'
-require 'wechat-rails'
+require 'wechat'
 require 'json'
 require 'active_support/dependencies/autoload'
 require 'active_support/core_ext'
