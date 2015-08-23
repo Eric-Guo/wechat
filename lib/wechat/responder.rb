@@ -74,12 +74,11 @@ module Wechat
     end
 
     def show
-      # 企业号
       if self.class.corpid.present?
-        echostr, corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), self.class.encoding_aes_key))
-        render :text => echostr
+        echostr, _corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), self.class.encoding_aes_key))
+        render text: echostr
       else
-        render :text => params[:echostr]
+        render text: params[:echostr]
       end
     end
 
