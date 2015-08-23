@@ -32,7 +32,6 @@ module Wechat
                    agentid: ENV['WECHAT_AGENTID'],
                    token: ENV['WECHAT_TOKEN'],
                    access_token: ENV['WECHAT_ACCESS_TOKEN'],
-                   type: ENV['WECHAT_TYPE'],
                    encrypt_mode: ENV['WECHAT_ENCRYPT_MODE'],
                    encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'] }
       config.symbolize_keys!
