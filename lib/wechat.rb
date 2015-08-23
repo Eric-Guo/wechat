@@ -2,6 +2,7 @@ require 'thor'
 require 'json'
 require 'active_support/core_ext'
 require 'fileutils'
+require 'yaml'
 require_relative 'wechat-rails'
 
 class App < Thor
@@ -11,9 +12,13 @@ class App < Thor
       secret = Wechat.config.secret
       token_file = options[:toke_file] || Wechat.config.access_token
 
-      if appid.nil? || secret.nil? || token_file.nil?
+      if appid.present? && secret.present? && token_file.present?
+        Wechat::Api.new(appid, secret, token_file)
+      elsif corpid.present? && corpsecret.present? && token_file.present?
+        Wechat::CorpApi.new(corpid, corpsecret, token_file, agentid)
+      else
         puts <<-HELP
-You need create ~/.wechat.yml with wechat appid and secret. For example:
+You need create config/wechat.yml with wechat appid and secret. For example:
 
   appid: <wechat appid>
   secret: <wechat secret>
@@ -22,7 +27,6 @@ You need create ~/.wechat.yml with wechat appid and secret. For example:
 HELP
         exit 1
       end
-      Wechat::Api.new(appid, secret, token_file)
     end
   end
 
@@ -66,6 +70,11 @@ HELP
   def media_create(type, path)
     file = File.new(path)
     puts Helper.with(options).media_create(type, file)
+  end
+
+  desc 'message_send [OPENID, TEXT_MESSAGE]', '发送文字消息(仅企业号)'
+  def message_send(openid, text_message)
+    puts Helper.with(options).message_send Wechat::Message.to(openid).text(text_message)
   end
 
   desc 'custom_text [OPENID, TEXT_MESSAGE]', '发送文字客服消息'

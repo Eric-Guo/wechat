@@ -27,6 +27,9 @@ module Wechat
 
       config ||= { appid: ENV['WECHAT_APPID'],
                    secret: ENV['WECHAT_SECRET'],
+                   corpid: ENV['WECHAT_CORPID'],
+                   corpsecret: ENV['WECHAT_CORPSECRET'],
+                   agentid: ENV['WECHAT_AGENTID'],
                    token: ENV['WECHAT_TOKEN'],
                    access_token: ENV['WECHAT_ACCESS_TOKEN'],
                    type: ENV['WECHAT_TYPE'],
