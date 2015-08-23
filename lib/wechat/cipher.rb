@@ -43,16 +43,15 @@ module Wechat
     end
 
     def unpack(msg)
-      random = msg[0..16]
       msg_len = msg[16, 4].reverse.unpack('V')[0]
       content = msg[20, msg_len]
       app_id = msg[(20 + msg_len)..-1]
 
-      return content, app_id
+      [content, app_id]
     end
 
-
     private
+
     def encode_padding(data)
       length = data.bytes.length
       amount_to_pad = BLOCK_SIZE - (length % BLOCK_SIZE)
