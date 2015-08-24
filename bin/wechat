@@ -67,9 +67,9 @@ HELP
     puts 'Menu deleted' if Helper.with(options).menu_delete
   end
 
-  desc 'menu_create [MENU_YAML]', '创建菜单'
-  def menu_create(menu_yaml)
-    menu = YAML.load(File.new(menu_yaml).read)
+  desc 'menu_create [MENU_YAML_PATH]', '创建菜单'
+  def menu_create(menu_yaml_path)
+    menu = YAML.load(File.new(menu_yaml_path).read)
     puts 'Menu created' if Helper.with(options).menu_create(menu)
   end
 
@@ -139,15 +139,15 @@ HELP
     puts api.custom_message_send Wechat::Message.to(openid).music(thumb_media_id, music_url, api_opts)
   end
 
-  desc 'custom_news [OPENID, NEWS_YAML_FILE]', '发送图文客服消息'
-  def custom_news(openid, news_yaml)
-    articles = YAML.load(File.new(news_yaml).read)
+  desc 'custom_news [OPENID, NEWS_YAML_PATH]', '发送图文客服消息'
+  def custom_news(openid, news_yaml_path)
+    articles = YAML.load(File.new(news_yaml_path).read)
     puts Helper.with(options).custom_message_send Wechat::Message.to(openid).news(articles['articles'])
   end
 
-  desc 'template_message [OPENID, TEMPLATE_YAML_FILE]', '模板消息接口'
-  def template_message(openid, template_yaml)
-    template = YAML.load(File.new(template_yaml).read)
+  desc 'template_message [OPENID, TEMPLATE_YAML_PATH]', '模板消息接口'
+  def template_message(openid, template_yaml_path)
+    template = YAML.load(File.new(template_yaml_path).read)
     puts Helper.with(options).template_message_send Wechat::Message.to(openid).template(template['template'])
   end
 end
