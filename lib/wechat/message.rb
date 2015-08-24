@@ -68,6 +68,10 @@ module Wechat
       update(:ToUserName=>openid)
     end
 
+    def agent_id agentid
+      update(:AgentId=> agentid)
+    end
+
     def text content
       update(:MsgType=>"text", :Content=>content)
     end
@@ -120,7 +124,7 @@ module Wechat
         [(JSON_KEY_MAP[key] || key.downcase), value]
       end
 
-      json_hash.slice!("touser", "msgtype", "content", "image", "voice", "video", "music", "news", "articles","template").to_hash
+      json_hash.slice!("touser", "msgtype", "content", "image", "voice", "video", "music", "news", "articles","template", "agentid").to_hash
       case json_hash["msgtype"]
       when "text"
         json_hash["text"] = {"content" => json_hash.delete("content")}

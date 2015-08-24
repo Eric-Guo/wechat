@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class WechatController < ApplicationController
-  wechat_responder 
+  wechat_responder
 end
 
 describe WechatController, type: :controller do
@@ -35,9 +35,10 @@ describe WechatController, type: :controller do
     expect(controller.class.token).to eq(Wechat.config.token)
   end
 
-  describe "config responder using per controller configuration" do 
+  describe "config responder using per controller configuration" do
     controller do
-      wechat_responder appid: "controller_appid", secret: "controller_secret", token: "controller_token", access_token:"controller_access_token"
+      wechat_responder appid: "controller_appid", secret: "controller_secret", token: "controller_token", access_token:"controller_access_token",
+                       agentid: 1, encrypt_mode: false, encoding_aes_key: "encoding_aes_key"
     end
     specify "will set controller wechat api and token" do
       access_token = controller.class.wechat.access_token
@@ -45,6 +46,9 @@ describe WechatController, type: :controller do
       expect(access_token.secret).to eq("controller_secret")
       expect(access_token.token_file).to eq("controller_access_token")
       expect(controller.class.token).to eq("controller_token")
+      expect(controller.class.agentid).to eq(1)
+      expect(controller.class.encrypt_mode).to eq(false)
+      expect(controller.class.encoding_aes_key).to eq("encoding_aes_key")
     end
   end
 
@@ -85,7 +89,7 @@ describe WechatController, type: :controller do
 
   describe "responder_for" do
     controller do
-      wechat_responder 
+      wechat_responder
       on :text,  with: "command", respond: "string matched"
       on :text,  with: /^cmd:(.*)$/, respond: "regex matched"
       on :text,  respond: "text content"
@@ -133,11 +137,11 @@ describe WechatController, type: :controller do
 
   describe "fallback responder" do
     controller do
-      wechat_responder 
+      wechat_responder
       on :fallback, respond: "fallback responder"
     end
 
-    specify "will respond to any message" do 
+    specify "will respond to any message" do
       post :create, signature_params.merge(xml: text_message)
       expect(xml_to_hash(response)[:Content]).to eq("fallback responder")
     end
@@ -147,7 +151,7 @@ describe WechatController, type: :controller do
   describe "#create use cases" do
 
     controller do
-      wechat_responder 
+      wechat_responder
       on :text, respond: "text message" do |message, content|
         message.replay.text("should not be here")
       end
