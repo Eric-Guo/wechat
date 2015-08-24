@@ -4,7 +4,7 @@
 
 * Rename gems to wechat and ambitious to being #1 gems about development wechat. thanks Xiaoning transfer this gem name.
 * Merge all existing enhancement
-* Add Enterprise account support
+* Add wechat enterprise account support
 
 ## v0.1.1
 
