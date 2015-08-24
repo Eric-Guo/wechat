@@ -1,7 +1,12 @@
-before_install:
-  - gem update --system 2.1.11
-scripte: "CODECLIMATE_REPO_TOKEN=5487d50f1b609149dbfe9aa46a3f7ce3ed52c394565d609c8575086a82993541 bundle exec rake"
 language: ruby
+
+sudo: false
+
 rvm:
-  - "2.0.0"
-  - "2.1.0"
+  - 2.0.0
+  - 2.1
+  - 2.2
+
+install:
+  - bundle install --retry=3
+
