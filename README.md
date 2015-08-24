@@ -4,11 +4,11 @@ Wechat Rails
 [![Build Status](https://travis-ci.org/skinnyworm/omniauth-wechat-oauth2.svg)](https://travis-ci.org/skinnyworm/wechat-rails) [![Code Climate](https://codeclimate.com/github/skinnyworm/wechat-rails.png)](https://codeclimate.com/github/skinnyworm/wechat-rails) [![Code Coverage](https://codeclimate.com/github/skinnyworm/wechat-rails/coverage.png)](https://codeclimate.com/github/skinnyworm/wechat-rails) [![Gem Version](https://badge.fury.io/rb/wechat-rails.png)](http://badge.fury.io/rb/wechat-rails)
 
 
-Wechat-rails 可以帮助开发者方便地在Rails环境中集成微信公众平台提供的所有服务，目前微信公众平台提供了以下几种类型的服务。
+Wechat-rails 可以帮助开发者方便地在Rails环境中集成微信[公众平台](https://mp.weixin.qq.com/)和[企业平台](https://qy.weixin.qq.com)提供的服务，目前微信公众平台提供了以下几种类型的服务。
 
-- ##### 微信公众平台基本API, 无需Web环境。
-- ##### 消息处理机制, 需运行在Web环境中。
-- ##### OAuth 2.0认证机制
+- 微信公众平台基本API, 无需Web环境
+- 消息处理机制, 需运行在Web环境中
+- OAuth 2.0认证机制
 
 Wechat-rails gem 包含了一个命令行程序可以调用各种无需web环境的API。同时它也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理机制。如果你的App还需要集成微信OAuth2.0, 你可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 这个gem可以方便地和devise集成提供完整的用户认证.
 
@@ -39,8 +39,19 @@ secret: "my_secret"
 access_token: "/var/tmp/wechat_access_token"
 ```
 
+Windows或者使用企业号，需要存放在`C:/Users/[user_name]/`下，配置如下：
+
+```
+corpid: "my_appid"
+corpsecret: "my_secret"
+agentid: "1" # 企业应用的id，整型。可在应用的设置页面查看
+access_token: "C:/Users/[user_name]/wechat_access_token"
+```
+
 #### Rails 全局配置
 Rails环境中, 你可以在config中创建wechat.yml, 为每个rails environment创建不同的配置。
+
+公众号配置：
 
 ```
 default: &default
@@ -55,13 +66,32 @@ production:
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
 
-staging: 
-  <<: *default
-
 development: 
   <<: *default
 
 test: 
+  <<: *default
+```
+
+企业号配置：
+
+```
+default: &default
+  corpid: "corpid"
+  corpsecret: "corpsecret"
+  agentid:  "3"
+  access_token: "C:/Users/6749/wechat_access_token"
+
+production:
+  corpid:     <%= ENV['WECHAT_CORPID'] %>
+  corpsecret: <%= ENV['WECHAT_CORPSECRET'] %>
+  agentid:    <%= ENV['WECHAT_AGENTID'] %>
+  access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
+
+development:
+  <<: *default
+
+test:
   <<: *default
 ```
 
@@ -84,6 +114,7 @@ Wechat commands:
   wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
   wechat custom_news [OPENID, NEWS_YAML_FILE]              # 发送图文客服消息
+  wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息(仅企业号)
   wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
   wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
   wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息

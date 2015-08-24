@@ -4,142 +4,152 @@ lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
 $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 
 require 'thor'
-require "wechat-rails"
+require 'wechat'
 require 'json'
-require "active_support"
-require "active_support/core_ext"
+require 'active_support/dependencies/autoload'
+require 'active_support/core_ext'
+require 'active_support/json'
 require 'fileutils'
 require 'yaml'
 
-
-class App < Thor                                                 
+class App < Thor
   class Helper
     def self.with(options)
-      config_file = File.join(Dir.home, ".wechat.yml")
+      config_file = File.join(Dir.home, '.wechat.yml')
       config = YAML.load(File.new(config_file).read) if File.exist?(config_file)
 
       config ||= {}
-      appid =  config["appid"]
-      secret = config["secret"]
-      token_file = options[:toke_file] ||  config["access_token"] || "/var/tmp/wechat_access_token"
+      appid =  config['appid']
+      secret = config['secret']
+      corpid = config['corpid']
+      corpsecret = config['corpsecret']
+      token_file = options[:toke_file] || config['access_token'] || '/var/tmp/wechat_access_token'
+      agentid = config['agentid']
 
-      if (appid.nil? || secret.nil? || token_file.nil?)
-      puts <<-HELP
+      if appid.present? && secret.present? && token_file.present?
+        Wechat::Api.new(appid, secret, token_file)
+      elsif corpid.present? && corpsecret.present? && token_file.present?
+        Wechat::CorpApi.new(corpid, corpsecret, token_file, agentid)
+      else
+        puts <<-HELP
 You need create ~/.wechat.yml with wechat appid and secret. For example:
 
   appid: <wechat appid>
   secret: <wechat secret>
-  access_toke: "/var/tmp/wechat_access_token"
+  access_token: "/var/tmp/wechat_access_token"
 
 HELP
-      exit 1
+        exit 1
       end
-      Wechat::Api.new(appid, secret, token_file)
     end
   end
 
-  package_name "Wechat"
-  option :toke_file, :aliases=>"-t", :desc => "File to store access token"
+  package_name 'Wechat'
+  option :toke_file, aliases: '-t', desc: 'File to store access token'
 
-  desc "users", "关注者列表"
+  desc 'users', '关注者列表'
   def users
     puts Helper.with(options).users
   end
 
-  desc "user [OPEN_ID]", "查找关注者"
+  desc 'user [OPEN_ID]', '查找关注者'
   def user(open_id)
     puts Helper.with(options).user(open_id)
   end
 
-  desc "menu", "当前菜单"
+  desc 'menu', '当前菜单'
   def menu
     puts Helper.with(options).menu
   end
 
-  desc "menu_delete", "删除菜单"
+  desc 'menu_delete', '删除菜单'
   def menu_delete
-    puts "Menu deleted" if Helper.with(options).menu_delete
+    puts 'Menu deleted' if Helper.with(options).menu_delete
   end
 
-  desc "menu_create [MENU_YAML]", "创建菜单"
+  desc 'menu_create [MENU_YAML]', '创建菜单'
   def menu_create(menu_yaml)
     menu = YAML.load(File.new(menu_yaml).read)
-    puts "Menu created" if Helper.with(options).menu_create(menu)
+    puts 'Menu created' if Helper.with(options).menu_create(menu)
   end
 
-  desc "media [MEDIA_ID, PATH]", "媒体下载"
+  desc 'media [MEDIA_ID, PATH]', '媒体下载'
   def media(media_id, path)
     tmp_file = Helper.with(options).media(media_id)
     FileUtils.mv(tmp_file.path, path)
-    puts "File downloaded"
+    puts 'File downloaded'
   end
 
-  desc "media_create [MEDIA_ID, PATH]", "媒体上传"
+  desc 'media_create [MEDIA_ID, PATH]', '媒体上传'
   def media_create(type, path)
     file = File.new(path)
     puts Helper.with(options).media_create(type, file)
   end
-  
-  desc "custom_text [OPENID, TEXT_MESSAGE]", "发送文字客服消息"
-  def custom_text openid, text_message
+
+  desc 'message_send [OPENID, TEXT_MESSAGE]', '发送文字消息(仅企业号)'
+  def message_send(openid, text_message)
+    puts Helper.with(options).message_send Wechat::Message.to(openid).text(text_message)
+  end
+
+  desc 'custom_text [OPENID, TEXT_MESSAGE]', '发送文字客服消息'
+  def custom_text(openid, text_message)
     puts Helper.with(options).custom_message_send Wechat::Message.to(openid).text(text_message)
   end
 
-  desc "custom_image [OPENID, IMAGE_PATH]", "发送图片客服消息"
-  def custom_image openid, image_path
+  desc 'custom_image [OPENID, IMAGE_PATH]', '发送图片客服消息'
+  def custom_image(openid, image_path)
     file = File.new(image_path)
     api = Helper.with(options)
 
-    media_id = api.media_create("image", file)["media_id"]
+    media_id = api.media_create('image', file)['media_id']
     puts api.custom_message_send Wechat::Message.to(openid).image(media_id)
   end
 
-  desc "custom_voice [OPENID, VOICE_PATH]", "发送语音客服消息"
-  def custom_voice openid, voice_path
+  desc 'custom_voice [OPENID, VOICE_PATH]', '发送语音客服消息'
+  def custom_voice(openid, voice_path)
     file = File.new(voice_path)
     api = Helper.with(options)
 
-    media_id = api.media_create("voice", file)["media_id"]
+    media_id = api.media_create('voice', file)['media_id']
     puts api.custom_message_send Wechat::Message.to(openid).voice(media_id)
   end
 
-  desc "custom_video [OPENID, VIDEO_PATH]", "发送视频客服消息"
-  method_option :title, :aliases => "-h", :desc => "视频标题"
-  method_option :description, :aliases => "-d", :desc => "视频描述"
-  def custom_video openid, video_path
+  desc 'custom_video [OPENID, VIDEO_PATH]', '发送视频客服消息'
+  method_option :title, aliases: '-h', desc: '视频标题'
+  method_option :description, aliases: '-d', desc: '视频描述'
+  def custom_video(openid, video_path)
     file = File.new(video_path)
     api = Helper.with(options)
 
     api_opts = options.slice(:title, :description)
-    media_id = api.media_create("video", file)["media_id"]
+    media_id = api.media_create('video', file)['media_id']
     puts api.custom_message_send Wechat::Message.to(openid).video(media_id, api_opts)
   end
 
-  desc "custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]", "发送音乐客服消息"
-  method_option :title, :aliases => "-h", :desc => "音乐标题"
-  method_option :description, :aliases => "-d", :desc => "音乐描述"
-  method_option :HQ_music_url, :aliases => "-u", :desc => "高质量音乐URL链接"
-  def custom_music openid, thumbnail_path, music_url
+  desc 'custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]', '发送音乐客服消息'
+  method_option :title, aliases: '-h', desc: '音乐标题'
+  method_option :description, aliases: '-d', desc: '音乐描述'
+  method_option :HQ_music_url, aliases: '-u', desc: '高质量音乐URL链接'
+  def custom_music(openid, thumbnail_path, music_url)
     file = File.new(thumbnail_path)
     api = Helper.with(options)
 
     api_opts = options.slice(:title, :description, :HQ_music_url)
-    thumb_media_id = api.media_create("thumb", file)["thumb_media_id"]
+    thumb_media_id = api.media_create('thumb', file)['thumb_media_id']
     puts api.custom_message_send Wechat::Message.to(openid).music(thumb_media_id, music_url, api_opts)
   end
 
-  desc "custom_news [OPENID, NEWS_YAML_FILE]", "发送图文客服消息"
-  def custom_news openid, news_yaml
+  desc 'custom_news [OPENID, NEWS_YAML_FILE]', '发送图文客服消息'
+  def custom_news(openid, news_yaml)
     articles = YAML.load(File.new(news_yaml).read)
-    puts Helper.with(options).custom_message_send Wechat::Message.to(openid).news(articles["articles"])
+    puts Helper.with(options).custom_message_send Wechat::Message.to(openid).news(articles['articles'])
   end
 
-  desc "template_message [OPENID, TEMPLATE_YAML_FILE]", "模板消息接口"
-  def template_message openid, template_yaml
+  desc 'template_message [OPENID, TEMPLATE_YAML_FILE]', '模板消息接口'
+  def template_message(openid, template_yaml)
     template = YAML.load(File.new(template_yaml).read)
-    puts Helper.with(options).template_message_send Wechat::Message.to(openid).template(template["template"])    
+    puts Helper.with(options).template_message_send Wechat::Message.to(openid).template(template['template'])
   end
-
 end
 
 App.start
