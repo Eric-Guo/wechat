@@ -106,6 +106,12 @@ class WechatFirstController < ApplicationController
 end
 ```
     
+#### jssdk 支持
+jssdk 使用前需通过config接口注入权限验证配置, 所需参数可以通过 signature 方法获取:
+```ruby
+WechatsController.wechat.jsapi_ticket.signature(request.original_url)
+```
+
 ## 使用命令行
 
 ```

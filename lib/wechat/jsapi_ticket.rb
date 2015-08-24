@@ -10,6 +10,13 @@ module Wechat
       @jsapi_ticket_file = jsapi_ticket_file
     end
 
+    #  获取微信 jssdk 签名所需的 jsapi_ticket, 返回具有如下结构的 hash:
+    #  {
+    #    "errcode":0,
+    #    "errmsg":"ok",
+    #    "ticket":"bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA",
+    #    "expires_in":7200
+    #  }
     def ticket
       begin
         @jsapi_ticket_data ||= JSON.parse(File.read(jsapi_ticket_file))
@@ -24,6 +31,7 @@ module Wechat
       valid_ticket(@jsapi_ticket_data)
     end
 
+    # 刷新 jsapi_ticket
     def refresh
       data = client.get('ticket/getticket', params: { access_token: access_token.token, type: 'jsapi' })
       data.merge!(created_at: Time.now.to_i)
@@ -31,7 +39,14 @@ module Wechat
       @jsapi_ticket_data = data
     end
 
-    # 获取 jsapi_ticket 签名, 并返回所有必要参数
+    # 获取 jssdk 签名及注册所需其他参数, 返回具有如下结构的 hash:
+    #  params = {
+    #    noncestr: noncestr,
+    #    timestamp: timestamp,
+    #    jsapi_ticket: ticket,
+    #    url: url,
+    #    signature: signature
+    #  }
     def signature(url)
       timestamp = Time.now.to_i
       noncestr = generate_noncestr
