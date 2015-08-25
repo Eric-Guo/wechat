@@ -1,12 +1,5 @@
 module Wechat
   class Message
-    JSON_KEY_MAP = {
-      'ToUserName' => 'touser',
-      'MediaId' => 'media_id',
-      'ThumbMediaId' => 'thumb_media_id',
-      'TemplateId' => 'template_id'
-    }
-
     class << self
       def from_hash(message_hash)
         new(message_hash)
@@ -117,13 +110,22 @@ module Wechat
       message_hash.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
     end
 
+    TO_JSON_KEY_MAP = {
+      'ToUserName' => 'touser',
+      'MediaId' => 'media_id',
+      'ThumbMediaId' => 'thumb_media_id',
+      'TemplateId' => 'template_id'
+    }
+
+    TO_JSON_ALLOWED = %w(touser msgtype content image voice video music news articles template agentid)
+
     def to_json
       json_hash = deep_recursive(message_hash) do |key, value|
         key = key.to_s
-        [(JSON_KEY_MAP[key] || key.downcase), value]
+        [(TO_JSON_KEY_MAP[key] || key.downcase), value]
       end
 
-      json_hash.slice!("touser", "msgtype", "content", "image", "voice", "video", "music", "news", "articles","template", "agentid").to_hash
+      json_hash = json_hash.select { |k, _v| TO_JSON_ALLOWED.include? k }
       case json_hash['msgtype']
       when 'text'
         json_hash['text'] = { 'content' => json_hash.delete('content') }

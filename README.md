@@ -327,8 +327,8 @@ class WechatsController < ApplicationController
   end
 
   # 当收到 EventKey 为 mykey 的事件时
-  on :event, with: "mykey", do |request, key|
-    request.reply.text "收到 EventKey 为 #{key} 的事件"
+  on :event, with: "mykey" do |request, key|
+    request.reply.text "收到来自#{request[:FromUserName]} 的EventKey 为 #{key} 的事件"
   end
 
   # 处理图片信息

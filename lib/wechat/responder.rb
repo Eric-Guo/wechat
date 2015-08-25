@@ -6,7 +6,7 @@ module Wechat
     included do
       skip_before_filter :verify_authenticity_token
       before_filter :verify_signature, only: [:show, :create]
-      #delegate :wehcat, to: :class
+      #delegate :wechat, to: :class
     end
 
     module ClassMethods
