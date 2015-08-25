@@ -39,7 +39,7 @@ secret: "my_secret"
 access_token: "/var/tmp/wechat_access_token"
 ```
 
-Windows或者使用企业号，需要存放在`C:/Users/[user_name]/`下，配置如下：
+Windows或者使用企业号，需要存放在`C:/Users/[user_name]/`下，其中corpid和corpsecret可以从企业号管理界面的设置->权限管理，通过新建任意一个管理组后获取。
 
 ```
 corpid: "my_appid"
@@ -73,20 +73,26 @@ test:
   <<: *default
 ```
 
-企业号配置：
+企业号配置，其中token和encoding_aes_key可以从企业号管理界面的应用中心->某个应用->模式选择，选择回调模式后获得。
 
 ```
 default: &default
   corpid: "corpid"
   corpsecret: "corpsecret"
-  agentid:  "3"
+  agentid:  "1"
   access_token: "C:/Users/[user_name]/wechat_access_token"
+  encrypt_mode: true
+  token:    ""
+  encoding_aes_key:  ""
 
 production:
   corpid:     <%= ENV['WECHAT_CORPID'] %>
   corpsecret: <%= ENV['WECHAT_CORPSECRET'] %>
   agentid:    <%= ENV['WECHAT_AGENTID'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
+  encrypt_mode:  <%= ENV['WECHAT_ENCRYPT_MODE'] %>
+  token:      <%= ENV['WECHAT_TOKEN'] %>
+  encoding_aes_key:  <%= ENV['WECHAT_ENCODING_AES_KEY'] %>
 
 development:
   <<: *default
