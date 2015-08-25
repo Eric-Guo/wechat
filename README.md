@@ -352,6 +352,16 @@ class WechatsController < ApplicationController
     request.reply.text("#{request[:Location_X]}, #{request[:Location_Y]}") #回复地理位置
   end
 
+  # 当用户加关注
+  on :event, with: 'subscribe' do |request, key|
+    request.reply.text "#{request[:FromUserName]} #{key} now"
+  end
+
+  # 当用户取消关注订阅
+  on :event, with: 'unsubscribe' do |request, key|
+    request.reply.text "#{request[:FromUserName]}无法收到这条消息。"
+  end
+
   # 当无任何responder处理用户信息时,使用这个responder处理
   on :fallback, respond: "fallback message"  
 end
