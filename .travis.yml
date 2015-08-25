@@ -1,7 +1,5 @@
 language: ruby
 
-sudo: false
-
 rvm:
   - 1.9.3
   - 2.0.0
@@ -9,5 +7,10 @@ rvm:
   - 2.2
 
 install:
-  - bundle install --retry=3
+  - "travis_retry bundle config build.nokogiri --use-system-libraries"
+  - "travis_retry bundle install --retry 3"
 
+script: bundle exec rake
+
+git:
+  depth: 10
