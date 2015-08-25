@@ -187,15 +187,47 @@ menu.yaml
 
 ```
 button:
-  -
-    type: "view"
-    name: "保护的"
-    url: "http://***/protected"
-  -
-    type: "view"
-    name: "公开的"
-    url: "http://***"
-    
+ -
+  name: "我要"
+  sub_button:
+   -
+    type: "click"
+    name: "预订午餐"
+    key:  "BOOK_LUNCH"
+    sub_button:
+     -
+   -
+    type: "click"
+    name: "预订晚餐"
+    key:  "BOOK_DINNER"
+    sub_button:
+     -
+   -
+    type: "click"
+    name: "预订半夜餐"
+    key:  "BOOK_NIGHT_SNACK"
+    sub_button:
+     -
+ -
+  name: "查询"
+  sub_button:
+   -
+    type: "click"
+    name: "进出记录"
+    key:  "BADGE_IN_OUT"
+    sub_button:
+     -
+   -
+    type: "click"
+    name: "年假余额"
+    key:  "ANNUAL_LEAVE"
+    sub_button:
+     -
+ -
+  type: "view"
+  name: "关于"
+  url:  "http://blog.cloud-mes.com/"
+
 ```
 
 然后执行命令行
@@ -353,5 +385,4 @@ Wechat 的核心是一个Message DSL,帮助开发者构建各种类型的消息�
 ....
 
   
-
 
