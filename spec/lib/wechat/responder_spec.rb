@@ -173,7 +173,7 @@ describe WechatController, type: :controller do
       end
 
       on :text, with: /^cmd:(.*)$/ do |message, cmd|
-        message.reply.text("text: #{cmd}")
+        message.reply.text("cmd: #{cmd}")
       end
 
       on :event, with: 'subscribe' do |message, event|
@@ -215,8 +215,8 @@ describe WechatController, type: :controller do
     end
 
     specify 'response text with regex matched' do
-      post :create, signature_params.merge(xml: text_message.merge(Content: 'command'))
-      expect(xml_to_hash(response)[:Content]).to eq('text: command')
+      post :create, signature_params.merge(xml: text_message.merge(Content: 'cmd:reload'))
+      expect(xml_to_hash(response)[:Content]).to eq('cmd: reload')
     end
 
     specify 'response event with matched event' do
