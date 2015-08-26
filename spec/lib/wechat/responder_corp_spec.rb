@@ -48,7 +48,7 @@ describe WechatCorpController, type: :controller do
         request.reply.text "echo: #{content}"
       end
 
-      on :event, with: 'my_event' do |request|
+      on :event, with: 'my_event' do |request, key|
         request.reply.text "echo: my_event"
       end
     end

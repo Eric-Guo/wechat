@@ -92,7 +92,8 @@ module Wechat
         when responder[:respond]
           request.reply.text responder[:respond]
         when responder[:proc]
-          responder[:proc].call(*args.unshift(request))
+          define_singleton_method :process, responder[:proc]
+          send(:process, *args.unshift(request))
         else
           next
         end
