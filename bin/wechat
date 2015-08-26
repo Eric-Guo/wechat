@@ -80,7 +80,7 @@ HELP
     puts 'File downloaded'
   end
 
-  desc 'media_create [MEDIA_ID, PATH]', '媒体上传'
+  desc 'media_create [MEDIA_TYPE, PATH]', '媒体上传'
   def media_create(type, path)
     file = File.new(path)
     puts Helper.with(options).media_create(type, file)

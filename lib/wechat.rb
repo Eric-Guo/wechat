@@ -4,14 +4,13 @@ require 'wechat/corp_api'
 module Wechat
   autoload :Message, 'wechat/message'
   autoload :Responder, 'wechat/responder'
-  autoload :Response, 'wechat/response'
   autoload :Cipher, 'wechat/cipher'
 
   class AccessTokenExpiredError < StandardError; end
   class ResponseError < StandardError
     attr_reader :error_code
     def initialize(errcode, errmsg)
-      error_code = errcode
+      @error_code = errcode
       super "#{errmsg}(#{error_code})"
     end
   end
