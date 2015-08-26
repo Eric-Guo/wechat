@@ -4,26 +4,28 @@ WeChat
 [![Build Status](https://travis-ci.org/Eric-Guo/wechat.svg)](https://travis-ci.org/Eric-Guo/wechat) [![Code Climate](https://codeclimate.com/github/Eric-Guo/wechat.png)](https://codeclimate.com/github/Eric-Guo/wechat) [![Code Coverage](https://codeclimate.com/github/Eric-Guo/wechat/coverage.png)](https://codeclimate.com/github/Eric-Guo/wechat) [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://badge.fury.io/for/rb/wechat)
 
 
-WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平台](https://mp.weixin.qq.com/)和[企业平台](https://qy.weixin.qq.com)提供的服务，目前微信公众平台提供了以下几种类型的服务。
+WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平台](https://mp.weixin.qq.com/)和[企业平台](https://qy.weixin.qq.com)提供的服务，包括：
 
-- 微信公众平台基本API, 无需Web环境
-- 消息处理机制, 需运行在Web环境中
+- 微信公众/企业平台[主动消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF)API（命令行和Web环境都可以使用）
+- [回调消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（必须运行Web服务器）
+- [微信JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config接口注入权限验证
 - OAuth 2.0认证机制
 
-wechat gem 包含了一个命令行程序可以调用各种无需web环境的API。同时它也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理机制。如果你的App还需要集成微信OAuth2.0, 你可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 这个gem可以方便地和devise集成提供完整的用户认证.
+命令行工具`wechat`可以调用各种无需web环境的API。同时也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理机制。如果你的App还需要集成微信OAuth2.0, 你可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 以便和devise集成，提供完整的用户认证。
 
-在使用这个Gem前，你需要获得微信API的appid, secret, token。具体情况可以参见http://mp.weixin.qq.com
 
 ## 安装
 
-Using `gem install` or add to your app's `Gemfile`:
+Using `gem install`
 
 ```
 gem install "wechat"
 ```
 
+Or add to your app's `Gemfile`:
+
 ```
-gem "wechat", git:"https://github.com/Eric-Guo/wechat"
+gem 'wechat'
 ```
 
 
@@ -31,7 +33,7 @@ gem "wechat", git:"https://github.com/Eric-Guo/wechat"
 
 #### 命令行程序的配置
 
-要使用命令行程序，你需要在你的home目录中创建一个`~/.wechat.yml`，包含以下内容。其中`access_token`是存放access_token的文件位置。
+要使用命令行程序，需要在home目录中创建一个`~/.wechat.yml`，包含以下内容。其中`access_token`是存放access_token的文件位置。
 
 ```
 appid: "my_appid"
@@ -49,9 +51,9 @@ access_token: "C:/Users/[user_name]/wechat_access_token"
 ```
 
 #### Rails 全局配置
-Rails环境中, 你可以在config中创建wechat.yml, 为每个rails environment创建不同的配置。
+Rails应用程序中，需要将配置文件放在`config/wechat.yml`，可以为不同environment创建不同的配置。
 
-公众号配置：
+公众号配置示例：
 
 ```
 default: &default
@@ -73,7 +75,7 @@ test:
   <<: *default
 ```
 
-企业号配置，其中token和encoding_aes_key可以从企业号管理界面的应用中心->某个应用->模式选择，选择回调模式后获得。
+企业号配置下必须使用加密模式，其中token和encoding_aes_key可以从企业号管理界面的应用中心->某个应用->模式选择，选择回调模式后获得。
 
 ```
 default: &default
@@ -101,8 +103,11 @@ test:
   <<: *default
 ```
 
-#### Rails 为每个Responder配置不同的appid和secret
-在个别情况下，你的app可能需要处理来自多个公众账号的消息，这时你可以配置多个responder controller。
+注意在Rails项目根目录下运行`wechat`命令行工具会优先使用`config/wechat.yml`中的`default`配置，如果失败则使用`~\.wechat.yml`中的配置，以便于在生产环境下管理多个微信账号应用。
+
+#### 为每个Responder配置不同的appid和secret
+
+在个别情况下，单个Rails应用可能需要处理来自多个账号的消息，此时可以配置多个responder controller。
 
 ```ruby
 class WechatFirstController < ApplicationController
@@ -113,7 +118,9 @@ end
 ```
     
 #### jssdk 支持
+
 jssdk 使用前需通过config接口注入权限验证配置, 所需参数可以通过 signature 方法获取:
+
 ```ruby
 WechatsController.wechat.jsapi_ticket.signature(request.original_url)
 ```
