@@ -63,7 +63,7 @@ module Wechat
           end
 
           if condition.is_a? Regexp
-            matched[:scoped] ||= [responder] + $~.captures if value =~ condition
+            matched[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
           else
             matched[:scoped] ||= [responder, value] if value == condition
           end
