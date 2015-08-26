@@ -1,3 +1,5 @@
+require 'English'
+
 module Wechat
   module Responder
     extend ActiveSupport::Concern
