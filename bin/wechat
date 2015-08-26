@@ -15,10 +15,21 @@ require 'yaml'
 class App < Thor
   class Helper
     def self.with(options)
-      config_file = File.join(Dir.home, '.wechat.yml')
-      config = YAML.load(File.new(config_file).read) if File.exist?(config_file)
+      rails_config_file = File.join(Dir.getwd, 'config/wechat.yml')
+      home_config_file = File.join(Dir.home, '.wechat.yml')
 
-      config ||= {}
+      config = {}
+      if File.exist?(rails_config_file)
+        config = YAML.load(ERB.new(File.new(rails_config_file).read).result)['default']
+        puts 'Using rails project config/wechat.yml default setting...' if config.present?
+      end
+
+      if config.blank? && File.exist?(home_config_file)
+        config = YAML.load ERB.new(File.read(home_config_file)).result
+      else
+        config = {}
+      end
+
       appid =  config['appid']
       secret = config['secret']
       corpid = config['corpid']
@@ -32,12 +43,8 @@ class App < Thor
         Wechat::CorpApi.new(corpid, corpsecret, token_file, agentid)
       else
         puts <<-HELP
-You need create ~/.wechat.yml with wechat appid and secret. For example:
-
-  appid: <wechat appid>
-  secret: <wechat secret>
-  access_token: "/var/tmp/wechat_access_token"
-
+Need create ~/.wechat.yml with wechat appid and secret
+or running at rails root folder so wechat can read config/wechat.yml
 HELP
         exit 1
       end
