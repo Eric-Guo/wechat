@@ -88,8 +88,12 @@ module Wechat
         responder ||= self.class.responders(:fallback).first
 
         next if responder.nil?
-        next request.reply.text responder[:respond] if responder[:respond]
-        next responder[:proc].call(*args.unshift(request)) if responder[:proc]
+        case
+        when responder[:respond]
+          next request.reply.text responder[:respond]
+        when responder[:proc]
+          next responder[:proc].call(*args.unshift(request))
+        end
       end
 
       if response.respond_to? :to_xml
