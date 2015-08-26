@@ -90,9 +90,11 @@ module Wechat
         next if responder.nil?
         case
         when responder[:respond]
-          next request.reply.text responder[:respond]
+          request.reply.text responder[:respond]
         when responder[:proc]
-          next responder[:proc].call(*args.unshift(request))
+          responder[:proc].call(*args.unshift(request))
+        else
+          next
         end
       end
 
