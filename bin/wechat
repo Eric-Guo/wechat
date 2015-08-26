@@ -47,13 +47,15 @@ HELP
 
       if File.exist?(rails_config_file)
         config = YAML.load(ERB.new(File.new(rails_config_file).read).result)['default']
-        puts 'Using rails project config/wechat.yml default setting...' if config.present?
+        if config.present? && (config['appid'] || config['corpid'])
+          puts 'Using rails project config/wechat.yml default setting...'
+        else
+          config = {}
+        end
       end
 
       if config.blank? && File.exist?(home_config_file)
         config = YAML.load ERB.new(File.read(home_config_file)).result
-      else
-        config = {}
       end
       config
     end
