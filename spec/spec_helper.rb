@@ -15,6 +15,11 @@ RSpec.configure do |config|
   config.mock_with :rspec
   config.infer_base_class_for_anonymous_controllers = true
   config.order = "random"
+
+  # Allows RSpec to persist some state between runs in order to support
+  # the `--only-failures` and `--next-failure` CLI options. We recommend
+  # you configure your source control system to ignore this file.
+  config.example_status_persistence_file_path = 'spec/examples.txt'
 end
 
 RSpec::Expectations.configuration.warn_about_potential_false_positives = false
