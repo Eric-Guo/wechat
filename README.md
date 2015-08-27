@@ -237,7 +237,7 @@ button:
 
 ```
 
-然后执行命令行
+然后执行命令行，需确保设置，权限管理中有对此应用的管理权限，否则会报[60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E)错。
 
 ```
 $ wechat menu_create menu.yaml
