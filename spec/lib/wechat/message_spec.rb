@@ -109,6 +109,13 @@ RSpec.describe Wechat::Message do
       end
     end
 
+    describe '#transfer_customer_service' do
+      specify 'will update MsgType and return self' do
+        expect(message.transfer_customer_service).to eq(message)
+        expect(message[:MsgType]).to eq 'transfer_customer_service'
+      end
+    end
+
     describe '#image' do
       specify 'will update MsgType and MediaId field and return self' do
         expect(message.image('media_id')).to eq(message)

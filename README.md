@@ -317,11 +317,10 @@ $ wechat template_message oCfEht9oM*********** template.yml
 然后创建Controller class, 例如
 
 ```ruby
-
 class WechatsController < ApplicationController
   wechat_responder
   
-  # 默认的文字信息responder
+  # 默认文字信息responder
   on :text do |request, content|
     request.reply.text "echo: #{content}" #Just echo
   end
@@ -401,6 +400,19 @@ end
 - :link 响应链接消息
 - :event 响应事件消息, 可以用`:with`参数来匹配事件类型
 - :fallback 默认响应，当收到的消息无法被其他responder响应时，会使用这个responder.
+
+### 多客服消息转发
+
+```ruby
+class WechatsController < ApplicationController
+  # 当无任何responder处理用户信息时，转发至客服处理。
+  on :fallback, respond: nil do |message|
+	message.reply.transfer_customer_service
+  end 
+end
+```
+
+注意设置了[多客服消息转发](http://dkf.qq.com/)后，不能再添加`默认文字信息responder`，否则文字消息将得不到转发。
 
 ## Message DSL
 
