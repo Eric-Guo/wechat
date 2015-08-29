@@ -49,7 +49,7 @@ module Wechat
     #  }
     def signature(url)
       timestamp = Time.now.to_i
-      noncestr = generate_noncestr
+      noncestr = SecureRandom.base64(16)
       params = {
         noncestr: noncestr,
         timestamp: timestamp,
@@ -69,18 +69,6 @@ module Wechat
       ticket = jsapi_ticket_data['ticket'] || jsapi_ticket_data[:ticket]
       raise "Response didn't have ticket" if  ticket.blank?
       ticket
-    end
-
-    # 生成随机字符串
-    # @param  Integer length 长度, 默认为16
-    # @return String
-    def generate_noncestr(length = 16)
-      chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-      str = ''
-      1.upto(length) do |i|
-        str += chars[rand(chars.length)]
-      end
-      str
     end
   end
 end
