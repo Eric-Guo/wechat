@@ -406,7 +406,7 @@ end
 ```ruby
 class WechatsController < ApplicationController
   # 当无任何responder处理用户信息时，转发至客服处理。
-  on :fallback, respond: nil do |message|
+  on :fallback do |message|
 	message.reply.transfer_customer_service
   end 
 end

@@ -164,7 +164,7 @@ RSpec.describe WechatController, type: :controller do
   describe 'fallback responder transfer to customer service' do
     controller do
       wechat_responder
-      on :fallback, respond: nil do |message|
+      on :fallback do |message|
         message.reply.transfer_customer_service
       end
     end
