@@ -175,6 +175,20 @@ RSpec.describe WechatController, type: :controller do
     end
   end
 
+  describe 'default text transfer to customer service' do
+    controller do
+      wechat_responder
+      on :text do |request, _content|
+        request.reply.transfer_customer_service
+      end
+    end
+
+    specify 'will change MsgType to transfer_customer_service' do
+      post :create, signature_params.merge(xml: text_message)
+      expect(xml_to_hash(response)[:MsgType]).to eq 'transfer_customer_service'
+    end
+  end
+
   describe '#create use cases' do
     controller do
       wechat_responder
