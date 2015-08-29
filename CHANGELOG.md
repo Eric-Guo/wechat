@@ -1,9 +1,10 @@
 # Changelog
 
-## v0.3.0
+## v0.3.0 (released at 8/30/2015)
 
 * New user group management API
-* Read and write access_token properly using file locking, close #43
+* Allow transfer to customer service on fallback. #42
+* Read and write access_token properly using file locking, #43
 
 ## v0.2.0 (released at 8/27/2015)
 
