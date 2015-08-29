@@ -1,13 +1,12 @@
 require 'spec_helper'
 
 describe Wechat::Cipher do
-
   subject { Class.new.send(:include, Wechat::Cipher) }
 
   it '#encode_padding' do
     result = subject.new.instance_eval { encode_padding('abcd') }
     expect(result.length).to eq Wechat::Cipher::BLOCK_SIZE
-    expect(result.bytes[-1]).to eq (Wechat::Cipher::BLOCK_SIZE - 4)
+    expect(result.bytes[-1]).to eq Wechat::Cipher::BLOCK_SIZE - 4
   end
 
   it '#decode_padding' do
@@ -35,5 +34,4 @@ describe Wechat::Cipher do
     expect(content2).to eq content
     expect(app_id2).to eq app_id
   end
-
 end
