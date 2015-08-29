@@ -56,7 +56,7 @@ module Wechat
       private
 
       def match_responders(responders, value)
-        matched = responders.inject({ scoped: nil, general: nil }) do |matched, responder|
+        match_responder = responders.inject(scoped: nil, general: nil) do |matched, responder|
           condition = responder[:with]
 
           if condition.nil?
@@ -71,7 +71,7 @@ module Wechat
           end
           matched
         end
-        matched[:scoped] || matched[:general]
+        match_responder[:scoped] || match_responder[:general]
       end
     end
 
