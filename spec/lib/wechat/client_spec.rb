@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wechat::Client do
+RSpec.describe Wechat::Client do
   subject do
     Wechat::Client.new('http://host/')
   end

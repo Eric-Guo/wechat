@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wechat::Cipher do
+RSpec.describe Wechat::Cipher do
   subject { Class.new.send(:include, Wechat::Cipher) }
 
   it '#encode_padding' do

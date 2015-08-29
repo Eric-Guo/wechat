@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wechat::Message do
+RSpec.describe Wechat::Message do
   let(:text_request) { request_base.merge(MsgType: 'text', Content: 'text message') }
 
   let(:request_base) do

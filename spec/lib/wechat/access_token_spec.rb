@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wechat::AccessToken do
+RSpec.describe Wechat::AccessToken do
   let(:token_content) { { 'access_token' => '12345', 'expires_in' => 7200 } }
   let(:token_file) { Rails.root.join('access_token') }
   let(:client) { double(:client) }

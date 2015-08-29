@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wechat::JsapiTicket do
+RSpec.describe Wechat::JsapiTicket do
   let(:ticket_content) do
     {
       errcode: 0,

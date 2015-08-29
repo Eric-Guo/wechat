@@ -9,7 +9,7 @@ class WechatCorpController < ApplicationController
                    agentid: 1, encrypt_mode: true, encoding_aes_key: ENCODING_AES_KEY
 end
 
-describe WechatCorpController, type: :controller do
+RSpec.describe WechatCorpController, type: :controller do
   render_views
 
   let(:message_base) do

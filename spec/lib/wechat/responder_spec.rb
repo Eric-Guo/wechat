@@ -4,7 +4,7 @@ class WechatController < ApplicationController
   wechat_responder
 end
 
-describe WechatController, type: :controller do
+RSpec.describe WechatController, type: :controller do
   def xml_to_hash(response)
     Hash.from_xml(response.body)['xml'].symbolize_keys
   end
