@@ -15,6 +15,22 @@ class Wechat::Api
     @jsapi_ticket = Wechat::JsapiTicket.new(@client, @access_token, jsapi_ticket_file)
   end
 
+  def groups
+    get('groups/get')
+  end
+
+  def group_create(group_name)
+    post 'groups/create', JSON.generate(group: { name: group_name })
+  end
+
+  def group_update(groupid, new_group_name)
+    post 'groups/update', JSON.generate(group: { id: groupid, name: new_group_name })
+  end
+
+  def group_delete(groupid)
+    post 'groups/delete', JSON.generate(group: { id: groupid })
+  end
+
   def users(nextid = nil)
     params = { params: { next_openid: nextid } } if nextid.present?
     get('user/get', params || {})
@@ -22,6 +38,14 @@ class Wechat::Api
 
   def user(openid)
     get('user/info', params: { openid: openid })
+  end
+
+  def user_group(openid)
+    post 'groups/getid', JSON.generate(openid: openid)
+  end
+
+  def user_change_group(openid, to_groupid)
+    post 'groups/members/update', JSON.generate(openid: openid, to_groupid: to_groupid)
   end
 
   def menu

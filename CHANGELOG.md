@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.0
+
+* New user group management API
+* Read and write access_token properly using file locking, close #43
+
 ## v0.2.0 (released at 8/27/2015)
 
 * Add wechat enterprise account support

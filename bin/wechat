@@ -37,8 +37,6 @@ HELP
       end
     end
 
-    private
-
     def self.loading_config
       config = {}
 
@@ -64,6 +62,26 @@ HELP
   package_name 'Wechat'
   option :toke_file, aliases: '-t', desc: 'File to store access token'
 
+  desc 'groups', '所有用户分组列表'
+  def groups
+    puts Helper.with(options).groups
+  end
+
+  desc 'group_create [GROUP_NAME]', '创建分组'
+  def group_create(group_name)
+    puts Helper.with(options).group_create(group_name)
+  end
+
+  desc 'group_update [GROUP_ID, NEW_GROUP_NAME]', '修改分组名'
+  def group_update(groupid, new_group_name)
+    puts Helper.with(options).group_update(groupid, new_group_name)
+  end
+
+  desc 'group_delete [GROUP_ID]', '删除分组'
+  def group_delete(groupid)
+    puts Helper.with(options).group_delete(groupid)
+  end
+
   desc 'users', '关注者列表'
   def users
     puts Helper.with(options).users
@@ -72,6 +90,16 @@ HELP
   desc 'user [OPEN_ID]', '查找关注者'
   def user(open_id)
     puts Helper.with(options).user(open_id)
+  end
+
+  desc 'user_group [OPEN_ID]', '查询用户所在分组'
+  def user_group(openid)
+    puts Helper.with(options).user_group(openid)
+  end
+
+  desc 'user_change_group [OPEN_ID, TO_GROUP_ID]', '移动用户分组'
+  def user_change_group(openid, to_groupid)
+    puts Helper.with(options).user_change_group(openid, to_groupid)
   end
 
   desc 'menu', '当前菜单'

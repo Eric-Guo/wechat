@@ -13,6 +13,38 @@ RSpec.describe Wechat::Api do
     allow(subject.jsapi_ticket).to receive(:jsapi_ticket).and_return('jsapi_ticket')
   end
 
+  describe '#groups' do
+    specify 'will get groups with access_token' do
+      groups_result = 'groups_result'
+      expect(subject.client).to receive(:get).with('groups/get', params: { access_token: 'access_token' }).and_return(groups_result)
+      expect(subject.groups).to eq groups_result
+    end
+  end
+
+  describe '#group_create' do
+    specify 'will post groups/create with access_token and new group json_data' do
+      new_group = { group: { name: 'new_group_name' } }
+      expect(subject.client).to receive(:post).with('groups/create', new_group.to_json, params: { access_token: 'access_token' }).and_return(true)
+      expect(subject.group_create('new_group_name')).to be true
+    end
+  end
+
+  describe '#group_update' do
+    specify 'will post groups/update with access_token and json_data' do
+      update_group = { group: { id: 108, name: 'test2_modify2' } }
+      expect(subject.client).to receive(:post).with('groups/update', update_group.to_json, params: { access_token: 'access_token' }).and_return(true)
+      expect(subject.group_update(108, 'test2_modify2')).to be true
+    end
+  end
+
+  describe '#group_delete' do
+    specify 'will post groups/delete with access_token' do
+      delete_group = { group: { id: 108 } }
+      expect(subject.client).to receive(:post).with('groups/delete', delete_group.to_json, params: { access_token: 'access_token' }).and_return(true)
+      expect(subject.group_delete(108)).to be true
+    end
+  end
+
   describe '#users' do
     specify 'will get user/get with access_token' do
       users_result = 'users_result'
@@ -34,6 +66,25 @@ RSpec.describe Wechat::Api do
       user_result = 'user_result'
       expect(subject.client).to receive(:get).with('user/info', params: { access_token: 'access_token', openid: 'openid' }).and_return(user_result)
       expect(subject.user 'openid').to eq(user_result)
+    end
+  end
+
+  describe '#user_group' do
+    specify 'will post groups/getid with access_token and openid to get user groups info' do
+      user_request = { openid: 'openid' }
+      user_response = { groupid: 102 }
+      expect(subject.client).to receive(:post)
+        .with('groups/getid', user_request.to_json, params: { access_token: 'access_token' }).and_return(user_response)
+      expect(subject.user_group 'openid').to eq(user_response)
+    end
+  end
+
+  describe '#user_change_group' do
+    specify 'will post groups/getid with access_token and openid to get user groups info' do
+      user_request = { openid: 'openid', to_groupid: 108 }
+      expect(subject.client).to receive(:post)
+        .with('groups/members/update', user_request.to_json, params: { access_token: 'access_token' }).and_return(true)
+      expect(subject.user_change_group 'openid', 108).to be true
     end
   end
 

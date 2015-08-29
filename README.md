@@ -136,18 +136,24 @@ $ wechat
 Wechat commands:
   wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
-  wechat custom_news [OPENID, NEWS_YAML_FILE]              # 发送图文客服消息
+  wechat custom_news [OPENID, NEWS_YAML_PATH]              # 发送图文客服消息
   wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
   wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
   wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息
+  wechat group_create [GROUP_NAME]                         # 创建分组
+  wechat group_delete [GROUP_ID]                           # 删除分组
+  wechat group_update [GROUP_ID, NEW_GROUP_NAME]           # 修改分组名
+  wechat groups                                            # 所有用户分组列表
   wechat media [MEDIA_ID, PATH]                            # 媒体下载
-  wechat media_create [MEDIA_ID, PATH]                     # 媒体上传
+  wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat menu                                              # 当前菜单
-  wechat menu_create [MENU_YAML]                           # 创建菜单
+  wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
   wechat menu_delete                                       # 删除菜单
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息(仅企业号)
-  wechat template_message [OPENID, TEMPLATE_YAML_FILE]     # 模板消息接口
+  wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 查找关注者
+  wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
+  wechat user_group [OPEN_ID]                              # 查询用户所在分组
   wechat users                                             # 关注者列表
 ```
 
