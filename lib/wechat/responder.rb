@@ -56,22 +56,21 @@ module Wechat
       private
 
       def match_responders(responders, value)
-        match_responder = responders.inject(scoped: nil, general: nil) do |matched, responder|
+        matched = responders.each_with_object({}) do |responder, memo|
           condition = responder[:with]
 
           if condition.nil?
-            matched[:general] ||= [responder, value]
-            next matched
+            memo[:general] ||= [responder, value]
+            next
           end
 
           if condition.is_a? Regexp
-            matched[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
+            memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
           else
-            matched[:scoped] ||= [responder, value] if value == condition
+            memo[:scoped] ||= [responder, value] if value == condition
           end
-          matched
         end
-        match_responder[:scoped] || match_responder[:general]
+        matched[:scoped] || matched[:general]
       end
     end
 
