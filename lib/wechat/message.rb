@@ -49,8 +49,9 @@ module Wechat
         Wechat.api.media(message_hash[:MediaId])
 
       when :location
-        message_hash.slice(:Location_X, :Location_Y, :Scale, :Label).inject({}) { |results, value|
-          results[value[0].to_s.underscore.to_sym] = value[1]; results }
+        message_hash.slice(:Location_X, :Location_Y, :Scale, :Label).each_with_object({}) do |value, results|
+          results[value[0].to_s.underscore.to_sym] = value[1]
+        end
       else
         raise "Don't know how to parse message as #{type}"
       end
