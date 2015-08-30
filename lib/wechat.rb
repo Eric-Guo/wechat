@@ -3,7 +3,7 @@ require 'wechat/corp_api'
 
 module Wechat
   autoload :Message, 'wechat/message'
-  autoload :Responder, 'wechat/responder'
+  autoload :Responder, 'action_controller/responder'
   autoload :Cipher, 'wechat/cipher'
 
   class AccessTokenExpiredError < StandardError; end
