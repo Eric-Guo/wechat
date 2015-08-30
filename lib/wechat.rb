@@ -52,7 +52,7 @@ end
 if defined? ActionController::Base
   class ActionController::Base
     def self.wechat_responder(opts = {})
-      send(:include, Wechat::Responder)
+      include Wechat::Responder
       if opts.empty?
         self.corpid = Wechat.config.corpid
         self.wechat = Wechat.api
@@ -79,7 +79,7 @@ end
 if defined? ActionController::API
   class ActionController::API
     def self.wechat_responder(opts = {})
-      send(:include, Wechat::Responder)
+      include Wechat::Responder
       if opts.empty?
         self.corpid = Wechat.config.corpid
         self.wechat = Wechat.api
