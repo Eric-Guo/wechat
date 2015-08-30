@@ -64,12 +64,13 @@ if defined? ActionController::Base
         self.corpid = opts[:corpid]
         if corpid.present?
           self.wechat = Wechat::CorpApi.new(opts[:corpid], opts[:corpsecret], opts[:access_token], opts[:agentid])
+          self.encrypt_mode = true
         else
           self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], opts[:jsapi_ticket])
+          self.encrypt_mode = opts[:encrypt_mode]
         end
         self.agentid = opts[:agentid]
         self.token = opts[:token]
-        self.encrypt_mode = opts[:encrypt_mode]
         self.encoding_aes_key = opts[:encoding_aes_key]
       end
     end
@@ -91,12 +92,13 @@ if defined? ActionController::API
         self.corpid = opts[:corpid]
         if corpid.present?
           self.wechat = Wechat::CorpApi.new(opts[:corpid], opts[:corpsecret], opts[:access_token], opts[:agentid])
+          self.encrypt_mode = true
         else
           self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], opts[:jsapi_ticket])
+          self.encrypt_mode = opts[:encrypt_mode]
         end
         self.agentid = opts[:agentid]
         self.token = opts[:token]
-        self.encrypt_mode = opts[:encrypt_mode]
         self.encoding_aes_key = opts[:encoding_aes_key]
       end
     end

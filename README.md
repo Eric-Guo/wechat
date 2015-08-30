@@ -83,7 +83,6 @@ default: &default
   corpsecret: "corpsecret"
   agentid:  "1"
   access_token: "C:/Users/[user_name]/wechat_access_token"
-  encrypt_mode: true
   token:    ""
   encoding_aes_key:  ""
 
@@ -92,7 +91,6 @@ production:
   corpsecret: <%= ENV['WECHAT_CORPSECRET'] %>
   agentid:    <%= ENV['WECHAT_AGENTID'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
-  encrypt_mode:  <%= ENV['WECHAT_ENCRYPT_MODE'] %>
   token:      <%= ENV['WECHAT_TOKEN'] %>
   encoding_aes_key:  <%= ENV['WECHAT_ENCODING_AES_KEY'] %>
 
