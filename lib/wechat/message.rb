@@ -53,7 +53,7 @@ module Wechat
           results[value[0].to_s.underscore.to_sym] = value[1]
         end
       else
-        raise "Don't know how to parse message as #{type}"
+        fail "Don't know how to parse message as #{type}"
       end
     end
 

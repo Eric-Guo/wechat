@@ -23,7 +23,7 @@ module Wechat
         created_at = jsapi_ticket_data['created_at'].to_i
         expires_in = jsapi_ticket_data['expires_in'].to_i
         if Time.now.to_i - created_at >= expires_in - 3 * 60
-          raise 'jsapi_ticket may be expired'
+          fail 'jsapi_ticket may be expired'
         end
       rescue
         refresh
@@ -67,7 +67,7 @@ module Wechat
 
     def valid_ticket(jsapi_ticket_data)
       ticket = jsapi_ticket_data['ticket'] || jsapi_ticket_data[:ticket]
-      raise "Response didn't have ticket" if  ticket.blank?
+      fail "Response didn't have ticket" if ticket.blank?
       ticket
     end
   end

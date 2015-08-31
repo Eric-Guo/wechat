@@ -29,22 +29,22 @@ module Wechat
     end
 
     def request(path, header = {}, &block)
-      url = "#{header.delete(:base) || self.base}#{path}"
+      url = "#{header.delete(:base) || base}#{path}"
       as = header.delete(:as)
-      header.merge!(:accept => :json)
+      header.merge!(accept: :json)
       response = yield(url, header)
 
-      raise "Request not OK, response code #{response.code}" if response.code != 200
+      fail "Request not OK, response code #{response.code}" if response.code != 200
       parse_response(response, as || :json) do |parse_as, data|
         break data unless parse_as == :json && data['errcode'].present?
 
         case data['errcode']
         when 0 # for request didn't expect results
           data
-        when 42_001, 40_014 # 42001: access_token超时, 40014:不合法的access_token
-          raise AccessTokenExpiredError
+        when 42001, 40014 # 42001: access_token超时, 40014:不合法的access_token
+          fail AccessTokenExpiredError
         else
-          raise ResponseError.new(data['errcode'], data['errmsg'])
+          fail ResponseError.new(data['errcode'], data['errmsg'])
         end
       end
     end
@@ -54,9 +54,9 @@ module Wechat
     def parse_response(response, as)
       content_type = response.headers[:content_type]
       parse_as = {
-        /^application\/json/ => :json,
-        /^image\/.*/ => :file
-      }.inject([]){ |memo, match| memo << match[1] if content_type =~ match[0]; memo }.first || as || :text
+        %r{^application\/json} => :json,
+        %r{^image\/.*} => :file
+      }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || as || :text
 
       case parse_as
       when :file
@@ -68,7 +68,6 @@ module Wechat
 
       when :json
         data = JSON.parse(response.body.gsub /[\u0000-\u001f]+/, '')
-
       else
         data = response.body
       end

@@ -14,9 +14,7 @@ module Wechat
         @token_data ||= JSON.parse(File.read(token_file, open_args: File::LOCK_SH))
         created_at = token_data['created_at'].to_i
         expires_in = token_data['expires_in'].to_i
-        if Time.now.to_i - created_at >= expires_in - 3 * 60
-          raise 'token_data may be expired'
-        end
+        fail 'token_data may be expired' if Time.now.to_i - created_at >= expires_in - 3 * 60
       rescue
         refresh
       end
@@ -34,7 +32,7 @@ module Wechat
 
     def valid_token(token_data)
       access_token = token_data['access_token']
-      raise "Response didn't have access_token" if access_token.blank?
+      fail "Response didn't have access_token" if access_token.blank?
       access_token
     end
   end

@@ -12,3 +12,6 @@ Metrics/ClassLength:
 
 Metrics/MethodLength:
   Max: 15
+
+Style/NumericLiterals:
+  MinDigits: 7
