@@ -39,7 +39,7 @@ RSpec.describe WechatCorpController, type: :controller do
   describe 'corp' do
     controller do
       wechat_responder corpid: 'corpid', corpsecret: 'corpsecret', token: 'token', access_token: 'controller_access_token',
-                       agentid: 1, encrypt_mode: false, encoding_aes_key: ENCODING_AES_KEY
+                       agentid: 1, encoding_aes_key: ENCODING_AES_KEY
 
       on :text do |request, content|
         request.reply.text "echo: #{content}"
@@ -48,6 +48,15 @@ RSpec.describe WechatCorpController, type: :controller do
       on :event, with: 'my_event' do |request, _key|
         request.reply.text 'echo: my_event'
       end
+    end
+
+    specify 'will set controller wechat api and token' do
+      access_token = controller.class.wechat.access_token
+      expect(access_token.token_file).to eq 'controller_access_token'
+      expect(controller.class.token).to eq 'token'
+      expect(controller.class.agentid).to eq 1
+      expect(controller.class.encrypt_mode).to eq true
+      expect(controller.class.encoding_aes_key).to eq ENCODING_AES_KEY
     end
 
     describe 'Verify signature' do

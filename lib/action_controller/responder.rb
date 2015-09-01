@@ -120,7 +120,7 @@ module Wechat
       data = request_content
 
       # 如果是加密模式解密
-      if self.class.encrypt_mode || self.class.corpid.present?
+      if self.class.encrypt_mode
         encrypt_msg = data['xml']['Encrypt']
         if encrypt_msg.present?
           content, @app_id = unpack(decrypt(Base64.decode64(encrypt_msg), self.class.encoding_aes_key))
@@ -154,7 +154,7 @@ module Wechat
       msg = response.to_xml
 
       # 返回加密消息
-      if self.class.encrypt_mode || self.class.corpid.present?
+      if self.class.encrypt_mode
         data = request_content
         if data['xml']['Encrypt']
           encrypt = Base64.strict_encode64 encrypt(pack(msg, @app_id), self.class.encoding_aes_key)

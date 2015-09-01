@@ -38,7 +38,7 @@ RSpec.describe WechatController, type: :controller do
     controller do
       wechat_responder appid: 'controller_appid', secret: 'controller_secret', token: 'controller_token',
                        access_token: 'controller_access_token',
-                       agentid: 1, encrypt_mode: false, encoding_aes_key: 'encoding_aes_key'
+                       agentid: 1, encoding_aes_key: 'encoding_aes_key'
     end
     specify 'will set controller wechat api and token' do
       access_token = controller.class.wechat.access_token
