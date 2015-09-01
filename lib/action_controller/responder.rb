@@ -8,7 +8,6 @@ module Wechat
     included do
       skip_before_filter :verify_authenticity_token
       before_filter :verify_signature, only: [:show, :create]
-      #delegate :wechat, to: :class
     end
 
     module ClassMethods
@@ -85,20 +84,7 @@ module Wechat
 
     def create
       request = Wechat::Message.from_hash(post_xml)
-      response = self.class.responder_for(request) do |responder, *args|
-        responder ||= self.class.responders(:fallback).first
-
-        next if responder.nil?
-        case
-        when responder[:respond]
-          request.reply.text responder[:respond]
-        when responder[:proc]
-          define_singleton_method :process, responder[:proc]
-          send(:process, *args.unshift(request))
-        else
-          next
-        end
-      end
+      response = run_responder(request)
 
       if response.respond_to? :to_xml
         render xml: process_response(response)
@@ -144,6 +130,23 @@ module Wechat
 
       HashWithIndifferentAccess.new_from_hash_copying_default(data.fetch('xml', {})).tap do |msg|
         msg[:Event].downcase! if msg[:Event]
+      end
+    end
+
+    def run_responder(request)
+      self.class.responder_for(request) do |responder, *args|
+        responder ||= self.class.responders(:fallback).first
+
+        next if responder.nil?
+        case
+        when responder[:respond]
+          request.reply.text responder[:respond]
+        when responder[:proc]
+          define_singleton_method :process, responder[:proc]
+          send(:process, *args.unshift(request))
+        else
+          next
+        end
       end
     end
 
