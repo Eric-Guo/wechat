@@ -208,6 +208,10 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("event: #{event}")
       end
 
+      on :event, with: 'unsubscribe' do |message, event|
+        message.reply.text("event: #{event}")
+      end
+
       on :event, with: 'binding_qr_code' do |message, scan_type, scan_result|
         message.reply.text "scan_type: #{scan_type} scan_result: #{scan_result}"
       end
@@ -251,10 +255,16 @@ RSpec.describe WechatController, type: :controller do
       expect(xml_to_hash(response)[:Content]).to eq('cmd: reload')
     end
 
-    specify 'response event with matched event' do
-      event_message = message_base.merge(MsgType: 'event', Event: 'VIEW')
-      post :create, signature_params.merge(xml: event_message.merge(Event: 'subscribe'))
+    specify 'response subscribe event with matched event' do
+      event_message = message_base.merge(MsgType: 'event', Event: 'subscribe')
+      post :create, signature_params.merge(xml: event_message)
       expect(xml_to_hash(response)[:Content]).to eq('event: subscribe')
+    end
+
+    specify 'response unsubscribe event with matched event' do
+      event_message = message_base.merge(MsgType: 'event', Event: 'unsubscribe')
+      post :create, signature_params.merge(xml: event_message)
+      expect(xml_to_hash(response)[:Content]).to eq('event: unsubscribe')
     end
 
     specify 'response scancode event with matched event' do
