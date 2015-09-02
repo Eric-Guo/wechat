@@ -22,6 +22,10 @@ module Wechat
       @agentid = agentid
     end
 
+    def callbackip
+      get('getcallbackip')
+    end
+
     def user(userid)
       get('user/get', params: { userid: userid })
     end

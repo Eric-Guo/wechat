@@ -3,6 +3,7 @@
 ## v0.4.0 (released at 9/4/2015)
 
 * Support scancode_push/scancode_waitmsg event.
+* New API method can get wechat server IP list
 
 ## v0.3.0 (released at 8/30/2015)
 

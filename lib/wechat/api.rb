@@ -16,6 +16,10 @@ module Wechat
       @jsapi_ticket = JsapiTicket.new(@client, @access_token, jsapi_ticket_file)
     end
 
+    def callbackip
+      get('getcallbackip')
+    end
+
     def groups
       get('groups/get')
     end

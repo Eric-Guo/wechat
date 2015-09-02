@@ -62,6 +62,11 @@ HELP
   package_name 'Wechat'
   option :toke_file, aliases: '-t', desc: 'File to store access token'
 
+  desc 'callbackip', '获取微信服务器IP地址'
+  def callbackip
+    puts Helper.with(options).callbackip
+  end
+
   desc 'groups', '所有用户分组列表'
   def groups
     puts Helper.with(options).groups

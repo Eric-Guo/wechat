@@ -11,6 +11,14 @@ RSpec.describe Wechat::CorpApi do
     allow(subject.access_token).to receive(:token).and_return('access_token')
   end
 
+  describe '#callbackip' do
+    specify 'will get callbackip with access_token' do
+      server_ip_result = 'server_ip_result'
+      expect(subject.client).to receive(:get).with('getcallbackip', { params: { access_token: 'access_token' } }, false).and_return(server_ip_result)
+      expect(subject.callbackip).to eq server_ip_result
+    end
+  end
+
   describe '#message_send' do
     specify 'will post message with access_token, and json payload' do
       payload = {
