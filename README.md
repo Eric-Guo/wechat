@@ -202,6 +202,12 @@ button:
   name: "我要"
   sub_button:
    -
+    type: "scancode_waitmsg"
+    name: "绑定用餐二维码"
+    key: "BINDING_QR_CODE"
+    sub_button:
+     -
+   -
     type: "click"
     name: "预订午餐"
     key:  "BOOK_LUNCH"
@@ -211,12 +217,6 @@ button:
     type: "click"
     name: "预订晚餐"
     key:  "BOOK_DINNER"
-    sub_button:
-     -
-   -
-    type: "click"
-    name: "预订半夜餐"
-    key:  "BOOK_NIGHT_SNACK"
     sub_button:
      -
  -
@@ -339,6 +339,11 @@ class WechatsController < ApplicationController
   # 当收到 EventKey 为 mykey 的事件时
   on :event, with: "mykey" do |request, key|
     request.reply.text "收到来自#{request[:FromUserName]} 的EventKey 为 #{key} 的事件"
+  end
+
+  # 当收到EventKey 为二维码扫描结果事件时
+  on :event, with: 'BINDING_QR_CODE' do |request, scan_type, scan_result|
+    request.reply.text "User #{request[:FromUserName]} ScanType #{scan_type} ScanResult #{scan_result}"
   end
 
   # 处理图片信息

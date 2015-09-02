@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.0 (released at 9/4/2015)
+
+* Support scancode_push/scancode_waitmsg event.
+
 ## v0.3.0 (released at 8/30/2015)
 
 * New user group management API

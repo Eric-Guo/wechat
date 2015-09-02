@@ -208,6 +208,10 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("event: #{event}")
       end
 
+      on :event, with: 'binding_qr_code' do |message, scan_type, scan_result|
+        message.reply.text "scan_type: #{scan_type} scan_result: #{scan_result}"
+      end
+
       on :image do |message|
         message.reply.text("image: #{message[:PicUrl]}")
       end
@@ -251,6 +255,12 @@ RSpec.describe WechatController, type: :controller do
       event_message = message_base.merge(MsgType: 'event', Event: 'VIEW')
       post :create, signature_params.merge(xml: event_message.merge(Event: 'subscribe'))
       expect(xml_to_hash(response)[:Content]).to eq('event: subscribe')
+    end
+
+    specify 'response scancode event with matched event' do
+      event_message = message_base.merge(MsgType: 'event', Event: 'scancode_push', EventKey: 'binding_qr_code')
+      post :create, signature_params.merge(xml: event_message.merge(ScanCodeInfo: { ScanType: 'qrcode', ScanResult: '12345' }))
+      expect(xml_to_hash(response)[:Content]).to eq 'scan_type: qrcode scan_result: 12345'
     end
 
     specify 'response image' do
