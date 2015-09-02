@@ -17,8 +17,8 @@ module Wechat
     API_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
 
     def initialize(appid, secret, token_file, agentid)
-      @client = Wechat::Client.new(API_BASE)
-      @access_token = Wechat::CorpAccessToken.new(@client, appid, secret, token_file)
+      @client = Client.new(API_BASE)
+      @access_token = CorpAccessToken.new(@client, appid, secret, token_file)
       @agentid = agentid
     end
 
@@ -60,7 +60,7 @@ module Wechat
     def with_access_token(params = {}, tries = 2)
       params ||= {}
       yield(params.merge(access_token: access_token.token))
-    rescue Wechat::AccessTokenExpiredError
+    rescue AccessTokenExpiredError
       access_token.refresh
       retry unless (tries -= 1).zero?
     end
