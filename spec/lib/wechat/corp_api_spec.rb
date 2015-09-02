@@ -24,7 +24,7 @@ RSpec.describe Wechat::CorpApi do
         .with('message/send', payload.to_json,
               { content_type: :json, params: { access_token: 'access_token' } }, false).and_return(true)
 
-      expect(subject.message_send Wechat::Message.to('openid').text('message content')).to be true
+      expect(subject.message_send 'openid', 'message content').to be true
     end
   end
 end

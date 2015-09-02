@@ -133,7 +133,7 @@ HELP
 
   desc 'message_send [OPENID, TEXT_MESSAGE]', '发送文字消息(仅企业号)'
   def message_send(openid, text_message)
-    puts Helper.with(options).message_send Wechat::Message.to(openid).text(text_message)
+    puts Helper.with(options).message_send openid, text_message
   end
 
   desc 'custom_text [OPENID, TEXT_MESSAGE]', '发送文字客服消息'
