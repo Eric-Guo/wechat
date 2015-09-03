@@ -1,5 +1,6 @@
 require 'wechat/api'
 require 'wechat/corp_api'
+require 'action_controller/wechat_responder'
 
 module Wechat
   autoload :Message, 'wechat/message'
@@ -42,23 +43,9 @@ module Wechat
 
   def self.api
     if config.corpid.present?
-      @api ||= Wechat::CorpApi.new(config.corpid, config.corpsecret, config.access_token, config.agentid)
+      @api ||= CorpApi.new(config.corpid, config.corpsecret, config.access_token, config.agentid)
     else
-      @api ||= Wechat::Api.new(config.appid, config.secret, config.access_token, config.jsapi_ticket)
+      @api ||= Api.new(config.appid, config.secret, config.access_token, config.jsapi_ticket)
     end
-  end
-end
-
-require 'action_controller/wechat_responder'
-
-if defined? ActionController::Base
-  class << ActionController::Base
-    include ActionController::WechatResponder
-  end
-end
-
-if defined? ActionController::API
-  class << ActionController::API
-    include ActionController::WechatResponder
   end
 end

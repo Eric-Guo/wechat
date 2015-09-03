@@ -20,4 +20,16 @@ module ActionController
       end
     end
   end
+
+  if defined? Base
+    class << Base
+      include WechatResponder
+    end
+  end
+
+  if defined? API
+    class << API
+      include WechatResponder
+    end
+  end
 end
