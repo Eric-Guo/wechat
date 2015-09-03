@@ -11,11 +11,34 @@ RSpec.describe Wechat::CorpApi do
     allow(subject.access_token).to receive(:token).and_return('access_token')
   end
 
-  describe '#callbackip' do
-    specify 'will get callbackip with access_token' do
-      server_ip_result = 'server_ip_result'
-      expect(subject.client).to receive(:get).with('getcallbackip', params: { access_token: 'access_token' }).and_return(server_ip_result)
-      expect(subject.callbackip).to eq server_ip_result
+  describe '#user' do
+    specify 'will get user/get with access_token and userid' do
+      userid = 'userid'
+      user_result = { errcode: 0, errmsg: 'ok',
+                      userid: 'zhangsan',
+                      name: '李四',
+                      department: [1, 2],
+                      position: '后台工程师',
+                      mobile: '15913215421',
+                      gender: '1',
+                      email: 'zhangsan@gzdev.com',
+                      weixinid: 'lisifordev',
+                      avatar: 'http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0',
+                      status: 1,
+                      extattr: { attrs: [{ name: '爱好', value: '旅游' }, { name: '卡号', value: '1234567234' }] } }
+      expect(subject.client).to receive(:get)
+        .with('user/get', params: { userid: userid, access_token: 'access_token' }).and_return(user_result)
+      expect(subject.user(userid)).to eq user_result
+    end
+  end
+
+  describe '#user_auth_success' do
+    specify 'will get user/authsucc with access_token and userid' do
+      userid = 'userid'
+      user_auth_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:get)
+        .with('user/authsucc', params: { userid: userid, access_token: 'access_token' }).and_return(user_auth_result)
+      expect(subject.user_auth_success(userid)).to eq user_auth_result
     end
   end
 
