@@ -151,6 +151,7 @@ Wechat commands:
   wechat group_delete [GROUP_ID]                           # 删除分组
   wechat group_update [GROUP_ID, NEW_GROUP_NAME]           # 修改分组名
   wechat groups                                            # 所有用户分组列表
+  wechat invite_user [USER_ID]                             # 邀请成员关注
   wechat media [MEDIA_ID, PATH]                            # 媒体下载
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat menu                                              # 当前菜单
@@ -158,7 +159,7 @@ Wechat commands:
   wechat menu_delete                                       # 删除菜单
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息(仅企业号)
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
-  wechat user [OPEN_ID]                                    # 查找关注者
+  wechat user [OPEN_ID]                                    # 获取用户基本信息
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
   wechat user_group [OPEN_ID]                              # 查询用户所在分组
   wechat users                                             # 关注者列表

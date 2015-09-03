@@ -32,6 +32,17 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#invite_user' do
+    specify 'will get invite/send with access_token and json userid' do
+      userid = 'userid'
+      invite_request = { userid: userid }
+      invite_result = { errcode: 0, errmsg: 'ok', type: 1 }
+      expect(subject.client).to receive(:post)
+        .with('invite/send', invite_request.to_json, params: { access_token: 'access_token' }).and_return(invite_result)
+      expect(subject.invite_user(userid)).to eq invite_result
+    end
+  end
+
   describe '#user_auth_success' do
     specify 'will get user/authsucc with access_token and userid' do
       userid = 'userid'

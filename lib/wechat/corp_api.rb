@@ -27,6 +27,10 @@ module Wechat
       get('user/get', params: { userid: userid })
     end
 
+    def invite_user(userid)
+      post 'invite/send', JSON.generate(userid: userid)
+    end
+
     def user_auth_success(userid)
       get('user/authsucc', params: { userid: userid })
     end

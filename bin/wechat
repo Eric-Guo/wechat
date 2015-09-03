@@ -98,9 +98,14 @@ HELP
     puts Helper.with(options).users
   end
 
-  desc 'user [OPEN_ID]', '查找关注者'
+  desc 'user [OPEN_ID]', '获取用户基本信息'
   def user(open_id)
     puts Helper.with(options).user(open_id)
+  end
+
+  desc 'invite_user [USER_ID]', '邀请成员关注'
+  def invite_user(userid)
+    puts Helper.with(options).invite_user(userid)
   end
 
   desc 'user_group [OPEN_ID]', '查询用户所在分组'
