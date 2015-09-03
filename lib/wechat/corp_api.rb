@@ -5,9 +5,9 @@ require 'wechat/access_token'
 module Wechat
   class CorpAccessToken < AccessToken
     def refresh
-      data = client.get('gettoken', { params: { corpid: appid, corpsecret: secret } }, false)
+      data = client.get('gettoken', params: { corpid: appid, corpsecret: secret })
       data.merge!(created_at: Time.now.to_i)
-      File.open(token_file, 'w') { |f| f.write(data.to_json) } if valid_token(data)
+      File.write(token_file, data.to_json) if valid_token(data)
       @token_data = data
     end
   end
