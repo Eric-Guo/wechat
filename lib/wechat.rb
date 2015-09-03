@@ -33,6 +33,7 @@ module Wechat
                    token: ENV['WECHAT_TOKEN'],
                    access_token: ENV['WECHAT_ACCESS_TOKEN'],
                    encrypt_mode: ENV['WECHAT_ENCRYPT_MODE'],
+                   skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
                    encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'] }
       config.symbolize_keys!
       config[:access_token] ||= Rails.root.join('tmp/access_token').to_s
@@ -43,9 +44,9 @@ module Wechat
 
   def self.api
     if config.corpid.present?
-      @api ||= CorpApi.new(config.corpid, config.corpsecret, config.access_token, config.agentid)
+      @api ||= CorpApi.new(config.corpid, config.corpsecret, config.access_token, config.agentid, config.skip_verify_ssl)
     else
-      @api ||= Api.new(config.appid, config.secret, config.access_token, config.jsapi_ticket)
+      @api ||= Api.new(config.appid, config.secret, config.access_token, config.jsapi_ticket, config.skip_verify_ssl)
     end
   end
 end

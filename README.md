@@ -92,6 +92,7 @@ production:
   agentid:    <%= ENV['WECHAT_AGENTID'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
   token:      <%= ENV['WECHAT_TOKEN'] %>
+  skip_verify_ssl: false
   encoding_aes_key:  <%= ENV['WECHAT_ENCODING_AES_KEY'] %>
 
 development:
@@ -102,6 +103,8 @@ test:
 ```
 
 注意在Rails项目根目录下运行`wechat`命令行工具会优先使用`config/wechat.yml`中的`default`配置，如果失败则使用`~\.wechat.yml`中的配置，以便于在生产环境下管理多个微信账号应用。
+
+Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://qydev.weixin.qq.com/qa/index.php?qa=11037)错误，此时可以选择关闭SSL验证（skip_verify_ssl）。
 
 #### 为每个Responder配置不同的appid和secret
 

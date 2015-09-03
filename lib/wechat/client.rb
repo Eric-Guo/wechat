@@ -2,13 +2,14 @@ require 'rest_client'
 
 module Wechat
   class Client
-    attr_reader :base
+    attr_reader :base, :verify_ssl
 
-    def initialize(base)
+    def initialize(base, skip_verify_ssl)
       @base = base
+      @verify_ssl = !skip_verify_ssl
     end
 
-    def get(path, header = {}, verify_ssl = true)
+    def get(path, header = {})
       request(path, header) do |url, header|
         if verify_ssl
           RestClient.get(url, header)
@@ -18,7 +19,7 @@ module Wechat
       end
     end
 
-    def post(path, payload, header = {}, verify_ssl = true)
+    def post(path, payload, header = {})
       request(path, header) do |url, header|
         if verify_ssl
           RestClient.post(url, payload, header)

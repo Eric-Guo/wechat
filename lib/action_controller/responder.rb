@@ -11,7 +11,7 @@ module Wechat
     end
 
     module ClassMethods
-      attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :encoding_aes_key
+      attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
       def on(message_type, with: nil, respond: nil, &block)
         fail 'Unknow message type' unless message_type.in? [:text, :image, :voice, :video, :location, :link, :event, :fallback]

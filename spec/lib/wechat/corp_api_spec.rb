@@ -4,7 +4,7 @@ RSpec.describe Wechat::CorpApi do
   let(:toke_file) { Rails.root.join('tmp/access_token') }
 
   subject do
-    Wechat::CorpApi.new('corpid', 'corpsecret', toke_file, '1')
+    Wechat::CorpApi.new('corpid', 'corpsecret', toke_file, '1', false)
   end
 
   before :each do

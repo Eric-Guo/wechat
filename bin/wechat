@@ -23,11 +23,12 @@ class App < Thor
       corpsecret = config['corpsecret']
       token_file = options[:toke_file] || config['access_token'] || '/var/tmp/wechat_access_token'
       agentid = config['agentid']
+      skip_verify_ssl = config['skip_verify_ssl']
 
       if appid.present? && secret.present? && token_file.present?
-        Wechat::Api.new(appid, secret, token_file)
+        Wechat::Api.new(appid, secret, token_file, skip_verify_ssl)
       elsif corpid.present? && corpsecret.present? && token_file.present?
-        Wechat::CorpApi.new(corpid, corpsecret, token_file, agentid)
+        Wechat::CorpApi.new(corpid, corpsecret, token_file, agentid, skip_verify_ssl)
       else
         puts <<-HELP
 Need create ~/.wechat.yml with wechat appid and secret
