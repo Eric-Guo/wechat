@@ -88,6 +88,11 @@ HELP
     puts Helper.with(options).group_delete(groupid)
   end
 
+  desc 'department [DEPARTMENT_ID]', '获取部门列表'
+  def department(departmentid)
+    puts Helper.with(options).department(departmentid)
+  end
+
   desc 'users', '关注者列表'
   def users
     puts Helper.with(options).users

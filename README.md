@@ -146,6 +146,7 @@ Wechat commands:
   wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
   wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
   wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息
+  wechat department [DEPARTMENT_ID]                        # 获取部门列表
   wechat group_create [GROUP_NAME]                         # 创建分组
   wechat group_delete [GROUP_ID]                           # 删除分组
   wechat group_update [GROUP_ID, NEW_GROUP_NAME]           # 修改分组名

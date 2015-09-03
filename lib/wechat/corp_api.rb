@@ -31,6 +31,10 @@ module Wechat
       get('user/authsucc', params: { userid: userid })
     end
 
+    def department(departmentid = 1)
+      get('department/list', params: { id: departmentid })
+    end
+
     def menu
       get('menu/get', params: { agentid: agentid })
     end

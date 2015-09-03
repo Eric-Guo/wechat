@@ -42,6 +42,25 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#department' do
+    specify 'will get user/get with access_token and userid' do
+      departmentid = 'departmentid'
+      department_result = { errcode: 0, errmsg: 'ok',
+                            department: [
+                              { id: 2,
+                                name: '广州研发中心',
+                                parentid: 1,
+                                order: 10 },
+                              { id: 3,
+                                name: '邮箱产品部',
+                                parentid: 2,
+                                order: 40 }] }
+      expect(subject.client).to receive(:get)
+        .with('department/list', params: { id: departmentid, access_token: 'access_token' }).and_return(department_result)
+      expect(subject.department(departmentid)).to eq department_result
+    end
+  end
+
   describe '#message_send' do
     specify 'will post message with access_token, and json payload' do
       payload = {
