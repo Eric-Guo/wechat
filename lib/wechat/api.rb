@@ -1,10 +1,11 @@
+require 'wechat/api_base'
 require 'wechat/client'
 require 'wechat/access_token'
 require 'wechat/jsapi_ticket'
 
 module Wechat
-  class Api
-    attr_reader :access_token, :client, :jsapi_ticket
+  class Api < ApiBase
+    attr_reader :jsapi_ticket
 
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'
     FILE_BASE = 'http://file.api.weixin.qq.com/cgi-bin/'
@@ -14,10 +15,6 @@ module Wechat
       @client = Client.new(API_BASE)
       @access_token = AccessToken.new(@client, appid, secret, token_file)
       @jsapi_ticket = JsapiTicket.new(@client, @access_token, jsapi_ticket_file)
-    end
-
-    def callbackip
-      get('getcallbackip')
     end
 
     def groups
@@ -92,24 +89,6 @@ module Wechat
         grant_type: 'authorization_code'
       }
       get 'access_token', params: params, base: OAUTH2_BASE
-    end
-
-    protected
-
-    def get(path, headers = {})
-      with_access_token(headers[:params]) { |params| client.get path, headers.merge(params: params) }
-    end
-
-    def post(path, payload, headers = {})
-      with_access_token(headers[:params]) { |params| client.post path, payload, headers.merge(params: params) }
-    end
-
-    def with_access_token(params = {}, tries = 2)
-      params ||= {}
-      yield(params.merge(access_token: access_token.token))
-    rescue AccessTokenExpiredError
-      access_token.refresh
-      retry unless (tries -= 1).zero?
     end
   end
 end

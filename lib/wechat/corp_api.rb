@@ -1,3 +1,4 @@
+require 'wechat/api_base'
 require 'wechat/client'
 require 'wechat/access_token'
 
@@ -11,8 +12,8 @@ module Wechat
     end
   end
 
-  class CorpApi
-    attr_reader :access_token, :client, :agentid
+  class CorpApi < ApiBase
+    attr_reader :agentid
 
     API_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
 
@@ -20,10 +21,6 @@ module Wechat
       @client = Client.new(API_BASE)
       @access_token = CorpAccessToken.new(@client, appid, secret, token_file)
       @agentid = agentid
-    end
-
-    def callbackip
-      get('getcallbackip')
     end
 
     def user(userid)
@@ -45,28 +42,6 @@ module Wechat
 
     def message_send(openid, message)
       post 'message/send', Message.to(openid).text(message).agent_id(agentid).to_json, content_type: :json
-    end
-
-    protected
-
-    def get(path, headers = {})
-      with_access_token(headers[:params]) do |params|
-        client.get path, headers.merge(params: params), false
-      end
-    end
-
-    def post(path, payload, headers = {})
-      with_access_token(headers[:params]) do |params|
-        client.post path, payload, headers.merge(params: params), false
-      end
-    end
-
-    def with_access_token(params = {}, tries = 2)
-      params ||= {}
-      yield(params.merge(access_token: access_token.token))
-    rescue AccessTokenExpiredError
-      access_token.refresh
-      retry unless (tries -= 1).zero?
     end
   end
 end

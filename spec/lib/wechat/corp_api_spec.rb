@@ -14,7 +14,7 @@ RSpec.describe Wechat::CorpApi do
   describe '#callbackip' do
     specify 'will get callbackip with access_token' do
       server_ip_result = 'server_ip_result'
-      expect(subject.client).to receive(:get).with('getcallbackip', { params: { access_token: 'access_token' } }, false).and_return(server_ip_result)
+      expect(subject.client).to receive(:get).with('getcallbackip', params: { access_token: 'access_token' }).and_return(server_ip_result)
       expect(subject.callbackip).to eq server_ip_result
     end
   end
@@ -30,7 +30,7 @@ RSpec.describe Wechat::CorpApi do
 
       expect(subject.client).to receive(:post)
         .with('message/send', payload.to_json,
-              { content_type: :json, params: { access_token: 'access_token' } }, false).and_return(true)
+              content_type: :json, params: { access_token: 'access_token' }).and_return(true)
 
       expect(subject.message_send 'openid', 'message content').to be true
     end
