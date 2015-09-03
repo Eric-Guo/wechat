@@ -102,7 +102,11 @@ test:
   <<: *default
 ```
 
+##### 配置优先级
+
 注意在Rails项目根目录下运行`wechat`命令行工具会优先使用`config/wechat.yml`中的`default`配置，如果失败则使用`~\.wechat.yml`中的配置，以便于在生产环境下管理多个微信账号应用。
+
+##### 配置跳过SSL认证
 
 Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://qydev.weixin.qq.com/qa/index.php?qa=11037)错误，此时可以选择关闭SSL验证（skip_verify_ssl）。
 
