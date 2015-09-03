@@ -115,7 +115,7 @@ module Wechat
         if params[:echostr].present?
           array << params[:echostr]
         else
-          array << request_content['xml']['Encrypt']
+          array << request_encrypt_content
         end
       end
 
@@ -125,13 +125,9 @@ module Wechat
     def post_xml
       data = request_content
 
-      # 如果是加密模式解密
-      if self.class.encrypt_mode
-        encrypt_msg = data['xml']['Encrypt']
-        if encrypt_msg.present?
-          content, @app_id = unpack(decrypt(Base64.decode64(encrypt_msg), self.class.encoding_aes_key))
-          data = Hash.from_xml(content)
-        end
+      if self.class.encrypt_mode && request_encrypt_content.present?
+        content, @app_id = unpack(decrypt(Base64.decode64(request_encrypt_content), self.class.encoding_aes_key))
+        data = Hash.from_xml(content)
       end
 
       HashWithIndifferentAccess.new_from_hash_copying_default(data.fetch('xml', {})).tap do |msg|
@@ -159,13 +155,9 @@ module Wechat
     def process_response(response)
       msg = response.to_xml
 
-      # 返回加密消息
-      if self.class.encrypt_mode
-        data = request_content
-        if data['xml']['Encrypt']
-          encrypt = Base64.strict_encode64 encrypt(pack(msg, @app_id), self.class.encoding_aes_key)
-          msg = gen_msg(encrypt, params[:timestamp], params[:nonce])
-        end
+      if self.class.encrypt_mode && request_encrypt_content.present?
+        encrypt = Base64.strict_encode64(encrypt(pack(msg, @app_id), self.class.encoding_aes_key))
+        msg = gen_msg(encrypt, params[:timestamp], params[:nonce])
       end
 
       msg
@@ -179,6 +171,10 @@ module Wechat
         TimeStamp: timestamp,
         Nonce: nonce
       }.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
+    end
+
+    def request_encrypt_content
+      request_content['xml']['Encrypt']
     end
 
     def request_content
