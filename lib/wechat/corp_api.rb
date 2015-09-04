@@ -35,6 +35,10 @@ module Wechat
       get('user/authsucc', params: { userid: userid })
     end
 
+    def user_delete(userid)
+      get('user/delete', params: { userid: userid })
+    end
+
     def department(departmentid = 1)
       get('department/list', params: { id: departmentid })
     end

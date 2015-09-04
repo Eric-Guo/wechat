@@ -53,6 +53,16 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#user_delete' do
+    specify 'will get user/delete with access_token and userid' do
+      userid = 'userid'
+      user_delete_result = { errcode: 0, errmsg: 'deleted' }
+      expect(subject.client).to receive(:get)
+        .with('user/delete', params: { userid: userid, access_token: 'access_token' }).and_return(user_delete_result)
+      expect(subject.user_delete(userid)).to eq user_delete_result
+    end
+  end
+
   describe '#department' do
     specify 'will get user/get with access_token and userid' do
       departmentid = 'departmentid'

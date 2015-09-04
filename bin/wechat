@@ -108,6 +108,11 @@ HELP
     puts Helper.with(options).invite_user(userid)
   end
 
+  desc 'user_delete [USER_ID]', '删除成员'
+  def user_delete(userid)
+    puts Helper.with(options).user_delete(userid)
+  end
+
   desc 'user_group [OPEN_ID]', '查询用户所在分组'
   def user_group(openid)
     puts Helper.with(options).user_group(openid)
