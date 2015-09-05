@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.0 (released at 9/17/2015)
+
+* Limit news articles collection to 10, close #5
+
 ## v0.4.0 (released at 9/5/2015)
 
 * Enable the verify SSL for enterprise mode by default, as security is more importent than speed, but still can switch off by configure
