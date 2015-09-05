@@ -11,6 +11,12 @@ RSpec.describe Wechat::CorpApi do
     allow(subject.access_token).to receive(:token).and_return('access_token')
   end
 
+  describe '#API_BASE' do
+    specify 'will get correct API_BASE' do
+      expect(subject.client.base).to eq Wechat::CorpApi::API_BASE
+    end
+  end
+
   describe '#user' do
     specify 'will get user/get with access_token and userid' do
       userid = 'userid'

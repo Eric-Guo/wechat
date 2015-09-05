@@ -13,6 +13,12 @@ RSpec.describe Wechat::Api do
     allow(subject.jsapi_ticket).to receive(:jsapi_ticket).and_return('jsapi_ticket')
   end
 
+  describe '#API_BASE' do
+    specify 'will get correct API_BASE' do
+      expect(subject.client.base).to eq Wechat::Api::API_BASE
+    end
+  end
+
   describe '#callbackip' do
     specify 'will get callbackip with access_token' do
       server_ip_result = 'server_ip_result'
