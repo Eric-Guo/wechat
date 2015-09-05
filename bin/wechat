@@ -152,6 +152,12 @@ HELP
     puts Helper.with(options).media_create(type, file)
   end
 
+  desc 'material_add [MEDIA_TYPE, PATH]', '永久媒体上传'
+  def material_add(type, path)
+    file = File.new(path)
+    puts Helper.with(options).material_add(type, file)
+  end
+
   desc 'message_send [OPENID, TEXT_MESSAGE]', '发送文字消息(仅企业号)'
   def message_send(openid, text_message)
     puts Helper.with(options).message_send openid, text_message

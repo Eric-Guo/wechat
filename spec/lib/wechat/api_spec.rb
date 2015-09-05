@@ -131,7 +131,7 @@ RSpec.describe Wechat::Api do
 
       expect(subject.client).to receive(:get)
         .with('media/get', params: { access_token: 'access_token', media_id: 'media_id' },
-                           base: 'http://file.api.weixin.qq.com/cgi-bin/',
+                           base: Wechat::Api::FILE_BASE,
                            as: :file).and_return(media_result)
       expect(subject.media('media_id')).to eq(media_result)
     end
@@ -143,8 +143,19 @@ RSpec.describe Wechat::Api do
       expect(subject.client).to receive(:post)
         .with('media/upload', { upload: { media: file } },
               params: { type: 'image', access_token: 'access_token' },
-              base: 'http://file.api.weixin.qq.com/cgi-bin/').and_return(true)
+              base: Wechat::Api::FILE_BASE).and_return(true)
       expect(subject.media_create('image', file)).to be true
+    end
+  end
+
+  describe '#material_add' do
+    specify 'will post material/add_material with access_token, type and media payload at file based api endpoint' do
+      file = 'file'
+      expect(subject.client).to receive(:post)
+        .with('material/add_material', { upload: { media: file } },
+              params: { type: 'image', access_token: 'access_token' },
+              base: Wechat::Api::FILE_BASE).and_return(true)
+      expect(subject.material_add('image', file)).to be true
     end
   end
 

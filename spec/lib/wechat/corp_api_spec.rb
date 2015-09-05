@@ -109,6 +109,16 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#material_add' do
+    specify 'will post material/add_material with access_token, type and media payload at file based api endpoint' do
+      file = 'file'
+      expect(subject.client).to receive(:post)
+        .with('material/add_material', { upload: { media: file } },
+              params: { type: 'image', access_token: 'access_token', agentid: '1' }).and_return(true)
+      expect(subject.material_add('image', file)).to be true
+    end
+  end
+
   describe '#message_send' do
     specify 'will post message with access_token, and json payload' do
       payload = {

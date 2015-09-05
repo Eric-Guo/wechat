@@ -152,6 +152,7 @@ Wechat commands:
   wechat group_update [GROUP_ID, NEW_GROUP_NAME]           # 修改分组名
   wechat groups                                            # 所有用户分组列表
   wechat invite_user [USER_ID]                             # 邀请成员关注
+  wechat material_add [MEDIA_TYPE, PATH]                   # 永久媒体上传
   wechat media [MEDIA_ID, PATH]                            # 媒体下载
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat menu                                              # 当前菜单
