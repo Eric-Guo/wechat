@@ -76,6 +76,10 @@ module Wechat
       post 'material/add_material', { upload: { media: file } }, params: { type: type, agentid: agentid }
     end
 
+    def material_delete(media_id)
+      get 'material/del', params: { media_id: media_id, agentid: agentid }
+    end
+
     def message_send(openid, message)
       post 'message/send', Message.to(openid).text(message).agent_id(agentid).to_json, content_type: :json
     end

@@ -83,6 +83,10 @@ module Wechat
       post 'material/add_material', { upload: { media: file } }, params: { type: type }, base: FILE_BASE
     end
 
+    def material_delete(media_id)
+      post 'material/del_material', media_id: media_id
+    end
+
     def custom_message_send(message)
       post 'message/custom/send', message.to_json, content_type: :json
     end

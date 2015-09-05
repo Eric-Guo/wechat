@@ -165,6 +165,11 @@ HELP
     puts Helper.with(options).material_add(type, file)
   end
 
+  desc 'material_delete [MEDIA_ID]', '删除永久素材'
+  def material_delete(media_id)
+    puts Helper.with(options).material_delete(media_id)
+  end
+
   desc 'material_count', '获取素材总数'
   def material_count
     puts Helper.with(options).material_count
