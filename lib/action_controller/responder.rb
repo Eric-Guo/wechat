@@ -164,7 +164,7 @@ module Wechat
     end
 
     def gen_msg(encrypt, timestamp, nonce)
-      msg_sign = Digest::SHA1.hexdigest [self.class.token, encrypt, timestamp, nonce].compact.collect(&:to_s).sort.join
+      msg_sign = Digest::SHA1.hexdigest [self.class.token, timestamp, nonce, encrypt].compact.collect(&:to_s).sort.join
 
       { Encrypt: encrypt,
         MsgSignature: msg_sign,
