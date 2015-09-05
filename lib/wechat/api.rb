@@ -75,6 +75,10 @@ module Wechat
       get 'material/get', params: { media_id: media_id }, base: FILE_BASE, as: :file
     end
 
+    def material_count
+      get 'material/get_materialcount'
+    end
+
     def material_add(type, file)
       post 'material/add_material', { upload: { media: file } }, params: { type: type }, base: FILE_BASE
     end

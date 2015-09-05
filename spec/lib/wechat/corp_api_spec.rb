@@ -115,8 +115,23 @@ RSpec.describe Wechat::CorpApi do
 
       expect(subject.client).to receive(:get)
         .with('material/get', params: { access_token: 'access_token', media_id: 'media_id', agentid: '1' },
-                           as: :file).and_return(material_result)
+                              as: :file).and_return(material_result)
       expect(subject.material('media_id')).to eq(material_result)
+    end
+  end
+
+  describe '#material_count' do
+    specify 'will get material_count with access_token' do
+      material_count_result = { errcode: 0, errmsg: 'ok',
+                                total_count: 37,
+                                image_count: 12,
+                                voice_count: 10,
+                                video_count: 3,
+                                file_count: 3,
+                                mpnews_count: 6 }
+      expect(subject.client).to receive(:get)
+        .with('material/get_count', params: { access_token: 'access_token', agentid: '1' }).and_return(material_count_result)
+      expect(subject.material_count).to eq material_count_result
     end
   end
 

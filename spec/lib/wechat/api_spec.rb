@@ -160,6 +160,18 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#material_count' do
+    specify 'will get material_count with access_token' do
+      material_count_result = { voice_count: 1,
+                                video_count: 2,
+                                image_count: 3,
+                                news_count: 4 }
+      expect(subject.client).to receive(:get)
+        .with('material/get_materialcount', params: { access_token: 'access_token' }).and_return(material_count_result)
+      expect(subject.material_count).to eq material_count_result
+    end
+  end
+
   describe '#material_add' do
     specify 'will post material/add_material with access_token, type and media payload at file based api endpoint' do
       file = 'file'

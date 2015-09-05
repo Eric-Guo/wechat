@@ -165,6 +165,11 @@ HELP
     puts Helper.with(options).material_add(type, file)
   end
 
+  desc 'material_count', '获取素材总数'
+  def material_count
+    puts Helper.with(options).material_count
+  end
+
   desc 'message_send [OPENID, TEXT_MESSAGE]', '发送文字消息(仅企业号)'
   def message_send(openid, text_message)
     puts Helper.with(options).message_send openid, text_message
