@@ -56,6 +56,14 @@ module Wechat
       post 'menu/create', JSON.generate(menu), params: { agentid: agentid }
     end
 
+    def media(media_id)
+      get 'media/get', params: { media_id: media_id }, as: :file
+    end
+
+    def media_create(type, file)
+      post 'media/upload', { upload: { media: file } }, params: { type: type }
+    end
+
     def message_send(openid, message)
       post 'message/send', Message.to(openid).text(message).agent_id(agentid).to_json, content_type: :json
     end
