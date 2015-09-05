@@ -14,11 +14,11 @@ module Wechat
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
       def on(message_type, with: nil, respond: nil, &block)
-        fail 'Unknow message type' unless message_type.in? [:text, :image, :voice, :video, :location, :link, :event, :fallback]
+        fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config.merge!(proc: block) if block_given?
 
-        if with.present? && !message_type.in?([:text, :event])
+        if with.present? && ![:text, :event].include?(message_type)
           fail 'Only text and event message can take :with parameters'
         else
           config.merge!(with: with) if with.present?
