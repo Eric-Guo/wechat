@@ -1,10 +1,11 @@
 # Changelog
 
-## v0.4.0 (released at 9/4/2015)
+## v0.4.0 (released at 9/5/2015)
 
 * Enable the verify SSL for enterprise mode by default, as security is more importent than speed, but still can switch off by configure
 * Support scancode_push/scancode_waitmsg event.
 * New API method can get wechat server IP list
+* New API to query/create department/media/material
 * Fix can not read token_file in mingw bug, which introduce at #43
 
 ## v0.3.0 (released at 8/30/2015)
