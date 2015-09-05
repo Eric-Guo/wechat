@@ -148,6 +148,18 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#material' do
+    specify 'will get material/get with access_token and media_id at file based api endpoint as file' do
+      material_result = 'material_result'
+
+      expect(subject.client).to receive(:get)
+        .with('material/get', params: { access_token: 'access_token', media_id: 'media_id' },
+                              base: Wechat::Api::FILE_BASE,
+                              as: :file).and_return(material_result)
+      expect(subject.material('media_id')).to eq(material_result)
+    end
+  end
+
   describe '#material_add' do
     specify 'will post material/add_material with access_token, type and media payload at file based api endpoint' do
       file = 'file'

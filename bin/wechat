@@ -152,6 +152,13 @@ HELP
     puts Helper.with(options).media_create(type, file)
   end
 
+  desc 'material [MEDIA_ID, PATH]', '永久媒体下载'
+  def material(media_id, path)
+    tmp_file = Helper.with(options).material(media_id)
+    FileUtils.mv(tmp_file.path, path)
+    puts 'File downloaded'
+  end
+
   desc 'material_add [MEDIA_TYPE, PATH]', '永久媒体上传'
   def material_add(type, path)
     file = File.new(path)

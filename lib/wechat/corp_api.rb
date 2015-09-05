@@ -64,6 +64,10 @@ module Wechat
       post 'media/upload', { upload: { media: file } }, params: { type: type }
     end
 
+    def material(media_id)
+      get 'material/get', params: { media_id: media_id, agentid: agentid }, as: :file
+    end
+
     def material_add(type, file)
       post 'material/add_material', { upload: { media: file } }, params: { type: type, agentid: agentid }
     end
