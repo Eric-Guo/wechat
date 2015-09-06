@@ -115,7 +115,7 @@ module Wechat
         if params[:echostr].present?
           array << params[:echostr]
         else
-          array << request_encrypt_content
+          array << request_content
         end
       end
 
@@ -126,7 +126,7 @@ module Wechat
       data = request_content
 
       if self.class.encrypt_mode
-        content, @app_id = unpack(decrypt(Base64.decode64(request_encrypt_content), self.class.encoding_aes_key))
+        content, @app_id = unpack(decrypt(Base64.decode64(data), self.class.encoding_aes_key))
         data = Hash.from_xml(content)
       end
 
@@ -173,12 +173,14 @@ module Wechat
       }.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
     end
 
-    def request_encrypt_content
-      request_content['xml']['Encrypt']
-    end
-
     def request_content
-      params[:xml].nil? ? Hash.from_xml(request.raw_post) : { 'xml' => params[:xml] }
+      return Hash.from_xml(request.raw_post) if params[:xml].nil?
+      xml_content = { 'xml' => params[:xml] }
+      if xml_content['xml']['Encrypt'].present?
+        xml_content['xml']['Encrypt']
+      else
+        xml_content
+      end
     end
   end
 end
