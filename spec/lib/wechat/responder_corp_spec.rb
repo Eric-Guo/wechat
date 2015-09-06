@@ -78,6 +78,10 @@ RSpec.describe WechatCorpController, type: :controller do
       on :event, with: 'my_event' do |request, _key|
         request.reply.text 'echo: my_event'
       end
+
+      on :event, with: 'BINDING_QR_CODE' do |request, scan_type, scan_result|
+        request.reply.text "User #{request[:FromUserName]} ScanType #{scan_type} ScanResult #{scan_result}"
+      end
     end
 
     specify 'will set controller wechat api and token' do
@@ -145,6 +149,22 @@ RSpec.describe WechatCorpController, type: :controller do
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
         expect(message['Content']).to eq 'echo: my_event'
+      end
+
+      it 'on BINDING_QR_CODE' do
+        post :create, signature_params(FromUserName: 'userid', MsgType: 'event', Event: 'scancode_push', EventKey: 'BINDING_QR_CODE',
+                                       ScanCodeInfo: { ScanType: 'qrcode', ScanResult: 'scan_result' })
+        expect(response.code).to eq '200'
+
+        data = Hash.from_xml(response.body)['xml']
+
+        xml_message, app_id = unpack(decrypt(Base64.decode64(data['Encrypt']), ENCODING_AES_KEY))
+        expect(app_id).to eq 'appid'
+        expect(xml_message.empty?).to eq false
+
+        message = Hash.from_xml(xml_message)['xml']
+        expect(message['MsgType']).to eq 'text'
+        expect(message['Content']).to eq 'User userid ScanType qrcode ScanResult scan_result'
       end
     end
   end
