@@ -71,6 +71,10 @@ RSpec.describe WechatCorpController, type: :controller do
         request.reply.text "echo: #{content}"
       end
 
+      on :event, with: 'subscribe' do |request|
+        request.reply.text 'welcome!'
+      end
+
       on :event, with: 'my_event' do |request, _key|
         request.reply.text 'echo: my_event'
       end
@@ -111,6 +115,21 @@ RSpec.describe WechatCorpController, type: :controller do
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
         expect(message['Content']).to eq 'echo: hello'
+      end
+
+      it 'on subscribe' do
+        post :create, signature_params(MsgType: 'event', Event: 'subscribe')
+        expect(response.code).to eq '200'
+
+        data = Hash.from_xml(response.body)['xml']
+
+        xml_message, app_id = unpack(decrypt(Base64.decode64(data['Encrypt']), ENCODING_AES_KEY))
+        expect(app_id).to eq 'appid'
+        expect(xml_message.empty?).to eq false
+
+        message = Hash.from_xml(xml_message)['xml']
+        expect(message['MsgType']).to eq 'text'
+        expect(message['Content']).to eq 'welcome!'
       end
 
       it 'on event' do
