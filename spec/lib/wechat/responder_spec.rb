@@ -212,7 +212,7 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("event: #{event}")
       end
 
-      on :event, with: 'BINDING_BARCODE' do |message, scan_result, scan_type|
+      on :event, with: 'BINDING_BARCODE' do |message, scan_result|
         if scan_result.start_with? 'CODE_39,'
           message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
         end

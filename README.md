@@ -358,7 +358,7 @@ class WechatsController < ApplicationController
   end
 
   # 当收到EventKey 为CODE 39码扫描结果事件时
-  on :event, with: 'BINDING_BARCODE' do |message, scan_result, scan_type|
+  on :event, with: 'BINDING_BARCODE' do |message, scan_result|
     if scan_result.start_with? 'CODE_39,'
       message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
     end

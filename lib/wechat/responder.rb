@@ -137,11 +137,8 @@ module Wechat
           request.reply.text responder[:respond]
         when responder[:proc]
           define_singleton_method :process, responder[:proc]
-          if responder[:proc].arity == 1
-            send(:process, request)
-          else
-            send(:process, *args.unshift(request))
-          end
+          number_of_block_parameter = responder[:proc].arity
+          send(:process, *args.unshift(request).take(number_of_block_parameter))
         else
           next
         end
