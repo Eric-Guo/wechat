@@ -32,6 +32,14 @@ RSpec.describe WechatCorpController, type: :controller do
     { timestamp: timestamp, nonce: nonce, xml: xml, msg_signature: msg_signature }
   end
 
+  def signature_echostr(echostr)
+    encrypt_echostr = Base64.strict_encode64 encrypt(pack(echostr, 'appid'), ENCODING_AES_KEY)
+    timestamp = '1234567'
+    nonce = 'nonce'
+    msg_signature = Digest::SHA1.hexdigest(['token', timestamp, nonce, encrypt_echostr].sort.join)
+    { timestamp: timestamp, nonce: nonce, echostr: encrypt_echostr, msg_signature: msg_signature }
+  end
+
   def xml_to_hash(response)
     Hash.from_xml(response.body)['xml'].symbolize_keys
   end
@@ -47,6 +55,11 @@ RSpec.describe WechatCorpController, type: :controller do
       expect(response.code).to eq '200'
       expect(response.body.length).to eq 0
     end
+  end
+
+  specify "echo 'echostr' param when show" do
+    get :show, signature_echostr('hello')
+    expect(response.body).to eq('hello')
   end
 
   describe 'corp' do
