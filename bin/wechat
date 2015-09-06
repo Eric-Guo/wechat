@@ -88,6 +88,13 @@ HELP
     puts Helper.with(options).group_delete(groupid)
   end
 
+  desc 'department_create [NAME, PARENT_ID]', '创建部门'
+  method_option :parentid, aliases: '-p', desc: '父亲部门id。根部门id为1'
+  def department_create(name)
+    api_opts = options.slice(:parentid)
+    puts Helper.with(options).department_create(name, api_opts[:parentid] || '1')
+  end
+
   desc 'department [DEPARTMENT_ID]', '获取部门列表'
   def department(departmentid)
     puts Helper.with(options).department(departmentid)
