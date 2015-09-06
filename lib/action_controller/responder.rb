@@ -105,7 +105,7 @@ module Wechat
     def verify_signature
       signature = params[:signature] || params[:msg_signature]
 
-      msg_encrypt = params[:echostr]
+      msg_encrypt = params[:echostr] if self.class.corpid.present?
 
       msg_encrypt ||= request_encrypt_content if self.class.encrypt_mode
 
