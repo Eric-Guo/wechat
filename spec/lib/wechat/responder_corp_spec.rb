@@ -79,8 +79,8 @@ RSpec.describe WechatCorpController, type: :controller do
         request.reply.text 'echo: my_event'
       end
 
-      on :event, with: 'BINDING_QR_CODE' do |request, scan_type, scan_result|
-        request.reply.text "User #{request[:FromUserName]} ScanType #{scan_type} ScanResult #{scan_result}"
+      on :event, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
+        request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
       end
     end
 
@@ -164,7 +164,7 @@ RSpec.describe WechatCorpController, type: :controller do
 
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
-        expect(message['Content']).to eq 'User userid ScanType qrcode ScanResult scan_result'
+        expect(message['Content']).to eq 'User userid ScanResult scan_result ScanType qrcode'
       end
     end
   end

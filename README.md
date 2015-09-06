@@ -353,8 +353,8 @@ class WechatsController < ApplicationController
   end
 
   # 当收到EventKey 为二维码扫描结果事件时
-  on :event, with: 'BINDING_QR_CODE' do |request, scan_type, scan_result|
-    request.reply.text "User #{request[:FromUserName]} ScanType #{scan_type} ScanResult #{scan_result}"
+  on :event, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
+    request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
   end
 
   # 处理图片信息

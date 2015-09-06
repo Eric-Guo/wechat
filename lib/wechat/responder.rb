@@ -71,7 +71,7 @@ module Wechat
           if condition.is_a? Regexp
             memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
           elsif value.is_a? Hash
-            memo[:scoped] ||= [responder, value[:scan_type], value[:scan_result]] if value[:event_key] == condition
+            memo[:scoped] ||= [responder, value[:scan_result], value[:scan_type]] if value[:event_key] == condition
           else
             memo[:scoped] ||= [responder, value] if value == condition
           end
