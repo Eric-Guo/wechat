@@ -125,7 +125,7 @@ module Wechat
     def post_xml
       data = request_content
 
-      if self.class.encrypt_mode && request_encrypt_content.present?
+      if self.class.encrypt_mode
         content, @app_id = unpack(decrypt(Base64.decode64(request_encrypt_content), self.class.encoding_aes_key))
         data = Hash.from_xml(content)
       end
@@ -155,7 +155,7 @@ module Wechat
     def process_response(response)
       msg = response.to_xml
 
-      if self.class.encrypt_mode && request_encrypt_content.present?
+      if self.class.encrypt_mode
         encrypt = Base64.strict_encode64(encrypt(pack(msg, @app_id), self.class.encoding_aes_key))
         msg = gen_msg(encrypt, params[:timestamp], params[:nonce])
       end
