@@ -1,8 +1,9 @@
 # Changelog
 
-## v0.5.0 (released at 9/17/2015)
+## v0.4.1 (released at 9/6/2015)
 
 * Limit news articles collection to 10, close #5
+* Resolve the conflict with gem "responders" by @seamon #45
 
 ## v0.4.0 (released at 9/5/2015)
 
