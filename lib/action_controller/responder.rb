@@ -105,10 +105,11 @@ module Wechat
     def verify_signature
       signature = params[:signature] || params[:msg_signature]
 
-      msg_encrypt = params[:echostr] || request_content
+      msg_encrypt = params[:echostr]
 
-      render text: 'Forbidden', status: 403 if signature != Signature.hexdigest(self.class.encrypt_mode,
-                                                                                self.class.token,
+      msg_encrypt ||= request_encrypt_content if self.class.encrypt_mode
+
+      render text: 'Forbidden', status: 403 if signature != Signature.hexdigest(self.class.token,
                                                                                 params[:timestamp],
                                                                                 params[:nonce],
                                                                                 msg_encrypt)
@@ -117,8 +118,8 @@ module Wechat
     def post_xml
       data = request_content
 
-      if self.class.encrypt_mode
-        content, @app_id = unpack(decrypt(Base64.decode64(data), self.class.encoding_aes_key))
+      if self.class.encrypt_mode && request_encrypt_content.present?
+        content, @app_id = unpack(decrypt(Base64.decode64(request_encrypt_content), self.class.encoding_aes_key))
         data = Hash.from_xml(content)
       end
 
@@ -156,7 +157,7 @@ module Wechat
     end
 
     def gen_msg(encrypt, timestamp, nonce)
-      msg_sign = Signature.hexdigest(self.class.encrypt_mode, self.class.token, timestamp, nonce, encrypt)
+      msg_sign = Signature.hexdigest(self.class.token, timestamp, nonce, encrypt)
 
       { Encrypt: encrypt,
         MsgSignature: msg_sign,
@@ -165,16 +166,12 @@ module Wechat
       }.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
     end
 
+    def request_encrypt_content
+      request_content['xml']['Encrypt']
+    end
+
     def request_content
-      return Hash.from_xml(request.raw_post) if params[:xml].nil?
-      xml_content = { 'xml' => params[:xml] }
-      if xml_content['xml']['Encrypt'].present?
-        xml_content['xml']['Encrypt']
-      else
-        xml_content
-      end
-    rescue REXML::ParseException
-      nil
+      params[:xml].nil? ? Hash.from_xml(request.raw_post) : { 'xml' => params[:xml] }
     end
   end
 end
