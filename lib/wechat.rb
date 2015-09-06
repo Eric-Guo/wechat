@@ -37,7 +37,7 @@ module Wechat
     if config.corpid.present?
       @api ||= CorpApi.new(config.corpid, config.corpsecret, config.access_token, config.agentid, config.skip_verify_ssl)
     else
-      @api ||= Api.new(config.appid, config.secret, config.access_token, config.jsapi_ticket, config.skip_verify_ssl)
+      @api ||= Api.new(config.appid, config.secret, config.access_token, config.skip_verify_ssl, config.jsapi_ticket)
     end
   end
 
