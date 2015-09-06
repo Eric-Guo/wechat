@@ -1,4 +1,5 @@
 require 'English'
+require 'wechat/signature'
 
 module Wechat
   module Responder
@@ -106,20 +107,11 @@ module Wechat
 
       msg_encrypt = params[:echostr] || request_content
 
-      dev_msg_signature = content_to_verify(self.class.token, params[:timestamp], params[:nonce], msg_encrypt)
-
-      render text: 'Forbidden', status: 403 if signature != Digest::SHA1.hexdigest(dev_msg_signature)
-    end
-
-    def content_to_verify(token, timestamp, nonce, msg_encrypt)
-      array = [token, timestamp, nonce]
-
-      # 默认使用明文方式验证, 企业号验证加密签名
-      if params[:signature].blank? && params[:msg_signature]
-        array << msg_encrypt
-      end
-
-      array.compact.collect(&:to_s).sort.join
+      render text: 'Forbidden', status: 403 if signature != Signature.hexdigest(self.class.encrypt_mode,
+                                                                                self.class.token,
+                                                                                params[:timestamp],
+                                                                                params[:nonce],
+                                                                                msg_encrypt)
     end
 
     def post_xml
@@ -164,7 +156,7 @@ module Wechat
     end
 
     def gen_msg(encrypt, timestamp, nonce)
-      msg_sign = Digest::SHA1.hexdigest [self.class.token, timestamp, nonce, encrypt].compact.collect(&:to_s).sort.join
+      msg_sign = Signature.hexdigest(self.class.encrypt_mode, self.class.token, timestamp, nonce, encrypt)
 
       { Encrypt: encrypt,
         MsgSignature: msg_sign,
