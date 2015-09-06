@@ -4,7 +4,7 @@ require 'action_controller/wechat_responder'
 
 module Wechat
   autoload :Message, 'wechat/message'
-  autoload :Responder, 'action_controller/responder'
+  autoload :Responder, 'wechat/responder'
   autoload :Cipher, 'wechat/cipher'
 
   class AccessTokenExpiredError < StandardError; end
