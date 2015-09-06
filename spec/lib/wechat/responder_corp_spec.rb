@@ -5,8 +5,8 @@ include Wechat::Cipher
 ENCODING_AES_KEY = Base64.encode64 SecureRandom.hex(16)
 
 class WechatCorpController < ApplicationController
-  wechat_responder appid: 'appid', secret: 'secret', token: 'token', access_token: 'controller_access_token',
-                   agentid: 1, encrypt_mode: true, encoding_aes_key: ENCODING_AES_KEY
+  wechat_responder corpid: 'corpid', corpsecret: 'corpsecret', token: 'token', access_token: 'controller_access_token',
+                   agentid: 1, encoding_aes_key: ENCODING_AES_KEY
 end
 
 RSpec.describe WechatCorpController, type: :controller do
@@ -36,6 +36,19 @@ RSpec.describe WechatCorpController, type: :controller do
     Hash.from_xml(response.body)['xml'].symbolize_keys
   end
 
+  describe 'Verify signature' do
+    it 'on create action faild' do
+      post :create, signature_params.merge(msg_signature: 'invalid')
+      expect(response.code).to eq '403'
+    end
+
+    it 'on create action success' do
+      post :create, signature_params(MsgType: 'voice', Voice: { MediaId: 'mediaID' })
+      expect(response.code).to eq '200'
+      expect(response.body.length).to eq 0
+    end
+  end
+
   describe 'corp' do
     controller do
       wechat_responder corpid: 'corpid', corpsecret: 'corpsecret', token: 'token', access_token: 'controller_access_token',
@@ -57,19 +70,6 @@ RSpec.describe WechatCorpController, type: :controller do
       expect(controller.class.agentid).to eq 1
       expect(controller.class.encrypt_mode).to eq true
       expect(controller.class.encoding_aes_key).to eq ENCODING_AES_KEY
-    end
-
-    describe 'Verify signature' do
-      it 'on create action faild' do
-        post :create, signature_params.merge(msg_signature: 'invalid')
-        expect(response.code).to eq '403'
-      end
-
-      it 'on create action success' do
-        post :create, signature_params(MsgType: 'voice', Voice: { MediaId: 'mediaID' })
-        expect(response.code).to eq '200'
-        expect(response.body.length).to eq 0
-      end
     end
 
     describe 'response' do

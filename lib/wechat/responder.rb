@@ -106,7 +106,6 @@ module Wechat
       signature = params[:signature] || params[:msg_signature]
 
       msg_encrypt = params[:echostr] if self.class.corpid.present?
-
       msg_encrypt ||= request_encrypt_content if self.class.encrypt_mode
 
       render text: 'Forbidden', status: 403 if signature != Signature.hexdigest(self.class.token,
