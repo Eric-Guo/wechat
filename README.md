@@ -357,6 +357,13 @@ class WechatsController < ApplicationController
     request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
   end
 
+  # 当收到EventKey 为CODE 39码扫描结果事件时
+  on :event, with: 'BINDING_BARCODE' do |message, scan_result, scan_type|
+    if scan_result.start_with? 'CODE_39,'
+      message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
+    end
+  end
+
   # 处理图片信息
   on :image do |request|
     request.reply.image(request[:MediaId]) #直接将图片返回给用户
