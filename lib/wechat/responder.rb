@@ -80,6 +80,10 @@ module Wechat
       end
     end
 
+    def wechat
+      self.class.wechat # Make sure user can continue access wechat at instance level similar to class level
+    end
+
     def show
       if self.class.corpid.present?
         echostr, _corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), self.class.encoding_aes_key))
