@@ -104,19 +104,19 @@ module Wechat
     def verify_signature
       signature = params[:signature] || params[:msg_signature]
 
-      render text: 'Forbidden', status: 403 if signature != Digest::SHA1.hexdigest(content_to_verify)
+      msg_encrypt = params[:echostr] || request_content
+
+      dev_msg_signature = content_to_verify(self.class.token, params[:timestamp], params[:nonce], msg_encrypt)
+
+      render text: 'Forbidden', status: 403 if signature != Digest::SHA1.hexdigest(dev_msg_signature)
     end
 
-    def content_to_verify
-      array = [self.class.token, params[:timestamp], params[:nonce]]
+    def content_to_verify(token, timestamp, nonce, msg_encrypt)
+      array = [token, timestamp, nonce]
 
       # 默认使用明文方式验证, 企业号验证加密签名
       if params[:signature].blank? && params[:msg_signature]
-        if params[:echostr].present?
-          array << params[:echostr]
-        else
-          array << request_content
-        end
+        array << msg_encrypt
       end
 
       array.compact.collect(&:to_s).sort.join
@@ -181,6 +181,8 @@ module Wechat
       else
         xml_content
       end
+    rescue REXML::ParseException
+      nil
     end
   end
 end
