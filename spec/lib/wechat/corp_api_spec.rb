@@ -70,12 +70,22 @@ RSpec.describe Wechat::CorpApi do
   end
 
   describe '#department_create' do
-    specify 'will get user/get with access_token and userid' do
+    specify 'will post department/create with access_token and new department payload' do
       department_create_request = { name: '广州研发中心', parentid: '1' }
       department_create_result = { errcode: 0, errmsg: 'created', id: 2 }
       expect(subject.client).to receive(:post)
         .with('department/create', department_create_request.to_json, params: { access_token: 'access_token' }).and_return(department_create_result)
       expect(subject.department_create('广州研发中心', '1')).to eq department_create_result
+    end
+  end
+
+  describe '#department_delete' do
+    specify 'will get department/delete with access_token and id' do
+      departmentid = 'departmentid'
+      department_delete_result = { errcode: 0, errmsg: 'deleted' }
+      expect(subject.client).to receive(:get)
+        .with('department/delete', params: { access_token: 'access_token', id: departmentid }).and_return(department_delete_result)
+      expect(subject.department_delete('departmentid')).to eq department_delete_result
     end
   end
 

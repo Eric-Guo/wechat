@@ -43,6 +43,10 @@ module Wechat
       post('department/create', JSON.generate(name: name, parentid: parentid))
     end
 
+    def department_delete(departmentid)
+      get('department/delete', params: { id: departmentid })
+    end
+
     def department(departmentid = 1)
       get('department/list', params: { id: departmentid })
     end

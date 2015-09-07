@@ -95,6 +95,11 @@ HELP
     puts Helper.with(options).department_create(name, api_opts[:parentid] || '1')
   end
 
+  desc 'department_delete [DEPARTMENT_ID]', '删除部门'
+  def department_delete(departmentid)
+    puts Helper.with(options).department_delete(departmentid)
+  end
+
   desc 'department [DEPARTMENT_ID]', '获取部门列表'
   def department(departmentid)
     puts Helper.with(options).department(departmentid)
