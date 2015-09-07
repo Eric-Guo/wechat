@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.2 (released at 9/7/2015)
+
+* Fix wrong number of arguments at Wechat::Responder.on by using arity #47
+* Fix can not access wechat method after using instance level context.
+* Fix skip_verify_ssl parameter error. 
+
 ## v0.4.1 (released at 9/6/2015)
 
 * Limit news articles collection to 10, close #5
