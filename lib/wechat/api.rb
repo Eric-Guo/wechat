@@ -50,6 +50,10 @@ module Wechat
       post 'groups/members/update', JSON.generate(openid: openid, to_groupid: to_groupid)
     end
 
+    def user_update_remark(openid, remark)
+      post 'user/info/updateremark', JSON.generate(openid: openid, remark: remark)
+    end
+
     def menu
       get('menu/get')
     end

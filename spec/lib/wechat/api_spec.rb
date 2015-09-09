@@ -102,6 +102,16 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#user_update_remark' do
+    specify 'will post groups/getid with access_token and openid to get user groups info' do
+      user_update_remark_request = { openid: 'openid', remark: 'remark' }
+      user_update_remark_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('user/info/updateremark', user_update_remark_request.to_json, params: { access_token: 'access_token' }).and_return(user_update_remark_result)
+      expect(subject.user_update_remark 'openid', 'remark').to eq user_update_remark_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token' do
       menu_result = 'menu_result'

@@ -135,6 +135,11 @@ HELP
     puts Helper.with(options).user_change_group(openid, to_groupid)
   end
 
+  desc 'user_update_remark [OPEN_ID, REMARK]', '设置备注名'
+  def user_update_remark(openid, remark)
+    puts Helper.with(options).user_update_remark(openid, remark)
+  end
+
   desc 'menu', '当前菜单'
   def menu
     puts Helper.with(options).menu
