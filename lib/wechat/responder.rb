@@ -25,23 +25,22 @@ module Wechat
           config.merge!(with: with) if with.present?
         end
 
-        responders(message_type) << config
+        user_defined_responders(message_type) << config
         config
       end
 
-      def responders(type)
+      def user_defined_responders(type)
         @responders ||= {}
         @responders[type] ||= []
       end
 
-      def responder_for(message, &block)
+      def responder_for(message)
         message_type = message[:MsgType].to_sym
-        responders = responders(message_type)
+        responders = user_defined_responders(message_type)
 
         case message_type
         when :text
           yield(* match_responders(responders, message[:Content]))
-
         when :event
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
@@ -133,7 +132,7 @@ module Wechat
 
     def run_responder(request)
       self.class.responder_for(request) do |responder, *args|
-        responder ||= self.class.responders(:fallback).first
+        responder ||= self.class.user_defined_responders(:fallback).first
 
         next if responder.nil?
         case
