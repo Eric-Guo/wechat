@@ -108,6 +108,30 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#menu' do
+    specify 'will get menu/get with access_token and agentid' do
+      menu_result = 'menu_result'
+      expect(subject.client).to receive(:get).with('menu/get', params: { access_token: 'access_token', agentid: '1' }).and_return(menu_result)
+      expect(subject.menu).to eq(menu_result)
+    end
+  end
+
+  describe '#menu_delete' do
+    specify 'will get menu/delete with access_token and agentid' do
+      expect(subject.client).to receive(:get).with('menu/delete', params: { access_token: 'access_token', agentid: '1' }).and_return(true)
+      expect(subject.menu_delete).to be true
+    end
+  end
+
+  describe '#menu_create' do
+    specify 'will post menu/create with access_token, agentid and json_data' do
+      menu = { buttons: ['a_button'] }
+      expect(subject.client).to receive(:post)
+        .with('menu/create', menu.to_json, params: { access_token: 'access_token', agentid: '1' }).and_return(true)
+      expect(subject.menu_create(menu)).to be true
+    end
+  end
+
   describe '#media' do
     specify 'will get media/get with access_token and media_id at file based api endpoint as file' do
       media_result = 'media_result'
