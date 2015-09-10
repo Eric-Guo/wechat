@@ -46,7 +46,7 @@ Windows或者使用企业号，需要存放在`C:/Users/[user_name]/`下，其�
 ```
 corpid: "my_appid"
 corpsecret: "my_secret"
-agentid: "1" # 企业应用的id，整型。可在应用的设置页面查看
+agentid: 1 # 企业应用的id，整型。可在应用的设置页面查看
 access_token: "C:/Users/[user_name]/wechat_access_token"
 ```
 
@@ -81,7 +81,7 @@ test:
 default: &default
   corpid: "corpid"
   corpsecret: "corpsecret"
-  agentid:  "1"
+  agentid:  1
   access_token: "C:/Users/[user_name]/wechat_access_token"
   token:    ""
   encoding_aes_key:  ""
