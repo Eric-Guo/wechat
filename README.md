@@ -384,7 +384,12 @@ class WechatsController < ApplicationController
 
   # 当用户取消关注订阅
   on :event, with: 'unsubscribe' do |request|
-    request.reply.text "#{request[:FromUserName]}无法收到这条消息。"
+    request.reply.text "#{request[:FromUserName]} can not receive this message"
+  end
+
+  # 成员进入应用的事件推送
+  on :event, with: 'enter_agent' do |request|
+    request.reply.text "#{request[:FromUserName]} enter agent app now"
   end
 
   # 当无任何responder处理用户信息时,使用这个responder处理

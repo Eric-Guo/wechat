@@ -75,8 +75,8 @@ RSpec.describe WechatCorpController, type: :controller do
         request.reply.text 'welcome!'
       end
 
-      on :event, with: 'my_event' do |request, _key|
-        request.reply.text 'echo: my_event'
+      on :event, with: 'enter_agent' do |request|
+        request.reply.text 'echo: enter_agent'
       end
 
       on :event, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
@@ -136,8 +136,8 @@ RSpec.describe WechatCorpController, type: :controller do
         expect(message['Content']).to eq 'welcome!'
       end
 
-      it 'on event' do
-        post :create, signature_params(MsgType: 'event', Event: 'click', EventKey: 'my_event')
+      it 'on enter_agent' do
+        post :create, signature_params(MsgType: 'event', Event: 'click', EventKey: 'enter_agent')
         expect(response.code).to eq '200'
 
         data = Hash.from_xml(response.body)['xml']
@@ -148,7 +148,7 @@ RSpec.describe WechatCorpController, type: :controller do
 
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
-        expect(message['Content']).to eq 'echo: my_event'
+        expect(message['Content']).to eq 'echo: enter_agent'
       end
 
       it 'on BINDING_QR_CODE' do
