@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.0 (released at 9/19/2015)
+
+* Add asynchronous callback event support for enterprise account
+
 ## v0.4.2 (released at 9/7/2015)
 
 * Fix wrong number of arguments at Wechat::Responder.on by using arity #47

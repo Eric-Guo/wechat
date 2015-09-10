@@ -82,6 +82,10 @@ RSpec.describe WechatCorpController, type: :controller do
       on :event, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
         request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
       end
+
+      on :event, with: 'replace_user' do |request, batch_job|
+        request.reply.text "Replace user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
+      end
     end
 
     specify 'will set controller wechat api and token' do
@@ -165,6 +169,22 @@ RSpec.describe WechatCorpController, type: :controller do
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
         expect(message['Content']).to eq 'User userid ScanResult scan_result ScanType qrcode'
+      end
+
+      it 'on replace_user' do
+        post :create, signature_params(FromUserName: 'sys', MsgType: 'event', Event: 'batch_job_result',
+                                       BatchJob: { JobId: 'job_id', JobType: 'replace_user', ErrCode: 0, ErrMsg: 'ok' })
+        expect(response.code).to eq '200'
+
+        data = Hash.from_xml(response.body)['xml']
+
+        xml_message, app_id = unpack(decrypt(Base64.decode64(data['Encrypt']), ENCODING_AES_KEY))
+        expect(app_id).to eq 'appid'
+        expect(xml_message.empty?).to eq false
+
+        message = Hash.from_xml(xml_message)['xml']
+        expect(message['MsgType']).to eq 'text'
+        expect(message['Content']).to eq 'Replace user job job_id finished, return code 0, return message ok'
       end
     end
   end

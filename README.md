@@ -392,6 +392,26 @@ class WechatsController < ApplicationController
     request.reply.text "#{request[:FromUserName]} enter agent app now"
   end
 
+  # 当异步任务增量更新成员完成时推送
+  on :event, with: 'sync_user' do |request, batch_job|
+    request.reply.text "job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
+  end
+
+  # 当异步任务全量覆盖成员完成时推送
+  on :event, with: 'replace_user' do |request, batch_job|
+    request.reply.text "job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
+  end
+
+  # 当异步任务邀请成员关注完成时推送
+  on :event, with: 'invite_user' do |request, batch_job|
+    request.reply.text "job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
+  end
+
+  # 当异步任务全量覆盖部门完成时推送
+  on :event, with: 'replace_party' do |request, batch_job|
+    request.reply.text "job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
+  end
+
   # 当无任何responder处理用户信息时,使用这个responder处理
   on :fallback, respond: "fallback message"  
 end

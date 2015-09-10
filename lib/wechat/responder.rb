@@ -49,6 +49,9 @@ module Wechat
                                                  event_key: message[:EventKey],
                                                  scan_type: message[:ScanCodeInfo][:ScanType],
                                                  scan_result: message[:ScanCodeInfo][:ScanResult]))
+          elsif 'batch_job_result' == message[:Event]
+            yield(* match_responders(responders, event: 'batch_job',
+                                                 batch_job: message[:BatchJob]))
           else
             yield(* match_responders(responders, message[:Event]))
           end
@@ -72,6 +75,8 @@ module Wechat
             memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
           elsif value.is_a? Hash
             memo[:scoped] ||= [responder, value[:scan_result], value[:scan_type]] if value[:event_key] == condition && value[:event] == 'scancode'
+            memo[:scoped] ||= [responder, value[:batch_job]] if value[:event] == 'batch_job' &&
+                                                                %w(sync_user replace_user invite_user replace_party).include?(condition.downcase)
           else
             memo[:scoped] ||= [responder, value] if value == condition
           end
