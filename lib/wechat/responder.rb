@@ -45,7 +45,8 @@ module Wechat
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
           elsif %w(scancode_push scancode_waitmsg).include? message[:Event]
-            yield(* match_responders(responders, event_key: message[:EventKey],
+            yield(* match_responders(responders, event: 'scancode',
+                                                 event_key: message[:EventKey],
                                                  scan_type: message[:ScanCodeInfo][:ScanType],
                                                  scan_result: message[:ScanCodeInfo][:ScanResult]))
           else
@@ -70,7 +71,7 @@ module Wechat
           if condition.is_a? Regexp
             memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
           elsif value.is_a? Hash
-            memo[:scoped] ||= [responder, value[:scan_result], value[:scan_type]] if value[:event_key] == condition
+            memo[:scoped] ||= [responder, value[:scan_result], value[:scan_type]] if value[:event_key] == condition && value[:event] == 'scancode'
           else
             memo[:scoped] ||= [responder, value] if value == condition
           end
