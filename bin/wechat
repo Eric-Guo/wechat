@@ -45,7 +45,7 @@ HELP
       home_config_file = File.join(Dir.home, '.wechat.yml')
 
       if File.exist?(rails_config_file)
-        config = YAML.load(ERB.new(File.new(rails_config_file).read).result)['default']
+        config = YAML.load(ERB.new(File.read(rails_config_file)).result)['default']
         if config.present? && (config['appid'] || config['corpid'])
           puts 'Using rails project config/wechat.yml default setting...'
         else
@@ -152,7 +152,7 @@ HELP
 
   desc 'menu_create [MENU_YAML_PATH]', '创建菜单'
   def menu_create(menu_yaml_path)
-    menu = YAML.load(File.new(menu_yaml_path).read)
+    menu = YAML.load(File.read(menu_yaml_path))
     puts 'Menu created' if Helper.with(options).menu_create(menu)
   end
 
@@ -247,13 +247,13 @@ HELP
 
   desc 'custom_news [OPENID, NEWS_YAML_PATH]', '发送图文客服消息'
   def custom_news(openid, news_yaml_path)
-    articles = YAML.load(File.new(news_yaml_path).read)
+    articles = YAML.load(File.read(news_yaml_path))
     puts Helper.with(options).custom_message_send Wechat::Message.to(openid).news(articles['articles'])
   end
 
   desc 'template_message [OPENID, TEMPLATE_YAML_PATH]', '模板消息接口'
   def template_message(openid, template_yaml_path)
-    template = YAML.load(File.new(template_yaml_path).read)
+    template = YAML.load(File.read(template_yaml_path))
     puts Helper.with(options).template_message_send Wechat::Message.to(openid).template(template['template'])
   end
 end

@@ -219,4 +219,25 @@ RSpec.describe Wechat::Api do
       expect(subject.custom_message_send Wechat::Message.to('openid').text('message content')).to be true
     end
   end
+
+  describe '#template_message' do
+    specify 'will post message/custom/send with access_token, and json payload' do
+      payload = { touser: 'OPENID',
+                  template_id: 'ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY',
+                  url: 'http://weixin.qq.com/download',
+                  topcolor: '#FF0000',
+                  data: { first: { value: '恭喜你购买成功！', color: '#173177' },
+                          keynote1: { value: '巧克力', color: '#173177' },
+                          keynote2: { value: '39.8元', color: '#173177' },
+                          keynote3: { value: '2014年9月16日', color: '#173177' },
+                          remark: { value: '欢迎再次购买！', color: '#173177' } } }
+      response_result = { errcode: 0, errmsg: 'ok', msgid: 332 }
+
+      expect(subject.client).to receive(:post)
+        .with('message/template/send', payload.to_json,
+              params: { access_token: 'access_token' }, content_type: :json).and_return(response_result)
+
+      expect(subject.template_message_send payload).to eq response_result
+    end
+  end
 end
