@@ -223,20 +223,14 @@ button:
     type: "scancode_waitmsg"
     name: "绑定用餐二维码"
     key: "BINDING_QR_CODE"
-    sub_button:
-     -
    -
     type: "click"
     name: "预订午餐"
     key:  "BOOK_LUNCH"
-    sub_button:
-     -
    -
     type: "click"
     name: "预订晚餐"
     key:  "BOOK_DINNER"
-    sub_button:
-     -
  -
   name: "查询"
   sub_button:
@@ -244,19 +238,14 @@ button:
     type: "click"
     name: "进出记录"
     key:  "BADGE_IN_OUT"
-    sub_button:
-     -
    -
     type: "click"
     name: "年假余额"
     key:  "ANNUAL_LEAVE"
-    sub_button:
-     -
  -
   type: "view"
   name: "关于"
   url:  "http://blog.cloud-mes.com/"
-
 ```
 
 然后执行命令行，需确保设置，权限管理中有对此应用的管理权限，否则会报[60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E)错。
