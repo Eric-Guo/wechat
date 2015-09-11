@@ -105,6 +105,13 @@ HELP
     puts Helper.with(options).department(departmentid)
   end
 
+  desc 'tag_create [TAGNAME, TAG_ID]', '创建标签'
+  method_option :tagid, aliases: '-id', desc: '整型，指定此参数时新增的标签会生成对应的标签id，不指定时则以目前最大的id自增'
+  def tag_create(name)
+    api_opts = options.slice(:tagid)
+    puts Helper.with(options).tag_create(name, api_opts[:tagid])
+  end
+
   desc 'users', '关注者列表'
   def users
     puts Helper.with(options).users

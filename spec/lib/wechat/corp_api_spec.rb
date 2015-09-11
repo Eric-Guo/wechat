@@ -108,6 +108,16 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#tag_create' do
+    specify 'will post department/create with access_token and new department payload' do
+      tag_create_request = { tagname: 'UI', tagid: 1 }
+      tag_create_result = { errcode: 0, errmsg: 'created', tagid: 1 }
+      expect(subject.client).to receive(:post)
+        .with('tag/create', tag_create_request.to_json, params: { access_token: 'access_token' }).and_return(tag_create_result)
+      expect(subject.tag_create('UI', 1)).to eq tag_create_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token and agentid' do
       menu_result = 'menu_result'

@@ -51,6 +51,10 @@ module Wechat
       get('department/list', params: { id: departmentid })
     end
 
+    def tag_create(tagname, tagid = nil)
+      post('tag/create', JSON.generate(tagname: tagname, tagid: tagid))
+    end
+
     def menu
       get('menu/get', params: { agentid: agentid })
     end

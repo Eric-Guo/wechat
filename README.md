@@ -164,6 +164,7 @@ Wechat commands:
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
   wechat menu_delete                                       # 删除菜单
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息(仅企业号)
+  wechat tag_create [TAGNAME, TAG_ID]                      # 创建标签
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 获取用户基本信息
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
