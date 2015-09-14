@@ -3,6 +3,7 @@
 ## v0.5.0 (released at 9/19/2015)
 
 * Add asynchronous callback event support for enterprise account
+* Add batch replace user support for enterprise account
 
 ## v0.4.2 (released at 9/7/2015)
 
