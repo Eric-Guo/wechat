@@ -39,6 +39,10 @@ module Wechat
       get('user/delete', params: { userid: userid })
     end
 
+    def batch_replaceuser(media_id)
+      post('batch/replaceuser', JSON.generate(media_id: media_id))
+    end
+
     def department_create(name, parentid)
       post('department/create', JSON.generate(name: name, parentid: parentid))
     end

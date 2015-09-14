@@ -132,6 +132,11 @@ HELP
     puts Helper.with(options).user_delete(userid)
   end
 
+  desc 'batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]', '全量覆盖成员'
+  def batch_replaceuser(batch_user_csv_media_id)
+    puts Helper.with(options).batch_replaceuser(batch_user_csv_media_id)
+  end
+
   desc 'user_group [OPEN_ID]', '查询用户所在分组'
   def user_group(openid)
     puts Helper.with(options).user_group(openid)
