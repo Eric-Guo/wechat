@@ -206,7 +206,15 @@ HELP
 
   desc 'material_list [TYPE, OFFSET, COUNT]', '获取永久素材列表'
   def material_list(type, offset, count)
-    puts Helper.with(options).material_list(type, offset, count)
+    r = Helper.with(options).material_list(type, offset, count)
+    if %w(image voice video file).include?(type)
+      puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']} total_count: #{r['total_count']} item_count: #{r['item_count']}"
+      r['itemlist'].each do |i|
+        puts "#{i['media_id']} #{i['filename']} #{Time.at(i['update_time'].to_i)}"
+      end
+    else
+      puts r
+    end
   end
 
   desc 'message_send [OPENID, TEXT_MESSAGE]', '发送文字消息(仅企业号)'
