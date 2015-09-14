@@ -182,6 +182,17 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#material_list' do
+    specify 'will get material list with access_token' do
+      material_list_request = { type: 'image', offset: 0, count: 20 }
+      material_list_result = { total_count: 1, item_count: 1,
+                               item: [{ media_id: 'media_id', name: 'name', update_time: 12345, url: 'url' }] }
+      expect(subject.client).to receive(:post)
+        .with('material/batchget_material', material_list_request.to_json, params: { access_token: 'access_token' }).and_return(material_list_result)
+      expect(subject.material_list('image', 0, 20)).to eq material_list_result
+    end
+  end
+
   describe '#material_add' do
     specify 'will post material/add_material with access_token, type and media payload at file based api endpoint' do
       file = 'file'

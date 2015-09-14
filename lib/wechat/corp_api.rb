@@ -80,6 +80,10 @@ module Wechat
       get 'material/get_count', params: { agentid: agentid }
     end
 
+    def material_list(type, offset, count)
+      post 'material/batchget', JSON.generate(type: type, agentid: agentid, offset: offset, count: count)
+    end
+
     def media_create(type, file)
       post 'media/upload', { upload: { media: file } }, params: { type: type }
     end

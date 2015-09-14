@@ -83,6 +83,10 @@ module Wechat
       get 'material/get_materialcount'
     end
 
+    def material_list(type, offset, count)
+      post 'material/batchget_material', JSON.generate(type: type, offset: offset, count: count)
+    end
+
     def material_add(type, file)
       post 'material/add_material', { upload: { media: file } }, params: { type: type }, base: FILE_BASE
     end

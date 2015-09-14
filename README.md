@@ -157,8 +157,9 @@ Wechat commands:
   wechat invite_user [USER_ID]                             # 邀请成员关注
   wechat material [MEDIA_ID, PATH]                         # 永久媒体下载
   wechat material_add [MEDIA_TYPE, PATH]                   # 永久媒体上传
-  wechat material_count                                    # 获取素材总数
+  wechat material_count                                    # 获取永久素材总数
   wechat material_delete [MEDIA_ID]                        # 删除永久素材
+  wechat material_list [TYPE, OFFSET, COUNT]               # 获取永久素材列表
   wechat media [MEDIA_ID, PATH]                            # 媒体下载
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat menu                                              # 当前菜单

@@ -199,9 +199,14 @@ HELP
     puts Helper.with(options).material_delete(media_id)
   end
 
-  desc 'material_count', '获取素材总数'
+  desc 'material_count', '获取永久素材总数'
   def material_count
     puts Helper.with(options).material_count
+  end
+
+  desc 'material_list [TYPE, OFFSET, COUNT]', '获取永久素材列表'
+  def material_list(type, offset, count)
+    puts Helper.with(options).material_list(type, offset, count)
   end
 
   desc 'message_send [OPENID, TEXT_MESSAGE]', '发送文字消息(仅企业号)'
