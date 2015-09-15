@@ -69,6 +69,17 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#batch_result' do
+    specify 'will get user/delete with access_token and userid' do
+      batch_result = { errcode: 0, errmsg: 'ok', status: 1,
+                       type: 'replace_user', total: 3, percentage: 33, remaintime: 1,
+                       result: [{}, {}] }
+      expect(subject.client).to receive(:get)
+        .with('batch/getresult', params: { jobid: 'jobid', access_token: 'access_token' }).and_return(batch_result)
+      expect(subject.batch_result('jobid')).to eq batch_result
+    end
+  end
+
   describe '#batch_replaceuser' do
     specify 'will post department/create with access_token and new department payload' do
       batch_replaceuser_request = { media_id: 'media_id' }

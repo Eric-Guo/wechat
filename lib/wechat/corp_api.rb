@@ -39,6 +39,10 @@ module Wechat
       get 'user/delete', params: { userid: userid }
     end
 
+    def batch_result(jobid)
+      get 'batch/getresult', params: { jobid: jobid }
+    end
+
     def batch_replaceuser(media_id)
       post 'batch/replaceuser', JSON.generate(media_id: media_id)
     end
