@@ -40,8 +40,8 @@ RSpec.describe WechatCorpController, type: :controller do
     { timestamp: timestamp, nonce: nonce, echostr: encrypt_echostr, msg_signature: msg_signature }
   end
 
-  def xml_to_hash(response)
-    Hash.from_xml(response.body)['xml'].symbolize_keys
+  def xml_to_hash(xml_message)
+    Hash.from_xml(xml_message)['xml'].symbolize_keys
   end
 
   describe 'Verify signature' do
@@ -69,6 +69,12 @@ RSpec.describe WechatCorpController, type: :controller do
 
       on :text do |request, content|
         request.reply.text "echo: #{content}"
+      end
+
+      on :text, with: 'mpnews' do |request|
+        request.reply.news(0...1) do |article|
+          article.item title: 'title', description: 'desc', pic_url: 'http://www.baidu.com/img/bdlogo.gif', url: 'http://www.baidu.com/'
+        end
       end
 
       on :event, with: 'subscribe' do |request|
@@ -123,6 +129,28 @@ RSpec.describe WechatCorpController, type: :controller do
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
         expect(message['Content']).to eq 'echo: hello'
+      end
+
+      it 'on mpnews' do
+        post :create, signature_params(MsgType: 'text', Content: 'mpnews')
+        expect(response.code).to eq '200'
+        expect(response.body.empty?).to eq false
+
+        data = Hash.from_xml(response.body)['xml']
+
+        xml_message, app_id = unpack(decrypt(Base64.decode64(data['Encrypt']), ENCODING_AES_KEY))
+
+        expect(app_id).to eq 'appid'
+        expect(xml_message.empty?).to eq false
+
+        message = Hash.from_xml(xml_message)['xml']
+        articles = { 'item' => { 'Title' => 'title',
+                                 'Description' => 'desc',
+                                 'PicUrl' => 'http://www.baidu.com/img/bdlogo.gif',
+                                 'Url' => 'http://www.baidu.com/' } }
+        expect(message['MsgType']).to eq 'news'
+        expect(message['ArticleCount']).to eq '1'
+        expect(message['Articles']).to eq articles
       end
 
       it 'on subscribe' do
