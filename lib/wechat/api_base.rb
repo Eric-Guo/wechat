@@ -3,7 +3,7 @@ module Wechat
     attr_reader :access_token, :client
 
     def callbackip
-      get('getcallbackip')
+      get 'getcallbackip'
     end
 
     protected

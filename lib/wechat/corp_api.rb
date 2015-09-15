@@ -24,7 +24,7 @@ module Wechat
     end
 
     def user(userid)
-      get('user/get', params: { userid: userid })
+      get 'user/get', params: { userid: userid }
     end
 
     def invite_user(userid)
@@ -32,39 +32,39 @@ module Wechat
     end
 
     def user_auth_success(userid)
-      get('user/authsucc', params: { userid: userid })
+      get 'user/authsucc', params: { userid: userid }
     end
 
     def user_delete(userid)
-      get('user/delete', params: { userid: userid })
+      get 'user/delete', params: { userid: userid }
     end
 
     def batch_replaceuser(media_id)
-      post('batch/replaceuser', JSON.generate(media_id: media_id))
+      post 'batch/replaceuser', JSON.generate(media_id: media_id)
     end
 
     def department_create(name, parentid)
-      post('department/create', JSON.generate(name: name, parentid: parentid))
+      post 'department/create', JSON.generate(name: name, parentid: parentid)
     end
 
     def department_delete(departmentid)
-      get('department/delete', params: { id: departmentid })
+      get 'department/delete', params: { id: departmentid }
     end
 
     def department(departmentid = 1)
-      get('department/list', params: { id: departmentid })
+      get 'department/list', params: { id: departmentid }
     end
 
     def tag_create(tagname, tagid = nil)
-      post('tag/create', JSON.generate(tagname: tagname, tagid: tagid))
+      post 'tag/create', JSON.generate(tagname: tagname, tagid: tagid)
     end
 
     def menu
-      get('menu/get', params: { agentid: agentid })
+      get 'menu/get', params: { agentid: agentid }
     end
 
     def menu_delete
-      get('menu/delete', params: { agentid: agentid })
+      get 'menu/delete', params: { agentid: agentid }
     end
 
     def menu_create(menu)

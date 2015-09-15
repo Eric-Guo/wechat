@@ -18,7 +18,7 @@ module Wechat
     end
 
     def groups
-      get('groups/get')
+      get 'groups/get'
     end
 
     def group_create(group_name)
@@ -39,7 +39,7 @@ module Wechat
     end
 
     def user(openid)
-      get('user/info', params: { openid: openid })
+      get 'user/info', params: { openid: openid }
     end
 
     def user_group(openid)
@@ -55,16 +55,16 @@ module Wechat
     end
 
     def menu
-      get('menu/get')
+      get 'menu/get'
     end
 
     def menu_delete
-      get('menu/delete')
+      get 'menu/delete'
     end
 
     def menu_create(menu)
       # 微信不接受7bit escaped json(eg \uxxxx), 中文必须UTF-8编码, 这可能是个安全漏洞
-      post('menu/create', JSON.generate(menu))
+      post 'menu/create', JSON.generate(menu)
     end
 
     def media(media_id)
