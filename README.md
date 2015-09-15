@@ -108,7 +108,7 @@ test:
 
 ##### 配置跳过SSL认证
 
-Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://qydev.weixin.qq.com/qa/index.php?qa=11037)错误，此时可以选择关闭SSL验证（skip_verify_ssl）。
+Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://qydev.weixin.qq.com/qa/index.php?qa=11037)错误，此时可以选择关闭SSL验证。`skip_verify_ssl: true`
 
 #### 为每个Responder配置不同的appid和secret
 
