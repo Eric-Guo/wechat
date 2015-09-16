@@ -39,7 +39,7 @@ module Wechat
       get 'user/delete', params: { userid: userid }
     end
 
-    def batch_result(jobid)
+    def batch_job_result(jobid)
       get 'batch/getresult', params: { jobid: jobid }
     end
 
