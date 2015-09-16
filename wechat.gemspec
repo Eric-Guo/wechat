@@ -15,8 +15,9 @@ Gem::Specification.new do |s|
   s.files = Dir['{bin,lib}/**/*'] + %w(LICENSE Rakefile README.md CHANGELOG.md)
   s.executables << 'wechat'
 
-  s.add_runtime_dependency 'rails', '>= 3.2'
+  s.add_runtime_dependency 'activesupport', '>= 3.2'
   s.add_runtime_dependency 'nokogiri', '>=1.6.0'
   s.add_runtime_dependency 'rest-client'
   s.add_development_dependency 'rspec-rails', '~> 3.3'
+  s.add_development_dependency 'rails', '>= 3.2'
 end
