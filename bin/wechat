@@ -137,6 +137,11 @@ HELP
     puts Helper.with(options).batch_job_result(job_id)
   end
 
+  desc 'batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]', '全量覆盖部门'
+  def batch_replaceparty(batch_party_csv_media_id)
+    puts Helper.with(options).batch_replaceparty(batch_party_csv_media_id)
+  end
+
   desc 'batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]', '全量覆盖成员'
   def batch_replaceuser(batch_user_csv_media_id)
     puts Helper.with(options).batch_replaceuser(batch_user_csv_media_id)

@@ -80,6 +80,16 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#batch_replaceparty' do
+    specify 'will post department/create with access_token and new department payload' do
+      batch_replaceparty_request = { media_id: 'media_id' }
+      batch_replaceparty_result = { errcode: 0, errmsg: 'ok', jobid: 'jobid' }
+      expect(subject.client).to receive(:post)
+        .with('batch/replaceparty', batch_replaceparty_request.to_json, params: { access_token: 'access_token' }).and_return(batch_replaceparty_result)
+      expect(subject.batch_replaceparty('media_id')).to eq batch_replaceparty_result
+    end
+  end
+
   describe '#batch_replaceuser' do
     specify 'will post department/create with access_token and new department payload' do
       batch_replaceuser_request = { media_id: 'media_id' }
