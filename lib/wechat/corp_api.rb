@@ -47,6 +47,10 @@ module Wechat
       post 'batch/replaceparty', JSON.generate(media_id: media_id)
     end
 
+    def batch_syncuser(media_id)
+      post 'batch/syncuser', JSON.generate(media_id: media_id)
+    end
+
     def batch_replaceuser(media_id)
       post 'batch/replaceuser', JSON.generate(media_id: media_id)
     end

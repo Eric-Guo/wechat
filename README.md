@@ -142,6 +142,7 @@ Wechat commands:
   wechat batch_job_result [JOB_ID]                         # 获取异步任务结果
   wechat batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]     # 全量覆盖部门
   wechat batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]       # 全量覆盖成员
+  wechat batch_syncuser [SYNC_USER_CSV_MEDIA_ID]           # 增量更新成员
   wechat callbackip                                        # 获取微信服务器IP地址
   wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息

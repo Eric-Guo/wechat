@@ -81,7 +81,7 @@ RSpec.describe Wechat::CorpApi do
   end
 
   describe '#batch_replaceparty' do
-    specify 'will post department/create with access_token and new department payload' do
+    specify 'will post batch/replaceparty with access_token and new department payload' do
       batch_replaceparty_request = { media_id: 'media_id' }
       batch_replaceparty_result = { errcode: 0, errmsg: 'ok', jobid: 'jobid' }
       expect(subject.client).to receive(:post)
@@ -91,12 +91,22 @@ RSpec.describe Wechat::CorpApi do
   end
 
   describe '#batch_replaceuser' do
-    specify 'will post department/create with access_token and new department payload' do
+    specify 'will post batch/replaceuser with access_token and new department payload' do
       batch_replaceuser_request = { media_id: 'media_id' }
       batch_replaceuser_result = { errcode: 0, errmsg: 'ok', jobid: 'jobid' }
       expect(subject.client).to receive(:post)
         .with('batch/replaceuser', batch_replaceuser_request.to_json, params: { access_token: 'access_token' }).and_return(batch_replaceuser_result)
       expect(subject.batch_replaceuser('media_id')).to eq batch_replaceuser_result
+    end
+  end
+
+  describe '#batch_syncuser' do
+    specify 'will post batch/syncuser with access_token and new department payload' do
+      batch_syncuser_request = { media_id: 'media_id' }
+      batch_syncuser_result = { errcode: 0, errmsg: 'ok', jobid: 'jobid' }
+      expect(subject.client).to receive(:post)
+        .with('batch/syncuser', batch_syncuser_request.to_json, params: { access_token: 'access_token' }).and_return(batch_syncuser_result)
+      expect(subject.batch_syncuser('media_id')).to eq batch_syncuser_result
     end
   end
 
