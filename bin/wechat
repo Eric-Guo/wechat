@@ -101,8 +101,13 @@ HELP
   end
 
   desc 'department [DEPARTMENT_ID]', '获取部门列表'
-  def department(departmentid)
-    puts Helper.with(options).department(departmentid)
+  def department(departmentid = 0)
+    r = Helper.with(options).department(departmentid)
+    puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
+    puts 'Or# pid  id name'
+    r['department'].sort_by { |d| d['order'].to_i + d['parentid'].to_i * 1000 } .each do |i|
+      puts format('%3d %3d %3d %s', i['order'], i['parentid'], i['id'], i['name'])
+    end
   end
 
   desc 'tag_create [TAGNAME, TAG_ID]', '创建标签'
