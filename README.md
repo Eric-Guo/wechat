@@ -139,6 +139,7 @@ wechat gems 内部不会检查权限。但因公众号类型不同，和微信�
 ```
 $ wechat
 Wechat commands:
+  wechat agent_list                                        # 获取应用概况列表
   wechat batch_job_result [JOB_ID]                         # 获取异步任务结果
   wechat batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]     # 全量覆盖部门
   wechat batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]       # 全量覆盖成员

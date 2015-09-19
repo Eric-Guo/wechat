@@ -17,6 +17,19 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#agent_list' do
+    specify 'will get user/get with access_token and userid' do
+      agent_list_result = { errcode: 0, errmsg: 'ok',
+                            agentlist: [{ agentid: '5', name: '企业小助手',
+                                          square_logo_url: 'url', round_logo_url: 'url' },
+                                        { agentid: '8', name: 'HR小助手',
+                                          square_logo_url: 'url', round_logo_url: 'url' }] }
+      expect(subject.client).to receive(:get)
+        .with('agent/list', params: { access_token: 'access_token' }).and_return(agent_list_result)
+      expect(subject.agent_list).to eq agent_list_result
+    end
+  end
+
   describe '#user' do
     specify 'will get user/get with access_token and userid' do
       userid = 'userid'

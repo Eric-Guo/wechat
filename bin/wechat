@@ -117,6 +117,16 @@ HELP
     puts Helper.with(options).tag_create(name, api_opts[:tagid])
   end
 
+  desc 'agent_list', '获取应用概况列表'
+  def agent_list
+    r = Helper.with(options).agent_list
+    puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
+    puts 'ag# name        square_logo_url round_logo_url'
+    r['agentlist'].sort_by { |d| d['agentid'] } .each do |i|
+      puts format('%3d %s %s %s', i['agentid'], i['name'], i['square_logo_url'], i['round_logo_url'])
+    end
+  end
+
   desc 'users', '关注者列表'
   def users
     puts Helper.with(options).users
