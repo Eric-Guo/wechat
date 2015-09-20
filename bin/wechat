@@ -127,6 +127,21 @@ HELP
     end
   end
 
+  desc 'agent [AGENT_ID]', '获取企业号应用详情'
+  def agent(agentid)
+    r = Helper.with(options).agent(agentid)
+    puts "agentid: #{r['agentid']} errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
+    puts "name: #{r['name']}"
+    puts "description: #{r['description']}"
+    puts "  square_logo_url: #{r['square_logo_url']}"
+    puts "   round_logo_url: #{r['round_logo_url']}"
+    puts "allow_userinfos: #{r['allow_userinfos']}"
+    puts "allow_partys: #{r['allow_partys']}"
+    puts "allow_tags: #{r['allow_tags']}"
+    puts "close: #{r['close']} redirect_domain: #{r['redirect_domain']}"
+    puts "report_location_flag: #{r['report_location_flag']} isreportuser: #{r['isreportuser']} isreportenter: #{r['isreportenter']}"
+  end
+
   desc 'users', '关注者列表'
   def users
     puts Helper.with(options).users

@@ -27,6 +27,10 @@ module Wechat
       get 'agent/list'
     end
 
+    def agent(agentid)
+      get 'agent/get', params: { agentid: agentid }
+    end
+
     def user(userid)
       get 'user/get', params: { userid: userid }
     end

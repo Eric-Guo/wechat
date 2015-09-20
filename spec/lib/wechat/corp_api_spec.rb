@@ -30,6 +30,23 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#agent' do
+    specify 'will get user/get with access_token and userid' do
+      agentid = '1'
+      agent_result = { errcode: 0, errmsg: 'ok', agentid: '1',
+                       name: 'NAME', square_logo_url: 'xxxxxxxx', round_logo_url: 'yyyyyyyy', description: 'desc',
+                       allow_userinfos: { user: [{ userid: 'id1', status: 1 },
+                                                 { userid: 'id2', status: 1 }] },
+                       allow_partys: { partyid: [1] },
+                       allow_tags: { tagid: [1, 2, 3] },
+                       close: 0, redirect_domain: 'www.qq.com', report_location_flag: 0,
+                       isreportuser: 0, isreportenter: 0 }
+      expect(subject.client).to receive(:get)
+        .with('agent/get', params: { agentid: agentid, access_token: 'access_token' }).and_return(agent_result)
+      expect(subject.agent(agentid)).to eq agent_result
+    end
+  end
+
   describe '#user' do
     specify 'will get user/get with access_token and userid' do
       userid = 'userid'
