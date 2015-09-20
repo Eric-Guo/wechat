@@ -27,6 +27,18 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#qrcode' do
+    specify 'will get showqrcode with ticket at file based api endpoint as file' do
+      ticket_result = 'ticket_result'
+
+      expect(subject.client).to receive(:get)
+        .with('showqrcode', ticket: 'ticket',
+                            base: Wechat::ApiBase::MP_BASE,
+                            as: :file).and_return(ticket_result)
+      expect(subject.qrcode('ticket')).to eq(ticket_result)
+    end
+  end
+
   describe '#groups' do
     specify 'will get groups with access_token' do
       groups_result = 'groups_result'

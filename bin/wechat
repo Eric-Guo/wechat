@@ -68,6 +68,13 @@ HELP
     puts Helper.with(options).callbackip
   end
 
+  desc 'qrcode_download [TICKET, QR_CODE_PIC_PATH]', '通过ticket下载二维码'
+  def qrcode_download(ticket, qr_code_pic_path)
+    tmp_file = Helper.with(options).qrcode(ticket)
+    FileUtils.mv(tmp_file.path, qr_code_pic_path)
+    puts 'File downloaded'
+  end
+
   desc 'groups', '所有用户分组列表'
   def groups
     puts Helper.with(options).groups

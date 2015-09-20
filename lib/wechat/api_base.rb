@@ -1,9 +1,17 @@
+require 'cgi'
+
 module Wechat
   class ApiBase
     attr_reader :access_token, :client
 
+    MP_BASE = 'https://mp.weixin.qq.com/cgi-bin/'
+
     def callbackip
       get 'getcallbackip'
+    end
+
+    def qrcode(ticket)
+      client.get 'showqrcode', ticket: CGI.escape(ticket), base: MP_BASE, as: :file
     end
 
     protected

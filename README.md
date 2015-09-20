@@ -173,6 +173,7 @@ Wechat commands:
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息(仅企业号)
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
+  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码  
   wechat tag_create [TAGNAME, TAG_ID]                      # 创建标签
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 获取用户基本信息
