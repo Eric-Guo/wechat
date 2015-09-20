@@ -112,6 +112,20 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#qrcode_create_scene' do
+    specify 'will post qrcode/create with access_token and json_data' do
+      scene_id = 101
+      qrcode_scene_req = { expire_seconds: 60,
+                           action_name: 'QR_SCENE',
+                           action_info: { scene: { scene_id: scene_id } } }
+      qrcode_scene_result = { ticket: 'qr_code_ticket',
+                              expire_seconds: 60, url: 'qr_code_ticket_pic_url' }
+      expect(subject.client).to receive(:post)
+        .with('qrcode/create', qrcode_scene_req.to_json, params: { access_token: 'access_token' }).and_return(qrcode_scene_result)
+      expect(subject.qrcode_create_scene(scene_id, 60)).to eq qrcode_scene_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token' do
       menu_result = 'menu_result'

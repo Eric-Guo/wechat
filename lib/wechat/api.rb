@@ -54,6 +54,12 @@ module Wechat
       post 'user/info/updateremark', JSON.generate(openid: openid, remark: remark)
     end
 
+    def qrcode_create_scene(scene_id, expire_seconds = 604800)
+      post 'qrcode/create', JSON.generate(expire_seconds: expire_seconds,
+                                          action_name: 'QR_SCENE',
+                                          action_info: { scene: { scene_id: scene_id } })
+    end
+
     def menu
       get 'menu/get'
     end

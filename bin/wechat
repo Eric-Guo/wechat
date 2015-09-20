@@ -197,6 +197,11 @@ HELP
     puts Helper.with(options).user_update_remark(openid, remark)
   end
 
+  desc 'qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]', '请求临时二维码'
+  def qrcode_create_scene(scene_id, expire_seconds = 604800)
+    puts Helper.with(options).qrcode_create_scene(scene_id, expire_seconds)
+  end
+
   desc 'menu', '当前菜单'
   def menu
     puts Helper.with(options).menu
