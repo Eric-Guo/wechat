@@ -354,8 +354,8 @@ class WechatsController < ApplicationController
   end
 
   # 当请求的文字信息内容为'help'时, 使用这个responder处理
-  on :text, with:"help" do |request, help|
-    request.reply.text "help content" #回复帮助信息
+  on :text, with: 'help' do |request|
+    request.reply.text 'help content' #回复帮助信息
   end
 
   # 当请求的文字信息内容为'<n>条新闻'时, 使用这个responder处理, 并将n作为第二个参数
@@ -391,8 +391,8 @@ class WechatsController < ApplicationController
 
   # 处理视频信息
   on :video do |request|
-    nickname = wechat.user(request[:FromUserName])["nickname"] #调用 api 获得发送者的nickname
-    request.reply.video(request[:MediaId], title: "回声", description: "#{nickname}发来的视频请求") #直接视频返回给用户
+    nickname = wechat.user(request[:FromUserName])['nickname'] #调用 api 获得发送者的nickname
+    request.reply.video(request[:MediaId], title: '回声', description: "#{nickname}发来的视频请求") #直接视频返回给用户
   end
 
   # 处理地理位置信息
@@ -436,9 +436,8 @@ class WechatsController < ApplicationController
   end
 
   # 当无任何responder处理用户信息时,使用这个responder处理
-  on :fallback, respond: "fallback message"  
+  on :fallback, respond: 'fallback message'
 end
-
 ```
 
 在controller中使用`wechat_responder`引入Responder DSL, 之后可以用
