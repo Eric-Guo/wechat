@@ -28,6 +28,18 @@ Or add to your app's `Gemfile`:
 gem 'wechat'
 ```
 
+Run the following command to install it:
+
+```console
+bundle install
+```
+
+Run the generator:
+
+```console
+rails generate wechat:install
+```
+
 
 ## 配置
 
