@@ -60,6 +60,17 @@ module Wechat
                                           action_info: { scene: { scene_id: scene_id } })
     end
 
+    def qrcode_create_limit_scene(scene_id_or_str)
+      case scene_id_or_str
+      when Fixnum
+        post 'qrcode/create', JSON.generate(action_name: 'QR_LIMIT_SCENE',
+                                            action_info: { scene: { scene_id: scene_id_or_str } })
+      else
+        post 'qrcode/create', JSON.generate(action_name: 'QR_LIMIT_STR_SCENE',
+                                            action_info: { scene: { scene_str: scene_id_or_str } })
+      end
+    end
+
     def menu
       get 'menu/get'
     end
