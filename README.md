@@ -40,6 +40,8 @@ Run the generator:
 rails generate wechat:install
 ```
 
+运行`rails g wechat:install`后会自动生成wechat.yml配置，还有wechat controller及相关路由配置到当前Rails项目。
+
 
 ## 配置
 
@@ -330,7 +332,6 @@ template:
 
 ```
 $ wechat template_message oCfEht9oM*********** template.yml
-
 ```
 
 ## Rails Responder Controller DSL
@@ -339,7 +340,6 @@ $ wechat template_message oCfEht9oM*********** template.yml
 
 ```ruby
   resource :wechat, only:[:show, :create]
-
 ```
 
 然后创建Controller class, 例如

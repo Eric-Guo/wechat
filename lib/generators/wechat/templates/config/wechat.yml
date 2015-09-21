@@ -2,6 +2,9 @@ default: &default
   corpid: "corpid"
   corpsecret: "corpsecret"
   agentid:  1
+# Or if using public account, only need above two line
+#  appid: "my_appid"
+#  secret: "my_secret"
   token:    "token"
   access_token: "C:/Users/[username]/wechat_access_token"
   encoding_aes_key:  "encoding_aes_key"
@@ -10,6 +13,9 @@ production:
   corpid:     <%%= ENV['WECHAT_CORPID'] %>
   corpsecret: <%%= ENV['WECHAT_CORPSECRET'] %>
   agentid:    <%%= ENV['WECHAT_AGENTID'] %>
+# Or if using public account, only need above two line
+#  appid:      <%= ENV['WECHAT_APPID'] %>
+#  secret:     <%= ENV['WECHAT_APP_SECRET'] %>
   token:      <%%= ENV['WECHAT_TOKEN'] %>
   access_token:  <%%= ENV['WECHAT_ACCESS_TOKEN'] %>
   encoding_aes_key:  <%%= ENV['WECHAT_ENCODING_AES_KEY'] %>
