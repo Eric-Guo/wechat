@@ -129,6 +129,11 @@ HELP
     puts Helper.with(options).tags
   end
 
+  desc 'tag [TAG_ID]', '获取标签成员'
+  def tag(tagid)
+    puts Helper.with(options).tag(tagid)
+  end
+
   desc 'agent_list', '获取应用概况列表'
   def agent_list
     r = Helper.with(options).agent_list

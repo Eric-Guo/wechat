@@ -83,6 +83,10 @@ module Wechat
       get 'tag/list'
     end
 
+    def tag(tagid)
+      get 'tag/get', params: { tagid: tagid }
+    end
+
     def menu
       get 'menu/get', params: { agentid: agentid }
     end

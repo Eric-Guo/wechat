@@ -200,6 +200,17 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#tag' do
+    specify 'will get user/get with access_token and tagid' do
+      tag_result = { errcode: 0, errmsg: 'ok',
+                     userlist: [{ userid: 'zhangsan', name: '李四' }],
+                     partylist: [2] }
+      expect(subject.client).to receive(:get)
+        .with('tag/get', params: { tagid: 1, access_token: 'access_token' }).and_return(tag_result)
+      expect(subject.tag(1)).to eq tag_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token and agentid' do
       menu_result = 'menu_result'
