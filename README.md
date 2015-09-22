@@ -189,6 +189,7 @@ Wechat commands:
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码  
   wechat tag_create [TAGNAME, TAG_ID]                      # 创建标签
+  wechat tags                                              # 获取标签列表  
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 获取用户基本信息
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组

@@ -79,6 +79,10 @@ module Wechat
       post 'tag/create', JSON.generate(tagname: tagname, tagid: tagid)
     end
 
+    def tags
+      get 'tag/list'
+    end
+
     def menu
       get 'menu/get', params: { agentid: agentid }
     end

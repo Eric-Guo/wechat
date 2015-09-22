@@ -124,6 +124,11 @@ HELP
     puts Helper.with(options).tag_create(name, api_opts[:tagid])
   end
 
+  desc 'tags', '获取标签列表'
+  def tags
+    puts Helper.with(options).tags
+  end
+
   desc 'agent_list', '获取应用概况列表'
   def agent_list
     r = Helper.with(options).agent_list
