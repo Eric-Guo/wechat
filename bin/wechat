@@ -124,6 +124,11 @@ HELP
     puts Helper.with(options).tag_create(name, api_opts[:tagid])
   end
 
+  desc 'tag_update [TAG_ID, TAGNAME]', '更新标签名字'
+  def tag_update(tagid, tagname)
+    puts Helper.with(options).tag_update(tagid, tagname)
+  end
+
   desc 'tags', '获取标签列表'
   def tags
     puts Helper.with(options).tags

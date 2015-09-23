@@ -180,7 +180,7 @@ RSpec.describe Wechat::CorpApi do
   end
 
   describe '#tag_create' do
-    specify 'will post department/create with access_token and new department payload' do
+    specify 'will post tag/create with access_token and new department payload' do
       tag_create_request = { tagname: 'UI', tagid: 1 }
       tag_create_result = { errcode: 0, errmsg: 'created', tagid: 1 }
       expect(subject.client).to receive(:post)
@@ -189,8 +189,18 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#tag_update' do
+    specify 'will post tag/update with access_token and new department payload' do
+      tag_update_request = { tagid: 1, tagname: 'UI Design' }
+      tag_update_result = { errcode: 0, errmsg: 'updated' }
+      expect(subject.client).to receive(:post)
+        .with('tag/update', tag_update_request.to_json, params: { access_token: 'access_token' }).and_return(tag_update_result)
+      expect(subject.tag_update(1, 'UI Design')).to eq tag_update_result
+    end
+  end
+
   describe '#tags' do
-    specify 'will get user/get with access_token and userid' do
+    specify 'will get tag/list with access_token' do
       tags_result = { errcode: 0, errmsg: 'ok',
                       taglist: [{ tagid: 1, tagname: 'a' },
                                 { tagid: 2, tagname: 'b' }] }

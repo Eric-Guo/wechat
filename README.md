@@ -190,6 +190,7 @@ Wechat commands:
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
   wechat tag [TAG_ID]                                      # 获取标签成员  
   wechat tag_create [TAGNAME, TAG_ID]                      # 创建标签
+  wechat tag_update [TAG_ID, TAGNAME]                      # 更新标签名字  
   wechat tags                                              # 获取标签列表  
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 获取用户基本信息
