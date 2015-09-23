@@ -83,6 +83,10 @@ module Wechat
       post 'tag/update', JSON.generate(tagid: tagid, tagname: tagname)
     end
 
+    def tag_delete(tagid)
+      get 'tag/delete', params: { tagid: tagid }
+    end
+
     def tags
       get 'tag/list'
     end

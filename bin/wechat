@@ -129,6 +129,11 @@ HELP
     puts Helper.with(options).tag_update(tagid, tagname)
   end
 
+  desc 'tag_delete [TAG_ID]', '删除标签'
+  def tag_delete(tagid)
+    puts Helper.with(options).tag_delete(tagid)
+  end
+
   desc 'tags', '获取标签列表'
   def tags
     puts Helper.with(options).tags

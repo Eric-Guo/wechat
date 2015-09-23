@@ -199,6 +199,15 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#tag_delete' do
+    specify 'will get tag/delete with access_token and tagid' do
+      tag_delete_result = { errcode: 0, errmsg: 'deleted' }
+      expect(subject.client).to receive(:get)
+        .with('tag/delete', params: { tagid: 1, access_token: 'access_token' }).and_return(tag_delete_result)
+      expect(subject.tag_delete(1)).to eq tag_delete_result
+    end
+  end
+
   describe '#tags' do
     specify 'will get tag/list with access_token' do
       tags_result = { errcode: 0, errmsg: 'ok',
