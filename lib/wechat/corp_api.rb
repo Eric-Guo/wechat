@@ -95,12 +95,12 @@ module Wechat
       get 'tag/get', params: { tagid: tagid }
     end
 
-    def tag_add_user(tagid, userids)
-      post 'tag/addtagusers', JSON.generate(tagid: tagid, userlist: userids)
+    def tag_add_user(tagid, userids = nil, departmentids = nil)
+      post 'tag/addtagusers', JSON.generate(tagid: tagid, userlist: userids, partylist: departmentids)
     end
 
-    def tag_del_user(tagid, userids)
-      post 'tag/deltagusers', JSON.generate(tagid: tagid, userlist: userids)
+    def tag_del_user(tagid, userids = nil, departmentids = nil)
+      post 'tag/deltagusers', JSON.generate(tagid: tagid, userlist: userids, partylist: departmentids)
     end
 
     def menu

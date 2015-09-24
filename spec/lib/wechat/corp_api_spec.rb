@@ -232,21 +232,37 @@ RSpec.describe Wechat::CorpApi do
 
   describe '#tag_add_user' do
     specify 'will post tag/addtagusers with tagid, userlist(userids) and access_token' do
-      tag_add_user_request = { tagid: 1, userlist: %w(6749 6110) }
+      tag_add_user_request = { tagid: 1, userlist: %w(6749 6110), partylist: nil }
       tag_add_user_result = { errcode: 0, errmsg: 'ok' }
       expect(subject.client).to receive(:post)
         .with('tag/addtagusers', tag_add_user_request.to_json, params: { access_token: 'access_token' }).and_return(tag_add_user_result)
       expect(subject.tag_add_user(1, %w(6749 6110))).to eq tag_add_user_result
     end
+
+    specify 'will post tag/addtagusers with tagid, partylist(departmentids) and access_token' do
+      tag_add_party_request = { tagid: 1, userlist: nil, partylist: [1, 2] }
+      tag_add_party_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('tag/addtagusers', tag_add_party_request.to_json, params: { access_token: 'access_token' }).and_return(tag_add_party_result)
+      expect(subject.tag_add_user(1, nil, [1, 2])).to eq tag_add_party_result
+    end
   end
 
   describe '#tag_del_user' do
     specify 'will post tag/deltagusers with tagid, userlist(userids) and access_token' do
-      tag_del_user_request = { tagid: 1, userlist: %w(6749 6110) }
+      tag_del_user_request = { tagid: 1, userlist: %w(6749 6110), partylist: nil }
       tag_del_user_result = { errcode: 0, errmsg: 'deleted' }
       expect(subject.client).to receive(:post)
         .with('tag/deltagusers', tag_del_user_request.to_json, params: { access_token: 'access_token' }).and_return(tag_del_user_result)
       expect(subject.tag_del_user(1, %w(6749 6110))).to eq tag_del_user_result
+    end
+
+    specify 'will post tag/deltagusers with tagid, partylist(departmentids) and access_token' do
+      tag_del_party_request = { tagid: 1, userlist: nil, partylist: [1, 2] }
+      tag_del_party_result = { errcode: 0, errmsg: 'deleted' }
+      expect(subject.client).to receive(:post)
+        .with('tag/deltagusers', tag_del_party_request.to_json, params: { access_token: 'access_token' }).and_return(tag_del_party_result)
+      expect(subject.tag_del_user(1, nil, [1, 2])).to eq tag_del_party_result
     end
   end
 
