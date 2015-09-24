@@ -240,6 +240,16 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#tag_del_user' do
+    specify 'will post tag/deltagusers with tagid, userlist(userids) and access_token' do
+      tag_del_user_request = { tagid: 1, userlist: %w(6749 6110) }
+      tag_del_user_result = { errcode: 0, errmsg: 'deleted' }
+      expect(subject.client).to receive(:post)
+        .with('tag/deltagusers', tag_del_user_request.to_json, params: { access_token: 'access_token' }).and_return(tag_del_user_result)
+      expect(subject.tag_del_user(1, %w(6749 6110))).to eq tag_del_user_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token and agentid' do
       menu_result = 'menu_result'

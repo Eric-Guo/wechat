@@ -99,6 +99,10 @@ module Wechat
       post 'tag/addtagusers', JSON.generate(tagid: tagid, userlist: userids)
     end
 
+    def tag_del_user(tagid, userids)
+      post 'tag/deltagusers', JSON.generate(tagid: tagid, userlist: userids)
+    end
+
     def menu
       get 'menu/get', params: { agentid: agentid }
     end

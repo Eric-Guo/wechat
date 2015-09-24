@@ -149,6 +149,11 @@ HELP
     puts Helper.with(options).tag_add_user(tagid, userids.split(','))
   end
 
+  desc 'tag_del_user [TAG_ID, USER_IDS]', '删除标签成员'
+  def tag_del_user(tagid, userids)
+    puts Helper.with(options).tag_del_user(tagid, userids.split(','))
+  end
+
   desc 'agent_list', '获取应用概况列表'
   def agent_list
     r = Helper.with(options).agent_list
