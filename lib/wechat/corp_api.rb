@@ -95,6 +95,10 @@ module Wechat
       get 'tag/get', params: { tagid: tagid }
     end
 
+    def tag_add_user(tagid, userids)
+      post 'tag/addtagusers', JSON.generate(tagid: tagid, userlist: userids)
+    end
+
     def menu
       get 'menu/get', params: { agentid: agentid }
     end

@@ -230,6 +230,16 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#tag_add_user' do
+    specify 'will post tag/addtagusers with tagid, userlist(userids) and access_token' do
+      tag_add_user_request = { tagid: 1, userlist: %w(6749 6110) }
+      tag_add_user_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('tag/addtagusers', tag_add_user_request.to_json, params: { access_token: 'access_token' }).and_return(tag_add_user_result)
+      expect(subject.tag_add_user(1, %w(6749 6110))).to eq tag_add_user_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token and agentid' do
       menu_result = 'menu_result'
