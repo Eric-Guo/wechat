@@ -1,11 +1,12 @@
 # Changelog
 
-## v0.5.0 (released at 9/22/2015)
+## v0.5.0 (released at 9/25/2015)
 
 * Only relay on activesupport on run time, so will greatly improve wechat cli startup time
 * Add rails generator support `rails g wechat:install`
-* Add batch job support for enterprise account like batch create user/department, both API and callback responder
-* Add material management API and CLI.
+* Add batch job support for enterprise account like batch create user/department, both API, callback responder and CLI
+* Add material management API and CLI
+* Add tag API and CLI for enterprise account
 * Add QR code scene function for public account
 
 ## v0.4.2 (released at 9/7/2015)
