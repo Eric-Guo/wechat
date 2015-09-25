@@ -179,6 +179,17 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#user_simplelist' do
+    specify 'will get user/simplelist with access_token and departmentid' do
+      departmentid = 'departmentid'
+      simplelist_result = { errcode: 0, errmsg: 'ok',
+                            userlist: [{ userid: 'zhangsan', name: '李四', department: [1, 2] }] }
+      expect(subject.client).to receive(:get)
+        .with('user/simplelist', params: { departmentid: departmentid, fetch_child: 0, status: 0, access_token: 'access_token' }).and_return(simplelist_result)
+      expect(subject.user_simplelist(departmentid)).to eq simplelist_result
+    end
+  end
+
   describe '#tag_create' do
     specify 'will post tag/create with access_token and new department payload' do
       tag_create_request = { tagname: 'UI', tagid: 1 }

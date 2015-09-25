@@ -75,6 +75,10 @@ module Wechat
       get 'department/list', params: { id: departmentid }
     end
 
+    def user_simplelist(departmentid, fetch_child = 0, status = 0)
+      get 'user/simplelist', params: { departmentid: departmentid, fetch_child: fetch_child, status: status }
+    end
+
     def tag_create(tagname, tagid = nil)
       post 'tag/create', JSON.generate(tagname: tagname, tagid: tagid)
     end

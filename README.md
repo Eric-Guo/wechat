@@ -202,6 +202,7 @@ Wechat commands:
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
   wechat user_delete [USER_ID]                             # 删除成员
   wechat user_group [OPEN_ID]                              # 查询用户所在分组
+  wechat user_simplelist [DEPARTMENT_ID]                   # 获取部门成员
   wechat user_update_remark [OPEN_ID, REMARK]              # 设置备注名
   wechat users                                             # 关注者列表
 ```
