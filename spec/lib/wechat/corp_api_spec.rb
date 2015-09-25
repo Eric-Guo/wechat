@@ -190,6 +190,26 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#user_list' do
+    specify 'will get user/list with access_token and departmentid' do
+      user_list_result = { errcode: 0, errmsg: 'ok',
+                           userlist:  [{ userid: 'zhangsan',
+                                         name: '李四',
+                                         department: [1, 2],
+                                         position: '后台工程师',
+                                         mobile: '15913215421',
+                                         gender: '1',
+                                         email: 'zhangsan@gzdev.com',
+                                         weixinid: 'lisifordev',
+                                         avatar:           'http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0',
+                                         status: 1,
+                                         extattr: { attrs: [{ name: '爱好', value: '旅游' }, { name: '卡号', value: '1234567234' }] } }] }
+      expect(subject.client).to receive(:get)
+        .with('user/list', params: { departmentid: 1, fetch_child: 0, status: 0, access_token: 'access_token' }).and_return(user_list_result)
+      expect(subject.user_list(1)).to eq user_list_result
+    end
+  end
+
   describe '#tag_create' do
     specify 'will post tag/create with access_token and new department payload' do
       tag_create_request = { tagname: 'UI', tagid: 1 }

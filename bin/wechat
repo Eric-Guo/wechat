@@ -118,8 +118,8 @@ HELP
   end
 
   desc 'user_simplelist [DEPARTMENT_ID]', '获取部门成员'
-  method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员'
-  method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加'
+  method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员', default: 1
+  method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加', default: 0
   def user_simplelist(departmentid = 0)
     api_opts = options.slice(:fetch_child, :status)
 
@@ -128,6 +128,22 @@ HELP
     puts " userid Name #{' ' * 20} department_ids"
     r['userlist'].sort_by { |d| d['userid'] } .each do |i|
       puts format('%7s %-25s %-14s', i['userid'], i['name'], i['department'])
+    end
+  end
+
+  desc 'user_list [DEPARTMENT_ID]', '获取部门成员详情'
+  method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员', default: 0
+  method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加', default: 0
+  def user_list(departmentid = 0)
+    api_opts = options.slice(:fetch_child, :status)
+
+    r = Helper.with(options).user_list(departmentid, api_opts[:fetch_child], api_opts[:status])
+    puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
+    puts " userid Name #{' ' * 15} department_ids position mobile #{' ' * 5}gender email #{' ' * 10}weixinid   status extattr"
+    r['userlist'].sort_by { |d| d['userid'] } .each do |i|
+      puts format('%7s %-20s %-14s %-8s %-11s %-6s %-15s %-15s %-6s %s',
+                  i['userid'], i['name'], i['department'], i['position'], i['mobile'],
+                  i['gender'], i['email'], i['weixinid'], i['status'], i['extattr'])
     end
   end
 
