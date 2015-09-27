@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'digest/sha1'
 
 module Wechat
@@ -34,7 +35,7 @@ module Wechat
     # 刷新 jsapi_ticket
     def refresh
       data = client.get('ticket/getticket', params: { access_token: access_token.token, type: 'jsapi' })
-      data.merge!(created_at: Time.now.to_i)
+      data.merge!('created_at' => Time.now.to_i)
       File.open(jsapi_ticket_file, 'w') { |f| f.write(data.to_json) } if valid_ticket(data)
       @jsapi_ticket_data = data
     end
