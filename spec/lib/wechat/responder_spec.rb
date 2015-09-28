@@ -212,12 +212,6 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("event: #{event}")
       end
 
-      on :event, with: 'BINDING_BARCODE' do |message, scan_result|
-        if scan_result.start_with? 'CODE_39,'
-          message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
-        end
-      end
-
       on :image do |message|
         message.reply.text("image: #{message[:PicUrl]}")
       end
@@ -267,12 +261,6 @@ RSpec.describe WechatController, type: :controller do
       event_message = message_base.merge(MsgType: 'event', Event: 'unsubscribe')
       post :create, signature_params.merge(xml: event_message)
       expect(xml_to_hash(response)[:Content]).to eq('event: unsubscribe')
-    end
-
-    specify 'response scancode event with matched event' do
-      event_message = message_base.merge(FromUserName: 'userid', MsgType: 'event', Event: 'scancode_waitmsg', EventKey: 'BINDING_BARCODE')
-      post :create, signature_params.merge(xml: event_message.merge(ScanCodeInfo: { ScanType: 'qrcode', ScanResult: 'CODE_39,SAP0D00' }))
-      expect(xml_to_hash(response)[:Content]).to eq 'User: userid scan barcode, result is SAP0D00'
     end
 
     specify 'response image' do

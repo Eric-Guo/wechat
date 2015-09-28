@@ -89,6 +89,12 @@ RSpec.describe WechatCorpController, type: :controller do
         request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
       end
 
+      on :event, with: 'BINDING_BARCODE' do |message, scan_result|
+        if scan_result.start_with? 'CODE_39,'
+          message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
+        end
+      end
+
       on :event, with: 'replace_user' do |request, batch_job|
         request.reply.text "Replace user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
       end
@@ -197,6 +203,22 @@ RSpec.describe WechatCorpController, type: :controller do
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
         expect(message['Content']).to eq 'User userid ScanResult scan_result ScanType qrcode'
+      end
+
+      it 'response scancode event with matched event' do
+        post :create, signature_params(FromUserName: 'userid', MsgType: 'event', Event: 'scancode_waitmsg', EventKey: 'BINDING_BARCODE',
+                                       ScanCodeInfo: { ScanType: 'qrcode', ScanResult: 'CODE_39,SAP0D00' })
+        expect(response.code).to eq '200'
+
+        data = Hash.from_xml(response.body)['xml']
+
+        xml_message, app_id = unpack(decrypt(Base64.decode64(data['Encrypt']), ENCODING_AES_KEY))
+        expect(app_id).to eq 'appid'
+        expect(xml_message.empty?).to eq false
+
+        message = Hash.from_xml(xml_message)['xml']
+        expect(message['MsgType']).to eq 'text'
+        expect(message['Content']).to eq 'User: userid scan barcode, result is SAP0D00'
       end
 
       it 'on replace_user' do
