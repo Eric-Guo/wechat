@@ -160,6 +160,17 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#department_update' do
+    specify 'will post department/update with access_token and id' do
+      departmentid = 'departmentid'
+      department_update_request = { id: departmentid, name: '广研' }
+      department_update_result = { errcode: 0, errmsg: 'updated' }
+      expect(subject.client).to receive(:post)
+        .with('department/update', department_update_request.to_json, params: { access_token: 'access_token' }).and_return(department_update_result)
+      expect(subject.department_update('departmentid', '广研')).to eq department_update_result
+    end
+  end
+
   describe '#department' do
     specify 'will get user/get with access_token and userid' do
       departmentid = 'departmentid'

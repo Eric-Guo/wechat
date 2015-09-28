@@ -107,6 +107,14 @@ HELP
     puts Helper.with(options).department_delete(departmentid)
   end
 
+  desc 'department_update [DEPARTMENT_ID, NAME]', '更新部门'
+  method_option :parentid, aliases: '-p', desc: '父亲部门id。根部门id为1', default: nil
+  method_option :order, aliases: '-o', desc: '在父部门中的次序值。order值小的排序靠前。', default: nil
+  def department_update(departmentid, name)
+    api_opts = options.slice(:parentid, :order)
+    puts Helper.with(options).department_update(departmentid, name, api_opts[:parentid], api_opts[:order])
+  end
+
   desc 'department [DEPARTMENT_ID]', '获取部门列表'
   def department(departmentid = 0)
     r = Helper.with(options).department(departmentid)
