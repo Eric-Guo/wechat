@@ -382,12 +382,12 @@ class WechatsController < ApplicationController
 
   # 公众号收到未关注用户扫描qrscene_为前缀的二维码的参数值时
   on :event, with: 'qrscene_xxxxxx' do |request, ticket|
-    request.reply.text "User #{request[:FromUserName]} Ticket #{ticket}"
+    request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
   # 公众号收到已关注用户扫描创建二维码的scene_id事件时
   on :event, with: 'scene_id' do |request, ticket|
-    request.reply.text "User #{request[:FromUserName]} Ticket #{ticket}"
+    request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
   # 企业号收到EventKey 为二维码扫描结果事件时

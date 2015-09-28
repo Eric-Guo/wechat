@@ -20,12 +20,22 @@ class WechatsController < ApplicationController
     end
   end
 
-  # When user press menu BINDING_QR_CODE and success to scan bar code
+  # When unsubscribe user scan to subscribe in public account
+  on :event, with: 'qrscene_xxxxxx' do |request, ticket|
+    request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
+  end
+
+  # When subscribe user scan scene_id in public account
+  on :event, with: 'scene_id' do |request, ticket|
+    request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
+  end
+
+  # When enterprise user press menu BINDING_QR_CODE and success to scan bar code
   on :event, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
     request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
   end
 
-  # Except QR code, wechat can also scan CODE_39 bar code
+  # Except QR code, wechat can also scan CODE_39 bar code in enterprise account
   on :event, with: 'BINDING_BARCODE' do |message, scan_result|
     if scan_result.start_with? 'CODE_39,'
       message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
