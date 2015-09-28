@@ -44,8 +44,12 @@ module Wechat
         when :event
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
+          elsif 'scan' == message[:Event] || ('subscribe' == message[:Event] && message[:EventKey].start_with?('qrscene_'))
+            yield(* match_responders(responders, event: 'scancode_public',
+                                                 event_key: message[:EventKey],
+                                                 ticket: message[:Ticket]))
           elsif %w(scancode_push scancode_waitmsg).include? message[:Event]
-            yield(* match_responders(responders, event: 'scancode',
+            yield(* match_responders(responders, event: 'scancode_enterprise',
                                                  event_key: message[:EventKey],
                                                  scan_type: message[:ScanCodeInfo][:ScanType],
                                                  scan_result: message[:ScanCodeInfo][:ScanResult]))
@@ -74,7 +78,8 @@ module Wechat
           if condition.is_a? Regexp
             memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
           elsif value.is_a? Hash
-            memo[:scoped] ||= [responder, value[:scan_result], value[:scan_type]] if value[:event_key] == condition && value[:event] == 'scancode'
+            memo[:scoped] ||= [responder, value[:ticket]] if value[:event_key] == condition && value[:event] == 'scancode_public'
+            memo[:scoped] ||= [responder, value[:scan_result], value[:scan_type]] if value[:event_key] == condition && value[:event] == 'scancode_enterprise'
             memo[:scoped] ||= [responder, value[:batch_job]] if value[:event] == 'batch_job' &&
                                                                 %w(sync_user replace_user invite_user replace_party).include?(condition.downcase)
           else
