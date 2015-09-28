@@ -44,7 +44,7 @@ module Wechat
         when :event
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
-          elsif 'scan' == message[:Event] || ('subscribe' == message[:Event] && message[:EventKey].start_with?('qrscene_'))
+          elsif 'scan' == message[:Event] || ('subscribe' == message[:Event] && message[:EventKey].present? && message[:EventKey].start_with?('qrscene_'))
             yield(* match_responders(responders, event: 'scancode_public',
                                                  event_key: message[:EventKey],
                                                  ticket: message[:Ticket]))
