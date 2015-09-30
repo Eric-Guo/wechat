@@ -202,6 +202,7 @@ Wechat commands:
   wechat tags                                              # 获取标签列表
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 获取用户基本信息
+  wechat user_batchdelete [USER_ID_LIST]                   # 批量删除成员  
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
   wechat user_delete [USER_ID]                             # 删除成员
   wechat user_group [OPEN_ID]                              # 查询用户所在分组
