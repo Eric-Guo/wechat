@@ -35,6 +35,10 @@ module Wechat
       get 'user/get', params: { userid: userid }
     end
 
+    def convert_to_openid(userid)
+      post 'user/convert_to_openid', JSON.generate(userid: userid, agentid: agentid)
+    end
+
     def invite_user(userid)
       post 'invite/send', JSON.generate(userid: userid)
     end

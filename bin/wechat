@@ -237,6 +237,11 @@ HELP
     puts Helper.with(options).user(open_id)
   end
 
+  desc 'convert_to_openid [USER_ID]', 'userid转换成openid'
+  def convert_to_openid(userid)
+    puts Helper.with(options).convert_to_openid(userid)
+  end
+
   desc 'invite_user [USER_ID]', '邀请成员关注'
   def invite_user(userid)
     puts Helper.with(options).invite_user(userid)
