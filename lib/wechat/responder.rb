@@ -14,15 +14,6 @@ module Wechat
     module ClassMethods
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
-      def known_qrscene_lists
-        @known_qrscene_lists ||= []
-      end
-
-      def known_qrscene_lists=(qrscene_value)
-        @known_qrscene_lists ||= []
-        @known_qrscene_lists << qrscene_value
-      end
-
       def on(message_type, with: nil, respond: nil, &block)
         fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
@@ -96,6 +87,15 @@ module Wechat
           end
         end
         matched[:scoped] || matched[:general]
+      end
+
+      def known_qrscene_lists
+        @known_qrscene_lists ||= []
+      end
+
+      def known_qrscene_lists=(qrscene_value)
+        @known_qrscene_lists ||= []
+        @known_qrscene_lists << qrscene_value
       end
     end
 
