@@ -20,7 +20,12 @@ class WechatsController < ApplicationController
     end
   end
 
-  # When unsubscribe user scan to subscribe in public account
+  on :event, with: 'subscribe' do |request|
+    request.reply.text "#{request[:FromUserName]} subscribe now"
+  end
+
+  # When unsubscribe user scan qrcode to subscribe in public account
+  # notice user will subscribe public account at same time, so wechat won't trigger subscribe event any more
   on :event, with: 'qrscene_xxxxxx' do |request, ticket|
     request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
@@ -61,10 +66,6 @@ class WechatsController < ApplicationController
   # When user sent location
   on :location do |request|
     request.reply.text("#{request[:Location_X]}, #{request[:Location_Y]}") # replay the GPS location
-  end
-
-  on :event, with: 'subscribe' do |request|
-    request.reply.text "#{request[:FromUserName]} subscribe now"
   end
 
   on :event, with: 'unsubscribe' do |request|

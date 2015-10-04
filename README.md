@@ -382,7 +382,12 @@ class WechatsController < ApplicationController
     end
   end
 
-  # 公众号收到未关注用户扫描qrscene_为前缀的二维码的参数值时
+  # 当用户加关注
+  on :event, with: 'subscribe' do |request|
+    request.reply.text "#{request[:FromUserName]} subscribe now"
+  end
+
+  # 公众号收到未关注用户扫描qrscene_为前缀的二维码，同时关注公众号时。注意若定义此事件处理，此次扫描事件将不再引发上条的用户加关注事件
   on :event, with: 'qrscene_xxxxxx' do |request, ticket|
     request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
@@ -423,11 +428,6 @@ class WechatsController < ApplicationController
   # 处理地理位置信息
   on :location do |request|
     request.reply.text("#{request[:Location_X]}, #{request[:Location_Y]}") #回复地理位置
-  end
-
-  # 当用户加关注
-  on :event, with: 'subscribe' do |request|
-    request.reply.text "#{request[:FromUserName]} subscribe now"
   end
 
   # 当用户取消关注订阅
