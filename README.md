@@ -384,10 +384,10 @@ class WechatsController < ApplicationController
 
   # 当用户加关注
   on :event, with: 'subscribe' do |request|
-    request.reply.text "#{request[:FromUserName]} subscribe now"
+    request.reply.text "User #{request[:FromUserName]} subscribe now"
   end
 
-  # 公众号收到未关注用户扫描qrscene_为前缀的二维码，同时关注公众号时。注意若定义此事件处理，此次扫描事件将不再引发上条的用户加关注事件
+  # 公众号收到未关注用户扫描qrscene_xxxxxx二维码时。注意此次扫描事件将不再引发上条的用户加关注事件
   on :event, with: 'qrscene_xxxxxx' do |request, ticket|
     request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end

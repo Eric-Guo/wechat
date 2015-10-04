@@ -260,7 +260,7 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'response subscribe event with matched event' do
-      event_message = message_base.merge(MsgType: 'event', Event: 'subscribe')
+      event_message = message_base.merge(MsgType: 'event', Event: 'subscribe', EventKey: 'qrscene_not_exist')
       post :create, signature_params.merge(xml: event_message)
       expect(xml_to_hash(response)[:Content]).to eq('event: subscribe')
     end

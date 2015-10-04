@@ -14,15 +14,24 @@ module Wechat
     module ClassMethods
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
+      def known_qrscene_lists
+        @known_qrscene_lists ||= []
+      end
+
+      def known_qrscene_lists=(qrscene_value)
+        @known_qrscene_lists ||= []
+        @known_qrscene_lists << qrscene_value
+      end
+
       def on(message_type, with: nil, respond: nil, &block)
         fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config.merge!(proc: block) if block_given?
 
-        if with.present? && ![:text, :event].include?(message_type)
-          fail 'Only text and event message can take :with parameters'
-        else
-          config.merge!(with: with) if with.present?
+        if with.present?
+          fail 'Only text and event message can take :with parameters' unless [:text, :event].include?(message_type)
+          config.merge!(with: with)
+          self.known_qrscene_lists = with if with.respond_to?(:start_with?) && with.start_with?('qrscene_')
         end
 
         user_defined_responders(message_type) << config
@@ -44,7 +53,7 @@ module Wechat
         when :event
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
-          elsif 'scan' == message[:Event] || ('subscribe' == message[:Event] && message[:EventKey].present? && message[:EventKey].start_with?('qrscene_'))
+          elsif 'scan' == message[:Event] || ('subscribe' == message[:Event] && known_qrscene_lists.include?(message[:EventKey]))
             yield(* match_responders(responders, event: 'scancode_public',
                                                  event_key: message[:EventKey],
                                                  ticket: message[:Ticket]))

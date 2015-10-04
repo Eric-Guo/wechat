@@ -24,7 +24,7 @@ class WechatsController < ApplicationController
     request.reply.text "#{request[:FromUserName]} subscribe now"
   end
 
-  # When unsubscribe user scan qrcode to subscribe in public account
+  # When unsubscribe user scan qrcode qrscene_xxxxxx to subscribe in public account
   # notice user will subscribe public account at same time, so wechat won't trigger subscribe event any more
   on :event, with: 'qrscene_xxxxxx' do |request, ticket|
     request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
