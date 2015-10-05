@@ -47,15 +47,8 @@ module Wechat
         when :event
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
-          elsif known_scan_key_lists.include?(message[:EventKey]) && ('scan' == message[:Event] || 'subscribe' == message[:Event])
-            yield(* match_responders(responders, event: 'scancode_public',
-                                                 event_key: message[:EventKey],
-                                                 ticket: message[:Ticket]))
-          elsif known_scan_key_lists.include?(message[:EventKey]) && %w(scancode_push scancode_waitmsg).include?(message[:Event])
-            yield(* match_responders(responders, event: 'scancode_enterprise',
-                                                 event_key: message[:EventKey],
-                                                 scan_type: message[:ScanCodeInfo][:ScanType],
-                                                 scan_result: message[:ScanCodeInfo][:ScanResult]))
+          elsif known_scan_key_lists.include?(message[:EventKey])
+            yield(* known_scan_key_match_responders(responders, message))
           elsif 'batch_job_result' == message[:Event]
             yield(* match_responders(responders, event: 'batch_job',
                                                  batch_job: message[:BatchJob]))
@@ -68,6 +61,19 @@ module Wechat
       end
 
       private
+
+      def known_scan_key_match_responders(responders, message)
+        if 'scan' == message[:Event] || 'subscribe' == message[:Event]
+          match_responders(responders, event: 'scancode_public',
+                                       event_key: message[:EventKey],
+                                       ticket: message[:Ticket])
+        elsif %w(scancode_push scancode_waitmsg).include?(message[:Event])
+          match_responders(responders, event: 'scancode_enterprise',
+                                       event_key: message[:EventKey],
+                                       scan_type: message[:ScanCodeInfo][:ScanType],
+                                       scan_result: message[:ScanCodeInfo][:ScanResult])
+        end
+      end
 
       def match_responders(responders, value)
         matched = responders.each_with_object({}) do |responder, memo|
