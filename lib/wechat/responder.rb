@@ -63,16 +63,14 @@ module Wechat
       private
 
       def known_scan_key_match_responders(responders, message)
-        if 'scan' == message[:Event] || 'subscribe' == message[:Event]
-          match_responders(responders, event: 'scancode_public',
-                                       event_key: message[:EventKey],
-                                       ticket: message[:Ticket])
-        elsif %w(scancode_push scancode_waitmsg).include?(message[:Event])
-          match_responders(responders, event: 'scancode_enterprise',
-                                       event_key: message[:EventKey],
-                                       scan_type: message[:ScanCodeInfo][:ScanType],
-                                       scan_result: message[:ScanCodeInfo][:ScanResult])
+        matched = responders.each_with_object({}) do |responder, memo|
+          if ('scan' == message[:Event] || 'subscribe' == message[:Event]) && message[:EventKey] == responder[:with]
+            memo[:scaned] ||= [responder, message[:Ticket]]
+          elsif %w(scancode_push scancode_waitmsg).include?(message[:Event]) && message[:EventKey] == responder[:with]
+            memo[:scaned] ||= [responder, message[:ScanCodeInfo][:ScanResult], message[:ScanCodeInfo][:ScanType]]
+          end
         end
+        matched[:scaned]
       end
 
       def match_responders(responders, value)
@@ -87,8 +85,6 @@ module Wechat
           if condition.is_a? Regexp
             memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
           elsif value.is_a? Hash
-            memo[:scoped] ||= [responder, value[:ticket]] if value[:event_key] == condition && value[:event] == 'scancode_public'
-            memo[:scoped] ||= [responder, value[:scan_result], value[:scan_type]] if value[:event_key] == condition && value[:event] == 'scancode_enterprise'
             memo[:scoped] ||= [responder, value[:batch_job]] if value[:event] == 'batch_job' &&
                                                                 %w(sync_user replace_user invite_user replace_party).include?(condition.downcase)
           else
