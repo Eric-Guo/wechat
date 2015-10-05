@@ -15,14 +15,15 @@ module Wechat
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
       def on(message_type, with: nil, respond: nil, &block)
-        fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :scan, :fallback].include?(message_type)
+        fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :click, :scan, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config.merge!(proc: block) if block_given?
 
         if with.present?
-          fail 'Only text, scan and event message can take :with parameters' unless [:text, :scan, :event].include?(message_type)
+          fail 'Only text, scan and event message can take :with parameters' unless [:text, :event, :click, :scan].include?(message_type)
           config.merge!(with: with)
           self.known_scan_key_lists = with if message_type == :scan
+          self.known_click_key_lists = with if message_type == :click
         end
 
         user_defined_responders(message_type) << config
@@ -42,7 +43,9 @@ module Wechat
         when :text
           yield(* match_responders(responders, message[:Content]))
         when :event
-          if 'click' == message[:Event]
+          if known_click_key_lists.include?(message[:EventKey]) && 'click' == message[:Event]
+            yield(* known_click_key_match_responders(user_defined_responders(:click), message))
+          elsif 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
           elsif known_scan_key_lists.include?(message[:EventKey])
             yield(* known_scan_with_match_responders(user_defined_responders(:scan), message))
@@ -58,6 +61,13 @@ module Wechat
       end
 
       private
+
+      def known_click_key_match_responders(responders, message)
+        matched = responders.each_with_object({}) do |responder, memo|
+          memo[:click] ||= [responder, message[:EventKey]] if message[:EventKey] == responder[:with]
+        end
+        matched[:click]
+      end
 
       def known_scan_with_match_responders(responders, message)
         matched = responders.each_with_object({}) do |responder, memo|
@@ -89,6 +99,15 @@ module Wechat
           end
         end
         matched[:scoped] || matched[:general]
+      end
+
+      def known_click_key_lists
+        @known_click_key_lists ||= []
+      end
+
+      def known_click_key_lists=(click_key)
+        @known_click_key_lists ||= []
+        @known_click_key_lists << click_key
       end
 
       def known_scan_key_lists

@@ -47,6 +47,11 @@ class WechatsController < ApplicationController
     end
   end
 
+  # When user click the menu button
+  on :click, with: 'BOOK_LUNCH' do |request, key|
+    request.reply.text "User: #{request[:FromUserName]} click #{key}"
+  end
+
   # When user sent the imsage
   on :image do |request|
     request.reply.image(request[:MediaId]) # Echo the sent image to user

@@ -85,7 +85,7 @@ RSpec.describe WechatCorpController, type: :controller do
         request.reply.text 'echo: enter_agent'
       end
 
-      on :event, with: 'BOOK_LUNCH' do |request, key|
+      on :click, with: 'BOOK_LUNCH' do |request, key|
         request.reply.text "#{request[:FromUserName]} click #{key}"
       end
 

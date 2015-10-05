@@ -409,6 +409,11 @@ class WechatsController < ApplicationController
     end
   end
 
+  # 当用户点击菜单时
+  on :click, with: 'BOOK_LUNCH' do |request, key|
+    request.reply.text "User: #{request[:FromUserName]} click #{key}"
+  end
+
   # 处理图片信息
   on :image do |request|
     request.reply.image(request[:MediaId]) #直接将图片返回给用户
@@ -484,6 +489,8 @@ end
 - :location 响应地理位置消息
 - :link 响应链接消息
 - :event 响应事件消息, 可以用`:with`参数来匹配事件类型
+- :click wechat gem 虚拟响应事件消息, 类似:event，但匹配速度更快
+- :scan  wechat gem 虚拟响应事件消息, 类似:event，但匹配速度更快
 - :fallback 默认响应，当收到的消息无法被其他responder响应时，会使用这个responder.
 
 ### 多客服消息转发
