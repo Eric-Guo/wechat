@@ -388,22 +388,22 @@ class WechatsController < ApplicationController
   end
 
   # 公众号收到未关注用户扫描qrscene_xxxxxx二维码时。注意此次扫描事件将不再引发上条的用户加关注事件
-  on :event, with: 'qrscene_xxxxxx' do |request, ticket|
+  on :scan, with: 'qrscene_xxxxxx' do |request, ticket|
     request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
   # 公众号收到已关注用户扫描创建二维码的scene_id事件时
-  on :event, with: 'scene_id' do |request, ticket|
+  on :scan, with: 'scene_id' do |request, ticket|
     request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
   # 企业号收到EventKey 为二维码扫描结果事件时
-  on :event, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
+  on :scan, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
     request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
   end
 
   # 企业号收到EventKey 为CODE 39码扫描结果事件时
-  on :event, with: 'BINDING_BARCODE' do |message, scan_result|
+  on :scan, with: 'BINDING_BARCODE' do |message, scan_result|
     if scan_result.start_with? 'CODE_39,'
       message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
     end

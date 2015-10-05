@@ -212,11 +212,11 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("event: #{event}")
       end
 
-      on :event, with: 'qrscene_xxxxxx' do |request, ticket|
+      on :scan, with: 'qrscene_xxxxxx' do |request, ticket|
         request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
       end
 
-      on :event, with: 'scene_id' do |request, ticket|
+      on :scan, with: 'scene_id' do |request, ticket|
         request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
       end
 

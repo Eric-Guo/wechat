@@ -85,11 +85,11 @@ RSpec.describe WechatCorpController, type: :controller do
         request.reply.text 'echo: enter_agent'
       end
 
-      on :event, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
+      on :scan, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
         request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
       end
 
-      on :event, with: 'BINDING_BARCODE' do |message, scan_result|
+      on :scan, with: 'BINDING_BARCODE' do |message, scan_result|
         if scan_result.start_with? 'CODE_39,'
           message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
         end

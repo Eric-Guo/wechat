@@ -15,14 +15,17 @@ module Wechat
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
       def on(message_type, with: nil, respond: nil, &block)
-        fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :fallback].include?(message_type)
+        fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :scan, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config.merge!(proc: block) if block_given?
 
         if with.present?
-          fail 'Only text and event message can take :with parameters' unless [:text, :event].include?(message_type)
+          fail 'Only text, scan and event message can take :with parameters' unless [:text, :scan, :event].include?(message_type)
           config.merge!(with: with)
-          self.known_qrscene_lists = with if with.respond_to?(:start_with?) && with.start_with?('qrscene_')
+          if message_type == :scan
+            self.known_scan_key_lists = with
+            message_type = :event # scan is only valid in wechat gems
+          end
         end
 
         user_defined_responders(message_type) << config
@@ -44,11 +47,11 @@ module Wechat
         when :event
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
-          elsif 'scan' == message[:Event] || ('subscribe' == message[:Event] && known_qrscene_lists.include?(message[:EventKey]))
+          elsif known_scan_key_lists.include?(message[:EventKey]) && ('scan' == message[:Event] || 'subscribe' == message[:Event])
             yield(* match_responders(responders, event: 'scancode_public',
                                                  event_key: message[:EventKey],
                                                  ticket: message[:Ticket]))
-          elsif %w(scancode_push scancode_waitmsg).include? message[:Event]
+          elsif known_scan_key_lists.include?(message[:EventKey]) && %w(scancode_push scancode_waitmsg).include?(message[:Event])
             yield(* match_responders(responders, event: 'scancode_enterprise',
                                                  event_key: message[:EventKey],
                                                  scan_type: message[:ScanCodeInfo][:ScanType],
@@ -89,13 +92,13 @@ module Wechat
         matched[:scoped] || matched[:general]
       end
 
-      def known_qrscene_lists
-        @known_qrscene_lists ||= []
+      def known_scan_key_lists
+        @known_scan_key_lists ||= []
       end
 
-      def known_qrscene_lists=(qrscene_value)
-        @known_qrscene_lists ||= []
-        @known_qrscene_lists << qrscene_value
+      def known_scan_key_lists=(qrscene_value)
+        @known_scan_key_lists ||= []
+        @known_scan_key_lists << qrscene_value
       end
     end
 
