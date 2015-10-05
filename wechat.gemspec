@@ -15,6 +15,11 @@ Gem::Specification.new do |s|
   s.files = Dir['{bin,lib}/**/*'] + %w(LICENSE Rakefile README.md CHANGELOG.md)
   s.executables << 'wechat'
 
+  s.post_install_message = %Q(*****WECHAT BREAK CHANGE*****
+Scan 2D barcode using new syntax `on :scan, with: 'BINDING_QR_CODE' `
+instead of previous `on :event, with: 'BINDING_QR_CODE' `.
+*****************************)
+
   s.add_runtime_dependency 'activesupport', '>= 3.2'
   s.add_runtime_dependency 'nokogiri', '>=1.6.0'
   s.add_runtime_dependency 'rest-client'
