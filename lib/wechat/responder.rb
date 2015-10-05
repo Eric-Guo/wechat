@@ -22,10 +22,7 @@ module Wechat
         if with.present?
           fail 'Only text, scan and event message can take :with parameters' unless [:text, :scan, :event].include?(message_type)
           config.merge!(with: with)
-          if message_type == :scan
-            self.known_scan_key_lists = with
-            message_type = :event # scan is only valid in wechat gems
-          end
+          self.known_scan_key_lists = with if message_type == :scan
         end
 
         user_defined_responders(message_type) << config
@@ -48,7 +45,7 @@ module Wechat
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
           elsif known_scan_key_lists.include?(message[:EventKey])
-            yield(* known_scan_key_match_responders(responders, message))
+            yield(* known_scan_key_match_responders(user_defined_responders(:scan), message))
           elsif 'batch_job_result' == message[:Event]
             yield(* match_responders(responders, event: 'batch_job',
                                                  batch_job: message[:BatchJob]))
