@@ -45,7 +45,7 @@ module Wechat
           if 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
           elsif known_scan_key_lists.include?(message[:EventKey])
-            yield(* known_scan_key_match_responders(user_defined_responders(:scan), message))
+            yield(* known_scan_with_match_responders(user_defined_responders(:scan), message))
           elsif 'batch_job_result' == message[:Event]
             yield(* match_responders(responders, event: 'batch_job',
                                                  batch_job: message[:BatchJob]))
@@ -59,7 +59,7 @@ module Wechat
 
       private
 
-      def known_scan_key_match_responders(responders, message)
+      def known_scan_with_match_responders(responders, message)
         matched = responders.each_with_object({}) do |responder, memo|
           if ('scan' == message[:Event] || 'subscribe' == message[:Event]) && message[:EventKey] == responder[:with]
             memo[:scaned] ||= [responder, message[:Ticket]]
