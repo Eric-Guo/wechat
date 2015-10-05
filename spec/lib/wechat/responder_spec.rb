@@ -94,6 +94,7 @@ RSpec.describe WechatController, type: :controller do
       on :text,  with: /^cmd:(.*)$/, respond: 'regex matched'
       on :text,  respond: 'text content'
       on :event, with: 'subscribe', respond: 'subscribe event'
+      on :click, with: 'EVENTKEY', respond: 'EVENTKEY clicked'
       on :image, respond: 'image content'
     end
 
@@ -126,12 +127,33 @@ RSpec.describe WechatController, type: :controller do
         controller.class.responder_for(MsgType: 'event', Event: 'subscribe', &b)
       end.to yield_with_args({ respond: 'subscribe event', with: 'subscribe' }, 'subscribe')
     end
+
+    specify "find 'click' responder if event request matches click" do
+      expect do |b|
+        controller.class.responder_for(MsgType: 'event', Event: 'click', EventKey: 'EVENTKEY', &b)
+      end.to yield_with_args({ respond: 'EVENTKEY clicked', with: 'EVENTKEY' }, 'EVENTKEY')
+    end
   end
 
   specify 'will respond empty if no responder for the message type' do
     post :create, signature_params.merge(xml: text_message)
     expect(response.code).to eq('200')
     expect(response.body.strip).to be_empty
+  end
+
+  describe 'respond_to wechat helper' do
+    controller do
+      wechat_responder
+      on :text do |_message, _content|
+        wechat
+      end
+    end
+
+    specify 'will return normal' do
+      expect do
+        post :create, signature_params.merge(xml: text_message)
+      end.not_to raise_error
+    end
   end
 
   describe 'respond_to wechat_url helper' do
