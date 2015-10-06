@@ -446,22 +446,22 @@ class WechatsController < ApplicationController
   end
 
   # 当异步任务增量更新成员完成时推送
-  on :event, with: 'sync_user' do |request, batch_job|
+  on :batch_job, with: 'sync_user' do |request, batch_job|
     request.reply.text "job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
   # 当异步任务全量覆盖成员完成时推送
-  on :event, with: 'replace_user' do |request, batch_job|
+  on :batch_job, with: 'replace_user' do |request, batch_job|
     request.reply.text "job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
   # 当异步任务邀请成员关注完成时推送
-  on :event, with: 'invite_user' do |request, batch_job|
+  on :batch_job, with: 'invite_user' do |request, batch_job|
     request.reply.text "job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
   # 当异步任务全量覆盖部门完成时推送
-  on :event, with: 'replace_party' do |request, batch_job|
+  on :batch_job, with: 'replace_party' do |request, batch_job|
     request.reply.text "job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
@@ -476,8 +476,8 @@ end
 on <message_type> do |message|
  message.reply.text "some text"
 end
-
 ```
+
 来响应用户信息。
 
 目前支持的message_type有如下几种
@@ -489,8 +489,9 @@ end
 - :location 响应地理位置消息
 - :link 响应链接消息
 - :event 响应事件消息, 可以用`:with`参数来匹配事件类型
-- :click wechat gem 虚拟响应事件消息, 类似:event，但匹配速度更快
-- :scan  wechat gem 虚拟响应事件消息, 类似:event，但匹配速度更快
+- :click 虚拟响应事件消息, 微信仍然传入:event，但gem内部会单独处理
+- :scan  虚拟响应事件消息
+- :batch_job  虚拟响应事件消息
 - :fallback 默认响应，当收到的消息无法被其他responder响应时，会使用这个responder.
 
 ### 多客服消息转发

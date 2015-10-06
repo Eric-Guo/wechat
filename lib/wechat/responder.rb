@@ -15,12 +15,12 @@ module Wechat
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
       def on(message_type, with: nil, respond: nil, &block)
-        fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :click, :scan, :fallback].include?(message_type)
+        fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :click, :scan, :batch_job, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config.merge!(proc: block) if block_given?
 
         if with.present?
-          fail 'Only text, scan and event message can take :with parameters' unless [:text, :event, :click, :scan].include?(message_type)
+          fail 'Only text, scan and event message can take :with parameters' unless [:text, :event, :click, :scan, :batch_job].include?(message_type)
           config.merge!(with: with)
           self.known_scan_key_lists = with if message_type == :scan
           self.known_click_key_lists = with if message_type == :click
@@ -50,8 +50,7 @@ module Wechat
           elsif known_scan_key_lists.include?(message[:EventKey])
             yield(* known_scan_with_match_responders(user_defined_responders(:scan), message))
           elsif 'batch_job_result' == message[:Event]
-            yield(* match_responders(responders, event: 'batch_job',
-                                                 batch_job: message[:BatchJob]))
+            yield(* batch_job_match_responders(user_defined_responders(:batch_job), message))
           else
             yield(* match_responders(responders, message[:Event]))
           end
@@ -80,6 +79,13 @@ module Wechat
         matched[:scaned]
       end
 
+      def batch_job_match_responders(responders, message)
+        matched = responders.each_with_object({}) do |responder, memo|
+          memo[:batch_job] ||= [responder, message[:BatchJob]] if message[:BatchJob][:JobType] == responder[:with]
+        end
+        matched[:batch_job]
+      end
+
       def match_responders(responders, value)
         matched = responders.each_with_object({}) do |responder, memo|
           condition = responder[:with]
@@ -91,9 +97,6 @@ module Wechat
 
           if condition.is_a? Regexp
             memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
-          elsif value.is_a? Hash
-            memo[:scoped] ||= [responder, value[:batch_job]] if value[:event] == 'batch_job' &&
-                                                                %w(sync_user replace_user invite_user replace_party).include?(condition.downcase)
           else
             memo[:scoped] ||= [responder, value] if value == condition
           end

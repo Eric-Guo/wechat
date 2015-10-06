@@ -83,22 +83,22 @@ class WechatsController < ApplicationController
   end
 
   # When batch job create/update user (incremental) finished.
-  on :event, with: 'sync_user' do |request, batch_job|
+  on :batch_job, with: 'sync_user' do |request, batch_job|
     request.reply.text "sync_user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
   # When batch job replace user (full sync) finished.
-  on :event, with: 'replace_user' do |request, batch_job|
+  on :batch_job, with: 'replace_user' do |request, batch_job|
     request.reply.text "replace_user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
   # When batch job invent user finished.
-  on :event, with: 'invite_user' do |request, batch_job|
+  on :batch_job, with: 'invite_user' do |request, batch_job|
     request.reply.text "invite_user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
   # When batch job replace department (full sync) finished.
-  on :event, with: 'replace_party' do |request, batch_job|
+  on :batch_job, with: 'replace_party' do |request, batch_job|
     request.reply.text "replace_party job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 

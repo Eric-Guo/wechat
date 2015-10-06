@@ -99,7 +99,7 @@ RSpec.describe WechatCorpController, type: :controller do
         end
       end
 
-      on :event, with: 'replace_user' do |request, batch_job|
+      on :batch_job, with: 'replace_user' do |request, batch_job|
         request.reply.text "Replace user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
       end
     end

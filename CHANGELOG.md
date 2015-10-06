@@ -2,8 +2,12 @@
 
 ## v0.6.0 (released at 10/06/2015)
 
+### Scan and Batch job are BREAK CHANGE!
+
 * Scan 2D barcode using new syntax `on :scan, with: 'BINDING_QR_CODE' ` instead of `on :event, with: 'BINDING_QR_CODE' ` in previous version #55
   Which will fix can not using `on :event, with: "scan" ` problem
+* Batch job using new syntax `on :batch_job, with: 'replace_user' `
+instead of previous `on :event, with: 'replace_user' `. 
 * Click menu support new syntax `on :click, with: 'BOOK_LUNCH' `, but `on :event, with: 'BOOK_LUNCH' ` still supported. perfer `on :click` because it running faster and more nature expression.
 * Fix refresh token not working problem under ruby 2.0.0 #54
 * New department_update, user_batchdelete, convert_to_openid API

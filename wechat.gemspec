@@ -16,8 +16,10 @@ Gem::Specification.new do |s|
   s.executables << 'wechat'
 
   s.post_install_message = %Q(*****WECHAT BREAK CHANGE*****
-Scan 2D barcode using new syntax `on :scan, with: 'BINDING_QR_CODE' `
+1. Scan 2D barcode using new syntax `on :scan, with: 'BINDING_QR_CODE' `
 instead of previous `on :event, with: 'BINDING_QR_CODE' `.
+2. Batch job using new syntax `on :batch_job, with: 'replace_user' `
+instead of previous `on :event, with: 'replace_user' `.
 *****************************)
 
   s.add_runtime_dependency 'activesupport', '>= 3.2'
