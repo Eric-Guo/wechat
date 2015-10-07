@@ -23,13 +23,22 @@ module Wechat
           fail 'Only text, event, click, scan and batch_job can having :with parameters' unless [:text, :event, :click, :scan, :batch_job].include?(message_type)
           config.merge!(with: with)
           self.known_scan_key_lists = with if message_type == :scan
-          self.known_click_key_lists = with if message_type == :click
         else
           fail 'Message type click, scan and batch_job must specify :with parameters' if [:click, :scan, :batch_job].include?(message_type)
         end
 
-        user_defined_responders(message_type) << config
+        case message_type
+        when :click
+          user_defined_click_responders(with) << config
+        else
+          user_defined_responders(message_type) << config
+        end
         config
+      end
+
+      def user_defined_click_responders(with)
+        @click_responders ||= {}
+        @click_responders[with] ||= []
       end
 
       def user_defined_responders(type)
@@ -45,8 +54,8 @@ module Wechat
         when :text
           yield(* match_responders(responders, message[:Content]))
         when :event
-          if known_click_key_lists.include?(message[:EventKey]) && 'click' == message[:Event]
-            yield(* known_click_key_match_responders(user_defined_responders(:click), message))
+          if 'click' == message[:Event] && !user_defined_click_responders(message[:EventKey]).empty?
+            yield(* user_defined_click_responders(message[:EventKey]), message[:EventKey])
           elsif 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
           elsif known_scan_key_lists.include?(message[:EventKey])
@@ -81,13 +90,6 @@ module Wechat
         matched[:scoped] || matched[:general]
       end
 
-      def known_click_key_match_responders(responders, message)
-        matched = responders.each_with_object({}) do |responder, memo|
-          memo[:click] ||= [responder, message[:EventKey]] if message[:EventKey] == responder[:with]
-        end
-        matched[:click]
-      end
-
       def known_scan_with_match_responders(responders, message)
         matched = responders.each_with_object({}) do |responder, memo|
           if %w(scan subscribe).include?(message[:Event]) && message[:EventKey] == responder[:with]
@@ -104,15 +106,6 @@ module Wechat
           memo[:batch_job] ||= [responder, message[:BatchJob]] if message[:BatchJob][:JobType] == responder[:with]
         end
         matched[:batch_job]
-      end
-
-      def known_click_key_lists
-        @known_click_key_lists ||= []
-      end
-
-      def known_click_key_lists=(click_key)
-        @known_click_key_lists ||= []
-        @known_click_key_lists << click_key
       end
 
       def known_scan_key_lists
