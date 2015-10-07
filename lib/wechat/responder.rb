@@ -30,6 +30,8 @@ module Wechat
         case message_type
         when :click
           user_defined_click_responders(with) << config
+        when :batch_job
+          user_defined_batch_job_responders(with) << config
         else
           user_defined_responders(message_type) << config
         end
@@ -39,6 +41,11 @@ module Wechat
       def user_defined_click_responders(with)
         @click_responders ||= {}
         @click_responders[with] ||= []
+      end
+
+      def user_defined_batch_job_responders(with)
+        @batch_job_responders ||= {}
+        @batch_job_responders[with] ||= []
       end
 
       def user_defined_responders(type)
@@ -61,7 +68,7 @@ module Wechat
           elsif known_scan_key_lists.include?(message[:EventKey])
             yield(* known_scan_with_match_responders(user_defined_responders(:scan), message))
           elsif 'batch_job_result' == message[:Event]
-            yield(* batch_job_match_responders(user_defined_responders(:batch_job), message))
+            yield(* user_defined_batch_job_responders(message[:BatchJob][:JobType]), message[:BatchJob])
           else
             yield(* match_responders(responders, message[:Event]))
           end
@@ -99,13 +106,6 @@ module Wechat
           end
         end
         matched[:scaned]
-      end
-
-      def batch_job_match_responders(responders, message)
-        matched = responders.each_with_object({}) do |responder, memo|
-          memo[:batch_job] ||= [responder, message[:BatchJob]] if message[:BatchJob][:JobType] == responder[:with]
-        end
-        matched[:batch_job]
       end
 
       def known_scan_key_lists
