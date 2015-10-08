@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.6.0 (released at 10/06/2015)
+## v0.6.0 (released at 10/08/2015)
 
 ### Scan and Batch job are BREAK CHANGE!
 
@@ -9,6 +9,7 @@
 * Batch job using new syntax `on :batch_job, with: 'replace_user' `
 instead of previous `on :event, with: 'replace_user' `. 
 * Click menu support new syntax `on :click, with: 'BOOK_LUNCH' `, but `on :event, with: 'BOOK_LUNCH' ` still supported. perfer `on :click` because it running faster and more nature expression.
+* Wechat::Responder using Hash for new :client and :batch_job event, avoid time consuming Array match responder
 * Fix refresh token not working problem under ruby 2.0.0 #54
 * New department_update, user_batchdelete, convert_to_openid API
 
