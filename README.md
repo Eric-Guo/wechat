@@ -3,7 +3,7 @@ WeChat
 
 [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://badge.fury.io/for/rb/wechat) [![Build Status](https://travis-ci.org/Eric-Guo/wechat.svg)](https://travis-ci.org/Eric-Guo/wechat) [![Code Climate](https://codeclimate.com/github/Eric-Guo/wechat.png)](https://codeclimate.com/github/Eric-Guo/wechat) [![Code Coverage](https://codeclimate.com/github/Eric-Guo/wechat/coverage.png)](https://codeclimate.com/github/Eric-Guo/wechat)
 
-[![Issue Stats](http://issuestats.com/github/Eric-Guo/wechat/badge/issue)](http://issuestats.com/github/Eric-Guo/wechat) [![PR Stats](http://issuestats.com/github/Eric-Guo/wechat/badge/pr)](http://issuestats.com/github/Eric-Guo/wechat)
+[![Join the chat at https://gitter.im/Eric-Guo/wechat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Issue Stats](http://issuestats.com/github/Eric-Guo/wechat/badge/issue)](http://issuestats.com/github/Eric-Guo/wechat) [![PR Stats](http://issuestats.com/github/Eric-Guo/wechat/badge/pr)](http://issuestats.com/github/Eric-Guo/wechat)
 
 
 WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平台](https://mp.weixin.qq.com/)和[企业平台](https://qy.weixin.qq.com)提供的服务，包括：
