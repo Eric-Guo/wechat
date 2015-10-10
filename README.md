@@ -397,6 +397,13 @@ class WechatsController < ApplicationController
     request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
+  # 当没有任何on :scan事件处理已关注用户扫描的scene_id时
+  on :event, with: 'scan' do |request|
+    if request[:EventKey].present?
+      request.reply.text "event scan got EventKey #{request[:EventKey]} Ticket #{request[:Ticket]}"
+    end
+  end
+
   # 企业号收到EventKey 为二维码扫描结果事件时
   on :scan, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
     request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"

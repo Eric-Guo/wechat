@@ -35,6 +35,13 @@ class WechatsController < ApplicationController
     request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
+  # When no any on :scan responder can match subscribe user scaned scene_id
+  on :event, with: 'scan' do |request|
+    if request[:EventKey].present?
+      request.reply.text "event scan got EventKey #{request[:EventKey]} Ticket #{request[:Ticket]}"
+    end
+  end
+
   # When enterprise user press menu BINDING_QR_CODE and success to scan bar code
   on :scan, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
     request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"

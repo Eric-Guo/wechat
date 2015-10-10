@@ -244,7 +244,7 @@ RSpec.describe WechatController, type: :controller do
 
       on :event, with: 'scan' do |request|
         if request[:EventKey].present?
-          request.reply.text "event scan got EventKey #{request[:EventKey]}"
+          request.reply.text "event scan got EventKey #{request[:EventKey]} Ticket #{request[:Ticket]}"
         end
       end
 
@@ -306,15 +306,15 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'response scan event with matched event' do
-      event_message = message_base.merge(MsgType: 'event', Event: 'scan', EventKey: 'scene_id')
+      event_message = message_base.merge(MsgType: 'event', Event: 'SCAN', EventKey: 'scene_id')
       post :create, signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
       expect(xml_to_hash(response)[:Content]).to eq 'Subscribe user fromUser Ticket TICKET'
     end
 
     specify 'response scan event with by_passed scene_id' do
-      event_message = message_base.merge(MsgType: 'event', Event: 'scan', EventKey: 'scene_id_by_pass_scan_process')
+      event_message = message_base.merge(MsgType: 'event', Event: 'SCAN', EventKey: 'scene_id_by_pass_scan_process')
       post :create, signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
-      expect(xml_to_hash(response)[:Content]).to eq 'event scan got EventKey scene_id_by_pass_scan_process'
+      expect(xml_to_hash(response)[:Content]).to eq 'event scan got EventKey scene_id_by_pass_scan_process Ticket TICKET'
     end
 
     specify 'response image' do
