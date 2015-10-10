@@ -42,7 +42,10 @@ module Wechat
         case data['errcode']
         when 0 # for request didn't expect results
           data
-        when 42001, 40014 # 42001: access_token超时, 40014:不合法的access_token
+        # 42001: access_token超时
+        # 40014: 不合法的access_token
+        # 40001, invalid credential, access_token is invalid or not latest hint
+        when 42001, 40014, 40001
           fail AccessTokenExpiredError
         else
           fail ResponseError.new(data['errcode'], data['errmsg'])
