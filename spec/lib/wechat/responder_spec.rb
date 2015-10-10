@@ -242,6 +242,12 @@ RSpec.describe WechatController, type: :controller do
         request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
       end
 
+      on :event, with: 'scan' do |request|
+        if request[:EventKey].present?
+          request.reply.text "event scan got EventKey #{request[:EventKey]}"
+        end
+      end
+
       on :image do |message|
         message.reply.text("image: #{message[:PicUrl]}")
       end
@@ -303,6 +309,12 @@ RSpec.describe WechatController, type: :controller do
       event_message = message_base.merge(MsgType: 'event', Event: 'scan', EventKey: 'scene_id')
       post :create, signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
       expect(xml_to_hash(response)[:Content]).to eq 'Subscribe user fromUser Ticket TICKET'
+    end
+
+    specify 'response scan event with by_passed scene_id' do
+      event_message = message_base.merge(MsgType: 'event', Event: 'scan', EventKey: 'scene_id_by_pass_scan_process')
+      post :create, signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
+      expect(xml_to_hash(response)[:Content]).to eq 'event scan got EventKey scene_id_by_pass_scan_process'
     end
 
     specify 'response image' do
