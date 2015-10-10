@@ -1,10 +1,7 @@
-WeChat
+WeChat [![Gem Version][version-badge]][rubygems] [![Build Status][travis-badge]][travis] [![Code Climate][codeclimate-badge]][codeclimate] [![Code Coverage][codecoverage-badge]][codecoverage]
 ======
 
-[![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://badge.fury.io/for/rb/wechat) [![Build Status](https://travis-ci.org/Eric-Guo/wechat.svg)](https://travis-ci.org/Eric-Guo/wechat) [![Code Climate](https://codeclimate.com/github/Eric-Guo/wechat.png)](https://codeclimate.com/github/Eric-Guo/wechat) [![Code Coverage](https://codeclimate.com/github/Eric-Guo/wechat/coverage.png)](https://codeclimate.com/github/Eric-Guo/wechat)
-
-[![Join the chat at https://gitter.im/Eric-Guo/wechat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Issue Stats](http://issuestats.com/github/Eric-Guo/wechat/badge/issue)](http://issuestats.com/github/Eric-Guo/wechat) [![PR Stats](http://issuestats.com/github/Eric-Guo/wechat/badge/pr)](http://issuestats.com/github/Eric-Guo/wechat)
-
+[![Join the chat][gitter-badge]][gitter] [![Issue Stats][issue-badge]][issuestats] [![PR Stats][pr-badge]][issuestats]
 
 WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平台](https://mp.weixin.qq.com/)和[企业平台](https://qy.weixin.qq.com)提供的服务，包括：
 
@@ -524,3 +521,18 @@ Wechat 的核心是一个Message DSL,帮助开发者构建各种类型的消息�
 
 * 企业号接受菜单消息时，Wechat腾讯服务器无法解析部分域名，请使用IP绑定回调URL，用户的普通消息目前不受影响。
 * 企业号全量覆盖成员使用的csv通讯录格式，直接将下载的模板导入[是不工作的](http://qydev.weixin.qq.com/qa/index.php?qa=13978)，必须使用Excel打开，然后另存为csv格式才会变成合法格式。
+
+
+[version-badge]: https://badge.fury.io/rb/wechat.svg
+[rubygems]: https://rubygems.org/gems/wechat
+[travis-badge]: https://travis-ci.org/Eric-Guo/wechat.svg
+[travis]: https://travis-ci.org/Eric-Guo/wechat
+[codeclimate-badge]: https://codeclimate.com/github/Eric-Guo/wechat.png
+[codeclimate]: https://codeclimate.com/github/Eric-Guo/wechat
+[codecoverage-badge]: https://codeclimate.com/github/Eric-Guo/wechat/coverage.png
+[codecoverage]: https://codeclimate.com/github/Eric-Guo/wechat/coverage
+[gitter-badge]: https://badges.gitter.im/Join%20Chat.svg
+[gitter]: https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+[issue-badge]: http://issuestats.com/github/Eric-Guo/wechat/badge/issue
+[pr-badge]: http://issuestats.com/github/Eric-Guo/wechat/badge/pr
+[issuestats]: http://issuestats.com/github/Eric-Guo/wechat
