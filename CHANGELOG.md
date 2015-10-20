@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.6.1 (released at 10/20/2015)
+
+* Handle 40001, invalid credential, access_token is invalid or not latest hint # 57
+* Support at Rails 4.2.1 wechat can not run #58
+
 ## v0.6.0 (released at 10/08/2015)
 
 ### Scan and Batch job are BREAK CHANGE!
