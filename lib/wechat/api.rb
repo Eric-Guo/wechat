@@ -85,15 +85,15 @@ module Wechat
     end
 
     def media(media_id)
-      get 'media/get', params: { media_id: media_id }, base: FILE_BASE, as: :file
+      get 'media/get', params: { media_id: media_id }, base: API_BASE, as: :file
     end
 
     def media_create(type, file)
-      post 'media/upload', { upload: { media: file } }, params: { type: type }, base: FILE_BASE
+      post 'media/upload', { upload: { media: file } }, params: { type: type }, base: API_BASE
     end
 
     def material(media_id)
-      get 'material/get', params: { media_id: media_id }, base: FILE_BASE, as: :file
+      get 'material/get', params: { media_id: media_id }, base: API_BASE, as: :file
     end
 
     def material_count
@@ -105,7 +105,7 @@ module Wechat
     end
 
     def material_add(type, file)
-      post 'material/add_material', { upload: { media: file } }, params: { type: type }, base: FILE_BASE
+      post 'material/add_material', { upload: { media: file } }, params: { type: type }, base: API_BASE
     end
 
     def material_delete(media_id)
