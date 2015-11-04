@@ -434,7 +434,7 @@ class WechatsController < ApplicationController
     request.reply.video(request[:MediaId], title: '回声', description: "#{nickname}发来的视频请求") #直接视频返回给用户
   end
 
-  # 处理地理位置信息
+  # 处理上报地理位置事件
   on :location do |request|
     request.reply.text("#{request[:Location_X]}, #{request[:Location_Y]}") #回复地理位置
   end
@@ -490,12 +490,12 @@ end
 - :image 响应图片消息
 - :voice 响应语音消息
 - :video 响应视频消息
-- :location 响应地理位置消息
 - :link 响应链接消息
 - :event 响应事件消息, 可以用`:with`参数来匹配事件类型
 - :click 虚拟响应事件消息, 微信仍然传入:event，但gem内部会单独处理
 - :scan  虚拟响应事件消息
 - :batch_job  虚拟响应事件消息
+- :location 虚拟响应上报地理位置事件消息
 - :fallback 默认响应，当收到的消息无法被其他responder响应时，会使用这个responder.
 
 ### 多客服消息转发

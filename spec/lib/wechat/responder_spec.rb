@@ -248,6 +248,10 @@ RSpec.describe WechatController, type: :controller do
         end
       end
 
+      on :location do |message|
+        message.reply.text("Latitude: #{message[:Latitude]} Longitude: #{message[:Longitude]}")
+      end
+
       on :image do |message|
         message.reply.text("image: #{message[:PicUrl]}")
       end
@@ -258,10 +262,6 @@ RSpec.describe WechatController, type: :controller do
 
       on :video do |message|
         message.reply.text("video: #{message[:MediaId]}")
-      end
-
-      on :location do |message|
-        message.reply.text("location: #{message[:Label]}")
       end
 
       on :link do |message|
@@ -317,6 +317,12 @@ RSpec.describe WechatController, type: :controller do
       expect(xml_to_hash(response)[:Content]).to eq 'event scan got EventKey scene_id_by_pass_scan_process Ticket TICKET'
     end
 
+    specify 'response location' do
+      message = message_base.merge(MsgType: 'event', Event: 'LOCATION', Latitude: 23.137466, Longitude: 113.352425, Precision: 119.385040)
+      post :create, signature_params.merge(xml: message)
+      expect(xml_to_hash(response)[:Content]).to eq('Latitude: 23.137466 Longitude: 113.352425')
+    end
+
     specify 'response image' do
       image_message = message_base.merge(MsgType: 'image', MediaId: 'image_media_id', PicUrl: 'pic_url')
       post :create, signature_params.merge(xml: image_message)
@@ -333,12 +339,6 @@ RSpec.describe WechatController, type: :controller do
       message = message_base.merge(MsgType: 'video', MediaId: 'video_media_id', ThumbMediaId: 'thumb_media_id')
       post :create, signature_params.merge(xml: message)
       expect(xml_to_hash(response)[:Content]).to eq('video: video_media_id')
-    end
-
-    specify 'response location' do
-      message = message_base.merge(MsgType: 'location', Location_X: 'location_x', Location_Y: 'location_y', Scale: 'scale', Label: 'label')
-      post :create, signature_params.merge(xml: message)
-      expect(xml_to_hash(response)[:Content]).to eq('location: label')
     end
 
     specify 'response link' do

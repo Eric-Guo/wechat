@@ -15,7 +15,7 @@ module Wechat
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
       def on(message_type, with: nil, respond: nil, &block)
-        fail 'Unknow message type' unless [:text, :image, :voice, :video, :location, :link, :event, :click, :scan, :batch_job, :fallback].include?(message_type)
+        fail 'Unknow message type' unless [:text, :image, :voice, :video, :link, :event, :click, :scan, :batch_job, :location, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config.merge!(proc: block) if block_given?
 
@@ -32,6 +32,8 @@ module Wechat
           user_defined_click_responders(with) << config
         when :batch_job
           user_defined_batch_job_responders(with) << config
+        when :location
+          user_defined_location_responders << config
         else
           user_defined_responders(message_type) << config
         end
@@ -46,6 +48,10 @@ module Wechat
       def user_defined_batch_job_responders(with)
         @batch_job_responders ||= {}
         @batch_job_responders[with] ||= []
+      end
+
+      def user_defined_location_responders
+        @location_responders ||= []
       end
 
       def user_defined_responders(type)
@@ -69,6 +75,8 @@ module Wechat
             yield(* known_scan_with_match_responders(user_defined_responders(:scan), message))
           elsif 'batch_job_result' == message[:Event]
             yield(* user_defined_batch_job_responders(message[:BatchJob][:JobType]), message[:BatchJob])
+          elsif 'location' == message[:Event]
+            yield(* user_defined_location_responders, message)
           else
             yield(* match_responders(responders, message[:Event]))
           end
