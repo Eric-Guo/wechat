@@ -436,7 +436,7 @@ class WechatsController < ApplicationController
 
   # 处理上报地理位置事件
   on :location do |request|
-    request.reply.text("#{request[:Location_X]}, #{request[:Location_Y]}") #回复地理位置
+    request.reply.text("Latitude: #{message[:Latitude]} Longitude: #{message[:Longitude]} Precision: #{message[:Precision]}")
   end
 
   # 当用户取消关注订阅

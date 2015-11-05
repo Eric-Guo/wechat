@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.2 (released at 11/05/2015)
+
+* Tecent report location API changed, so change wechat gems also. #64
+
 ## v0.6.1 (released at 10/20/2015)
 
 * Handle 40001, invalid credential, access_token is invalid or not latest hint # 57

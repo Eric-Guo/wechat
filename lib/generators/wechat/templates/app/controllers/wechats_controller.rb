@@ -77,7 +77,7 @@ class WechatsController < ApplicationController
 
   # When user sent location
   on :location do |request|
-    request.reply.text("#{request[:Location_X]}, #{request[:Location_Y]}") # replay the GPS location
+    request.reply.text("Latitude: #{message[:Latitude]} Longitude: #{message[:Longitude]} Precision: #{message[:Precision]}")
   end
 
   on :event, with: 'unsubscribe' do |request|
