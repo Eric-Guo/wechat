@@ -14,11 +14,11 @@ module Wechat
       cipher.encrypt
 
       cipher.padding = 0
-      key_data = Base64.decode64(encoding_aes_key)
+      key_data = Base64.decode64(encoding_aes_key+'=')
       cipher.key = key_data
       cipher.iv = key_data[0..16]
 
-      cipher.update(encode_padding(plain)) + cipher.final
+      cipher.update(plain) + cipher.final
     end
 
     def decrypt(msg, encoding_aes_key)
@@ -26,7 +26,7 @@ module Wechat
       cipher.decrypt
 
       cipher.padding = 0
-      key_data = Base64.decode64(encoding_aes_key)
+      key_data = Base64.decode64(encoding_aes_key+'=')
       cipher.key = key_data
       cipher.iv = key_data[0..16]
 
