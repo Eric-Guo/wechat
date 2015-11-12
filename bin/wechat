@@ -361,7 +361,7 @@ HELP
     if %w(image voice video file).include?(type)
       puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']} total_count: #{r['total_count']} item_count: #{r['item_count']}"
       r['item'].each do |i|
-        puts "#{i['media_id']} #{i['filename']} #{Time.at(i['update_time'].to_i)}"
+        puts "#{i['media_id']} #{i['name']} #{Time.at(i['update_time'].to_i)}"
       end
     else
       puts r
