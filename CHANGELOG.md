@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.3 (released at 11/14/2015)
+
+* Official testing and support public encrypt mode, also fix one cipher bug, many thanks to hlltc #67
+* hlltc report public account FILE_BASE no longer needs, clean code #67
+* Media command line reflect recent Tecent json schema change. #67
+
 ## v0.6.2 (released at 11/05/2015)
 
 * Tecent report location API changed, so change wechat gems also. #64
