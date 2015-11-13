@@ -136,20 +136,12 @@ module Wechat
       post 'menu/create', JSON.generate(menu), params: { agentid: agentid }
     end
 
-    def media(media_id)
-      get 'media/get', params: { media_id: media_id }, as: :file
-    end
-
     def material_count
       get 'material/get_count', params: { agentid: agentid }
     end
 
     def material_list(type, offset, count)
       post 'material/batchget', JSON.generate(type: type, agentid: agentid, offset: offset, count: count)
-    end
-
-    def media_create(type, file)
-      post 'media/upload', { upload: { media: file } }, params: { type: type }
     end
 
     def material(media_id)

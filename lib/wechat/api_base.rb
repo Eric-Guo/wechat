@@ -14,6 +14,14 @@ module Wechat
       client.get 'showqrcode', ticket: CGI.escape(ticket), base: MP_BASE, as: :file
     end
 
+    def media(media_id)
+      get 'media/get', params: { media_id: media_id }, as: :file
+    end
+
+    def media_create(type, file)
+      post 'media/upload', { upload: { media: file } }, params: { type: type }
+    end
+
     protected
 
     def get(path, headers = {})
