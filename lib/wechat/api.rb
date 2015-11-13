@@ -8,7 +8,6 @@ module Wechat
     attr_reader :jsapi_ticket
 
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'
-    FILE_BASE = 'http://file.api.weixin.qq.com/cgi-bin/'
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/oauth2/'
 
     def initialize(appid, secret, token_file, skip_verify_ssl, jsapi_ticket_file = '/var/tmp/wechat_jsapi_ticket')
@@ -85,15 +84,15 @@ module Wechat
     end
 
     def media(media_id)
-      get 'media/get', params: { media_id: media_id }, base: API_BASE, as: :file
+      get 'media/get', params: { media_id: media_id }, as: :file
     end
 
     def media_create(type, file)
-      post 'media/upload', { upload: { media: file } }, params: { type: type }, base: API_BASE
+      post 'media/upload', { upload: { media: file } }, params: { type: type }
     end
 
     def material(media_id)
-      get 'material/get', params: { media_id: media_id }, base: API_BASE, as: :file
+      get 'material/get', params: { media_id: media_id }, as: :file
     end
 
     def material_count
@@ -105,7 +104,7 @@ module Wechat
     end
 
     def material_add(type, file)
-      post 'material/add_material', { upload: { media: file } }, params: { type: type }, base: API_BASE
+      post 'material/add_material', { upload: { media: file } }, params: { type: type }
     end
 
     def material_delete(media_id)
