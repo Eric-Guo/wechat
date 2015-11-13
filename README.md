@@ -88,6 +88,14 @@ test:
   <<: *default
 ```
 
+公众号可选安全模式（加密模式），通过添加如下配置可开启加密模式。
+
+```
+default: &default
+  encrypt_mode: true
+  encoding_aes_key:  "my_encoding_aes_key"
+```
+
 企业号配置下必须使用加密模式，其中token和encoding_aes_key可以从企业号管理界面的应用中心->某个应用->模式选择，选择回调模式后获得。
 
 ```

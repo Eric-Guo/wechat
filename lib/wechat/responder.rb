@@ -153,10 +153,14 @@ module Wechat
     private
 
     def verify_signature
-      signature = params[:signature] || params[:msg_signature]
+      if self.class.encrypt_mode
+        signature = params[:signature] || params[:msg_signature]
+        msg_encrypt = params[:echostr] || request_encrypt_content
+      else
+        signature = params[:signature]
+      end
 
-      msg_encrypt = params[:echostr] if self.class.corpid.present?
-      msg_encrypt ||= request_encrypt_content if self.class.encrypt_mode
+      msg_encrypt = nil unless self.class.corpid.present?
 
       render text: 'Forbidden', status: 403 if signature != Signature.hexdigest(self.class.token,
                                                                                 params[:timestamp],
