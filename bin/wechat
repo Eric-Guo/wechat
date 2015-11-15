@@ -12,100 +12,61 @@ require 'active_support/core_ext'
 require 'active_support/json'
 require 'fileutils'
 require 'yaml'
+require 'wechat/api_loader'
 
 class App < Thor
-  class Helper
-    def self.with(options)
-      config = loading_config
-
-      appid =  config['appid']
-      secret = config['secret']
-      corpid = config['corpid']
-      corpsecret = config['corpsecret']
-      token_file = options[:toke_file] || config['access_token'] || '/var/tmp/wechat_access_token'
-      agentid = config['agentid']
-      skip_verify_ssl = config['skip_verify_ssl']
-
-      if appid.present? && secret.present? && token_file.present?
-        Wechat::Api.new(appid, secret, token_file, skip_verify_ssl)
-      elsif corpid.present? && corpsecret.present? && token_file.present?
-        Wechat::CorpApi.new(corpid, corpsecret, token_file, agentid, skip_verify_ssl)
-      else
-        puts <<-HELP
-Need create ~/.wechat.yml with wechat appid and secret
-or running at rails root folder so wechat can read config/wechat.yml
-HELP
-        exit 1
-      end
-    end
-
-    def self.loading_config
-      config = {}
-
-      rails_config_file = File.join(Dir.getwd, 'config/wechat.yml')
-      home_config_file = File.join(Dir.home, '.wechat.yml')
-
-      if File.exist?(rails_config_file)
-        config = YAML.load(ERB.new(File.read(rails_config_file)).result)['default']
-        if config.present? && (config['appid'] || config['corpid'])
-          puts 'Using rails project config/wechat.yml default setting...'
-        else
-          config = {}
-        end
-      end
-
-      if config.blank? && File.exist?(home_config_file)
-        config = YAML.load ERB.new(File.read(home_config_file)).result
-      end
-      config
-    end
-  end
-
   package_name 'Wechat'
   option :toke_file, aliases: '-t', desc: 'File to store access token'
 
+  attr_reader :wechat_api_client
+  no_commands do
+    def wechat_api
+      @wechat_api_client ||= Wechat::ApiLoader.with(options)
+    end
+  end
+
   desc 'callbackip', '获取微信服务器IP地址'
   def callbackip
-    puts Helper.with(options).callbackip
+    puts wechat_api.callbackip
   end
 
   desc 'qrcode_download [TICKET, QR_CODE_PIC_PATH]', '通过ticket下载二维码'
   def qrcode_download(ticket, qr_code_pic_path)
-    tmp_file = Helper.with(options).qrcode(ticket)
+    tmp_file = wechat_api.qrcode(ticket)
     FileUtils.mv(tmp_file.path, qr_code_pic_path)
     puts 'File downloaded'
   end
 
   desc 'groups', '所有用户分组列表'
   def groups
-    puts Helper.with(options).groups
+    puts wechat_api.groups
   end
 
   desc 'group_create [GROUP_NAME]', '创建分组'
   def group_create(group_name)
-    puts Helper.with(options).group_create(group_name)
+    puts wechat_api.group_create(group_name)
   end
 
   desc 'group_update [GROUP_ID, NEW_GROUP_NAME]', '修改分组名'
   def group_update(groupid, new_group_name)
-    puts Helper.with(options).group_update(groupid, new_group_name)
+    puts wechat_api.group_update(groupid, new_group_name)
   end
 
   desc 'group_delete [GROUP_ID]', '删除分组'
   def group_delete(groupid)
-    puts Helper.with(options).group_delete(groupid)
+    puts wechat_api.group_delete(groupid)
   end
 
   desc 'department_create [NAME, PARENT_ID]', '创建部门'
   method_option :parentid, aliases: '-p', desc: '父亲部门id。根部门id为1'
   def department_create(name)
     api_opts = options.slice(:parentid)
-    puts Helper.with(options).department_create(name, api_opts[:parentid] || '1')
+    puts wechat_api.department_create(name, api_opts[:parentid] || '1')
   end
 
   desc 'department_delete [DEPARTMENT_ID]', '删除部门'
   def department_delete(departmentid)
-    puts Helper.with(options).department_delete(departmentid)
+    puts wechat_api.department_delete(departmentid)
   end
 
   desc 'department_update [DEPARTMENT_ID, NAME]', '更新部门'
@@ -113,12 +74,12 @@ HELP
   method_option :order, aliases: '-o', desc: '在父部门中的次序值。order值小的排序靠前。', default: nil
   def department_update(departmentid, name)
     api_opts = options.slice(:parentid, :order)
-    puts Helper.with(options).department_update(departmentid, name, api_opts[:parentid], api_opts[:order])
+    puts wechat_api.department_update(departmentid, name, api_opts[:parentid], api_opts[:order])
   end
 
   desc 'department [DEPARTMENT_ID]', '获取部门列表'
   def department(departmentid = 0)
-    r = Helper.with(options).department(departmentid)
+    r = wechat_api.department(departmentid)
     puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
     puts 'Or# pid  id name'
     r['department'].sort_by { |d| d['order'].to_i + d['parentid'].to_i * 1000 } .each do |i|
@@ -132,7 +93,7 @@ HELP
   def user_simplelist(departmentid = 0)
     api_opts = options.slice(:fetch_child, :status)
 
-    r = Helper.with(options).user_simplelist(departmentid, api_opts[:fetch_child], api_opts[:status])
+    r = wechat_api.user_simplelist(departmentid, api_opts[:fetch_child], api_opts[:status])
     puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
     puts " userid Name #{' ' * 20} department_ids"
     r['userlist'].sort_by { |d| d['userid'] } .each do |i|
@@ -146,7 +107,7 @@ HELP
   def user_list(departmentid = 0)
     api_opts = options.slice(:fetch_child, :status)
 
-    r = Helper.with(options).user_list(departmentid, api_opts[:fetch_child], api_opts[:status])
+    r = wechat_api.user_list(departmentid, api_opts[:fetch_child], api_opts[:status])
     puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
     puts " userid Name #{' ' * 15} department_ids position mobile #{' ' * 5}gender email #{' ' * 10}weixinid   status extattr"
     r['userlist'].sort_by { |d| d['userid'] } .each do |i|
@@ -160,52 +121,52 @@ HELP
   method_option :tagid, aliases: '-id', desc: '整型，指定此参数时新增的标签会生成对应的标签id，不指定时则以目前最大的id自增'
   def tag_create(name)
     api_opts = options.slice(:tagid)
-    puts Helper.with(options).tag_create(name, api_opts[:tagid])
+    puts wechat_api.tag_create(name, api_opts[:tagid])
   end
 
   desc 'tag_update [TAG_ID, TAGNAME]', '更新标签名字'
   def tag_update(tagid, tagname)
-    puts Helper.with(options).tag_update(tagid, tagname)
+    puts wechat_api.tag_update(tagid, tagname)
   end
 
   desc 'tag_delete [TAG_ID]', '删除标签'
   def tag_delete(tagid)
-    puts Helper.with(options).tag_delete(tagid)
+    puts wechat_api.tag_delete(tagid)
   end
 
   desc 'tags', '获取标签列表'
   def tags
-    puts Helper.with(options).tags
+    puts wechat_api.tags
   end
 
   desc 'tag [TAG_ID]', '获取标签成员'
   def tag(tagid)
-    puts Helper.with(options).tag(tagid)
+    puts wechat_api.tag(tagid)
   end
 
   desc 'tag_add_user [TAG_ID, USER_IDS]', '增加标签成员'
   def tag_add_user(tagid, userids)
-    puts Helper.with(options).tag_add_user(tagid, userids.split(','))
+    puts wechat_api.tag_add_user(tagid, userids.split(','))
   end
 
   desc 'tag_add_department [TAG_ID, PARTY_IDS]', '增加标签部门'
   def tag_add_department(tagid, partyids)
-    puts Helper.with(options).tag_add_user(tagid, nil, partyids.split(','))
+    puts wechat_api.tag_add_user(tagid, nil, partyids.split(','))
   end
 
   desc 'tag_del_user [TAG_ID, USER_IDS]', '删除标签成员'
   def tag_del_user(tagid, userids)
-    puts Helper.with(options).tag_del_user(tagid, userids.split(','))
+    puts wechat_api.tag_del_user(tagid, userids.split(','))
   end
 
   desc 'tag_del_department [TAG_ID, PARTY_IDS]', '删除标签部门'
   def tag_del_department(tagid, partyids)
-    puts Helper.with(options).tag_del_user(tagid, nil, partyids.split(','))
+    puts wechat_api.tag_del_user(tagid, nil, partyids.split(','))
   end
 
   desc 'agent_list', '获取应用概况列表'
   def agent_list
-    r = Helper.with(options).agent_list
+    r = wechat_api.agent_list
     puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
     puts 'ag# name        square_logo_url round_logo_url'
     r['agentlist'].sort_by { |d| d['agentid'] } .each do |i|
@@ -215,7 +176,7 @@ HELP
 
   desc 'agent [AGENT_ID]', '获取企业号应用详情'
   def agent(agentid)
-    r = Helper.with(options).agent(agentid)
+    r = wechat_api.agent(agentid)
     puts "agentid: #{r['agentid']} errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
     puts "name: #{r['name']}"
     puts "description: #{r['description']}"
@@ -230,98 +191,98 @@ HELP
 
   desc 'users', '关注者列表'
   def users
-    puts Helper.with(options).users
+    puts wechat_api.users
   end
 
   desc 'user [OPEN_ID]', '获取用户基本信息'
   def user(open_id)
-    puts Helper.with(options).user(open_id)
+    puts wechat_api.user(open_id)
   end
 
   desc 'convert_to_openid [USER_ID]', 'userid转换成openid'
   def convert_to_openid(userid)
-    puts Helper.with(options).convert_to_openid(userid)
+    puts wechat_api.convert_to_openid(userid)
   end
 
   desc 'invite_user [USER_ID]', '邀请成员关注'
   def invite_user(userid)
-    puts Helper.with(options).invite_user(userid)
+    puts wechat_api.invite_user(userid)
   end
 
   desc 'user_delete [USER_ID]', '删除成员'
   def user_delete(userid)
-    puts Helper.with(options).user_delete(userid)
+    puts wechat_api.user_delete(userid)
   end
 
   desc 'user_batchdelete [USER_ID_LIST]', '批量删除成员'
   def user_batchdelete(useridlist)
-    puts Helper.with(options).user_batchdelete(useridlist.split(','))
+    puts wechat_api.user_batchdelete(useridlist.split(','))
   end
 
   desc 'batch_job_result [JOB_ID]', '获取异步任务结果'
   def batch_job_result(job_id)
-    puts Helper.with(options).batch_job_result(job_id)
+    puts wechat_api.batch_job_result(job_id)
   end
 
   desc 'batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]', '全量覆盖部门'
   def batch_replaceparty(batch_party_csv_media_id)
-    puts Helper.with(options).batch_replaceparty(batch_party_csv_media_id)
+    puts wechat_api.batch_replaceparty(batch_party_csv_media_id)
   end
 
   desc 'batch_syncuser [SYNC_USER_CSV_MEDIA_ID]', '增量更新成员'
   def batch_syncuser(sync_user_csv_media_id)
-    puts Helper.with(options).batch_syncuser(sync_user_csv_media_id)
+    puts wechat_api.batch_syncuser(sync_user_csv_media_id)
   end
 
   desc 'batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]', '全量覆盖成员'
   def batch_replaceuser(batch_user_csv_media_id)
-    puts Helper.with(options).batch_replaceuser(batch_user_csv_media_id)
+    puts wechat_api.batch_replaceuser(batch_user_csv_media_id)
   end
 
   desc 'user_group [OPEN_ID]', '查询用户所在分组'
   def user_group(openid)
-    puts Helper.with(options).user_group(openid)
+    puts wechat_api.user_group(openid)
   end
 
   desc 'user_change_group [OPEN_ID, TO_GROUP_ID]', '移动用户分组'
   def user_change_group(openid, to_groupid)
-    puts Helper.with(options).user_change_group(openid, to_groupid)
+    puts wechat_api.user_change_group(openid, to_groupid)
   end
 
   desc 'user_update_remark [OPEN_ID, REMARK]', '设置备注名'
   def user_update_remark(openid, remark)
-    puts Helper.with(options).user_update_remark(openid, remark)
+    puts wechat_api.user_update_remark(openid, remark)
   end
 
   desc 'qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]', '请求临时二维码'
   def qrcode_create_scene(scene_id, expire_seconds = 604800)
-    puts Helper.with(options).qrcode_create_scene(scene_id, expire_seconds)
+    puts wechat_api.qrcode_create_scene(scene_id, expire_seconds)
   end
 
   desc 'qrcode_create_limit_scene [SCENE_ID_OR_STR]', '请求永久二维码'
   def qrcode_create_limit_scene(scene_id_or_str)
-    puts Helper.with(options).qrcode_create_limit_scene(scene_id_or_str)
+    puts wechat_api.qrcode_create_limit_scene(scene_id_or_str)
   end
 
   desc 'menu', '当前菜单'
   def menu
-    puts Helper.with(options).menu
+    puts wechat_api.menu
   end
 
   desc 'menu_delete', '删除菜单'
   def menu_delete
-    puts 'Menu deleted' if Helper.with(options).menu_delete
+    puts 'Menu deleted' if wechat_api.menu_delete
   end
 
   desc 'menu_create [MENU_YAML_PATH]', '创建菜单'
   def menu_create(menu_yaml_path)
     menu = YAML.load(File.read(menu_yaml_path))
-    puts 'Menu created' if Helper.with(options).menu_create(menu)
+    puts 'Menu created' if wechat_api.menu_create(menu)
   end
 
   desc 'media [MEDIA_ID, PATH]', '媒体下载'
   def media(media_id, path)
-    tmp_file = Helper.with(options).media(media_id)
+    tmp_file = wechat_api.media(media_id)
     FileUtils.mv(tmp_file.path, path)
     puts 'File downloaded'
   end
@@ -329,12 +290,12 @@ HELP
   desc 'media_create [MEDIA_TYPE, PATH]', '媒体上传'
   def media_create(type, path)
     file = File.new(path)
-    puts Helper.with(options).media_create(type, file)
+    puts wechat_api.media_create(type, file)
   end
 
   desc 'material [MEDIA_ID, PATH]', '永久媒体下载'
   def material(media_id, path)
-    tmp_file = Helper.with(options).material(media_id)
+    tmp_file = wechat_api.material(media_id)
     FileUtils.mv(tmp_file.path, path)
     puts 'File downloaded'
   end
@@ -342,26 +303,25 @@ HELP
   desc 'material_add [MEDIA_TYPE, PATH]', '永久媒体上传'
   def material_add(type, path)
     file = File.new(path)
-    puts Helper.with(options).material_add(type, file)
+    puts wechat_api.material_add(type, file)
   end
 
   desc 'material_delete [MEDIA_ID]', '删除永久素材'
   def material_delete(media_id)
-    puts Helper.with(options).material_delete(media_id)
+    puts wechat_api.material_delete(media_id)
   end
 
   desc 'material_count', '获取永久素材总数'
   def material_count
-    puts Helper.with(options).material_count
+    puts wechat_api.material_count
   end
 
   desc 'material_list [TYPE, OFFSET, COUNT]', '获取永久素材列表'
   def material_list(type, offset, count)
-    client = Helper.with(options)
-    r = client.material_list(type, offset, count)
+    r = wechat_api.material_list(type, offset, count)
     if %w(image voice video file).include?(type)
       puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']} total_count: #{r['total_count']} item_count: #{r['item_count']}"
-      if client.is_a?(Wechat::CorpApi)
+      if wechat_api.is_a?(Wechat::CorpApi)
         r['itemlist'].each { |i| puts "#{i['media_id']} #{i['filename']} #{Time.at(i['update_time'].to_i)}" }
       else
         r['item'].each { |i| puts "#{i['media_id']} #{i['name']} #{Time.at(i['update_time'].to_i)}" }
@@ -373,18 +333,18 @@ HELP
 
   desc 'message_send [OPENID, TEXT_MESSAGE]', '发送文字消息(仅企业号)'
   def message_send(openid, text_message)
-    puts Helper.with(options).message_send openid, text_message
+    puts wechat_api.message_send openid, text_message
   end
 
   desc 'custom_text [OPENID, TEXT_MESSAGE]', '发送文字客服消息'
   def custom_text(openid, text_message)
-    puts Helper.with(options).custom_message_send Wechat::Message.to(openid).text(text_message)
+    puts wechat_api.custom_message_send Wechat::Message.to(openid).text(text_message)
   end
 
   desc 'custom_image [OPENID, IMAGE_PATH]', '发送图片客服消息'
   def custom_image(openid, image_path)
     file = File.new(image_path)
-    api = Helper.with(options)
+    api = wechat_api
 
     media_id = api.media_create('image', file)['media_id']
     puts api.custom_message_send Wechat::Message.to(openid).image(media_id)
@@ -393,7 +353,7 @@ HELP
   desc 'custom_voice [OPENID, VOICE_PATH]', '发送语音客服消息'
   def custom_voice(openid, voice_path)
     file = File.new(voice_path)
-    api = Helper.with(options)
+    api = wechat_api
 
     media_id = api.media_create('voice', file)['media_id']
     puts api.custom_message_send Wechat::Message.to(openid).voice(media_id)
@@ -404,7 +364,7 @@ HELP
   method_option :description, aliases: '-d', desc: '视频描述'
   def custom_video(openid, video_path)
     file = File.new(video_path)
-    api = Helper.with(options)
+    api = wechat_api
 
     api_opts = options.slice(:title, :description)
     media_id = api.media_create('video', file)['media_id']
@@ -417,7 +377,7 @@ HELP
   method_option :HQ_music_url, aliases: '-u', desc: '高质量音乐URL链接'
   def custom_music(openid, thumbnail_path, music_url)
     file = File.new(thumbnail_path)
-    api = Helper.with(options)
+    api = wechat_api
 
     api_opts = options.slice(:title, :description, :HQ_music_url)
     thumb_media_id = api.media_create('thumb', file)['thumb_media_id']
@@ -427,13 +387,13 @@ HELP
   desc 'custom_news [OPENID, NEWS_YAML_PATH]', '发送图文客服消息'
   def custom_news(openid, news_yaml_path)
     articles = YAML.load(File.read(news_yaml_path))
-    puts Helper.with(options).custom_message_send Wechat::Message.to(openid).news(articles['articles'])
+    puts wechat_api.custom_message_send Wechat::Message.to(openid).news(articles['articles'])
   end
 
   desc 'template_message [OPENID, TEMPLATE_YAML_PATH]', '模板消息接口'
   def template_message(openid, template_yaml_path)
     template = YAML.load(File.read(template_yaml_path))
-    puts Helper.with(options).template_message_send Wechat::Message.to(openid).template(template['template'])
+    puts wechat_api.template_message_send Wechat::Message.to(openid).template(template['template'])
   end
 end
 
