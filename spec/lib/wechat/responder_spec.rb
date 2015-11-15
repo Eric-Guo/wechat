@@ -230,8 +230,8 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("event: #{event}")
       end
 
-      on :event, with: 'unsubscribe' do |message, event|
-        message.reply.text("event: #{event}")
+      on :event, with: 'unsubscribe' do |message|
+        message.reply.success
       end
 
       on :scan, with: 'qrscene_xxxxxx' do |request, ticket|
@@ -296,7 +296,8 @@ RSpec.describe WechatController, type: :controller do
     specify 'response unsubscribe event with matched event' do
       event_message = message_base.merge(MsgType: 'event', Event: 'unsubscribe')
       post :create, signature_params.merge(xml: event_message)
-      expect(xml_to_hash(response)[:Content]).to eq('event: unsubscribe')
+      expect(response.code).to eq('200')
+      expect(response.body).to eq('success')
     end
 
     specify 'response subscribe scan event with matched event' do

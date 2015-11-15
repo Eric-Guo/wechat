@@ -159,7 +159,7 @@ wechat gems 内部不会检查权限。但因公众号类型不同，和微信�
 
 根据企业号和公众号配置不同，wechat提供了的命令行命令。
 
-#### 公众号
+#### 公众号命令行
 
 ```
 $ wechat
@@ -196,7 +196,7 @@ Wechat commands:
   wechat users                                             # 关注者列表
 ```
 
-#### 企业号
+#### 企业号命令行
 ```
 $ wechat
 Wechat commands:
@@ -482,7 +482,7 @@ class WechatsController < ApplicationController
 
   # 当用户取消关注订阅
   on :event, with: 'unsubscribe' do |request|
-    request.reply.text "#{request[:FromUserName]} can not receive this message"
+    request.reply.success # user can not receive this message
   end
 
   # 成员进入应用的事件推送

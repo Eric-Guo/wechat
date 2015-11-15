@@ -81,7 +81,7 @@ class WechatsController < ApplicationController
   end
 
   on :event, with: 'unsubscribe' do |request|
-    request.reply.text "#{request[:FromUserName]} can not receive this message"
+    request.reply.success # user can not receive this message
   end
 
   # When user enter the app / agent app

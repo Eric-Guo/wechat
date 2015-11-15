@@ -200,7 +200,11 @@ module Wechat
     end
 
     def process_response(response)
-      msg = response.to_xml
+      if response[:MsgType] == 'success'
+        msg = 'success'
+      else
+        msg = response.to_xml
+      end
 
       if self.class.encrypt_mode
         encrypt = Base64.strict_encode64(encrypt(pack(msg, @app_id), self.class.encoding_aes_key))
