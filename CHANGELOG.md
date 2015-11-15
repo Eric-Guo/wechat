@@ -1,13 +1,15 @@
 # Changelog
 
-## v0.6.4 (released at 11/20/2015)
+## v0.6.4 (released at 11/16/2015)
 
 * Command mode now display different command set based on enterprise/public account setting
 * Move config logic in command/wechat to ApiLoader class
+* Unsubscribe can only reply plain text 'success' #68
+* Fix 404 qrcode download problem, by @huangxiangdan #69
 
 ## v0.6.3 (released at 11/14/2015)
 
-* Official testing and support public encrypt mode, also fix one cipher bug, many thanks to hlltc #67
+* Official testing and support public encrypt mode, also fix one cipher bug, many thanks to @hlltc #67
 * hlltc report public account FILE_BASE no longer needs, clean code #67
 * Media command line reflect recent Tecent json schema change. #67
 
