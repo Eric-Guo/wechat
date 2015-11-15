@@ -11,7 +11,7 @@ module Wechat
     end
 
     def qrcode(ticket)
-      client.get 'showqrcode', ticket: CGI.escape(ticket), base: MP_BASE, as: :file
+      client.get 'showqrcode', params: { ticket: ticket }, base: MP_BASE, as: :file
     end
 
     def media(media_id)
