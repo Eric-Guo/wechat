@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.6.4 (released at 11/20/2015)
+
+* Command mode now display different command set based on enterprise/public account setting
+* Move config logic in command/wechat to ApiLoader class
+
 ## v0.6.3 (released at 11/14/2015)
 
 * Official testing and support public encrypt mode, also fix one cipher bug, many thanks to hlltc #67
