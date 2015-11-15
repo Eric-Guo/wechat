@@ -32,7 +32,7 @@ RSpec.describe Wechat::Api do
       ticket_result = 'ticket_result'
 
       expect(subject.client).to receive(:get)
-        .with('showqrcode', ticket: 'ticket',
+        .with('showqrcode', params: { ticket: 'ticket' },
                             base: Wechat::ApiBase::MP_BASE,
                             as: :file).and_return(ticket_result)
       expect(subject.qrcode('ticket')).to eq(ticket_result)
