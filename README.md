@@ -157,6 +157,46 @@ wechat gems 内部不会检查权限。但因公众号类型不同，和微信�
 
 ## 使用命令行
 
+根据企业号和公众号配置不同，wechat提供了的命令行命令。
+
+#### 公众号
+
+```
+$ wechat
+Wechat commands:
+  wechat callbackip                                        # 获取微信服务器IP地址
+  wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
+  wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
+  wechat custom_news [OPENID, NEWS_YAML_PATH]              # 发送图文客服消息
+  wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
+  wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
+  wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息
+  wechat group_create [GROUP_NAME]                         # 创建分组
+  wechat group_delete [GROUP_ID]                           # 删除分组
+  wechat group_update [GROUP_ID, NEW_GROUP_NAME]           # 修改分组名
+  wechat groups                                            # 查询所有分组
+  wechat material [MEDIA_ID, PATH]                         # 永久媒体下载
+  wechat material_add [MEDIA_TYPE, PATH]                   # 永久媒体上传
+  wechat material_count                                    # 获取永久素材总数
+  wechat material_delete [MEDIA_ID]                        # 删除永久素材
+  wechat material_list [TYPE, OFFSET, COUNT]               # 获取永久素材列表
+  wechat media [MEDIA_ID, PATH]                            # 媒体下载
+  wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
+  wechat menu                                              # 当前菜单
+  wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
+  wechat menu_delete                                       # 删除菜单
+  wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
+  wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
+  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
+  wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
+  wechat user [OPEN_ID]                                    # 获取用户基本信息
+  wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
+  wechat user_group [OPEN_ID]                              # 查询用户所在分组
+  wechat user_update_remark [OPEN_ID, REMARK]              # 设置备注名
+  wechat users                                             # 关注者列表
+```
+
+#### 企业号
 ```
 $ wechat
 Wechat commands:
@@ -177,11 +217,7 @@ Wechat commands:
   wechat department [DEPARTMENT_ID]                        # 获取部门列表
   wechat department_create [NAME, PARENT_ID]               # 创建部门
   wechat department_delete [DEPARTMENT_ID]                 # 删除部门
-  wechat department_update [DEPARTMENT_ID, NAME]           # 更新部门  
-  wechat group_create [GROUP_NAME]                         # 创建分组
-  wechat group_delete [GROUP_ID]                           # 删除分组
-  wechat group_update [GROUP_ID, NEW_GROUP_NAME]           # 修改分组名
-  wechat groups                                            # 所有用户分组列表
+  wechat department_update [DEPARTMENT_ID, NAME]           # 更新部门
   wechat invite_user [USER_ID]                             # 邀请成员关注
   wechat material [MEDIA_ID, PATH]                         # 永久媒体下载
   wechat material_add [MEDIA_TYPE, PATH]                   # 永久媒体上传
@@ -193,7 +229,7 @@ Wechat commands:
   wechat menu                                              # 当前菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
   wechat menu_delete                                       # 删除菜单
-  wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息(仅企业号)
+  wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
@@ -201,21 +237,18 @@ Wechat commands:
   wechat tag_add_department [TAG_ID, PARTY_IDS]            # 增加标签部门
   wechat tag_add_user [TAG_ID, USER_IDS]                   # 增加标签成员
   wechat tag_create [TAGNAME, TAG_ID]                      # 创建标签
-  wechat tag_del_user [TAG_ID, USER_IDS]                   # 删除标签成员  
   wechat tag_del_department [TAG_ID, PARTY_IDS]            # 删除标签部门
+  wechat tag_del_user [TAG_ID, USER_IDS]                   # 删除标签成员
   wechat tag_delete [TAG_ID]                               # 删除标签
   wechat tag_update [TAG_ID, TAGNAME]                      # 更新标签名字
   wechat tags                                              # 获取标签列表
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 获取用户基本信息
-  wechat user_batchdelete [USER_ID_LIST]                   # 批量删除成员  
-  wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
+  wechat user_batchdelete [USER_ID_LIST]                   # 批量删除成员
   wechat user_delete [USER_ID]                             # 删除成员
-  wechat user_group [OPEN_ID]                              # 查询用户所在分组
   wechat user_list [DEPARTMENT_ID]                         # 获取部门成员详情
   wechat user_simplelist [DEPARTMENT_ID]                   # 获取部门成员
   wechat user_update_remark [OPEN_ID, REMARK]              # 设置备注名
-  wechat users                                             # 关注者列表
 ```
 
 ### 使用场景
