@@ -1,5 +1,3 @@
-require 'cgi'
-
 module Wechat
   class ApiBase
     attr_reader :access_token, :client
