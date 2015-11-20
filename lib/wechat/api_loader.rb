@@ -19,34 +19,34 @@ HELP
     end
 
     def self.loading_config
-      if defined?(::Rails)
-        config_file = Rails.root.join('config/wechat.yml')
-        config = YAML.load(ERB.new(File.read(config_file)).result)[Rails.env] if File.exist?(config_file)
-      else
-        rails_config_file = File.join(Dir.getwd, 'config/wechat.yml')
-        home_config_file = File.join(Dir.home, '.wechat.yml')
+      config ||= config_from_file || config_from_environment
 
-        if File.exist?(rails_config_file)
-          config = YAML.load(ERB.new(File.read(rails_config_file)).result)['default']
-          if config.present? && (config['appid'] || config['corpid'])
-            puts 'Using rails project config/wechat.yml default setting...'
-          else
-            config = {}
-          end
-        end
-
-        if config.blank? && File.exist?(home_config_file)
-          config = YAML.load ERB.new(File.read(home_config_file)).result
-        end
-      end
-
-      config ||= config_from_environment
       if defined?(::Rails)
         config[:access_token] ||= Rails.root.join('tmp/access_token').to_s
         config[:jsapi_ticket] ||= Rails.root.join('tmp/jsapi_ticket').to_s
       end
       config.symbolize_keys!
       OpenStruct.new(config)
+    end
+
+    def self.config_from_file
+      if defined?(::Rails)
+        config_file = Rails.root.join('config/wechat.yml')
+        return YAML.load(ERB.new(File.read(config_file)).result)[Rails.env] if File.exist?(config_file)
+      else
+        rails_config_file = File.join(Dir.getwd, 'config/wechat.yml')
+        home_config_file = File.join(Dir.home, '.wechat.yml')
+        if File.exist?(rails_config_file)
+          config = YAML.load(ERB.new(File.read(rails_config_file)).result)['default']
+          if config.present? && (config['appid'] || config['corpid'])
+            puts 'Using rails project config/wechat.yml default setting...'
+            return config
+          end
+        end
+        if File.exist?(home_config_file)
+          return YAML.load ERB.new(File.read(home_config_file)).result
+        end
+      end
     end
 
     def self.config_from_environment
