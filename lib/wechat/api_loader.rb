@@ -19,14 +19,15 @@ HELP
     end
 
     def self.loading_config
-      @config ||= config_from_file || config_from_environment
+      return @config unless @config.nil?
+      config ||= config_from_file || config_from_environment
 
       if defined?(::Rails)
-        @config[:access_token] ||= Rails.root.join('tmp/access_token').to_s
-        @config[:jsapi_ticket] ||= Rails.root.join('tmp/jsapi_ticket').to_s
+        config[:access_token] ||= Rails.root.join('tmp/access_token').to_s
+        config[:jsapi_ticket] ||= Rails.root.join('tmp/jsapi_ticket').to_s
       end
-      @config.symbolize_keys!
-      OpenStruct.new(@config)
+      config.symbolize_keys!
+      @config = OpenStruct.new(config)
     end
 
     def self.config_from_file
