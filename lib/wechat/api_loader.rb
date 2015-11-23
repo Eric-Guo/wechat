@@ -1,7 +1,16 @@
 module Wechat
   module ApiLoader
+    def self.api
+      c = ApiLoader.config
+      if c.corpid.present?
+        @api ||= CorpApi.new(c.corpid, c.corpsecret, c.access_token, c.agentid, c.skip_verify_ssl)
+      else
+        @api ||= Api.new(c.appid, c.secret, c.access_token, c.skip_verify_ssl, c.jsapi_ticket)
+      end
+    end
+
     def self.with(options)
-      c = loading_config
+      c = config
 
       token_file = options[:toke_file] || c.access_token || '/var/tmp/wechat_access_token'
 
@@ -18,8 +27,14 @@ HELP
       end
     end
 
-    def self.loading_config
+    def self.config
       return @config unless @config.nil?
+      @config ||= loading_config!
+    end
+
+    private
+
+    def self.loading_config!
       config ||= config_from_file || config_from_environment
 
       if defined?(::Rails)

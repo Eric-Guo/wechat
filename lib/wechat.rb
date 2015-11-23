@@ -17,17 +17,11 @@ module Wechat
     end
   end
 
-  attr_reader :config
-
   def self.config
-    @config ||= ApiLoader.loading_config
+    ApiLoader.config
   end
 
   def self.api
-    if config.corpid.present?
-      @api ||= CorpApi.new(config.corpid, config.corpsecret, config.access_token, config.agentid, config.skip_verify_ssl)
-    else
-      @api ||= Api.new(config.appid, config.secret, config.access_token, config.skip_verify_ssl, config.jsapi_ticket)
-    end
+    ApiLoader.api
   end
 end
