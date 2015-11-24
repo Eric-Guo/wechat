@@ -27,6 +27,8 @@ HELP
       end
     end
 
+    @config = nil
+
     def self.config
       return @config unless @config.nil?
       @config ||= loading_config!

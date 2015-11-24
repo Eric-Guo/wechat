@@ -45,7 +45,8 @@ module Wechat
         # 42001: access_token超时
         # 40014: 不合法的access_token
         # 40001, invalid credential, access_token is invalid or not latest hint
-        when 42001, 40014, 40001
+        # 48001, api unauthorized hint, for qrcode creation # 71
+        when 42001, 40014, 40001, 48001
           fail AccessTokenExpiredError
         else
           fail ResponseError.new(data['errcode'], data['errmsg'])
