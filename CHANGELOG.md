@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.6.5 (released at 11/24/2015)
+
+* Handle 48001 error if token is expire/not valid, close #71
+* ApiLoader will do config reading and initialize the api instead of spreading the logic.
+
 ## v0.6.4 (released at 11/16/2015)
 
 * Command mode now display different command set based on enterprise/public account setting
