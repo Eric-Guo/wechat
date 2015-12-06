@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.0 (unreleased)
+
+* Default generated WechatsController < ActionController::Base, as many Rails application may having #authenticate_user or #set_current_user in ApplicationController, so easily affect the first time using experience.
+
 ## v0.6.5 (released at 11/24/2015)
 
 * Handle 48001 error if token is expire/not valid, close #71

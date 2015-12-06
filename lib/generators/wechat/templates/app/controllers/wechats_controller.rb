@@ -1,4 +1,4 @@
-class WechatsController < ApplicationController
+class WechatsController < ActionController::Base
   wechat_responder
 
   # default text responder when no other match

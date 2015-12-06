@@ -136,7 +136,7 @@ Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://
 在个别情况下，单个Rails应用可能需要处理来自多个账号的消息，此时可以配置多个responder controller。
 
 ```ruby
-class WechatFirstController < ApplicationController
+class WechatFirstController < ActionController::Base
    wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1")
    
    on :text, with:"help", respond: "help content"
@@ -396,7 +396,7 @@ $ wechat template_message oCfEht9oM*********** template.yml
 然后创建Controller class, 例如
 
 ```ruby
-class WechatsController < ApplicationController
+class WechatsController < ActionController::Base
   wechat_responder
   
   # 默认文字信息responder
@@ -540,7 +540,7 @@ end
 ### 多客服消息转发
 
 ```ruby
-class WechatsController < ApplicationController
+class WechatsController < ActionController::Base
   # 当无任何responder处理用户信息时，转发至客服处理。
   on :fallback do |message|
 	message.reply.transfer_customer_service

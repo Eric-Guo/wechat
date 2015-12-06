@@ -4,7 +4,7 @@ include Wechat::Cipher
 
 ENCODING_AES_KEY = Base64.encode64 SecureRandom.hex(16)
 
-class WechatCorpController < ApplicationController
+class WechatCorpController < ActionController::Base
   wechat_responder corpid: 'corpid', corpsecret: 'corpsecret', token: 'token', access_token: 'controller_access_token',
                    agentid: 1, encoding_aes_key: ENCODING_AES_KEY
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class WechatController < ApplicationController
+class WechatController < ActionController::Base
   wechat_responder
 end
 
