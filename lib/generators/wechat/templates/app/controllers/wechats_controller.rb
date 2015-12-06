@@ -1,4 +1,8 @@
+<% if defined? ActionController::API -%>
+class WechatsController < ApplicationController
+<% else -%>
 class WechatsController < ActionController::Base
+<% end -%>
   wechat_responder
 
   # default text responder when no other match
