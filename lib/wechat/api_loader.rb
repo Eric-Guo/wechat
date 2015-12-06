@@ -10,12 +10,13 @@ module Wechat
     end
 
     def self.with(options)
-      c = config
+      c = ApiLoader.config
 
-      token_file = options[:toke_file] || c.access_token || '/var/tmp/wechat_access_token'
+      token_file = options[:token_file] || c.access_token || '/var/tmp/wechat_access_token'
+      js_token_file = options[:js_token_file] || c.jsapi_ticket || '/var/tmp/wechat_jsapi_ticket'
 
       if c.appid && c.secret && token_file.present?
-        Wechat::Api.new(c.appid, c.secret, token_file, c.skip_verify_ssl)
+        Wechat::Api.new(c.appid, c.secret, token_file, c.skip_verify_ssl, js_token_file)
       elsif c.corpid && c.corpsecret && token_file.present?
         Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.skip_verify_ssl)
       else
