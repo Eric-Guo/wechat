@@ -1,14 +1,5 @@
 module Wechat
   module ApiLoader
-    def self.api
-      c = ApiLoader.config
-      if c.corpid.present?
-        @api ||= CorpApi.new(c.corpid, c.corpsecret, c.access_token, c.agentid, c.skip_verify_ssl)
-      else
-        @api ||= Api.new(c.appid, c.secret, c.access_token, c.skip_verify_ssl, c.jsapi_ticket)
-      end
-    end
-
     def self.with(options)
       c = ApiLoader.config
 

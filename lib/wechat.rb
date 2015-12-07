@@ -22,6 +22,6 @@ module Wechat
   end
 
   def self.api
-    ApiLoader.api
+    @wechat_api ||= ApiLoader.with({})
   end
 end
