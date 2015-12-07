@@ -16,7 +16,7 @@ require 'wechat/api_loader'
 
 class App < Thor
   package_name 'Wechat'
-  option :toke_file, aliases: '-t', desc: 'File to store access token'
+  option :token_file, aliases: '-t', desc: 'File to store access token'
 
   attr_reader :wechat_api_client
   no_commands do
