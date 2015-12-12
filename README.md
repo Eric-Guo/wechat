@@ -10,7 +10,11 @@ WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平
 - [微信JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config接口注入权限验证
 - OAuth 2.0认证机制
 
-命令行工具`wechat`可以调用各种无需web环境的API。同时也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理机制。如果你的App还需要集成微信OAuth2.0, 你可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 以便和devise集成，提供完整的用户认证。
+命令行工具`wechat`可以调用各种无需web环境的API。同时也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理机制。
+
+如果你的App还需要集成微信OAuth2.0, 你可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 以便和devise集成，提供完整的用户认证。
+
+如果你对如何制作微信网页UI没有灵感，可以参考官方的[weui](https://github.com/weui/weui)，针对Rails的Gem是[weui-rails](https://github.com/Eric-Guo/weui-rails)。
 
 
 ## 安装
