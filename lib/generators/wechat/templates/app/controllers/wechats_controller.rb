@@ -63,6 +63,11 @@ class WechatsController < ActionController::Base
     request.reply.text "User: #{request[:FromUserName]} click #{key}"
   end
 
+  # When user view URL in the menu button
+  on :view, with: 'http://wechat.somewhere.com/view_url' do |request, view|
+    request.reply.text "#{request[:FromUserName]} view #{view}"
+  end
+
   # When user sent the imsage
   on :image do |request|
     request.reply.image(request[:MediaId]) # Echo the sent image to user

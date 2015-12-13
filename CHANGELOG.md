@@ -3,6 +3,7 @@
 ## v0.7.0 (unreleased)
 
 * Default generated WechatsController < ActionController::Base, as many Rails application may having #authenticate_user or #set_current_user in ApplicationController, so easily affect the first time using experience.
+* New syntax `on :view, with: 'VIEW_URL'` support.
 
 ## v0.6.5 (released at 11/24/2015)
 

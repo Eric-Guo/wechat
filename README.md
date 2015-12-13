@@ -461,6 +461,11 @@ class WechatsController < ActionController::Base
     request.reply.text "User: #{request[:FromUserName]} click #{key}"
   end
 
+  # 当用户点击菜单时
+  on :view, with: 'http://wechat.somewhere.com/view_url' do |request, view|
+    request.reply.text "#{request[:FromUserName]} view #{view}"
+  end
+
   # 处理图片信息
   on :image do |request|
     request.reply.image(request[:MediaId]) #直接将图片返回给用户
@@ -535,7 +540,8 @@ end
 - :video 响应视频消息
 - :link 响应链接消息
 - :event 响应事件消息, 可以用`:with`参数来匹配事件类型
-- :click 虚拟响应事件消息, 微信仍然传入:event，但gem内部会单独处理
+- :click 虚拟响应事件消息, 微信传入:event，但gem内部会单独处理
+- :view 虚拟响应事件消息, 微信传入:event，但gem内部会单独处理
 - :scan  虚拟响应事件消息
 - :batch_job  虚拟响应事件消息
 - :location 虚拟响应上报地理位置事件消息

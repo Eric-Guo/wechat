@@ -15,21 +15,23 @@ module Wechat
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :skip_verify_ssl, :encoding_aes_key
 
       def on(message_type, with: nil, respond: nil, &block)
-        fail 'Unknow message type' unless [:text, :image, :voice, :video, :link, :event, :click, :scan, :batch_job, :location, :fallback].include?(message_type)
+        fail 'Unknow message type' unless [:text, :image, :voice, :video, :link, :event, :click, :view, :scan, :batch_job, :location, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config.merge!(proc: block) if block_given?
 
         if with.present?
-          fail 'Only text, event, click, scan and batch_job can having :with parameters' unless [:text, :event, :click, :scan, :batch_job].include?(message_type)
+          fail 'Only text, event, click, view, scan and batch_job can having :with parameters' unless [:text, :event, :click, :view, :scan, :batch_job].include?(message_type)
           config.merge!(with: with)
           self.known_scan_key_lists = with if message_type == :scan
         else
-          fail 'Message type click, scan and batch_job must specify :with parameters' if [:click, :scan, :batch_job].include?(message_type)
+          fail 'Message type click, view, scan and batch_job must specify :with parameters' if [:click, :view, :scan, :batch_job].include?(message_type)
         end
 
         case message_type
         when :click
           user_defined_click_responders(with) << config
+        when :view
+          user_defined_view_responders(with) << config
         when :batch_job
           user_defined_batch_job_responders(with) << config
         when :location
@@ -43,6 +45,11 @@ module Wechat
       def user_defined_click_responders(with)
         @click_responders ||= {}
         @click_responders[with] ||= []
+      end
+
+      def user_defined_view_responders(with)
+        @view_responders ||= {}
+        @view_responders[with] ||= []
       end
 
       def user_defined_batch_job_responders(with)
@@ -69,6 +76,8 @@ module Wechat
         when :event
           if 'click' == message[:Event] && !user_defined_click_responders(message[:EventKey]).empty?
             yield(* user_defined_click_responders(message[:EventKey]), message[:EventKey])
+          elsif 'view' == message[:Event] && !user_defined_view_responders(message[:EventKey]).empty?
+            yield(* user_defined_view_responders(message[:EventKey]), message[:EventKey])
           elsif 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
           elsif known_scan_key_lists.include?(message[:EventKey])

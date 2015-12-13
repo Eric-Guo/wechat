@@ -89,6 +89,10 @@ RSpec.describe WechatCorpController, type: :controller do
         request.reply.text "#{request[:FromUserName]} click #{key}"
       end
 
+      on :view, with: 'http://xxx.proxy.qqbrowser.cc/wechat/view_url' do |request, view|
+        request.reply.text "#{request[:FromUserName]} view #{view}"
+      end
+
       on :scan, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
         request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
       end
@@ -206,6 +210,21 @@ RSpec.describe WechatCorpController, type: :controller do
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
         expect(message['Content']).to eq 'fromUser click BOOK_LUNCH'
+      end
+
+      it 'on view http://xxx.proxy.qqbrowser.cc/wechat/view_url' do
+        post :create, signature_params(MsgType: 'event', Event: 'view', EventKey: 'http://xxx.proxy.qqbrowser.cc/wechat/view_url')
+        expect(response.code).to eq '200'
+
+        data = Hash.from_xml(response.body)['xml']
+
+        xml_message, app_id = unpack(decrypt(Base64.decode64(data['Encrypt']), ENCODING_AES_KEY))
+        expect(app_id).to eq 'appid'
+        expect(xml_message.empty?).to eq false
+
+        message = Hash.from_xml(xml_message)['xml']
+        expect(message['MsgType']).to eq 'text'
+        expect(message['Content']).to eq 'fromUser view http://xxx.proxy.qqbrowser.cc/wechat/view_url'
       end
 
       it 'on BINDING_QR_CODE' do
