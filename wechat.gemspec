@@ -26,6 +26,6 @@ instead of previous `on :event, with: 'replace_user' `.
   s.add_runtime_dependency 'nokogiri', '>=1.6.0'
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'rest-client'
-  s.add_development_dependency 'rspec-rails', '~> 3.3'
+  s.add_development_dependency 'rspec-rails', '~> 3.4'
   s.add_development_dependency 'rails', '>= 3.2'
 end
