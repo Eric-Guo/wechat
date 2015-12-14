@@ -189,6 +189,15 @@ class App < Thor
       puts wechat_api.batch_replaceuser(batch_user_csv_media_id)
     end
 
+    desc 'upload_replaceuser [BATCH_USER_CSV_PATH]', '上传文件方式全量覆盖成员'
+    def upload_replaceuser(batch_user_csv_path)
+      file = File.new(batch_user_csv_path)
+      media_id = wechat_api.media_create('file', file)['media_id']
+      job_id = wechat_api.batch_replaceuser(media_id)['jobid']
+      puts "running job_id: #{job_id}"
+      puts wechat_api.batch_job_result(job_id)
+    end
+
     desc 'convert_to_openid [USER_ID]', 'userid转换成openid'
     def convert_to_openid(userid)
       puts wechat_api.convert_to_openid(userid)
