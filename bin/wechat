@@ -170,6 +170,15 @@ class App < Thor
       puts wechat_api.batch_replaceparty(batch_party_csv_media_id)
     end
 
+    desc 'upload_replaceparty [BATCH_PARTY_CSV_PATH]', '上传文件方式全量覆盖部门'
+    def upload_replaceparty(batch_party_csv_path)
+      file = File.new(batch_party_csv_path)
+      media_id = wechat_api.media_create('file', file)['media_id']
+      job_id = wechat_api.batch_replaceparty(media_id)['jobid']
+      puts "running job_id: #{job_id}"
+      puts wechat_api.batch_job_result(job_id)
+    end
+
     desc 'batch_syncuser [SYNC_USER_CSV_MEDIA_ID]', '增量更新成员'
     def batch_syncuser(sync_user_csv_media_id)
       puts wechat_api.batch_syncuser(sync_user_csv_media_id)

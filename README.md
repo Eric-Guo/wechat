@@ -245,6 +245,7 @@ Wechat commands:
   wechat tag_update [TAG_ID, TAGNAME]                      # 更新标签名字
   wechat tags                                              # 获取标签列表
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
+  wechat upload_replaceparty [BATCH_PARTY_CSV_PATH]        # 上传文件方式全量覆盖部门  
   wechat user [OPEN_ID]                                    # 获取用户基本信息
   wechat user_batchdelete [USER_ID_LIST]                   # 批量删除成员
   wechat user_delete [USER_ID]                             # 删除成员
