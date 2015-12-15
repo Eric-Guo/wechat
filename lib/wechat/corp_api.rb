@@ -1,6 +1,7 @@
 require 'wechat/api_base'
 require 'wechat/client'
 require 'wechat/access_token'
+require 'wechat/corp_jsapi_ticket'
 
 module Wechat
   class CorpAccessToken < AccessToken
@@ -21,7 +22,7 @@ module Wechat
       @client = Client.new(API_BASE, skip_verify_ssl)
       @access_token = CorpAccessToken.new(@client, appid, secret, token_file)
       @agentid = agentid
-      @jsapi_ticket = JsapiTicket.new(@client, @access_token, jsapi_ticket_file)
+      @jsapi_ticket = CorpJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
     end
 
     def agent_list
