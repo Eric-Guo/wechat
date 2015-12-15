@@ -9,7 +9,7 @@ module Wechat
       if c.appid && c.secret && token_file.present?
         Wechat::Api.new(c.appid, c.secret, token_file, c.skip_verify_ssl, js_token_file)
       elsif c.corpid && c.corpsecret && token_file.present?
-        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.skip_verify_ssl)
+        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.skip_verify_ssl, js_token_file)
       else
         puts <<-HELP
 Need create ~/.wechat.yml with wechat appid and secret
@@ -69,7 +69,8 @@ HELP
         access_token: ENV['WECHAT_ACCESS_TOKEN'],
         encrypt_mode: ENV['WECHAT_ENCRYPT_MODE'],
         skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
-        encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'] }
+        encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
+        jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'] }
     end
   end
 end

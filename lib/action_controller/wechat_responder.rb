@@ -14,7 +14,7 @@ module ActionController
         self.wechat = Wechat.api
       else
         if corpid.present?
-          self.wechat = Wechat::CorpApi.new(corpid, opts[:corpsecret], opts[:access_token], agentid, skip_verify_ssl)
+          self.wechat = Wechat::CorpApi.new(corpid, opts[:corpsecret], opts[:access_token], agentid, skip_verify_ssl, opts[:jsapi_ticket])
         else
           self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], skip_verify_ssl, opts[:jsapi_ticket])
         end

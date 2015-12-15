@@ -5,8 +5,6 @@ require 'wechat/jsapi_ticket'
 
 module Wechat
   class Api < ApiBase
-    attr_reader :jsapi_ticket
-
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/oauth2/'
 

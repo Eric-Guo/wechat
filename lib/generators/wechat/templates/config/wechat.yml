@@ -9,6 +9,7 @@ default: &default
   access_token: "C:/Users/[username]/wechat_access_token"
   encrypt_mode: false # if true must fill encoding_aes_key
   encoding_aes_key:  "my_encoding_aes_key"
+  jsapi_ticket: "C:/Users/[user_name]/wechat_jsapi_ticket"
 
 production:
   corpid:     <%%= ENV['WECHAT_CORPID'] %>
@@ -21,6 +22,7 @@ production:
   access_token:  <%%= ENV['WECHAT_ACCESS_TOKEN'] %>
   encrypt_mode: false # if true must fill encoding_aes_key
   encoding_aes_key:  <%%= ENV['WECHAT_ENCODING_AES_KEY'] %>
+  jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
 
 development:
   <<: *default

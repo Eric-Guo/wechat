@@ -6,6 +6,7 @@
 * New syntax `on :view, with: 'VIEW_URL'` support.
 * New command `upload_replaceparty` which combine three sub command to make uploading department easier.
 * New command `upload_replaceuser` which combine three sub command to make uploading user easier.
+* Add jsapi_ticket support for Enterprise Account
 
 ## v0.6.5 (released at 11/24/2015)
 
