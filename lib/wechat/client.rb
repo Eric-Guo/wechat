@@ -12,9 +12,9 @@ module Wechat
     def get(path, header = {})
       request(path, header) do |url, header|
         if verify_ssl
-          RestClient.get(url, header)
+          RestClient::Request.execute(method: :get, url: url, headers: header)
         else
-          RestClient::Request.execute(url: url, method: :get, headers: header, verify_ssl: OpenSSL::SSL::VERIFY_NONE)
+          RestClient::Request.execute(method: :get, url: url, headers: header, verify_ssl: OpenSSL::SSL::VERIFY_NONE)
         end
       end
     end
@@ -22,9 +22,9 @@ module Wechat
     def post(path, payload, header = {})
       request(path, header) do |url, header|
         if verify_ssl
-          RestClient.post(url, payload, header)
+          RestClient::Request.execute(method: :post, url: url, payload: payload, headers: header)
         else
-          RestClient::Request.execute(url: url, method: :post, payload: payload, headers: header, verify_ssl: OpenSSL::SSL::VERIFY_NONE)
+          RestClient::Request.execute(method: :post, url: url, payload: payload, headers: header, verify_ssl: OpenSSL::SSL::VERIFY_NONE)
         end
       end
     end

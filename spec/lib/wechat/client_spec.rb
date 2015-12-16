@@ -21,14 +21,14 @@ RSpec.describe Wechat::Client do
 
   describe '#get' do
     specify 'Will use http get method to request data' do
-      expect(RestClient).to receive(:get).with('http://host/token', accept: :json).and_return(response_json)
+      expect(RestClient::Request).to receive(:execute).with(method: :get, url: 'http://host/token', headers: { accept: :json }).and_return(response_json)
       subject.get('token')
     end
   end
 
   describe '#post' do
     specify 'Will use http post method to request data' do
-      expect(RestClient).to receive(:post).with('http://host/token', 'some_data', accept: :json).and_return(response_json)
+      expect(RestClient::Request).to receive(:execute).with(method: :post, url: 'http://host/token', payload: 'some_data', headers: { accept: :json }).and_return(response_json)
       subject.post('token', 'some_data')
     end
   end
