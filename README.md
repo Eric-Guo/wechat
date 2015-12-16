@@ -118,7 +118,8 @@ production:
   agentid:    <%= ENV['WECHAT_AGENTID'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
   token:      <%= ENV['WECHAT_TOKEN'] %>
-  skip_verify_ssl: false
+  timeout:    30,
+  skip_verify_ssl: true
   encoding_aes_key:  <%= ENV['WECHAT_ENCODING_AES_KEY'] %>
   jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
 
@@ -132,6 +133,10 @@ test:
 ##### 配置优先级
 
 注意在Rails项目根目录下运行`wechat`命令行工具会优先使用`config/wechat.yml`中的`default`配置，如果失败则使用`~\.wechat.yml`中的配置，以便于在生产环境下管理多个微信账号应用。
+
+##### 配置微信服务器超时
+
+微信服务器有时请求会花很长时间，如果不配置，默认为20秒，可视情况配置。
 
 ##### 配置跳过SSL认证
 

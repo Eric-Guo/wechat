@@ -7,9 +7,9 @@ module Wechat
       js_token_file = options[:js_token_file] || c.jsapi_ticket || '/var/tmp/wechat_jsapi_ticket'
 
       if c.appid && c.secret && token_file.present?
-        Wechat::Api.new(c.appid, c.secret, token_file, c.skip_verify_ssl, js_token_file)
+        Wechat::Api.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
       elsif c.corpid && c.corpsecret && token_file.present?
-        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.skip_verify_ssl, js_token_file)
+        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.timeout, c.skip_verify_ssl, js_token_file)
       else
         puts <<-HELP
 Need create ~/.wechat.yml with wechat appid and secret
@@ -35,6 +35,7 @@ HELP
         config[:access_token] ||= Rails.root.join('tmp/access_token').to_s
         config[:jsapi_ticket] ||= Rails.root.join('tmp/jsapi_ticket').to_s
       end
+      config[:timeout] ||= 20
       config.symbolize_keys!
       @config = OpenStruct.new(config)
     end
@@ -68,6 +69,7 @@ HELP
         token: ENV['WECHAT_TOKEN'],
         access_token: ENV['WECHAT_ACCESS_TOKEN'],
         encrypt_mode: ENV['WECHAT_ENCRYPT_MODE'],
+        timeout: ENV['WECHAT_TIMEOUT'],
         skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
         encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
         jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'] }

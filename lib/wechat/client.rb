@@ -2,22 +2,23 @@ require 'rest_client'
 
 module Wechat
   class Client
-    attr_reader :base, :verify_ssl
+    attr_reader :base, :timeout, :verify_ssl
 
-    def initialize(base, skip_verify_ssl)
+    def initialize(base, timeout, skip_verify_ssl)
       @base = base
+      @timeout = timeout
       @verify_ssl = skip_verify_ssl ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
     end
 
     def get(path, header = {})
       request(path, header) do |url, header|
-        RestClient::Request.execute(method: :get, url: url, headers: header, verify_ssl: verify_ssl)
+        RestClient::Request.execute(method: :get, url: url, headers: header, timeout: timeout, verify_ssl: verify_ssl)
       end
     end
 
     def post(path, payload, header = {})
       request(path, header) do |url, header|
-        RestClient::Request.execute(method: :post, url: url, payload: payload, headers: header, verify_ssl: verify_ssl)
+        RestClient::Request.execute(method: :post, url: url, payload: payload, headers: header, timeout: timeout, verify_ssl: verify_ssl)
       end
     end
 

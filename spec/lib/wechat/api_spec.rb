@@ -5,7 +5,7 @@ RSpec.describe Wechat::Api do
   let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket') }
 
   subject do
-    Wechat::Api.new('appid', 'secret', token_file, false, jsapi_ticket_file)
+    Wechat::Api.new('appid', 'secret', token_file, 20, false, jsapi_ticket_file)
   end
 
   before :each do

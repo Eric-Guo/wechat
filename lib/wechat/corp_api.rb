@@ -18,8 +18,8 @@ module Wechat
 
     API_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
 
-    def initialize(appid, secret, token_file, agentid, skip_verify_ssl, jsapi_ticket_file)
-      @client = Client.new(API_BASE, skip_verify_ssl)
+    def initialize(appid, secret, token_file, agentid, timeout, skip_verify_ssl, jsapi_ticket_file)
+      @client = Client.new(API_BASE, timeout, skip_verify_ssl)
       @access_token = CorpAccessToken.new(@client, appid, secret, token_file)
       @agentid = agentid
       @jsapi_ticket = CorpJsapiTicket.new(@client, @access_token, jsapi_ticket_file)

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Wechat::Client do
   subject do
-    Wechat::Client.new('http://host/', false)
+    Wechat::Client.new('http://host/', 20, false)
   end
 
   let(:response_params) do
@@ -22,7 +22,7 @@ RSpec.describe Wechat::Client do
   describe '#get' do
     specify 'Will use http get method to request data' do
       expect(RestClient::Request).to receive(:execute)
-        .with(method: :get, url: 'http://host/token', headers: { accept: :json }, verify_ssl: OpenSSL::SSL::VERIFY_PEER)
+        .with(method: :get, url: 'http://host/token', headers: { accept: :json }, timeout: 20, verify_ssl: OpenSSL::SSL::VERIFY_PEER)
         .and_return(response_json)
       subject.get('token')
     end
@@ -31,7 +31,7 @@ RSpec.describe Wechat::Client do
   describe '#post' do
     specify 'Will use http post method to request data' do
       expect(RestClient::Request).to receive(:execute)
-        .with(method: :post, url: 'http://host/token', payload: 'some_data', headers: { accept: :json }, verify_ssl: OpenSSL::SSL::VERIFY_PEER)
+        .with(method: :post, url: 'http://host/token', payload: 'some_data', headers: { accept: :json }, timeout: 20, verify_ssl: OpenSSL::SSL::VERIFY_PEER)
         .and_return(response_json)
       subject.post('token', 'some_data')
     end

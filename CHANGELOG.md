@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.0 (unreleased)
+
+* Add timeout configuration option, close #74
+
 ## v0.6.6 (released at 12/15/2015)
 
 * Add jsapi_ticket support for Enterprise Account

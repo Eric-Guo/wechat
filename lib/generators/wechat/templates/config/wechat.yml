@@ -19,6 +19,8 @@ production:
 #  appid:      <%= ENV['WECHAT_APPID'] %>
 #  secret:     <%= ENV['WECHAT_APP_SECRET'] %>
   token:      <%%= ENV['WECHAT_TOKEN'] %>
+  timeout:    30,
+  skip_verify_ssl: true
   access_token:  <%%= ENV['WECHAT_ACCESS_TOKEN'] %>
   encrypt_mode: false # if true must fill encoding_aes_key
   encoding_aes_key:  <%%= ENV['WECHAT_ENCODING_AES_KEY'] %>
