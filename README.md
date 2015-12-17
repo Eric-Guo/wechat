@@ -196,6 +196,7 @@ Wechat commands:
   wechat menu                                              # 当前菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
   wechat menu_delete                                       # 删除菜单
+  wechat oauth2_url [REDIRECT_URI]                         # 生成OAuth2.0验证URL
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
@@ -241,6 +242,7 @@ Wechat commands:
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
   wechat menu_delete                                       # 删除菜单
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
+  wechat oauth2_url [REDIRECT_URI]                         # 生成OAuth2.0验证URL
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
   wechat tag [TAG_ID]                                      # 获取标签成员
   wechat tag_add_department [TAG_ID, PARTY_IDS]            # 增加标签部门
