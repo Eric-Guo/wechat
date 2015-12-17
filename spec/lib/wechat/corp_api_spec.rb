@@ -69,6 +69,16 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#getuserinfo' do
+    specify 'will get user/getuserinfo with access_token and code' do
+      code = 'code'
+      getuserinfo_result = { UserId: 'USERID', DeviceId: 'DEVICEID' }
+      expect(subject.client).to receive(:get)
+        .with('user/getuserinfo', params: { code: code, access_token: 'access_token' }).and_return(getuserinfo_result)
+      expect(subject.getuserinfo(code)).to eq getuserinfo_result
+    end
+  end
+
   describe '#convert_to_openid' do
     specify 'will get invite/send with access_token and json userid' do
       userid = 'userid'

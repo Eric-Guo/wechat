@@ -37,6 +37,10 @@ module Wechat
       get 'user/get', params: { userid: userid }
     end
 
+    def getuserinfo(code)
+      get 'user/getuserinfo', params: { code: code }
+    end
+
     def convert_to_openid(userid)
       post 'user/convert_to_openid', JSON.generate(userid: userid, agentid: agentid)
     end
