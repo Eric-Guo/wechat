@@ -1,8 +1,9 @@
 # Changelog
 
-## v0.7.0 (unreleased)
+## v0.6.7 (released at 12/18/2015)
 
 * Add timeout configuration option, close #74
+* New getuserinfo and oauth2_url to support getting FromUserName from web page.
 
 ## v0.6.6 (released at 12/15/2015)
 
