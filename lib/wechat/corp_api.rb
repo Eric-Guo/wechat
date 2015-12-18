@@ -2,6 +2,7 @@ require 'wechat/api_base'
 require 'wechat/client'
 require 'wechat/access_token'
 require 'wechat/corp_jsapi_ticket'
+require 'cgi'
 
 module Wechat
   class CorpAccessToken < AccessToken
@@ -39,6 +40,11 @@ module Wechat
 
     def getuserinfo(code)
       get 'user/getuserinfo', params: { code: code }
+    end
+
+    def oauth2_url(redirect_uri, appid)
+      redirect_uri = CGI.escape(redirect_uri)
+      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=snsapi_base#wechat_redirect"
     end
 
     def convert_to_openid(userid)

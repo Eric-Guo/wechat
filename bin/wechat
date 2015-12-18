@@ -287,9 +287,8 @@ class App < Thor
 
   desc 'oauth2_url [REDIRECT_URI]', '生成OAuth2.0验证URL'
   def oauth2_url(redirect_uri)
-    redirect_uri = CGI.escape(redirect_uri)
     appid = Wechat.config.corpid || Wechat.config.appid
-    puts "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=snsapi_base#wechat_redirect"
+    puts oauth2_url(redirect_uri, appid)
   end
 
   desc 'user_update_remark [OPEN_ID, REMARK]', '设置备注名'
