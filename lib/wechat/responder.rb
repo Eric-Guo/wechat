@@ -7,8 +7,14 @@ module Wechat
     include Cipher
 
     included do
-      skip_before_filter :verify_authenticity_token
-      before_filter :verify_signature, only: [:show, :create]
+      # Rails 5 remove before_filter and skip_before_filter
+      if defined?(:skip_before_action)
+        skip_before_action :verify_authenticity_token
+        before_action :verify_signature, only: [:show, :create]
+      else
+        skip_before_filter :verify_authenticity_token
+        before_filter :verify_signature, only: [:show, :create]
+      end
     end
 
     module ClassMethods
