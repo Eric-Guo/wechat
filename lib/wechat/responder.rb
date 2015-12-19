@@ -160,7 +160,7 @@ module Wechat
       response = run_responder(request)
 
       if response.respond_to? :to_xml
-        render xml: process_response(response)
+        render plain: process_response(response)
       else
         render nothing: true, status: 200, content_type: 'text/html'
       end
