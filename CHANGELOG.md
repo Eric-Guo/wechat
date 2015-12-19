@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.0 (unreleased)
+
+* Support Rails 5.0.0.beta1 now.
+
 ## v0.6.7 (released at 12/18/2015)
 
 * Add timeout configuration option, close #74
