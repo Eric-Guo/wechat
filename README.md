@@ -285,14 +285,6 @@ $ wechat user "oCfEht9***********"
 
 ```
 
-#####获取用户的信息
-
-```
-$ wechat user "oCfEht9***********"
-
-{"subscribe"=>1, "openid"=>"oCfEht9***********", "nickname"=>"Nickname", "sex"=>1, "language"=>"zh_CN", "city"=>"徐汇", "province"=>"上海", "country"=>"中国", "headimgurl"=>"http://wx.qlogo.cn/mmopen/ajNVdqHZLLBd0SG8NjV3UpXZuiaGGPDcaKHebTKiaTyof*********/0", "subscribe_time"=>1395715239}
-```
-
 ##### 获取当前菜单
 ```
 $ wechat menu
