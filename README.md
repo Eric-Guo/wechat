@@ -10,7 +10,7 @@ WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平
 - [微信JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config接口注入权限验证
 - OAuth 2.0认证机制
 
-命令行工具`wechat`可以调用各种无需web环境的API。同时也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理机制。
+命令行工具`wechat`可以调用各种无需web环境的API。同时也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理，包括主动推送的和被动响应的消息。
 
 如果你的App还需要集成微信OAuth2.0, 你可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 以便和devise集成，提供完整的用户认证。
 
@@ -563,12 +563,6 @@ end
 
 注意设置了[多客服消息转发](http://dkf.qq.com/)后，不能再添加`默认文字信息responder`，否则文字消息将得不到转发。
 
-## Message DSL
-
-Wechat 的核心是一个Message DSL,帮助开发者构建各种类型的消息，包括主动推送的和被动响应的。
-....
-
-  
 ## 已知问题
 
 * 企业号接受菜单消息时，Wechat腾讯服务器无法解析部分域名，请使用IP绑定回调URL，用户的普通消息目前不受影响。
