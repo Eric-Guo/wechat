@@ -1,8 +1,10 @@
 # Changelog
 
-## v0.7.0 (unreleased)
+## v0.6.8 (released at 12/25/2015)
 
-* Support Rails 5.0.0.beta1 now.
+* Support Rails 5.0.0.beta1.
+* English README available
+* Fix oauth2_url calling error, fix #75
 
 ## v0.6.7 (released at 12/18/2015)
 

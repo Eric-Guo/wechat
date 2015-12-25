@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = 'DSL for wechat message handling and API'
   s.description = 'API and message handling for WeChat in Rails'
 
-  s.files = Dir['{bin,lib}/**/*'] + %w(LICENSE Rakefile README.md CHANGELOG.md)
+  s.files = Dir['{bin,lib}/**/*'] + %w(LICENSE Rakefile README.md README-CN.md CHANGELOG.md)
   s.executables << 'wechat'
 
   s.post_install_message = %Q(*****WECHAT BREAK CHANGE*****
@@ -22,7 +22,7 @@ instead of previous `on :event, with: 'BINDING_QR_CODE' `.
 instead of previous `on :event, with: 'replace_user' `.
 *****************************)
 
-  s.add_runtime_dependency 'activesupport', '>= 3.2'
+  s.add_runtime_dependency 'activesupport', '>= 3.2', '< 5.1.x'
   s.add_runtime_dependency 'nokogiri', '>=1.6.0'
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'rest-client'
