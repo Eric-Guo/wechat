@@ -1,4 +1,4 @@
-require 'rest_client'
+require 'http'
 
 module Wechat
   class Client
@@ -12,13 +12,17 @@ module Wechat
 
     def get(path, header = {})
       request(path, header) do |url, header|
-        RestClient::Request.execute(method: :get, url: url, headers: header, timeout: timeout, verify_ssl: verify_ssl)
+        params = header.delete(:params)
+        HTTP.timeout(write: timeout, connect: timeout, read: timeout).headers(header)
+          .get(url, params: params)
       end
     end
 
     def post(path, payload, header = {})
       request(path, header) do |url, header|
-        RestClient::Request.execute(method: :post, url: url, payload: payload, headers: header, timeout: timeout, verify_ssl: verify_ssl)
+        params = header.delete(:params)
+        HTTP.timeout(write: timeout, connect: timeout, read: timeout).headers(header)
+          .post(url, params: params, body: payload)
       end
     end
 
@@ -28,7 +32,7 @@ module Wechat
       header.merge!(accept: :json)
       response = yield(url, header)
 
-      fail "Request not OK, response code #{response.code}" if response.code != 200
+      fail "Request not OK, response status #{response.status}" if response.status != 200
       parse_response(response, as || :json) do |parse_as, data|
         break data unless parse_as == :json && data['errcode'].present?
 
@@ -65,7 +69,7 @@ module Wechat
         data = file
 
       when :json
-        data = JSON.parse(response.body.gsub /[\u0000-\u001f]+/, '')
+        data = JSON.parse(response.body.to_s.gsub /[\u0000-\u001f]+/, '')
       else
         data = response.body
       end
