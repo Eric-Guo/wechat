@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Wechat::JsapiTicket do
+RSpec.describe Wechat::CorpJsapiTicket do
   let(:ticket_content) do
     {
       errcode: 0,
@@ -15,13 +15,13 @@ RSpec.describe Wechat::JsapiTicket do
   let(:token_content) { { access_token: '12345', expires_in: 7200 } }
 
   subject do
-    Wechat::JsapiTicket.new(client, access_token, jsapi_ticket_file)
+    Wechat::CorpJsapiTicket.new(client, access_token, jsapi_ticket_file)
   end
 
   before :each do
     allow(client).to receive(:get)
-      .with('ticket/getticket',
-            params: { type: 'jsapi', access_token: token_content[:access_token] })
+      .with('get_jsapi_ticket',
+            params: { access_token: token_content[:access_token] })
       .and_return(ticket_content)
 
     allow(access_token).to receive(:token).and_return(token_content[:access_token])
