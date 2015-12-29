@@ -11,7 +11,7 @@ module Wechat
       @jsapi_ticket_file = jsapi_ticket_file
     end
 
-    #  获取微信 jssdk 签名所需的 jsapi_ticket, 返回具有如下结构的 hash:
+    # Obtain the wechat jssdk signature's ticket and return below hash
     #  {
     #    "errcode":0,
     #    "errmsg":"ok",
@@ -32,7 +32,7 @@ module Wechat
       valid_ticket(@jsapi_ticket_data)
     end
 
-    # 获取 jssdk 签名及注册所需其他参数, 返回具有如下结构的 hash:
+    # Obtain the wechat jssdk config signature parameter and return below hash
     #  params = {
     #    noncestr: noncestr,
     #    timestamp: timestamp,
