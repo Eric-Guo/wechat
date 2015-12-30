@@ -1,6 +1,6 @@
 module Wechat
   class AccessToken
-    attr_reader :client, :appid, :secret, :token_file, :token_data
+    attr_reader :client, :appid, :secret, :token_file, :token_data, :access_token, :token_life_in_seconds, :got_token_at
 
     def initialize(client, appid, secret, token_file)
       @appid = appid
@@ -30,6 +30,22 @@ module Wechat
     end
 
     private
+
+    def read_token_from_file
+      td = JSON.parse(File.read(token_file))
+      @got_token_at = td['got_token_at'].to_i
+      @token_life_in_seconds = td['expires_in'].to_i
+      @access_token = td['access_token']
+    end
+
+    def write_token_to_file(token_hash)
+      token_hash.merge!('got_token_at'.freeze => Time.now.to_i)
+      File.write(token_file, token_hash.to_json) if valid_token(token_hash)
+    end
+
+    def remain_life_seconds
+      @token_life_in_seconds - (Time.now.to_i - @got_token_at)
+    end
 
     def valid_token(token_data)
       access_token = token_data['access_token']
