@@ -22,8 +22,10 @@ module Wechat
 
     def refresh
       data = client.get('token', params: { grant_type: 'client_credential', appid: appid, secret: secret })
+      @got_token_at = Time.now.to_i
+      @token_life_in_seconds = data['expires_in'].to_i
+      @access_token = data['access_token']
       write_token_to_file(data)
-      read_token_from_file
       token_data
     end
 
