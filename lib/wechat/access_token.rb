@@ -7,6 +7,7 @@ module Wechat
       @secret = secret
       @client = client
       @token_file = token_file
+      @random_generator = Random.new
     end
 
     def token
@@ -14,7 +15,7 @@ module Wechat
         @token_data ||= JSON.parse(File.read(token_file))
         created_at = token_data['created_at'].to_i
         expires_in = token_data['expires_in'].to_i
-        fail 'token_data may be expired' if Time.now.to_i - created_at >= expires_in - 3 * 60
+        fail 'token_data may be expired' if Time.now.to_i - created_at >= expires_in - @random_generator.rand(30..3 * 60)
       rescue
         refresh
       end

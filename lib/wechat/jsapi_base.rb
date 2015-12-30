@@ -9,6 +9,7 @@ module Wechat
       @client = client
       @access_token = access_token
       @jsapi_ticket_file = jsapi_ticket_file
+      @random_generator = Random.new
     end
 
     # Obtain the wechat jssdk signature's ticket and return below hash
@@ -23,7 +24,7 @@ module Wechat
         @jsapi_ticket_data ||= JSON.parse(File.read(jsapi_ticket_file))
         created_at = jsapi_ticket_data['created_at'].to_i
         expires_in = jsapi_ticket_data['expires_in'].to_i
-        if Time.now.to_i - created_at >= expires_in - 3 * 60
+        if Time.now.to_i - created_at >= expires_in - @random_generator.rand(30..3 * 60)
           fail 'jsapi_ticket may be expired'
         end
       rescue
