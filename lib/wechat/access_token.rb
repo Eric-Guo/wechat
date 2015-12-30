@@ -11,12 +11,8 @@ module Wechat
     end
 
     def token
-      begin
-        read_token_from_file
-        fail 'access_token may be expired' if remain_life_seconds < @random_generator.rand(30..3 * 60)
-      rescue
-        refresh
-      end
+      read_token_from_file if access_token.blank?
+      refresh if remain_life_seconds < @random_generator.rand(30..3 * 60)
       access_token
     end
 
@@ -37,6 +33,8 @@ module Wechat
       @got_token_at = td['got_token_at'].to_i
       @token_life_in_seconds = td['expires_in'].to_i
       @access_token = td['access_token']
+    rescue JSON::ParserError, Errno::ENOENT
+      refresh
     end
 
     def write_token_to_file(token_hash)
