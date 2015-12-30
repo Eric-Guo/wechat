@@ -9,9 +9,19 @@ module Wechat
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/oauth2/'
 
     def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file)
+      @appid = appid
+      @secret = secret
+      @token_file = token_file
       @client = Client.new(API_BASE, timeout, skip_verify_ssl)
-      @access_token = AccessToken.new(@client, appid, secret, token_file)
-      @jsapi_ticket = JsapiTicket.new(@client, @access_token, jsapi_ticket_file)
+      @jsapi_ticket_file = jsapi_ticket_file
+    end
+
+    def access_token
+      AccessToken.new(@client, @appid, @secret, @token_file)
+    end
+
+    def jsapi_ticket
+      JsapiTicket.new(@client, access_token, @jsapi_ticket_file)
     end
 
     def groups
