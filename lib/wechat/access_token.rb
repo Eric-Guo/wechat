@@ -22,9 +22,6 @@ module Wechat
 
     def refresh
       data = client.get('token', params: { grant_type: 'client_credential', appid: appid, secret: secret })
-      @got_token_at = Time.now.to_i
-      @token_life_in_seconds = data['expires_in'].to_i
-      @access_token = data['access_token']
       write_token_to_file(data)
       token_data
     end
@@ -43,7 +40,10 @@ module Wechat
     end
 
     def write_token_to_file(token_hash)
-      token_hash.merge!('got_token_at'.freeze => Time.now.to_i)
+      @got_token_at = Time.now.to_i
+      @token_life_in_seconds = token_hash['expires_in'].to_i
+      @access_token = token_hash['access_token']
+      token_hash.merge!('got_token_at'.freeze => got_token_at)
       File.write(token_file, token_hash.to_json)
     end
 
