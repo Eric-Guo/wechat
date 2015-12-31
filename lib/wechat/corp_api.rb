@@ -1,11 +1,11 @@
 require 'wechat/api_base'
 require 'wechat/client'
-require 'wechat/access_token'
+require 'wechat/token/access_token'
 require 'wechat/corp_jsapi_ticket'
 require 'cgi'
 
 module Wechat
-  class CorpAccessToken < AccessToken
+  class CorpAccessToken < Token::AccessToken
     def refresh
       data = client.get('gettoken', params: { corpid: appid, corpsecret: secret })
       write_token_to_file(data)
