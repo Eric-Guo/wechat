@@ -39,11 +39,11 @@ module Wechat
     end
 
     def write_token_to_file(token_hash)
-      @got_token_at = Time.now.to_i
+      token_hash.merge!('got_token_at'.freeze => Time.now.to_i)
+      File.write(token_file, token_hash.to_json)
+      @got_token_at = token_hash['got_token_at'].to_i
       @token_life_in_seconds = token_hash['expires_in'].to_i
       @access_token = token_hash['access_token']
-      token_hash.merge!('got_token_at'.freeze => got_token_at)
-      File.write(token_file, token_hash.to_json)
     end
 
     def remain_life_seconds
