@@ -3,7 +3,7 @@ require 'digest/sha1'
 module Wechat
   module Ticket
     class JsapiBase
-      attr_reader :client, :access_token, :jsapi_ticket_file, :jsapi_ticket_data
+      attr_reader :client, :access_token, :jsapi_ticket_file, :jsapi_ticket_data, :access_ticket, :ticket_life_in_seconds, :got_ticket_at
 
       def initialize(client, access_token, jsapi_ticket_file)
         @client = client
@@ -58,6 +58,27 @@ module Wechat
       end
 
       protected
+
+      def read_ticket_from_file
+        td = JSON.parse(File.read(jsapi_ticket_file))
+        @got_ticket_at = td['got_ticket_at'].to_i
+        @ticket_life_in_seconds = td['expires_in'].to_i
+        @access_ticket = td['ticket']
+      rescue JSON::ParserError, Errno::ENOENT
+        refresh
+      end
+
+      def write_ticket_to_file(ticket_hash)
+        ticket_hash.merge!('got_ticket_at'.freeze => Time.now.to_i)
+        File.write(jsapi_ticket_file, ticket_hash.to_json)
+        @got_ticket_at = ticket_hash['got_ticket_at'].to_i
+        @ticket_life_in_seconds = ticket_hash['expires_in'].to_i
+        @access_ticket = ticket_hash['ticket']
+      end
+
+      def remain_life_seconds
+        ticket_life_in_seconds - (Time.now.to_i - got_ticket_at)
+      end
 
       def valid_ticket(jsapi_ticket_data)
         ticket = jsapi_ticket_data['ticket'] || jsapi_ticket_data[:ticket]
