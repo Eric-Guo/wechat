@@ -1,6 +1,6 @@
 module Wechat
   module Token
-    class AccessToken
+    class AccessTokenBase
       attr_reader :client, :appid, :secret, :token_file, :access_token, :token_life_in_seconds, :got_token_at
 
       def initialize(client, appid, secret, token_file)
@@ -18,12 +18,7 @@ module Wechat
         access_token
       end
 
-      def refresh
-        data = client.get('token', params: { grant_type: 'client_credential', appid: appid, secret: secret })
-        write_token_to_file(data)
-      end
-
-      private
+      protected
 
       def read_token_from_file
         td = JSON.parse(File.read(token_file))

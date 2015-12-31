@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-RSpec.describe Wechat::Token::AccessToken do
+RSpec.describe Wechat::Token::PublicAccessToken do
   let(:token_file) { Rails.root.join('access_token') }
   let(:token) { '12345' }
   let(:client) { double(:client) }
 
   subject do
-    Wechat::Token::AccessToken.new(client, 'appid', 'secret', token_file)
+    Wechat::Token::PublicAccessToken.new(client, 'appid', 'secret', token_file)
   end
 
   before :each do
@@ -45,7 +45,6 @@ RSpec.describe Wechat::Token::AccessToken do
 
   describe '#refresh' do
     specify 'will set access_token' do
-      got_token_at = Time.now.to_i
       expect(subject.refresh).to eq(token)
       expect(subject.access_token).to eq('12345')
     end

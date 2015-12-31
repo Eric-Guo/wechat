@@ -21,7 +21,6 @@ RSpec.describe Wechat::Token::CorpAccessToken do
 
   describe '#refresh' do
     specify 'will set access_token' do
-      got_token_at = Time.now.to_i
       expect(subject.refresh).to eq(token)
       expect(subject.access_token).to eq('12345')
     end
