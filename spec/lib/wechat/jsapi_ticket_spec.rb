@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Wechat::JsapiTicket do
+RSpec.describe Wechat::Ticket::JsapiTicket do
   let(:ticket_content) do
     {
       errcode: 0,
@@ -15,7 +15,7 @@ RSpec.describe Wechat::JsapiTicket do
   let(:token_content) { { access_token: '12345', expires_in: 7200 } }
 
   subject do
-    Wechat::JsapiTicket.new(client, access_token, jsapi_ticket_file)
+    Wechat::Ticket::JsapiTicket.new(client, access_token, jsapi_ticket_file)
   end
 
   before :each do

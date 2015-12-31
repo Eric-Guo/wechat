@@ -1,7 +1,7 @@
 require 'wechat/api_base'
 require 'wechat/client'
 require 'wechat/token/corp_access_token'
-require 'wechat/corp_jsapi_ticket'
+require 'wechat/ticket/corp_jsapi_ticket'
 require 'cgi'
 
 module Wechat
@@ -14,7 +14,7 @@ module Wechat
       @client = Client.new(API_BASE, timeout, skip_verify_ssl)
       @access_token = Token::CorpAccessToken.new(@client, appid, secret, token_file)
       @agentid = agentid
-      @jsapi_ticket = CorpJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
+      @jsapi_ticket = Ticket::CorpJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
     end
 
     def agent_list
