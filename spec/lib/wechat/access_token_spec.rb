@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe Wechat::AccessToken do
-  let(:token_content) { { 'access_token' => '12345', 'expires_in' => 7200 } }
   let(:token_file) { Rails.root.join('access_token') }
   let(:client) { double(:client) }
 
@@ -13,7 +12,7 @@ RSpec.describe Wechat::AccessToken do
     allow(client).to receive(:get)
       .with('token', params: { grant_type: 'client_credential',
                                appid: 'appid',
-                               secret: 'secret' }).and_return(token_content)
+                               secret: 'secret' }).and_return('access_token' => '12345', 'expires_in' => 7200)
   end
 
   after :each do
@@ -22,7 +21,7 @@ RSpec.describe Wechat::AccessToken do
 
   describe '#token' do
     specify 'read from file if access_token is not initialized' do
-      File.open(token_file, 'w') { |f| f.write(token_content.to_json) }
+      File.open(token_file, 'w') { |f| f.write({ 'access_token' => '12345', 'expires_in' => 7200 }.to_json) }
       expect(subject.token).to eq('12345')
     end
 
@@ -45,8 +44,9 @@ RSpec.describe Wechat::AccessToken do
 
   describe '#refresh' do
     specify 'will set token_data' do
-      expect(subject.refresh).to eq(token_content)
-      expect(subject.token_data).to eq(token_content)
+      got_token_at = Time.now.to_i
+      expect(subject.refresh).to eq('access_token' => '12345', 'expires_in' => 7200, 'got_token_at' => got_token_at)
+      expect(subject.token_data).to eq('access_token' => '12345', 'expires_in' => 7200, 'got_token_at' => got_token_at)
     end
 
     specify "won't set token_data if request failed" do

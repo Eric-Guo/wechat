@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe Wechat::CorpAccessToken do
-  let(:token_content) { { 'access_token' => '12345', 'expires_in' => 7200 } }
   let(:token_file) { Rails.root.join('access_token') }
   let(:client) { double(:client) }
 
@@ -12,7 +11,7 @@ RSpec.describe Wechat::CorpAccessToken do
   before :each do
     allow(client).to receive(:get)
       .with('gettoken', params: { corpid: 'corpid',
-                                  corpsecret: 'corpsecret' }).and_return(token_content)
+                                  corpsecret: 'corpsecret' }).and_return('access_token' => '12345', 'expires_in' => 7200)
   end
 
   after :each do
@@ -21,8 +20,9 @@ RSpec.describe Wechat::CorpAccessToken do
 
   describe '#refresh' do
     specify 'will set token_data' do
-      expect(subject.refresh).to eq(token_content)
-      expect(subject.token_data).to eq(token_content)
+      got_token_at = Time.now.to_i
+      expect(subject.refresh).to eq('access_token' => '12345', 'expires_in' => 7200, 'got_token_at' => got_token_at)
+      expect(subject.token_data).to eq('access_token' => '12345', 'expires_in' => 7200, 'got_token_at' => got_token_at)
     end
 
     specify "won't set token_data if request failed" do
