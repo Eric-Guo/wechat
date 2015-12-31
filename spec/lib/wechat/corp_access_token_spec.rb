@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-RSpec.describe Wechat::CorpAccessToken do
+RSpec.describe Wechat::Token::CorpAccessToken do
   let(:token_file) { Rails.root.join('access_token') }
   let(:token) { '12345' }
   let(:client) { double(:client) }
 
   subject do
-    Wechat::CorpAccessToken.new(client, 'corpid', 'corpsecret', token_file)
+    Wechat::Token::CorpAccessToken.new(client, 'corpid', 'corpsecret', token_file)
   end
 
   before :each do
