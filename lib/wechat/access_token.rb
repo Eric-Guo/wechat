@@ -11,7 +11,8 @@ module Wechat
     end
 
     def token
-      read_token_from_file if access_token.blank?
+      # Possible two worker running, one worker refresh token, other unaware, so must read every time
+      read_token_from_file
       refresh if remain_life_seconds < @random_generator.rand(30..3 * 60)
       access_token
     end
