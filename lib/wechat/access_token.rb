@@ -22,10 +22,6 @@ module Wechat
       write_token_to_file(data)
     end
 
-    def token_data
-      { 'access_token' => access_token, 'expires_in' => token_life_in_seconds, 'got_token_at' => got_token_at } if access_token
-    end
-
     private
 
     def read_token_from_file

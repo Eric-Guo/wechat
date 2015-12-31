@@ -20,24 +20,24 @@ RSpec.describe Wechat::CorpAccessToken do
   end
 
   describe '#refresh' do
-    specify 'will set token_data' do
+    specify 'will set access_token' do
       got_token_at = Time.now.to_i
       expect(subject.refresh).to eq(token)
-      expect(subject.token_data).to eq('access_token' => '12345', 'expires_in' => 7200, 'got_token_at' => got_token_at)
+      expect(subject.access_token).to eq('12345')
     end
 
-    specify "won't set token_data if request failed" do
+    specify "won't set access_token if request failed" do
       allow(client).to receive(:get).and_raise('error')
 
       expect { subject.refresh }.to raise_error('error')
-      expect(subject.token_data).to be_nil
+      expect(subject.access_token).to be_nil
     end
 
-    specify "won't set token_data if response value invalid" do
+    specify "won't set access_token if response value invalid" do
       allow(client).to receive(:get).and_return('rubbish')
 
       expect { subject.refresh }.to raise_error
-      expect(subject.token_data).to be_nil
+      expect(subject.access_token).to be_nil
     end
   end
 end
