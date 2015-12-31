@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Wechat::AccessToken do
   let(:token_file) { Rails.root.join('access_token') }
+  let(:token) { '12345' }
   let(:client) { double(:client) }
 
   subject do
@@ -45,7 +46,7 @@ RSpec.describe Wechat::AccessToken do
   describe '#refresh' do
     specify 'will set token_data' do
       got_token_at = Time.now.to_i
-      expect(subject.refresh).to eq('access_token' => '12345', 'expires_in' => 7200, 'got_token_at' => got_token_at)
+      expect(subject.refresh).to eq(token)
       expect(subject.token_data).to eq('access_token' => '12345', 'expires_in' => 7200, 'got_token_at' => got_token_at)
     end
 

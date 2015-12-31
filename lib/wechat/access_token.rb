@@ -20,7 +20,6 @@ module Wechat
     def refresh
       data = client.get('token', params: { grant_type: 'client_credential', appid: appid, secret: secret })
       write_token_to_file(data)
-      token_data
     end
 
     def token_data
