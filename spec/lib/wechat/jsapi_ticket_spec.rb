@@ -26,7 +26,7 @@ RSpec.describe Wechat::Ticket::JsapiTicket do
 
   describe '#ticket' do
     specify 'read from file if jsapi_ticket_file is not initialized' do
-      File.open(jsapi_ticket_file, 'w') { |f| f.write({ errcode: 0, errmsg: 'ok', ticket: ticket, expires_in: 7200 }.to_json) }
+      File.open(jsapi_ticket_file, 'w') { |f| f.write({ ticket: ticket, expires_in: 7200 }.to_json) }
       expect(subject.ticket).to eq ticket
     end
   end

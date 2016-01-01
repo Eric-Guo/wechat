@@ -13,6 +13,7 @@ module Wechat
       end
 
       def ticket
+        # Possible two worker running, one worker refresh ticket, other unaware, so must read every time
         read_ticket_from_file
         refresh if remain_life_seconds < @random_generator.rand(30..3 * 60)
         access_ticket
