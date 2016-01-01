@@ -32,7 +32,7 @@ RSpec.describe Wechat::Ticket::CorpJsapiTicket do
   end
 
   describe '#refresh' do
-    specify 'will set jsapi_ticket_data' do
+    specify 'will set ticket' do
       expect(subject.refresh).to eq ticket
       expect(subject.ticket).to eq ticket
     end

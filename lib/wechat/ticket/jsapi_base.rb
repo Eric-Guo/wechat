@@ -18,15 +18,6 @@ module Wechat
         access_ticket
       end
 
-      def jsapi_ticket_data
-        {
-          errcode: 0,
-          errmsg: 'ok',
-          ticket: access_ticket,
-          expires_in: ticket_life_in_seconds
-        }
-      end
-
       # Obtain the wechat jssdk config signature parameter and return below hash
       #  params = {
       #    noncestr: noncestr,
