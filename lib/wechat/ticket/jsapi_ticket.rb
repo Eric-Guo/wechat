@@ -6,9 +6,9 @@ module Wechat
       # refresh jsapi ticket
       def refresh
         data = client.get('ticket/getticket', params: { access_token: access_token.token, type: 'jsapi' })
-        data.merge!('created_at'.freeze => Time.now.to_i)
-        File.open(jsapi_ticket_file, 'w') { |f| f.write(data.to_json) } if valid_ticket(data)
-        @jsapi_ticket_data = data
+        write_ticket_to_file(data)
+        read_ticket_from_file
+        jsapi_ticket_data
       end
     end
   end
