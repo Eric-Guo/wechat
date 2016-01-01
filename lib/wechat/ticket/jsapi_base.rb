@@ -23,8 +23,7 @@ module Wechat
           errcode: 0,
           errmsg: 'ok',
           ticket: access_ticket,
-          expires_in: ticket_life_in_seconds,
-          got_ticket_at: got_ticket_at
+          expires_in: ticket_life_in_seconds
         }
       end
 
