@@ -28,11 +28,9 @@ module Wechat
       #    signature: signature
       #  }
       def signature(url)
-        timestamp = Time.now.to_i
-        noncestr = SecureRandom.base64(16)
         params = {
-          noncestr: noncestr,
-          timestamp: timestamp,
+          noncestr: SecureRandom.base64(16),
+          timestamp: Time.now.to_i,
           jsapi_ticket: ticket,
           url: url
         }
