@@ -2,25 +2,26 @@ require 'http'
 
 module Wechat
   class Client
-    attr_reader :base, :verify_ssl
+    attr_reader :base, :ssl_context
 
     def initialize(base, timeout, skip_verify_ssl)
       @base = base
       HTTP.timeout(:global, write: timeout, connect: timeout, read: timeout)
-      @verify_ssl = skip_verify_ssl ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
+      @ssl_context = OpenSSL::SSL::SSLContext.new
+      @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE if skip_verify_ssl
     end
 
     def get(path, get_header = {})
       request(path, get_header) do |url, header|
         params = header.delete(:params)
-        HTTP.headers(header).get(url, params: params)
+        HTTP.headers(header).get(url, params: params, ssl_context: ssl_context)
       end
     end
 
     def post(path, payload, post_header = {})
       request(path, post_header) do |url, header|
         params = header.delete(:params)
-        HTTP.headers(header).post(url, params: params, body: payload)
+        HTTP.headers(header).post(url, params: params, body: payload, ssl_context: ssl_context)
       end
     end
 
