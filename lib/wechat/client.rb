@@ -26,6 +26,8 @@ module Wechat
       end
     end
 
+    private
+
     def request(path, header = {}, &_block)
       url = "#{header.delete(:base) || base}#{path}"
       as = header.delete(:as)
@@ -50,8 +52,6 @@ module Wechat
         end
       end
     end
-
-    private
 
     def parse_response(response, as)
       content_type = response.headers[:content_type]

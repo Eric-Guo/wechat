@@ -41,7 +41,7 @@ RSpec.describe Wechat::Client do
         response_json
       end
 
-      subject.request('token', params: { access_token: '1234' }, &block)
+      subject.send(:request, 'token', params: { access_token: '1234' }, &block)
     end
 
     specify 'will use base option to construct url' do
@@ -49,7 +49,7 @@ RSpec.describe Wechat::Client do
         expect(url).to eq('http://override/token')
         response_json
       end
-      subject.request('token', base: 'http://override/', &block)
+      subject.send(:request, 'token', base: 'http://override/', &block)
     end
 
     specify 'will not pass as option for request' do
@@ -57,37 +57,37 @@ RSpec.describe Wechat::Client do
         expect(headers[:as]).to be_nil
         response_json
       end
-      subject.request('token', as: :text, &block)
+      subject.send(:request, 'token', as: :text, &block)
     end
 
     specify 'will raise error if response code is not 200' do
-      expect { subject.request('token') { response_404 } }.to raise_error
+      expect { subject.send(:request, 'token') { response_404 } }.to raise_error
     end
 
     context 'parse response body' do
       specify 'will return response body for text response' do
-        expect(subject.request('text', as: :text) { response_text }).to eq(response_text.body)
+        expect(subject.send(:request, 'text', as: :text) { response_text }).to eq(response_text.body)
       end
 
       specify 'will return response body as file for image' do
-        expect(subject.request('image') { response_image }).to be_a(Tempfile)
+        expect(subject.send(:request, 'image') { response_image }).to be_a(Tempfile)
       end
 
       specify 'will return response body as file for unknown content_type' do
         response_stream = double 'image', response_params.merge(body: 'stream', headers: { content_type: 'stream' })
-        expect(subject.request('image', as: :file) { response_stream }).to be_a(Tempfile)
+        expect(subject.send(:request, 'image', as: :file) { response_stream }).to be_a(Tempfile)
       end
     end
 
     context 'json error' do
       specify 'raise ResponseError given response has error json' do
         allow(response_json).to receive(:body).and_return({ errcode: 1106, errmsg: 'error message' }.to_json)
-        expect { subject.request('image', as: :file) { response_json } }.to raise_error(Wechat::ResponseError)
+        expect { subject.send(:request, 'image', as: :file) { response_json } }.to raise_error(Wechat::ResponseError)
       end
 
       specify 'raise AccessTokenExpiredError given response has error json with errorcode 40014' do
         allow(response_json).to receive(:body).and_return({ errcode: 40014, errmsg: 'error message' }.to_json)
-        expect { subject.request('image', as: :file) { response_json } }.to raise_error(Wechat::AccessTokenExpiredError)
+        expect { subject.send(:request, 'image', as: :file) { response_json } }.to raise_error(Wechat::AccessTokenExpiredError)
       end
     end
   end
