@@ -22,19 +22,16 @@ module Wechat
 
       def read_token_from_file
         td = JSON.parse(File.read(token_file))
-        @got_token_at = td['got_token_at'].to_i
-        @token_life_in_seconds = td['expires_in'].to_i
-        @access_token = td['access_token']
-      rescue JSON::ParserError, Errno::ENOENT
+        @got_token_at = td.fetch('got_token_at').to_i
+        @token_life_in_seconds = td.fetch('expires_in').to_i
+        @access_token = td.fetch('access_token')
+      rescue JSON::ParserError, Errno::ENOENT, KeyError
         refresh
       end
 
       def write_token_to_file(token_hash)
         token_hash.merge!('got_token_at'.freeze => Time.now.to_i)
         File.write(token_file, token_hash.to_json)
-        @got_token_at = token_hash['got_token_at'].to_i
-        @token_life_in_seconds = token_hash['expires_in'].to_i
-        @access_token = token_hash['access_token']
       end
 
       def remain_life_seconds

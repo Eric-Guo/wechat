@@ -47,19 +47,16 @@ module Wechat
 
       def read_ticket_from_file
         td = JSON.parse(File.read(jsapi_ticket_file))
-        @got_ticket_at = td['got_ticket_at'].to_i
-        @ticket_life_in_seconds = td['expires_in'].to_i
-        @access_ticket = td['ticket']
-      rescue JSON::ParserError, Errno::ENOENT
+        @got_ticket_at = td.fetch('got_ticket_at').to_i
+        @ticket_life_in_seconds = td.fetch('expires_in').to_i
+        @access_ticket = td.fetch('ticket')
+      rescue JSON::ParserError, Errno::ENOENT, KeyError
         refresh
       end
 
       def write_ticket_to_file(ticket_hash)
-        ticket_hash.merge!(got_ticket_at: Time.now.to_i)
+        ticket_hash.merge!('got_ticket_at'.freeze => Time.now.to_i)
         File.write(jsapi_ticket_file, ticket_hash.to_json)
-        @got_ticket_at = ticket_hash['got_ticket_at'].to_i
-        @ticket_life_in_seconds = ticket_hash['expires_in'].to_i
-        @access_ticket = ticket_hash['ticket']
       end
 
       def remain_life_seconds
