@@ -90,12 +90,12 @@ module Wechat
       get 'department/list', params: { id: departmentid }
     end
 
-    def user_simplelist(departmentid, fetch_child = 0, status = 0)
-      get 'user/simplelist', params: { departmentid: departmentid, fetch_child: fetch_child, status: status }
+    def user_simplelist(department_id, fetch_child = 0, status = 0)
+      get 'user/simplelist', params: { department_id: department_id, fetch_child: fetch_child, status: status }
     end
 
-    def user_list(departmentid, fetch_child = 0, status = 0)
-      get 'user/list', params: { departmentid: departmentid, fetch_child: fetch_child, status: status }
+    def user_list(department_id, fetch_child = 0, status = 0)
+      get 'user/list', params: { department_id: department_id, fetch_child: fetch_child, status: status }
     end
 
     def tag_create(tagname, tagid = nil)
