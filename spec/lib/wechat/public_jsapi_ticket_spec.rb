@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Wechat::Ticket::JsapiTicket do
+RSpec.describe Wechat::Ticket::PublicJsapiTicket do
   let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket_file') }
   let(:ticket) { 'bxLdikRXVbTPdHSM05e5u5sUoXNKd8' }
   let(:client) { double(:client) }
@@ -8,7 +8,7 @@ RSpec.describe Wechat::Ticket::JsapiTicket do
   let(:token_content) { { access_token: '12345', expires_in: 7200 } }
 
   subject do
-    Wechat::Ticket::JsapiTicket.new(client, access_token, jsapi_ticket_file)
+    Wechat::Ticket::PublicJsapiTicket.new(client, access_token, jsapi_ticket_file)
   end
 
   before :each do

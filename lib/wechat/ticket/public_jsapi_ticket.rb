@@ -2,8 +2,7 @@ require 'wechat/ticket/jsapi_base'
 
 module Wechat
   module Ticket
-    class JsapiTicket < JsapiBase
-      # refresh jsapi ticket
+    class PublicJsapiTicket < JsapiBase
       def refresh
         data = client.get('ticket/getticket', params: { access_token: access_token.token, type: 'jsapi' })
         write_ticket_to_file(data)
