@@ -19,20 +19,6 @@ RSpec.describe Wechat::Client do
   end
   let(:response_image) { double 'image', response_params.merge(body: 'image data', headers: { content_type: 'image/gif' }) }
 
-  describe '#get' do
-    specify 'Will use http get method to request data' do
-      allow(HTTP).to receive_message_chain('timeout.headers.get') { response_json }
-      subject.get('token')
-    end
-  end
-
-  describe '#post' do
-    specify 'Will use http post method to request data' do
-      allow(HTTP).to receive_message_chain('timeout.headers.post') { response_json }
-      subject.post('token', 'some_data')
-    end
-  end
-
   describe '#request' do
     specify 'will add accept=>:json for request' do
       block = lambda do |url, headers|
