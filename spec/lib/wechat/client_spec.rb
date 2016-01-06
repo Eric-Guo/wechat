@@ -21,14 +21,14 @@ RSpec.describe Wechat::Client do
 
   describe '#get' do
     specify 'Will use http get method to request data' do
-      allow(HTTP).to receive_message_chain('headers.get') { response_json }
+      allow(HTTP).to receive_message_chain('timeout.headers.get') { response_json }
       subject.get('token')
     end
   end
 
   describe '#post' do
     specify 'Will use http post method to request data' do
-      allow(HTTP).to receive_message_chain('headers.post') { response_json }
+      allow(HTTP).to receive_message_chain('timeout.headers.post') { response_json }
       subject.post('token', 'some_data')
     end
   end
