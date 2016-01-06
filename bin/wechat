@@ -334,8 +334,7 @@ class App < Thor
 
   desc 'material_add [MEDIA_TYPE, PATH]', '永久媒体上传'
   def material_add(type, path)
-    file = File.new(path)
-    puts wechat_api.material_add(type, file)
+    puts wechat_api.material_add(type, path)
   end
 
   desc 'material_delete [MEDIA_ID]', '删除永久素材'

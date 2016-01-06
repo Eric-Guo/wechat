@@ -152,7 +152,7 @@ module Wechat
     end
 
     def material_add(type, file)
-      post 'material/add_material', { upload: { media: file } }, params: { type: type, agentid: agentid }
+      post_file 'material/add_material', file, params: { type: type, agentid: agentid }
     end
 
     def material_delete(media_id)

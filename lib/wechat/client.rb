@@ -25,6 +25,13 @@ module Wechat
       end
     end
 
+    def post_file(path, file, post_header = {})
+      request(path, post_header) do |url, header|
+        params = header.delete(:params)
+        HTTP.headers(header).post(url, params: params, form: { media: HTTP::FormData::File.new(file) }, ssl_context: ssl_context)
+      end
+    end
+
     private
 
     def request(path, header = {}, &_block)
