@@ -8,16 +8,34 @@ RSpec.describe Wechat::Client do
   let(:response_params) do
     {
       headers: { content_type: 'text/plain' },
-      status: 200
+      code: 200
     }
   end
-  let(:response_404) { double '404', response_params.merge(status: 404) }
+  let(:response_404) { double '404', response_params.merge(code: 404) }
   let(:response_text) { double 'text', response_params.merge(body: 'some text') }
   let(:response_json) do
     double 'json', response_params.merge(body: { result: 'success' }.to_json,
                                          headers: { content_type: 'application/json' })
   end
   let(:response_image) { double 'image', response_params.merge(body: 'image data', headers: { content_type: 'image/gif' }) }
+
+  describe '#get' do
+    specify 'Will use http get method to request data' do
+      expect(RestClient::Request).to receive(:execute)
+        .with(method: :get, url: 'http://host/token', headers: { accept: :json }, timeout: 20, verify_ssl: OpenSSL::SSL::VERIFY_PEER)
+        .and_return(response_json)
+      subject.get('token')
+    end
+  end
+
+  describe '#post' do
+    specify 'Will use http post method to request data' do
+      expect(RestClient::Request).to receive(:execute)
+        .with(method: :post, url: 'http://host/token', payload: 'some_data', headers: { accept: :json }, timeout: 20, verify_ssl: OpenSSL::SSL::VERIFY_PEER)
+        .and_return(response_json)
+      subject.post('token', 'some_data')
+    end
+  end
 
   describe '#request' do
     specify 'will add accept=>:json for request' do
