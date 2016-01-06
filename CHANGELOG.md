@@ -1,8 +1,7 @@
 # Changelog
 
-## v0.7.0 (released at 1/1/2016)
+## v0.6.9 (released at 1/6/2016)
 
-* Using [http](https://github.com/httprb/http) instead of rest-client for performance reason.
 * Fix token refresh bug on multi worker. #76
 * Rewrite the token relative code to add more storage support in future.
 
