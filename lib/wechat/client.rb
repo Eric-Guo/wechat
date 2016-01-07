@@ -37,7 +37,7 @@ module Wechat
     def request(path, header = {}, &_block)
       url = "#{header.delete(:base) || base}#{path}"
       as = header.delete(:as)
-      header.merge!(accept: :json)
+      header.merge!('Accept' => 'application/json')
       response = yield(url, header)
 
       fail "Request not OK, response status #{response.status}" if response.status != 200
