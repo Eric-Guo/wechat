@@ -165,6 +165,7 @@ module Wechat
         render nothing: true, status: 200, content_type: 'text/html'
       end
 
+      Wechat::WechatLog.create_by_responder post_xml, response, session
       after_wechat_response(request, response) if respond_to?(:after_wechat_response)
     end
 
