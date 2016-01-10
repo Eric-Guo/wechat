@@ -79,16 +79,16 @@ default: &default
   token:  "app_token"
   access_token: "/var/tmp/wechat_access_token"
 
-production: 
+production:
   appid: <%= ENV['WECHAT_APPID'] %>
   secret: <%= ENV['WECHAT_APP_SECRET'] %>
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
 
-development: 
+development:
   <<: *default
 
-test: 
+test:
   <<: *default
 ```
 
@@ -149,11 +149,11 @@ Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://
 ```ruby
 class WechatFirstController < ActionController::Base
    wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1")
-   
+
    on :text, with:"help", respond: "help content"
 end
 ```
-    
+
 #### jssdk 支持
 
 jssdk 使用前需通过config接口注入权限验证配置, 所需参数可以通过 signature 方法获取:
@@ -354,7 +354,7 @@ articles:
 然后执行命令行
 
 ```
-$ wechat custom_news oCfEht9oM*********** articles.yml 
+$ wechat custom_news oCfEht9oM*********** articles.yml
 
 ```
 
@@ -368,7 +368,7 @@ template:
   url: "http://weixin.qq.com/download"
   topcolor: "#FF0000"
   data:
-    first: 
+    first:
       value: "你好，你已报名成功"
       color: "#0A0A0A"      
     keynote1:
@@ -405,7 +405,7 @@ $ wechat template_message oCfEht9oM*********** template.yml
 ```ruby
 class WechatsController < ActionController::Base
   wechat_responder
-  
+
   # 默认文字信息responder
   on :text do |request, content|
     request.reply.text "echo: #{content}" #Just echo
@@ -522,6 +522,13 @@ class WechatsController < ActionController::Base
 
   # 当无任何responder处理用户信息时,使用这个responder处理
   on :fallback, respond: 'fallback message'
+
+  # 如果你要在微信回复后增加一些操作，可以用 after_wechat_response(req, res)
+  # private
+  #
+  # def after_wechat_response(req, res)
+  #   WechatLog.create req: req, res: res
+  # end
 end
 ```
 
@@ -557,7 +564,7 @@ class WechatsController < ActionController::Base
   # 当无任何responder处理用户信息时，转发至客服处理。
   on :fallback do |message|
 	message.reply.transfer_customer_service
-  end 
+  end
 end
 ```
 
