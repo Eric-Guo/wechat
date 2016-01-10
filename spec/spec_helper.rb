@@ -11,6 +11,19 @@ require File.expand_path('../dummy/config/environment', __FILE__)
 require 'rspec/rails'
 
 Dir[File.join(File.dirname(__FILE__), '../spec/support/**/*.rb')].sort.each { |f| require f }
+
+ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
+ActiveRecord::Migration.verbose = false
+ActiveRecord::Schema.define do
+  create_table :wechat_logs do |t|
+    t.string :openid, null: false, index: true
+    t.text :request_raw
+    t.text :response_raw
+    t.text :session_raw
+    t.datetime :created_at, null: false
+  end
+end
+
 RSpec.configure do |config|
   config.mock_with :rspec
   config.infer_base_class_for_anonymous_controllers = true
