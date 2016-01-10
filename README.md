@@ -17,7 +17,7 @@ WeChat gem trying to helping Rails developer to integrated [enterprise account](
 
 `wechat` command share the same API in console, so you can interactive with wechat server quickly, without starting up web environment/code.
 
-A responder DSL can used in Rails controller, so giving a event based interface to handler message sent by end user from wechat server. 
+A responder DSL can used in Rails controller, so giving a event based interface to handler message sent by end user from wechat server.
 
 Wechat provide OAuth2.0 as authentication service and possible to intergrated with devise/other authorization gems, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) is a good start
 
@@ -88,16 +88,16 @@ default: &default
   token:  "app_token"
   access_token: "/var/tmp/wechat_access_token"
 
-production: 
+production:
   appid: <%= ENV['WECHAT_APPID'] %>
   secret: <%= ENV['WECHAT_APP_SECRET'] %>
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
 
-development: 
+development:
   <<: *default
 
-test: 
+test:
   <<: *default
 ```
 
@@ -161,11 +161,11 @@ Rare case, you may want to hosting more than one wechat enterprise/public accoun
 ```ruby
 class WechatFirstController < ActionController::Base
    wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1")
-   
+
    on :text, with:"help", respond: "help content"
 end
 ```
-    
+
 #### JS-SDK helper
 
 JS-SDK enable you control wechat behavior in your web page, but need inject a config with signature methods first, you can obtain those signature hash via below
@@ -182,7 +182,7 @@ wechat gems won't handle any privilege exception. (except token time out, but it
 
 The available API is different between public account and enterprise account, so wechat gems provide different set of command.
 
-Feel safe if you can not read Chinese in the comments, it's keep there in order to copy & find in official document more easier. 
+Feel safe if you can not read Chinese in the comments, it's keep there in order to copy & find in official document more easier.
 
 #### Public account command line
 
@@ -367,7 +367,7 @@ articles:
 After that, can running command:
 
 ```
-$ wechat custom_news oCfEht9oM*********** articles.yml 
+$ wechat custom_news oCfEht9oM*********** articles.yml
 
 ```
 
@@ -381,7 +381,7 @@ template:
   url: "http://weixin.qq.com/download"
   topcolor: "#FF0000"
   data:
-    first: 
+    first:
       value: "Hello, you successfully registed"
       color: "#0A0A0A"      
     keynote1:
@@ -535,10 +535,17 @@ class WechatsController < ActionController::Base
 
   # Any not match above will fail to below
   on :fallback, respond: 'fallback message'
+
+  # If you need do something after response, you should add after_wechat_response(req, res)
+  # private
+  #
+  # def after_wechat_response(req, res)
+  #   WechatLog.create req: req, res: res
+  # end
 end
 ```
 
-So the importent statement is only `wechat_responder`, all other is just a DSL: 
+So the importent statement is only `wechat_responder`, all other is just a DSL:
 
 ```
 on <message_type> do |message|
@@ -571,13 +578,13 @@ class WechatsController < ActionController::Base
   # When no other responder can handle incoming message, will transfer to human customer service.
   on :fallback do |message|
     message.reply.transfer_customer_service
-  end 
+  end
 end
 ```
 
 Caution: do not setting default text responder if you want to using [multiply human customer service](http://dkf.qq.com/), other will lead text message can not transfer.
 
-  
+
 ## Known Issue
 
 * Sometime, enterprise account can not receive the menu message due to Tencent server can not resolved the DNS, so using IP as a callback URL more stable, but it's never happen for user sent text message.
