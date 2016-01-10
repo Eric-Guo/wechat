@@ -28,7 +28,11 @@ module Wechat
     def post_file(path, file, post_header = {})
       request(path, post_header) do |url, header|
         params = header.delete(:params)
-        HTTP.headers(header).post(url, params: params, form: { media: HTTP::FormData::File.new(file) }, ssl_context: ssl_context)
+        HTTP.headers(header)
+          .post(url, params: params,
+                     form: { media: HTTP::FormData::File.new(file),
+                             hack: 'X' }, # Existing here for http-form_data 1.0.1 handle single param improperly
+                     ssl_context: ssl_context)
       end
     end
 
