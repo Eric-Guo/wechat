@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7.1 (released at 1/11/2016)
+
+* Fix after using http, upload file function break. #78
+* Add callback function after_wechat_response support. by @zfben #79
+* Should using department_id instead of departmentid at enterprise api: user_simplelist/user_list.
+
 ## v0.7.0 (released at 1/1/2016)
 
 * Using [http](https://github.com/httprb/http) instead of rest-client for performance reason. (not support upload file yet)
