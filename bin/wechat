@@ -173,8 +173,7 @@ class App < Thor
 
     desc 'upload_replaceparty [BATCH_PARTY_CSV_PATH]', '上传文件方式全量覆盖部门'
     def upload_replaceparty(batch_party_csv_path)
-      file = File.new(batch_party_csv_path)
-      media_id = wechat_api.media_create('file', file)['media_id']
+      media_id = wechat_api.media_create('file', batch_party_csv_path)['media_id']
       job_id = wechat_api.batch_replaceparty(media_id)['jobid']
       puts "running job_id: #{job_id}"
       puts wechat_api.batch_job_result(job_id)
@@ -192,8 +191,7 @@ class App < Thor
 
     desc 'upload_replaceuser [BATCH_USER_CSV_PATH]', '上传文件方式全量覆盖成员'
     def upload_replaceuser(batch_user_csv_path)
-      file = File.new(batch_user_csv_path)
-      media_id = wechat_api.media_create('file', file)['media_id']
+      media_id = wechat_api.media_create('file', batch_user_csv_path)['media_id']
       job_id = wechat_api.batch_replaceuser(media_id)['jobid']
       puts "running job_id: #{job_id}"
       puts wechat_api.batch_job_result(job_id)
@@ -321,8 +319,7 @@ class App < Thor
 
   desc 'media_create [MEDIA_TYPE, PATH]', '媒体上传'
   def media_create(type, path)
-    file = File.new(path)
-    puts wechat_api.media_create(type, file)
+    puts wechat_api.media_create(type, path)
   end
 
   desc 'material [MEDIA_ID, PATH]', '永久媒体下载'
@@ -369,19 +366,15 @@ class App < Thor
 
   desc 'custom_image [OPENID, IMAGE_PATH]', '发送图片客服消息'
   def custom_image(openid, image_path)
-    file = File.new(image_path)
     api = wechat_api
-
-    media_id = api.media_create('image', file)['media_id']
+    media_id = api.media_create('image', image_path)['media_id']
     puts api.custom_message_send Wechat::Message.to(openid).image(media_id)
   end
 
   desc 'custom_voice [OPENID, VOICE_PATH]', '发送语音客服消息'
   def custom_voice(openid, voice_path)
-    file = File.new(voice_path)
     api = wechat_api
-
-    media_id = api.media_create('voice', file)['media_id']
+    media_id = api.media_create('voice', voice_path)['media_id']
     puts api.custom_message_send Wechat::Message.to(openid).voice(media_id)
   end
 
@@ -389,11 +382,9 @@ class App < Thor
   method_option :title, aliases: '-h', desc: '视频标题'
   method_option :description, aliases: '-d', desc: '视频描述'
   def custom_video(openid, video_path)
-    file = File.new(video_path)
     api = wechat_api
-
     api_opts = options.slice(:title, :description)
-    media_id = api.media_create('video', file)['media_id']
+    media_id = api.media_create('video', video_path)['media_id']
     puts api.custom_message_send Wechat::Message.to(openid).video(media_id, api_opts)
   end
 
@@ -402,11 +393,9 @@ class App < Thor
   method_option :description, aliases: '-d', desc: '音乐描述'
   method_option :HQ_music_url, aliases: '-u', desc: '高质量音乐URL链接'
   def custom_music(openid, thumbnail_path, music_url)
-    file = File.new(thumbnail_path)
     api = wechat_api
-
     api_opts = options.slice(:title, :description, :HQ_music_url)
-    thumb_media_id = api.media_create('thumb', file)['thumb_media_id']
+    thumb_media_id = api.media_create('thumb', thumbnail_path)['thumb_media_id']
     puts api.custom_message_send Wechat::Message.to(openid).music(thumb_media_id, music_url, api_opts)
   end
 

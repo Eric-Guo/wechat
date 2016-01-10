@@ -17,7 +17,7 @@ module Wechat
     end
 
     def media_create(type, file)
-      post 'media/upload', { upload: { media: file } }, params: { type: type }
+      post_file 'media/upload', file, params: { type: type }
     end
 
     protected
