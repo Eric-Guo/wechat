@@ -164,6 +164,8 @@ module Wechat
       else
         render nothing: true, status: 200, content_type: 'text/html'
       end
+
+      after_wechat_response(request, response) if respond_to?(:after_wechat_response)
     end
 
     private
