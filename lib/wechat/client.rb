@@ -25,12 +25,23 @@ module Wechat
       end
     end
 
+    def post_file(path, file, post_header = {})
+      request(path, post_header) do |url, header|
+        params = header.delete(:params)
+        HTTP.headers(header)
+          .post(url, params: params,
+                     form: { media: HTTP::FormData::File.new(file),
+                             hack: 'X' }, # Existing here for http-form_data 1.0.1 handle single param improperly
+                     ssl_context: ssl_context)
+      end
+    end
+
     private
 
     def request(path, header = {}, &_block)
       url = "#{header.delete(:base) || base}#{path}"
       as = header.delete(:as)
-      header.merge!(accept: :json)
+      header.merge!('Accept' => 'application/json')
       response = yield(url, header)
 
       fail "Request not OK, response status #{response.status}" if response.status != 200

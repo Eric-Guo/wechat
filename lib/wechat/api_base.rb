@@ -17,7 +17,7 @@ module Wechat
     end
 
     def media_create(type, file)
-      post 'media/upload', { upload: { media: file } }, params: { type: type }
+      post_file 'media/upload', file, params: { type: type }
     end
 
     protected
@@ -31,6 +31,12 @@ module Wechat
     def post(path, payload, headers = {})
       with_access_token(headers[:params]) do |params|
         client.post path, payload, headers.merge(params: params)
+      end
+    end
+
+    def post_file(path, file, headers = {})
+      with_access_token(headers[:params]) do |params|
+        client.post_file path, file, headers.merge(params: params)
       end
     end
 

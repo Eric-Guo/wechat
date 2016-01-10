@@ -197,9 +197,9 @@ RSpec.describe Wechat::Api do
 
   describe '#media_create' do
     specify 'will post media/upload with access_token, type and media payload at file based api endpoint' do
-      file = 'file'
-      expect(subject.client).to receive(:post)
-        .with('media/upload', { upload: { media: file } },
+      file = 'README.md'
+      expect(subject.client).to receive(:post_file)
+        .with('media/upload', file,
               params: { type: 'image', access_token: 'access_token' }).and_return(true)
       expect(subject.media_create('image', file)).to be true
     end
@@ -241,9 +241,9 @@ RSpec.describe Wechat::Api do
 
   describe '#material_add' do
     specify 'will post material/add_material with access_token, type and media payload at file based api endpoint' do
-      file = 'file'
-      expect(subject.client).to receive(:post)
-        .with('material/add_material', { upload: { media: file } },
+      file = 'README.md'
+      expect(subject.client).to receive(:post_file)
+        .with('material/add_material', file,
               params: { type: 'image', access_token: 'access_token' }).and_return(true)
       expect(subject.material_add('image', file)).to be true
     end

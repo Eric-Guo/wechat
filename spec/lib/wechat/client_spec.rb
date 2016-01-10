@@ -37,7 +37,7 @@ RSpec.describe Wechat::Client do
     specify 'will add accept=>:json for request' do
       block = lambda do |url, headers|
         expect(url).to eq('http://host/token')
-        expect(headers).to eq(params: { access_token: '1234' }, accept: :json)
+        expect(headers).to eq(params: { access_token: '1234' }, 'Accept' => 'application/json')
         response_json
       end
 
