@@ -26,6 +26,7 @@ module Wechat
 
     def initialize(message_hash)
       @message_hash = message_hash || {}
+      session
     end
 
     def [](key)

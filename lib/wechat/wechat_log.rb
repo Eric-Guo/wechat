@@ -3,7 +3,7 @@ require 'active_record'
 module Wechat
   class WechatLog < ::ActiveRecord::Base
     def self.create_by_responder(req, res, session)
-      create openid: req[:FromUserName], request_raw: req.try(:to_json), response_raw: res.try(:to_json), session_raw: session.to_json
+      create openid: req[:FromUserName], request: req, response: res, session: session
     end
 
     def self.find_session(openid)
@@ -14,6 +14,10 @@ module Wechat
       define_method name do
         raw = send(:"#{name}_raw")
         raw.blank? ? {} : JSON.parse(raw).symbolize_keys
+      end
+
+      define_method :"#{name}=" do |obj|
+        self[:"#{name}_raw"] = obj.try(:to_json)
       end
     end
   end
