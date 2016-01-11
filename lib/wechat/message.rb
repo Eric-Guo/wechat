@@ -36,8 +36,13 @@ module Wechat
       Message.new(
         ToUserName: message_hash[:FromUserName],
         FromUserName: message_hash[:ToUserName],
-        CreateTime: Time.now.to_i
+        CreateTime: Time.now.to_i,
+        session: session
       )
+    end
+
+    def session
+      @message_hash[:session] ||= Wechat::WechatLog.find_session(message_hash[:FromUserName]) || {}
     end
 
     def as(type)

@@ -6,16 +6,15 @@ module Wechat
       create openid: req[:FromUserName], request_raw: req.try(:to_json), response_raw: res.try(:to_json), session_raw: session.to_json
     end
 
-    def request
-      Hash.from_json request_raw
+    def self.find_session(openid)
+      select(:session_raw).where(openid: openid).last.try :session
     end
 
-    def response
-      Hash.from_json response_raw
-    end
-
-    def session
-      Hash.from_json session_raw
+    %i(request response session).each do |name|
+      define_method name do
+        raw = send(:"#{name}_raw")
+        raw.blank? ? {} : JSON.parse(raw).symbolize_keys
+      end
     end
   end
 end
