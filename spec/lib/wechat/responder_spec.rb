@@ -226,6 +226,12 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("cmd: #{cmd}")
       end
 
+      on :text, with: 'session count' do |message|
+        message.session[:count] ||= 0
+        message.session[:count] += 1
+        message.reply.text message.session[:count]
+      end
+
       on :event, with: 'subscribe' do |message, event|
         message.reply.text("event: #{event}")
       end
@@ -285,6 +291,14 @@ RSpec.describe WechatController, type: :controller do
     specify 'response text with regex matched' do
       post :create, signature_params.merge(xml: text_message.merge(Content: 'cmd:reload'))
       expect(xml_to_hash(response)[:Content]).to eq('cmd: reload')
+    end
+
+    specify 'response text with session count' do
+      post :create, signature_params.merge(xml: text_message.merge(Content: 'session count'))
+      expect(xml_to_hash(response)[:Content]).to eq('1')
+
+      post :create, signature_params.merge(xml: text_message.merge(Content: 'session count'))
+      expect(xml_to_hash(response)[:Content]).to eq('2')
     end
 
     specify 'response subscribe event with matched event' do

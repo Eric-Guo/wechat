@@ -54,6 +54,7 @@ module Wechat
         else
           user_defined_responders(message_type) << config
         end
+
         config
       end
 
@@ -177,7 +178,7 @@ module Wechat
         render nothing: true, status: 200, content_type: 'text/html'
       end
 
-      Wechat::WechatLog.create_by_responder post_xml, response, session
+      Wechat::WechatLog.create_by_responder post_xml, response, response.session if response.is_a?(Wechat::Message)
       after_wechat_response(request, response) if respond_to?(:after_wechat_response)
     end
 
