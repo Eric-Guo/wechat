@@ -41,6 +41,8 @@ module Wechat
           user_defined_view_responders(with) << config
         when :batch_job
           user_defined_batch_job_responders(with) << config
+        when :scan
+          user_defined_scan_responders << config
         when :location
           user_defined_location_responders << config
         else
@@ -62,6 +64,10 @@ module Wechat
       def user_defined_batch_job_responders(with)
         @batch_job_responders ||= {}
         @batch_job_responders[with] ||= []
+      end
+
+      def user_defined_scan_responders
+        @scan_responders ||= []
       end
 
       def user_defined_location_responders
@@ -88,7 +94,7 @@ module Wechat
           elsif 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
           elsif known_scan_key_lists.include?(message[:EventKey])
-            yield(* known_scan_with_match_responders(user_defined_responders(:scan), message))
+            yield(* known_scan_with_match_responders(user_defined_scan_responders, message))
           elsif 'batch_job_result' == message[:Event]
             yield(* user_defined_batch_job_responders(message[:BatchJob][:JobType]), message[:BatchJob])
           elsif 'location' == message[:Event]
