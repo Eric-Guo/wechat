@@ -29,7 +29,13 @@ module Wechat
         if with.present?
           fail 'Only text, event, click, view, scan and batch_job can having :with parameters' unless [:text, :event, :click, :view, :scan, :batch_job].include?(message_type)
           config.merge!(with: with)
-          self.known_scan_key_lists = with if message_type == :scan && with.is_a?(String)
+          if message_type == :scan
+            if with.is_a?(String)
+              self.known_scan_key_lists = with
+            else
+              fail 'on :scan only support string in parameter with, detail see https://github.com/Eric-Guo/wechat/issues/84'
+            end
+          end
         else
           fail 'Message type click, view, scan and batch_job must specify :with parameters' if [:click, :view, :scan, :batch_job].include?(message_type)
         end
