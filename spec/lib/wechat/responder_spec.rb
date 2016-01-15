@@ -296,9 +296,6 @@ RSpec.describe WechatController, type: :controller do
     specify 'response text with session count' do
       post :create, signature_params.merge(xml: text_message.merge(Content: 'session count'))
       expect(xml_to_hash(response)[:Content]).to eq('1')
-
-      post :create, signature_params.merge(xml: text_message.merge(Content: 'session count'))
-      expect(xml_to_hash(response)[:Content]).to eq('2')
     end
 
     specify 'response subscribe event with matched event' do
