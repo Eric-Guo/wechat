@@ -29,7 +29,13 @@ module Wechat
         if with.present?
           fail 'Only text, event, click, view, scan and batch_job can having :with parameters' unless [:text, :event, :click, :view, :scan, :batch_job].include?(message_type)
           config.merge!(with: with)
-          self.known_scan_key_lists = with if message_type == :scan
+          if message_type == :scan
+            if with.is_a?(String)
+              self.known_scan_key_lists = with
+            else
+              fail 'on :scan only support string in parameter with, detail see https://github.com/Eric-Guo/wechat/issues/84'
+            end
+          end
         else
           fail 'Message type click, view, scan and batch_job must specify :with parameters' if [:click, :view, :scan, :batch_job].include?(message_type)
         end
@@ -41,6 +47,8 @@ module Wechat
           user_defined_view_responders(with) << config
         when :batch_job
           user_defined_batch_job_responders(with) << config
+        when :scan
+          user_defined_scan_responders << config
         when :location
           user_defined_location_responders << config
         else
@@ -62,6 +70,10 @@ module Wechat
       def user_defined_batch_job_responders(with)
         @batch_job_responders ||= {}
         @batch_job_responders[with] ||= []
+      end
+
+      def user_defined_scan_responders
+        @scan_responders ||= []
       end
 
       def user_defined_location_responders
@@ -88,7 +100,7 @@ module Wechat
           elsif 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
           elsif known_scan_key_lists.include?(message[:EventKey])
-            yield(* known_scan_with_match_responders(user_defined_responders(:scan), message))
+            yield(* known_scan_with_match_responders(user_defined_scan_responders, message))
           elsif 'batch_job_result' == message[:Event]
             yield(* user_defined_batch_job_responders(message[:BatchJob][:JobType]), message[:BatchJob])
           elsif 'location' == message[:Event]

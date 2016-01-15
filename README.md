@@ -418,7 +418,6 @@ So the ActionController should defined like below:
 ```ruby
 class WechatsController < ActionController::Base
   wechat_responder
-  wechat_responder
 
   # default text responder when no other match
   on :text do |request, content|

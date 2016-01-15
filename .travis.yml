@@ -6,6 +6,11 @@ rvm:
   - 2.0.0
   - 2.1
   - 2.2
+  - 2.3
+
+matrix:
+  allow_failures:
+    - rvm: 2.3
 
 install:
   - "travis_retry bundle config build.nokogiri --use-system-libraries"
