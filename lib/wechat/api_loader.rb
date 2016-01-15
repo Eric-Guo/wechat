@@ -48,14 +48,10 @@ HELP
         rails_config_file = File.join(Dir.getwd, 'config/wechat.yml')
         home_config_file = File.join(Dir.home, '.wechat.yml')
         if File.exist?(rails_config_file)
-          config_hash = YAML.load(ERB.new(File.read(rails_config_file)).result)
-          if ENV['RAILS_ENV']
-            config = config_hash[ENV['RAILS_ENV']]
-          else
-            config = config_hash['default']
-          end
+          rails_env = ENV['RAILS_ENV'] || 'default'
+          config = YAML.load(ERB.new(File.read(rails_config_file)).result)[rails_env]
           if config.present? && (config['appid'] || config['corpid'])
-            puts "Using rails project config/wechat.yml #{ENV['RAILS_ENV'] || 'default'} setting..."
+            puts "Using rails project config/wechat.yml #{rails_env} setting..."
             return config
           end
         end
