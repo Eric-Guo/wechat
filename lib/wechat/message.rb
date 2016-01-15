@@ -153,7 +153,7 @@ module Wechat
     end
 
     def save_to!(model_class)
-      model = model_class.new(underscore_hash_keys(message_hash))
+      model = model_class.new(underscore_hash_keys(message_hash.tap { |hs| hs.delete(:session) }))
       model.save!
       self
     end
