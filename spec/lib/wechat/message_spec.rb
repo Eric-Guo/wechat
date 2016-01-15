@@ -25,7 +25,7 @@ RSpec.describe Wechat::Message do
     specify 'will create message' do
       message = Wechat::Message.from_hash(text_request)
       expect(message).to be_a(Wechat::Message)
-      expect(message.message_hash.size).to eq(6)
+      expect(message.message_hash.size).to eq(7)
     end
   end
 
