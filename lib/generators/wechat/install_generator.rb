@@ -21,7 +21,7 @@ module Wechat
       end
 
       def copy_model_migration
-        migration_template 'db/migration.rb', 'db/migrate/create_wechat_logs.rb'
+        migration_template 'db/migration.rb', 'db/migrate/create_wechat_sessions.rb'
       end
 
       def self.next_migration_number(dirname)
