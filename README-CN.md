@@ -522,13 +522,6 @@ class WechatsController < ActionController::Base
 
   # 当无任何responder处理用户信息时,使用这个responder处理
   on :fallback, respond: 'fallback message'
-
-  # 如果你要在微信回复后增加一些操作，可以用 after_wechat_response(req, res)
-  # private
-  #
-  # def after_wechat_response(req, res)
-  #   WechatLog.create req: req, res: res
-  # end
 end
 ```
 
@@ -569,6 +562,20 @@ end
 ```
 
 注意设置了[多客服消息转发](http://dkf.qq.com/)后，不能再添加`默认文字信息responder`，否则文字消息将得不到转发。
+
+### 通知
+
+现支持以下通知：
+
+* `wechat.responder.after_create` data 包含 message<Wechat::Message> 和 response_raw<XML string>
+
+使用示例：
+
+```ruby
+ActiveSupport::Notifications.subscribe('wechat.responder.after_create') do |name, started, finished, unique_id, data|
+  WechatLog.create message: data[:message], response_raw: data[:response_raw]
+end
+```
 
 ## 已知问题
 

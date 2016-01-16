@@ -47,7 +47,7 @@ module Wechat
     end
 
     def session
-      @message_hash[:session] ||= Wechat::WechatLog.find_session(message_hash[:FromUserName]) || {}
+      @message_hash[:session] ||= Wechat::WechatSession.find_session(message_hash[:FromUserName]) || {}
     end
 
     def as(type)
