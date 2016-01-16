@@ -32,10 +32,6 @@ module Wechat
       message_hash[key]
     end
 
-    def merge(other_hash)
-      @message_hash.merge!(other_hash)
-    end
-
     def reply
       Message.new(
         ToUserName: message_hash[:FromUserName],
