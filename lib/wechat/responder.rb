@@ -173,16 +173,14 @@ module Wechat
       response = run_responder(request)
 
       if response.respond_to? :to_xml
-        response_xml = process_response(response)
-        render plain: response_xml
+        render plain: process_response(response)
       else
-        response_xml = nil
         render nothing: true, status: 200, content_type: 'text/html'
       end
 
       Wechat::WechatSession.update_session post_xml[:FromUserName], response.session if response.is_a?(Wechat::Message)
 
-      ActiveSupport::Notifications.instrument 'wechat.responder.after_create', message: request, response_raw: response_xml
+      ActiveSupport::Notifications.instrument 'wechat.responder.after_create', request: request, response: response
     end
 
     private

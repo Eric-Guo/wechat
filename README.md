@@ -578,13 +578,13 @@ Caution: do not setting default text responder if you want to using [multiply hu
 
 ### Notifications
 
-* `wechat.responder.after_create` data include message<Wechat::Message> and response_raw<XML string>.
+* `wechat.responder.after_create` data include request<Wechat::Message> and response<Wechat::Message>.
 
 Example:
 
 ```ruby
 ActiveSupport::Notifications.subscribe('wechat.responder.after_create') do |name, started, finished, unique_id, data|
-  WechatLog.create message: data[:message], response_raw: data[:response_raw]
+  WechatLog.create request: data[:request], response: data[:response]
 end
 ```
 

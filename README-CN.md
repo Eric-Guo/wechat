@@ -567,13 +567,13 @@ end
 
 现支持以下通知：
 
-* `wechat.responder.after_create` data 包含 message<Wechat::Message> 和 response_raw<XML string>
+* `wechat.responder.after_create` data 包含 request<Wechat::Message> 和 response<Wechat::Message>
 
 使用示例：
 
 ```ruby
 ActiveSupport::Notifications.subscribe('wechat.responder.after_create') do |name, started, finished, unique_id, data|
-  WechatLog.create message: data[:message], response_raw: data[:response_raw]
+  WechatLog.create request: data[:request], response: data[:response]
 end
 ```
 
