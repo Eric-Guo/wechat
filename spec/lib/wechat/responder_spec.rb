@@ -19,12 +19,12 @@ RSpec.describe WechatController, type: :controller do
   end
 
   let(:message_base) do
-    {
+    Wechat::Message.new(
       ToUserName: 'toUser',
       FromUserName: 'fromUser',
       CreateTime: '1348831860',
       MsgId: '1234567890123456'
-    }
+    )
   end
 
   let(:text_message) { message_base.merge(MsgType: 'text', Content: 'text message') }
