@@ -534,13 +534,6 @@ class WechatsController < ActionController::Base
 
   # Any not match above will fail to below
   on :fallback, respond: 'fallback message'
-
-  # If you need do something after response, you should add after_wechat_response(req, res)
-  # private
-  #
-  # def after_wechat_response(req, res)
-  #   WechatLog.create req: req, res: res
-  # end
 end
 ```
 
@@ -583,6 +576,17 @@ end
 
 Caution: do not setting default text responder if you want to using [multiply human customer service](http://dkf.qq.com/), other will lead text message can not transfer.
 
+### Notifications
+
+* `wechat.responder.after_create` data include message<Wechat::Message> and response_raw<XML string>.
+
+Example:
+
+```ruby
+ActiveSupport::Notifications.subscribe('wechat.responder.after_create') do |name, started, finished, unique_id, data|
+  WechatLog.create message: data[:message], response_raw: data[:response_raw]
+end
+```
 
 ## Known Issue
 
