@@ -100,7 +100,7 @@ module Wechat
             yield(* user_defined_view_responders(message[:EventKey]), message[:EventKey])
           elsif 'click' == message[:Event]
             yield(* match_responders(responders, message[:EventKey]))
-          elsif known_scan_key_lists.include?(message[:EventKey])
+          elsif known_scan_key_lists.include?(message[:EventKey]) && %w(scan subscribe scancode_push scancode_waitmsg).include?(message[:Event])
             yield(* known_scan_with_match_responders(user_defined_scan_responders, message))
           elsif 'batch_job_result' == message[:Event]
             yield(* user_defined_batch_job_responders(message[:BatchJob][:JobType]), message[:BatchJob])
