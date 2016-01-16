@@ -228,7 +228,7 @@ RSpec.describe WechatController, type: :controller do
 
       on :text, with: 'session count' do |message|
         message.session[:count] ||= 0
-        message.session[:count] += 1
+        message.session[:count] = message.session[:count].to_i + 1
         message.reply.text message.session[:count]
       end
 
@@ -296,6 +296,13 @@ RSpec.describe WechatController, type: :controller do
     specify 'response text with session count' do
       post :create, signature_params.merge(xml: text_message.merge(Content: 'session count'))
       expect(xml_to_hash(response)[:Content]).to eq('1')
+    end
+
+    specify 'response text with session count in one record advance' do
+      post_xml = text_message.merge(Content: 'session count')
+      Wechat::WechatLog.create_by_responder post_xml, post_xml, { count: 1 }
+      post :create, signature_params.merge(xml: post_xml)
+      expect(xml_to_hash(response)[:Content]).to eq('2')
     end
 
     specify 'response subscribe event with matched event' do
