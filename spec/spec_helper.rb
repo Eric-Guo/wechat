@@ -15,12 +15,14 @@ Dir[File.join(File.dirname(__FILE__), '../spec/support/**/*.rb')].sort.each { |f
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 ActiveRecord::Migration.verbose = false
 ActiveRecord::Schema.define do
-  create_table :wechat_logs do |t|
+  create_table :wechat_sessions do |t|
     t.string :openid, null: false, index: true
-    t.text :request_raw
-    t.text :response_raw
-    t.text :session_raw
-    t.datetime :created_at, null: false
+    if connection.adapter_name.downcase.to_sym == :postgresql
+      t.json :session_raw
+    else
+      t.string :session_raw
+    end
+    t.timestamps null: false
   end
 end
 
