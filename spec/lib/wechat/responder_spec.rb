@@ -298,9 +298,8 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'response text with session count in one record advance' do
-      post_xml = text_message.update(Content: 'session count')
-      Wechat::WechatLog.create_by_responder post_xml, post_xml, count: 1
-      post :create, signature_params.merge(xml: post_xml)
+      Wechat::WechatSession.update_session text_message[:FromUserName], count: 1
+      post :create, signature_params.merge(xml: text_message.update(Content: 'session count'))
       expect(xml_to_hash(response)[:Content]).to eq('2')
     end
 
