@@ -17,7 +17,7 @@ ActiveRecord::Migration.verbose = false
 ActiveRecord::Schema.define do
   create_table :wechat_sessions do |t|
     t.string :openid, null: false, index: true
-    t.string :json_hash_raw
+    t.string :hash_store
     t.integer :count, default: 0
     t.timestamps null: false
   end

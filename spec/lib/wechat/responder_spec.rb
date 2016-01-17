@@ -231,9 +231,9 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text message.session.count
       end
 
-      on :text, with: 'session json_hash count' do |message|
-        message.session.json_hash = { count: message.session.json_hash.fetch(:count, 0) + 1 }
-        message.reply.text message.session.json_hash[:count]
+      on :text, with: 'session hash_store count' do |message|
+        message.session.hash_store[:count] = message.session.hash_store.fetch(:count, 0) + 1
+        message.reply.text message.session.hash_store[:count]
       end
 
       on :event, with: 'subscribe' do |message, event|
@@ -310,18 +310,18 @@ RSpec.describe WechatController, type: :controller do
       expect(xml_to_hash(response)[:Content]).to eq('3')
     end
 
-    specify 'response text with session json_hash count with no session record' do
+    specify 'response text with session hash_store count with no session record' do
       WechatSession.all.delete_all
-      post :create, signature_params.merge(xml: text_message.update(Content: 'session json_hash count'))
+      post :create, signature_params.merge(xml: text_message.update(Content: 'session hash_store count'))
       expect(xml_to_hash(response)[:Content]).to eq('1')
     end
 
-    specify 'response text with session json_hash count with existing session record' do
+    specify 'response text with session hash_store count with existing session record' do
       WechatSession.all.delete_all
       ws = WechatSession.new openid: text_message[:FromUserName]
-      ws.json_hash = { count: 2 }
+      ws.hash_store = { count: 2 }
       ws.save!
-      post :create, signature_params.merge(xml: text_message.update(Content: 'session json_hash count'))
+      post :create, signature_params.merge(xml: text_message.update(Content: 'session hash_store count'))
       expect(xml_to_hash(response)[:Content]).to eq('3')
     end
 
