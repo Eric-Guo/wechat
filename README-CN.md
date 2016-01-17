@@ -46,6 +46,15 @@ rails generate wechat:install
 
 运行`rails g wechat:install`后会自动生成wechat.yml配置，还有wechat controller及相关路由配置到当前Rails项目。
 
+启用session会话记录:
+
+```console
+rails g wechat:session
+rake db:migrate
+```
+
+运行后会自动启用回调消息会话(session)记录，wechat gem会在Rails项目中生成两个文件，用户可以在*wechat_session*表中添加更多字段或者声明一些关联关系。使用已有的**hash_store**直接保存也是可以的，但对于PostgreSQL用户，使用[hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)或者json格式可能更佳，当然，最佳方案仍然是添加新字段记录数据。
+
 
 ## 配置
 

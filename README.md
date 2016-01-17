@@ -52,12 +52,20 @@ rails generate wechat:install
 
 `rails g wechat:install` will generated the initial `wechat.yml` configuration, example wechat controller and corresponding routes.
 
+Enable session record:
+
+```console
+rails g wechat:session
+rake db:migrate
+```
+
+Enable session record will generate two files in Rails folder,  User can add more column fields in *wechat_session* table and add declare to link to users table, it's also possible to store data directly in **hash_store**. if you are using PostgreSQL, using [hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)/json maybe better, but the best way is still add dedicate column to record the data, the Rails way.
 
 ## Configuration
 
 #### Configure for command line
 
-You can using `wechat` command solely, you need created configure file `~/.wechat.yml` and including below content for public account. the access_token will be write as a file.
+To using `wechat` command solely, needs created configure file `~/.wechat.yml` and including below content for public account. the access_token will be write as a file.
 
 ```
 appid: "my_appid"
