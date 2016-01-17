@@ -46,6 +46,12 @@ module Wechat
       @message_hash[:WechatSession] ||= WechatSession.find_or_initialize_session(underscore_hash_keys(message_hash))
     end
 
+    def save_session
+      ws = message_hash.delete(:WechatSession)
+      ws.try(:save_session, underscore_hash_keys(message_hash))
+      @message_hash[:WechatSession] = ws
+    end
+
     def as(type)
       case type
       when :text
