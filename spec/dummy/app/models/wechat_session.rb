@@ -1,5 +1,7 @@
 # Used by wechat gems, do not rename WechatSession to other name.
 class WechatSession < ActiveRecord::Base
+  validates :openid, presence: true, uniqueness: true
+
   def self.find_session(openid)
     select(:json_hash_raw).where(openid: openid).last.try :json_hash
   end
