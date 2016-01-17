@@ -1,20 +1,20 @@
 # Used by wechat gems, do not rename WechatSession to other name.
 class WechatSession < ActiveRecord::Base
   def self.find_session(openid)
-    select(:session_raw).where(openid: openid).last.try :session
+    select(:json_hash_raw).where(openid: openid).last.try :json_hash
   end
 
   def self.update_session(openid, data)
     session = find_or_initialize_by openid: openid
-    session.session = data
+    session.json_hash = data
     session.save
   end
 
-  def session=(data)
-    self[:session_raw] = data.try :to_json
+  def json_hash=(data)
+    self.json_hash_raw = data.try :to_json
   end
 
-  def session
-    session_raw.blank? ? {} : JSON.parse(session_raw).symbolize_keys
+  def json_hash
+    json_hash_raw.blank? ? {} : JSON.parse(json_hash_raw).symbolize_keys
   end
 end
