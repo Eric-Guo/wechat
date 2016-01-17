@@ -24,7 +24,7 @@ HELP
     def self.config
       return @config unless @config.nil?
       @config ||= loading_config!
-      @config.have_session_table = Wechat::WechatSession.table_exists?
+      @config.have_session_table = WechatSession.try :table_exists?
       @config
     end
 

@@ -8,9 +8,15 @@ module Wechat
       desc 'Enable wechat session support'
       source_root File.expand_path('../templates', __FILE__)
 
-      def copy_model_migration
+      def copy_wechat_sessions_migration
         migration_template 'db/migration.rb', 'db/migrate/create_wechat_sessions.rb'
       end
+
+      def copy_wechat_session_model
+        template 'app/models/wechat_session.rb'
+      end
+
+      private
 
       def self.next_migration_number(dirname)
         ::ActiveRecord::Generators::Base.next_migration_number(dirname)
