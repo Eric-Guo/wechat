@@ -1,5 +1,9 @@
 # Changelog
 
+* Support Rails 3.2 again after support Rails 5.0. by @guange2015 #87 
+* Fetch setting from RAILS_ENV first, then fetch default. by @kikyous #85
+* Warning not support on :scan with regular expression. by @kikyous #84 
+
 ## v0.7.1 (released at 1/11/2016)
 
 * Fix after using http, upload file function break. #78
@@ -9,6 +13,12 @@
 ## v0.7.0 (released at 1/1/2016)
 
 * Using [http](https://github.com/httprb/http) instead of rest-client for performance reason. (not support upload file yet)
+
+## v0.6.10 (released at 1/17/2016)
+
+* Support Rails 3.2 again after support Rails 5.0. by @guange2015 #87 
+* Fetch setting from RAILS_ENV first, then fetch default. by @kikyous #85
+* Warning not support on :scan with regular expression. by @kikyous #84 
 
 ## v0.6.9 (released at 1/6/2016)
 
