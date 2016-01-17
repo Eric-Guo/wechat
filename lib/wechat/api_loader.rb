@@ -24,7 +24,7 @@ HELP
     def self.config
       return @config unless @config.nil?
       @config ||= loading_config!
-      @config.have_session_table = WechatSession.try :table_exists?
+      @config.have_session_table = class_exists?('WechatSession') && WechatSession.table_exists?
       @config
     end
 
@@ -76,6 +76,13 @@ HELP
         skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
         encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
         jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'] }
+    end
+
+    def self.class_exists?(class_name)
+      klass = Module.const_get(class_name)
+      return klass.ancestors.include?(ActiveRecord::Base)
+    rescue NameError
+      return false
     end
   end
 end

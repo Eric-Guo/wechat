@@ -1,3 +1,4 @@
+# Used by wechat gems, do not rename WechatSession to other name.
 class WechatSession < ActiveRecord::Base
   def self.find_session(openid)
     select(:session_raw).where(openid: openid).last.try :session
