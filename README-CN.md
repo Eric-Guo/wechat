@@ -9,6 +9,7 @@ WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平
 - [回调消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（必须运行Web服务器）
 - [微信JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config接口注入权限验证
 - OAuth 2.0认证机制
+- 回调消息会话(session)记录机制（可选）
 
 命令行工具`wechat`可以调用各种无需web环境的API。同时也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理，包括主动推送的和被动响应的消息。
 

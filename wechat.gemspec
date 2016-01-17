@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.version     = version
   s.licenses    = ['MIT']
   s.summary     = 'DSL for wechat message handling and API'
-  s.description = 'API and message handling for WeChat in Rails'
+  s.description = 'API, command and message handling for WeChat in Rails'
 
   s.files = Dir['{bin,lib}/**/*'] + %w(LICENSE Rakefile README.md README-CN.md CHANGELOG.md)
   s.executables << 'wechat'

@@ -13,6 +13,7 @@ WeChat gem trying to helping Rails developer to integrated [enterprise account](
 - [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（You must running on rails server to receiving message）
 - [Wechat JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config signature
 - OAuth 2.0 authentication
+- Record session when received message from user (Optional)
 
 
 `wechat` command share the same API in console, so you can interactive with wechat server quickly, without starting up web environment/code.
