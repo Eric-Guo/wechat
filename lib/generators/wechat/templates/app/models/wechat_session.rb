@@ -3,13 +3,11 @@ class WechatSession < ActiveRecord::Base
   validates :openid, presence: true, uniqueness: true
 
   def self.find_session(openid)
-    find_or_initialize_by(openid: openid).json_hash
+    find_or_initialize_by(openid: openid)
   end
 
-  def self.update_session(openid, data)
-    session = find_or_initialize_by openid: openid
-    session.json_hash = data
-    session.save
+  def save_session
+    save!
   end
 
   def json_hash=(data)
