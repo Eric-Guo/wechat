@@ -178,7 +178,7 @@ module Wechat
         render nothing: true, status: 200, content_type: 'text/html'
       end
 
-      Wechat::WechatSession.update_session post_xml[:FromUserName], response.session if response.is_a?(Wechat::Message)
+      Wechat::WechatSession.update_session post_xml[:FromUserName], post_xml[:ToUserName], response.session if response.is_a?(Wechat::Message)
 
       ActiveSupport::Notifications.instrument 'wechat.responder.after_create', request: request, response: response
     end
