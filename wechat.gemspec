@@ -15,12 +15,14 @@ Gem::Specification.new do |s|
   s.files = Dir['{bin,lib}/**/*'] + %w(LICENSE Rakefile README.md README-CN.md CHANGELOG.md)
   s.executables << 'wechat'
 
-  s.post_install_message = %Q(*****WECHAT BREAK CHANGE*****
-1. Scan 2D barcode using new syntax `on :scan, with: 'BINDING_QR_CODE' `
+  s.post_install_message = %Q(*****************************  WeChat Notice  *****************************
+Last version of v6 series, v7 relay on http gems and performance improved.
+
+1. Scan 2D barcode using new syntax `on :scan, with: 'BINDING_QR_CODE'`
 instead of previous `on :event, with: 'BINDING_QR_CODE' `.
 2. Batch job using new syntax `on :batch_job, with: 'replace_user' `
 instead of previous `on :event, with: 'replace_user' `.
-*****************************)
+***************************************************************************)
 
   s.add_runtime_dependency 'activesupport', '>= 3.2', '< 5.1.x'
   s.add_runtime_dependency 'nokogiri', '>=1.6.0'
