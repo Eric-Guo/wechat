@@ -153,7 +153,7 @@ module Wechat
     end
 
     def save_to!(model_class)
-      model = model_class.new(underscore_hash_keys(message_hash.tap { |hs| hs.delete(:WechatSession) }))
+      model = model_class.new(underscore_hash_keys(message_hash))
       model.save!
       self
     end
@@ -183,7 +183,7 @@ module Wechat
           value = value.collect { |item| item.is_a?(Hash) ? deep_recursive(item, &block) : item }
         end
 
-        key, value = yield(key, value)
+        key, value = yield(key, value) unless key == :WechatSession
         memo.merge!(key => value)
       end
     end
