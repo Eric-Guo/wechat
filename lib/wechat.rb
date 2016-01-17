@@ -7,6 +7,7 @@ module Wechat
   autoload :Message, 'wechat/message'
   autoload :Responder, 'wechat/responder'
   autoload :Cipher, 'wechat/cipher'
+  autoload :WechatSession, 'wechat/wechat_session'
 
   class AccessTokenExpiredError < StandardError; end
   class ResponseError < StandardError
