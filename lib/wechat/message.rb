@@ -122,7 +122,7 @@ module Wechat
     end
 
     def to_xml
-      message_hash.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
+      message_hash.tap { |hs| hs.delete(:WechatSession) }.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
     end
 
     TO_JSON_KEY_MAP = {
