@@ -292,15 +292,19 @@ RSpec.describe WechatController, type: :controller do
       expect(xml_to_hash(response)[:Content]).to eq('cmd: reload')
     end
 
-    specify 'response text with session count' do
+    specify 'response text with session count with no session record' do
+      WechatSession.all.delete_all
       post :create, signature_params.merge(xml: text_message.update(Content: 'session count'))
       expect(xml_to_hash(response)[:Content]).to eq('1')
     end
 
-    specify 'response text with session count in one record advance' do
-      WechatSession.update_session text_message[:FromUserName], count: 1
+    specify 'response text with session count with existing session record' do
+      WechatSession.all.delete_all
+      ws = WechatSession.new openid: text_message[:FromUserName]
+      ws.json_hash = { count: 2 }
+      ws.save!
       post :create, signature_params.merge(xml: text_message.update(Content: 'session count'))
-      expect(xml_to_hash(response)[:Content]).to eq('2')
+      expect(xml_to_hash(response)[:Content]).to eq('3')
     end
 
     specify 'response subscribe event with matched event' do
