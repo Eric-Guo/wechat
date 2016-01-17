@@ -95,6 +95,33 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#user_batchget' do
+    specify 'will post user/info/batchget with access_token and openids' do
+      user_batchget_request = { user_list: [{ openid: 'openid_subscribed', lang: 'en' }, { openid: 'openid_unsubscribe', lang: 'en' }] }
+      user_batchget_result = {
+        user_info_list: [{ subscribe: 1,
+                           openid: 'openid_subscribed',
+                           nickname: 'iWithery',
+                           sex: 1,
+                           language: 'zh_CN',
+                           city: 'Jieyang',
+                           province: 'Guangdong',
+                           country: 'China',
+                           headimgurl: 'http://wx.qlogo.cn/mmopen/xbIQx1GRqdvyqkMMhEaGOX802l1CyqMJNgUzKP8MeAeHFicRDSnZH7FY4XB7p8XHXIf6uJA2SCunTPicGKezDC4saKISzRj3nz/0',
+                           subscribe_time: 1434093047,
+                           unionid: 'oR5GjjgEhCMJFyzaVZdrxZ2zRRF4',
+                           remark: '',
+                           groupid: 0 },
+                         { subscribe: 0,
+                           openid: 'openid_unsubscribe',
+                           unionid: 'oR5GjjjrbqBZbrnPwwmSxFukE41U' }] }
+
+      expect(subject.client).to receive(:post).with('user/info/batchget', user_batchget_request.to_json, params: { access_token: 'access_token' })
+        .and_return(user_batchget_result)
+      expect(subject.user_batchget(%w(openid_subscribed openid_unsubscribe), 'en')).to eq(user_batchget_result)
+    end
+  end
+
   describe '#user_group' do
     specify 'will post groups/getid with access_token and openid to get user groups info' do
       user_request = { openid: 'openid' }

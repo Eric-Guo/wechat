@@ -267,6 +267,11 @@ class App < Thor
       puts wechat_api.users
     end
 
+    desc 'user_batchget [OPEN_ID_LIST]', '批量获取用户基本信息'
+    def user_batchget(openidlist)
+      puts wechat_api.user_batchget(openidlist.split(','))
+    end
+
     desc 'qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]', '请求临时二维码'
     def qrcode_create_scene(scene_id, expire_seconds = 604800)
       puts wechat_api.qrcode_create_scene(scene_id, expire_seconds)

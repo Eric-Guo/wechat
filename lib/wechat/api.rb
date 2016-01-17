@@ -39,6 +39,10 @@ module Wechat
       get 'user/info', params: { openid: openid }
     end
 
+    def user_batchget(openids, lang = 'zh-CN')
+      post 'user/info/batchget', JSON.generate(user_list: openids.collect { |v| { openid: v, lang: lang } })
+    end
+
     def user_group(openid)
       post 'groups/getid', JSON.generate(openid: openid)
     end
