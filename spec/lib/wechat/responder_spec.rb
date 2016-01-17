@@ -227,8 +227,8 @@ RSpec.describe WechatController, type: :controller do
       end
 
       on :text, with: 'session count' do |message|
-        message.session[:count] = message.session.fetch(:count, 0) + 1
-        message.reply.text message.session[:count]
+        message.session.count = message.session.count + 1
+        message.reply.text message.session.count
       end
 
       on :event, with: 'subscribe' do |message, event|
@@ -300,9 +300,7 @@ RSpec.describe WechatController, type: :controller do
 
     specify 'response text with session count with existing session record' do
       WechatSession.all.delete_all
-      ws = WechatSession.new openid: text_message[:FromUserName]
-      ws.json_hash = { count: 2 }
-      ws.save!
+      WechatSession.create! openid: text_message[:FromUserName], count: 2
       post :create, signature_params.merge(xml: text_message.update(Content: 'session count'))
       expect(xml_to_hash(response)[:Content]).to eq('3')
     end
