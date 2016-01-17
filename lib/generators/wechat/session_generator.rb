@@ -12,10 +12,6 @@ module Wechat
         migration_template 'db/migration.rb', 'db/migrate/create_wechat_sessions.rb'
       end
 
-      def copy_wechat_session_model
-        template 'app/models/wechat_session.rb'
-      end
-
       private
 
       def self.next_migration_number(dirname)
