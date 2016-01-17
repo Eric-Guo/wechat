@@ -2,7 +2,7 @@
 class WechatSession < ActiveRecord::Base
   validates :openid, presence: true, uniqueness: true
 
-  def self.find_session(from_user_openid, _to_app_openid)
+  def self.find_or_initialize_session(from_user_openid, _to_app_openid)
     find_or_initialize_by(openid: from_user_openid)
   end
 

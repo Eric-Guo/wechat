@@ -42,7 +42,8 @@ module Wechat
     end
 
     def session
-      @message_hash[:WechatSession] ||= WechatSession.find_session(message_hash[:FromUserName], message_hash[:ToUserName])
+      return nil unless Wechat.config.have_session_table
+      @message_hash[:WechatSession] ||= WechatSession.find_or_initialize_session(message_hash[:FromUserName], message_hash[:ToUserName])
     end
 
     def as(type)
