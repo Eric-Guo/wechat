@@ -1,10 +1,6 @@
-require 'rails/generators/active_record'
-
 module Wechat
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      include ::Rails::Generators::Migration
-
       desc 'Install Wechat support files'
       source_root File.expand_path('../templates', __FILE__)
 
@@ -18,14 +14,6 @@ module Wechat
 
       def copy_wechat_controller
         template 'app/controllers/wechats_controller.rb'
-      end
-
-      def copy_model_migration
-        migration_template 'db/migration.rb', 'db/migrate/create_wechat_sessions.rb'
-      end
-
-      def self.next_migration_number(dirname)
-        ::ActiveRecord::Generators::Base.next_migration_number(dirname)
       end
     end
   end

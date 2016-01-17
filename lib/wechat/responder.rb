@@ -8,7 +8,7 @@ module Wechat
 
     included do
       # Rails 5 remove before_filter and skip_before_filter
-      if defined?(:skip_before_action)
+      if respond_to?(:skip_before_action)
         # Rails 5 API mode won't define verify_authenticity_token
         skip_before_action :verify_authenticity_token unless defined?(:verify_authenticity_token)
         before_action :verify_signature, only: [:show, :create]
@@ -179,6 +179,7 @@ module Wechat
       end
 
       Wechat::WechatSession.update_session post_xml[:FromUserName], post_xml[:ToUserName], response.session if response.is_a?(Wechat::Message)
+      # response.session.save_session if response.is_a?(Wechat::Message) && Wechat.config.have_session_table
 
       ActiveSupport::Notifications.instrument 'wechat.responder.after_create', request: request, response: response
     end

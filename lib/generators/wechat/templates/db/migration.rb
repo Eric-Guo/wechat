@@ -4,11 +4,12 @@ class CreateWechatSessions < ActiveRecord::Migration
       t.string :from_openid, null: false, index: true
       t.string :to_openid, null: false, index: true
       if connection.adapter_name.downcase.to_sym == :postgresql
-        t.json :session_raw
+        t.json :json_hash_raw
       else
-        t.string :session_raw
+        t.string :json_hash_raw
       end
       t.timestamps null: false
     end
+    add_index :wechat_sessions, :openid, unique: true
   end
 end
