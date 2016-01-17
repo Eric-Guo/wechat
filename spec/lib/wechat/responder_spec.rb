@@ -327,6 +327,7 @@ RSpec.describe WechatController, type: :controller do
       WechatSession.all.delete_all
       post :create, signature_params.merge(xml: text_message.update(Content: 'session hash_store count'))
       expect(xml_to_hash(response)[:Content]).to eq('1')
+      expect(WechatSession.first.openid).to eq 'fromUser'
     end
 
     specify 'response text with session hash_store count with existing session record' do
@@ -336,12 +337,15 @@ RSpec.describe WechatController, type: :controller do
       ws.save!
       post :create, signature_params.merge(xml: text_message.update(Content: 'session hash_store count'))
       expect(xml_to_hash(response)[:Content]).to eq('3')
+      expect(WechatSession.first.openid).to eq 'fromUser'
     end
 
     specify 'response subscribe event with matched event' do
+      WechatSession.all.delete_all
       event_message = message_base.merge(MsgType: 'event', Event: 'subscribe', EventKey: 'qrscene_not_exist')
       post :create, signature_params.merge(xml: event_message)
       expect(xml_to_hash(response)[:Content]).to eq('event: subscribe')
+      expect(WechatSession.first.openid).to eq 'fromUser'
     end
 
     specify 'response unsubscribe event with matched event' do
