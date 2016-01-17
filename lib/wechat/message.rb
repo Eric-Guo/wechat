@@ -41,7 +41,7 @@ module Wechat
     end
 
     def session
-      @message_hash[:session] ||= WechatSession.find_session(message_hash[:FromUserName]) || {}
+      @message_hash[:session] ||= WechatSession.find_session(message_hash[:FromUserName])
       @message_hash[:session] # do not remove, otherwise first call will get nil
     end
 
