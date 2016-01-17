@@ -222,6 +222,10 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("text: #{content}")
       end
 
+      on :text, with: 'help' do |message,|
+        message.reply.text('help requested')
+      end
+
       on :text, with: /^cmd:(.*)$/ do |message, cmd|
         message.reply.text("cmd: #{cmd}")
       end
@@ -292,6 +296,13 @@ RSpec.describe WechatController, type: :controller do
       expect(xml_to_hash(response)[:Content]).to eq('text: command')
     end
 
+    specify 'response text with help and session check' do
+      WechatSession.all.delete_all
+      post :create, signature_params.merge(xml: text_message.merge(Content: 'help'))
+      expect(xml_to_hash(response)[:Content]).to eq('help requested')
+      expect(WechatSession.first.openid).to eq 'fromUser'
+    end
+
     specify 'response text with regex matched' do
       post :create, signature_params.merge(xml: text_message.merge(Content: 'cmd:reload'))
       expect(xml_to_hash(response)[:Content]).to eq('cmd: reload')
@@ -301,6 +312,7 @@ RSpec.describe WechatController, type: :controller do
       WechatSession.all.delete_all
       post :create, signature_params.merge(xml: text_message.update(Content: 'session count'))
       expect(xml_to_hash(response)[:Content]).to eq('1')
+      expect(WechatSession.first.openid).to eq 'fromUser'
     end
 
     specify 'response text with session count with existing session record' do
@@ -308,6 +320,7 @@ RSpec.describe WechatController, type: :controller do
       WechatSession.create! openid: text_message[:FromUserName], count: 2
       post :create, signature_params.merge(xml: text_message.update(Content: 'session count'))
       expect(xml_to_hash(response)[:Content]).to eq('3')
+      expect(WechatSession.first.openid).to eq 'fromUser'
     end
 
     specify 'response text with session hash_store count with no session record' do

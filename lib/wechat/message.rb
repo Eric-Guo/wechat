@@ -37,7 +37,7 @@ module Wechat
         ToUserName: message_hash[:FromUserName],
         FromUserName: message_hash[:ToUserName],
         CreateTime: Time.now.to_i,
-        WechatSession: @message_hash[:WechatSession]
+        WechatSession: session
       )
     end
 
