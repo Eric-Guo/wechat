@@ -80,7 +80,7 @@ HELP
 
     def self.class_exists?(class_name)
       klass = Module.const_get(class_name)
-      return klass.ancestors.include?(ActiveRecord::Base)
+      return klass.ancestors.include?(ActiveRecord::Base) || klass.ancestors.include?(ActiveModel::Model) || klass.ancestors.include?(Mongoid::Document)
     rescue NameError
       return false
     end
