@@ -169,18 +169,18 @@ module Wechat
     end
 
     def create
-      request = Wechat::Message.from_hash(post_xml)
-      response = run_responder(request)
+      request_msg = Wechat::Message.from_hash(post_xml)
+      response_msg = run_responder(request_msg)
 
-      if response.respond_to? :to_xml
-        render plain: process_response(response)
+      if response_msg.respond_to? :to_xml
+        render plain: process_response(response_msg)
       else
         render nothing: true, status: 200, content_type: 'text/html'
       end
 
-      response.save_session if response.is_a?(Wechat::Message) && Wechat.config.have_session_table
+      response_msg.save_session if response_msg.is_a?(Wechat::Message) && Wechat.config.have_session_table
 
-      ActiveSupport::Notifications.instrument 'wechat.responder.after_create', request: request, response: response
+      ActiveSupport::Notifications.instrument 'wechat.responder.after_create', request: request_msg, response: response_msg
     end
 
     private
