@@ -79,8 +79,8 @@ HELP
     end
 
     def self.class_exists?(class_name)
-      klass = Module.const_get(class_name)
-      return klass.ancestors.include?(ActiveRecord::Base) || klass.ancestors.include?(ActiveModel::Model) || klass.ancestors.include?(Mongoid::Document)
+      ca = Module.const_get(class_name).ancestors
+      return ca.include?(ActiveRecord::Base) || ca.include?(ActiveModel::Model) || ca.include?(Mongoid::Document)
     rescue NameError
       return false
     end
