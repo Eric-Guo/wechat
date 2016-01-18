@@ -1,4 +1,5 @@
-# Used by wechat gems, do not rename WechatSession to other name.
+# Used by wechat gems, do not rename WechatSession to other name,
+# Feel free to inherit from other class like ActiveModel::Model
 class WechatSession < ActiveRecord::Base
   validates :openid, presence: true, uniqueness: true
   serialize :hash_store, Hash
@@ -10,6 +11,7 @@ class WechatSession < ActiveRecord::Base
 
   # called by wechat gems after response Techent server at controller#create
   def save_session(response_message)
+    touch unless new_record? # Always refresh updated_at even no change
     save!
   end
 end
