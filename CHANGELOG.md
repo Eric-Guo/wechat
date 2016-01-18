@@ -1,10 +1,13 @@
 # Changelog
 
-* Optional session support, by @zfben #81, #88, #91
-* Replace after_wechat_response with Rails Nofications facility, by @zfben
+## v0.7.2 (released at 1/18/2016)
+
+* Optional session support by @zfben #81, #88, #91
+* Replace after_wechat_response with Rails Nofications facility, by @zfben, original issue is #79
+* New user_batchget API. #89
 * Support Rails 3.2 again after support Rails 5.0. by @guange2015 #87 
 * Fetch setting from RAILS_ENV first, then fetch default. by @kikyous #85
-* Warning not support on :scan with regular expression. by @kikyous #84 
+* Warning not support on :scan with regular expression, reason see #84 
 
 ## v0.7.1 (released at 1/11/2016)
 
