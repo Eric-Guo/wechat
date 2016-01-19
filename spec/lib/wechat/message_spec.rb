@@ -114,6 +114,12 @@ RSpec.describe Wechat::Message do
         expect(message.transfer_customer_service).to eq(message)
         expect(message[:MsgType]).to eq 'transfer_customer_service'
       end
+
+      specify 'will update MsgType and KfAccount and return self' do
+        expect(message.transfer_customer_service('kf_1')).to eq(message)
+        expect(message[:MsgType]).to eq 'transfer_customer_service'
+        expect(message[:TransInfo][:KfAccount]).to eq 'kf_1'
+      end
     end
 
     describe '#image' do

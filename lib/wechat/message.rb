@@ -81,8 +81,12 @@ module Wechat
       update(MsgType: 'text', Content: content)
     end
 
-    def transfer_customer_service
-      update(MsgType: 'transfer_customer_service')
+    def transfer_customer_service(kf_account = nil)
+      if kf_account
+        update(MsgType: 'transfer_customer_service', TransInfo: { KfAccount: kf_account })
+      else
+        update(MsgType: 'transfer_customer_service')
+      end
     end
 
     def success
