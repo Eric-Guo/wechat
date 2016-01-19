@@ -24,7 +24,6 @@ HELP
     def self.config
       return @config unless @config.nil?
       @config ||= loading_config!
-      @config.have_session_table = class_exists?('WechatSession') && WechatSession.table_exists?
       @config
     end
 
@@ -38,6 +37,7 @@ HELP
         config[:jsapi_ticket] ||= Rails.root.join('tmp/jsapi_ticket').to_s
       end
       config[:timeout] ||= 20
+      config[:have_session_class] = class_exists?('WechatSession')
       config.symbolize_keys!
       @config = OpenStruct.new(config)
     end

@@ -42,7 +42,7 @@ module Wechat
     end
 
     def session
-      return nil unless Wechat.config.have_session_table
+      return nil unless Wechat.config.have_session_class
       @message_hash[:WechatSession] ||= WechatSession.find_or_initialize_session(underscore_hash_keys(message_hash))
     end
 

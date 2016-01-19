@@ -178,7 +178,7 @@ module Wechat
         render nothing: true, status: 200, content_type: 'text/html'
       end
 
-      response_msg.save_session if response_msg.is_a?(Wechat::Message) && Wechat.config.have_session_table
+      response_msg.save_session if response_msg.is_a?(Wechat::Message) && Wechat.config.have_session_class
 
       ActiveSupport::Notifications.instrument 'wechat.responder.after_create', request: request_msg, response: response_msg
     end
