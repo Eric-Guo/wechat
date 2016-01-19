@@ -303,7 +303,7 @@ RSpec.describe Wechat::Api do
     end
   end
 
-  describe '#template_message' do
+  describe '#template_message_send' do
     specify 'will post message/custom/send with access_token, and json payload' do
       payload = { touser: 'OPENID',
                   template_id: 'ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY',
@@ -320,7 +320,24 @@ RSpec.describe Wechat::Api do
         .with('message/template/send', payload.to_json,
               params: { access_token: 'access_token' }, content_type: :json).and_return(response_result)
 
-      expect(subject.template_message_send payload).to eq response_result
+      expect(subject.template_message_send(payload)).to eq response_result
+    end
+  end
+
+  describe '#customservice_getonlinekflist' do
+    specify 'will get customservice/getonlinekflist with access_token' do
+      kf_list = { kf_online_list: [{ kf_account: 'test1@test',
+                                     status: 1,
+                                     kf_id: '1001',
+                                     auto_accept: 0,
+                                     accepted_case: 1 },
+                                   { kf_account: 'test2@test',
+                                     status: 1,
+                                     kf_id: '1002',
+                                     auto_accept: 0,
+                                     accepted_case: 2 }] }
+      expect(subject.client).to receive(:get).with('customservice/getonlinekflist', params: { access_token: 'access_token' }).and_return(kf_list)
+      expect(subject.customservice_getonlinekflist).to eq(kf_list)
     end
   end
 end

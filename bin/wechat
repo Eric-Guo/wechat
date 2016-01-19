@@ -281,6 +281,11 @@ class App < Thor
     def qrcode_create_limit_scene(scene_id_or_str)
       puts wechat_api.qrcode_create_limit_scene(scene_id_or_str)
     end
+
+    desc 'customservice_getonlinekflist', '获取在线客服接待信息'
+    def customservice_getonlinekflist
+      puts wechat_api.customservice_getonlinekflist
+    end
   end
 
   desc 'user [OPEN_ID]', '获取用户基本信息'

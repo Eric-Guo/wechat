@@ -113,6 +113,10 @@ module Wechat
       post 'message/template/send', message.to_json, content_type: :json
     end
 
+    def customservice_getonlinekflist
+      get 'customservice/getonlinekflist'
+    end
+
     # http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html
     # 第二步：通过code换取网页授权access_token
     def web_access_token(code)
