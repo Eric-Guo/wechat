@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7.3 (released at 1/19/2016)
+
+* Allow transfer_customer_service to specific account.
+* New customservice_getonlinekflist API.
+* session support class WechatSession no need table_exists? methods exist.
+
 ## v0.7.2 (released at 1/18/2016)
 
 * Optional session support by @zfben #81, #88, #91
