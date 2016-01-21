@@ -5,8 +5,8 @@ module Wechat
     class PublicAccessToken < AccessTokenBase
       def refresh
         data = client.get('token', params: { grant_type: 'client_credential', appid: appid, secret: secret })
-        write_token_to_file(data)
-        read_token_from_file
+        write_token_to_store(data)
+        read_token_from_store
       end
     end
   end

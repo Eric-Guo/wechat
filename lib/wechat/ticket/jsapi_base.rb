@@ -14,7 +14,7 @@ module Wechat
 
       def ticket
         # Possible two worker running, one worker refresh ticket, other unaware, so must read every time
-        read_ticket_from_file
+        read_ticket_from_store
         refresh if remain_life_seconds < @random_generator.rand(30..3 * 60)
         access_ticket
       end
@@ -43,7 +43,7 @@ module Wechat
 
       protected
 
-      def read_ticket_from_file
+      def read_ticket_from_store
         td = JSON.parse(File.read(jsapi_ticket_file))
         @got_ticket_at = td.fetch('got_ticket_at').to_i
         @ticket_life_in_seconds = td.fetch('expires_in').to_i
@@ -52,7 +52,7 @@ module Wechat
         refresh
       end
 
-      def write_ticket_to_file(ticket_hash)
+      def write_ticket_to_store(ticket_hash)
         ticket_hash.merge!('got_ticket_at'.freeze => Time.now.to_i)
         File.write(jsapi_ticket_file, ticket_hash.to_json)
       end
