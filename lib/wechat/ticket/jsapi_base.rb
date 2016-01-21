@@ -53,7 +53,11 @@ module Wechat
       end
 
       def write_ticket_to_store(ticket_hash)
-        ticket_hash.merge!('got_ticket_at'.freeze => Time.now.to_i)
+        write_ticket_to_file(ticket_hash)
+      end
+
+      def write_ticket_to_file(ticket_hash)
+        ticket_hash['got_ticket_at'.freeze] = Time.now.to_i
         File.write(jsapi_ticket_file, ticket_hash.to_json)
       end
 

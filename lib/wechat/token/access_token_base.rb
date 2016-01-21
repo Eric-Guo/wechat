@@ -30,7 +30,11 @@ module Wechat
       end
 
       def write_token_to_store(token_hash)
-        token_hash.merge!('got_token_at'.freeze => Time.now.to_i)
+        write_token_to_file(token_hash)
+      end
+
+      def write_token_to_file(token_hash)
+        token_hash['got_token_at'.freeze] = Time.now.to_i
         File.write(token_file, token_hash.to_json)
       end
 
