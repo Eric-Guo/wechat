@@ -21,7 +21,7 @@ module Wechat
       protected
 
       def read_token_from_store
-        td = read_token_from_file
+        td = read_token
         @got_token_at = td.fetch('got_token_at').to_i
         @token_life_in_seconds = td.fetch('expires_in').to_i
         @access_token = td.fetch('access_token')
@@ -30,15 +30,15 @@ module Wechat
       end
 
       def write_token_to_store(token_hash)
-        write_token_to_file(token_hash)
+        token_hash['got_token_at'.freeze] = Time.now.to_i
+        write_token(token_hash)
       end
 
-      def read_token_from_file
+      def read_token
         JSON.parse(File.read(token_file))
       end
 
-      def write_token_to_file(token_hash)
-        token_hash['got_token_at'.freeze] = Time.now.to_i
+      def write_token(token_hash)
         File.write(token_file, token_hash.to_json)
       end
 

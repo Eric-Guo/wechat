@@ -44,7 +44,7 @@ module Wechat
       protected
 
       def read_ticket_from_store
-        td = read_ticket_from_file
+        td = read_ticket
         @got_ticket_at = td.fetch('got_ticket_at').to_i
         @ticket_life_in_seconds = td.fetch('expires_in').to_i
         @access_ticket = td.fetch('ticket')
@@ -53,15 +53,15 @@ module Wechat
       end
 
       def write_ticket_to_store(ticket_hash)
-        write_ticket_to_file(ticket_hash)
+        ticket_hash['got_ticket_at'.freeze] = Time.now.to_i
+        write_ticket(ticket_hash)
       end
 
-      def read_ticket_from_file
+      def read_ticket
         JSON.parse(File.read(jsapi_ticket_file))
       end
 
-      def write_ticket_to_file(ticket_hash)
-        ticket_hash['got_ticket_at'.freeze] = Time.now.to_i
+      def write_ticket(ticket_hash)
         File.write(jsapi_ticket_file, ticket_hash.to_json)
       end
 
