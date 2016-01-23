@@ -25,7 +25,7 @@ module Wechat
         @access_token = td.fetch('access_token')
         @token_life_in_seconds = td.fetch('token_expires_in').to_i
         @got_token_at = td.fetch('got_token_at').to_i
-      rescue JSON::ParserError, Errno::ENOENT, KeyError
+      rescue JSON::ParserError, Errno::ENOENT, KeyError, TypeError
         refresh
       end
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.4 (released at 1/23/2016)
+
+* Add Redis store token/ticket support, close #76, #60
+
 ## v0.7.3 (released at 1/19/2016)
 
 * Allow transfer_customer_service to specific account.
