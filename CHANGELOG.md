@@ -3,6 +3,7 @@
 ## v0.7.4 (released at 1/23/2016)
 
 * Add Redis store token/ticket support, close #76, #60
+* Rails 5 support without deprecate warning or other not necessory call. #82
 
 ## v0.7.3 (released at 1/19/2016)
 

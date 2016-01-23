@@ -61,6 +61,14 @@ rake db:migrate
 
 Enable session record will generate two files in Rails folder,  User can add more column fields in *wechat_session* table and add declare to link to users table, it's also possible to store data directly in **hash_store**. if you are using PostgreSQL, using [hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)/json maybe better, but the best way is still add dedicate column to record the data, the Rails way.
 
+Using Redis to store wechat token and ticket:
+
+```console
+rails g wechat:redis_store
+```
+
+Redis store support Rails application running in multi-server, no need to enable it if your Rails application running in one server only, the wechat command won't read the token/ticket store in Redis.
+
 ## Configuration
 
 #### Configure for command line

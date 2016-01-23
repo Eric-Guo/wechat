@@ -55,6 +55,13 @@ rake db:migrate
 
 运行后会自动启用回调消息会话(session)记录，wechat gem会在Rails项目中生成两个文件，用户可以在*wechat_session*表中添加更多字段或者声明一些关联关系。使用已有的**hash_store**直接保存也是可以的，但对于PostgreSQL用户，使用[hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)或者json格式可能更佳，当然，最佳方案仍然是添加新字段记录数据。
 
+启用Redis存贮token和ticket:
+
+```console
+rails g wechat:redis_store
+```
+
+Redis存贮相比默认的文件存贮，可以允许Rails应用运行在多台服务器中，如果只有一台服务器，仍然推荐使用默认的文件存贮，另外命令行不会读取Redis存贮的Token或者Ticket。
 
 ## 配置
 
