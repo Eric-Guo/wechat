@@ -209,8 +209,14 @@ module Wechat
         data = Hash.from_xml(content)
       end
 
-      HashWithIndifferentAccess.new_from_hash_copying_default(data.fetch('xml', {})).tap do |msg|
-        msg[:Event].downcase! if msg[:Event]
+      if Rails::VERSION::MAJOR >= 5
+        HashWithIndifferentAccess.new(data.fetch('xml', {})).tap do |msg|
+          msg[:Event].downcase! if msg[:Event]
+        end
+      else
+        HashWithIndifferentAccess.new_from_hash_copying_default(data.fetch('xml', {})).tap do |msg|
+          msg[:Event].downcase! if msg[:Event]
+        end
       end
     end
 
