@@ -46,7 +46,7 @@ module Wechat
       def read_ticket_from_store
         td = read_ticket
         @got_ticket_at = td.fetch('got_ticket_at').to_i
-        @ticket_life_in_seconds = td.fetch('expires_in').to_i
+        @ticket_life_in_seconds = td.fetch('ticket_expires_in').to_i
         @access_ticket = td.fetch('ticket')
       rescue JSON::ParserError, Errno::ENOENT, KeyError
         refresh
@@ -54,6 +54,7 @@ module Wechat
 
       def write_ticket_to_store(ticket_hash)
         ticket_hash['got_ticket_at'.freeze] = Time.now.to_i
+        ticket_hash['ticket_expires_in'.freeze] = ticket_hash.delete('expires_in')
         write_ticket(ticket_hash)
       end
 
