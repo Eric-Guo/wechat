@@ -45,9 +45,9 @@ module Wechat
 
       def read_ticket_from_store
         td = read_ticket
-        @got_ticket_at = td.fetch('got_ticket_at').to_i
-        @ticket_life_in_seconds = td.fetch('ticket_expires_in').to_i
         @access_ticket = td.fetch('ticket')
+        @ticket_life_in_seconds = td.fetch('ticket_expires_in').to_i
+        @got_ticket_at = td.fetch('got_ticket_at').to_i
       rescue JSON::ParserError, Errno::ENOENT, KeyError
         refresh
       end

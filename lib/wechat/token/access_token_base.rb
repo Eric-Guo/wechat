@@ -22,9 +22,9 @@ module Wechat
 
       def read_token_from_store
         td = read_token
-        @got_token_at = td.fetch('got_token_at').to_i
-        @token_life_in_seconds = td.fetch('token_expires_in').to_i
         @access_token = td.fetch('access_token')
+        @token_life_in_seconds = td.fetch('token_expires_in').to_i
+        @got_token_at = td.fetch('got_token_at').to_i
       rescue JSON::ParserError, Errno::ENOENT, KeyError
         refresh
       end
