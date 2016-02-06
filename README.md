@@ -24,6 +24,8 @@ Wechat provide OAuth2.0 as authentication service and possible to intergrated wi
 
 There is official [weui](https://github.com/weui/weui), which corresponding Rails gems called [weui-rails](https://github.com/Eric-Guo/weui-rails) available, if you prefer following the same UI design as wechat.
 
+There is a more complete [wechat-starter](https://github.com/goofansu/wechat-starter) demo available, even include the payment SDK feature.
+
 ## Installation
 
 Using `gem install`
