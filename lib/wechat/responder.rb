@@ -162,9 +162,9 @@ module Wechat
     def show
       if self.class.corpid.present?
         echostr, _corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), self.class.encoding_aes_key))
-        render text: echostr
+        render plain: echostr
       else
-        render text: params[:echostr]
+        render plain: params[:echostr]
       end
     end
 
@@ -195,7 +195,7 @@ module Wechat
 
       msg_encrypt = nil unless self.class.corpid.present?
 
-      render text: 'Forbidden', status: 403 if signature != Signature.hexdigest(self.class.token,
+      render plain: 'Forbidden', status: 403 if signature != Signature.hexdigest(self.class.token,
                                                                                 params[:timestamp],
                                                                                 params[:nonce],
                                                                                 msg_encrypt)
