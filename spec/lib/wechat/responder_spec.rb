@@ -70,7 +70,7 @@ RSpec.describe WechatController, type: :controller do
   end
 
   describe 'responders' do
-    specify 'responders only accept :text, :image, :voice, :video, :location, :link, :event, :fallback message type' do
+    specify 'responders only accept :text, :image, :voice, :video, :shortvideo, :location, :link, :event, :fallback message type' do
       [:text, :image, :voice, :video, :location, :link, :event, :fallback].each do |message_type|
         controller.class.on message_type, respond: 'response'
       end
@@ -278,6 +278,10 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("video: #{message[:MediaId]}")
       end
 
+      on :shortvideo do |message|
+        message.reply.text("shortvideo: #{message[:MediaId]}")
+      end
+
       on :link do |message|
         message.reply.text("link: #{message[:Url]}")
       end
@@ -392,9 +396,15 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'response video' do
-      message = message_base.merge(MsgType: 'video', MediaId: 'video_media_id', ThumbMediaId: 'thumb_media_id')
+      message = message_base.merge(MsgType: 'video', MediaId: 'video_media_id', ThumbMediaId: 'thumb_video_media_id')
       post :create, signature_params.merge(xml: message)
       expect(xml_to_hash(response)[:Content]).to eq('video: video_media_id')
+    end
+
+    specify 'response shortvideo' do
+      message = message_base.merge(MsgType: 'shortvideo', MediaId: 'shortvideo_media_id', ThumbMediaId: 'thumb_shortvideo_media_id')
+      post :create, signature_params.merge(xml: message)
+      expect(xml_to_hash(response)[:Content]).to eq('shortvideo: shortvideo_media_id')
     end
 
     specify 'response link' do
