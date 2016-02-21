@@ -105,6 +105,7 @@ production:
 
 development:
   <<: *default
+  trusted_domain_hostname: "your_dev.proxy.qqbrowser.cc"
 
 test:
   <<: *default
@@ -143,7 +144,8 @@ production:
 
 development:
   <<: *default
-
+  trusted_domain_hostname: "your_dev.proxy.qqbrowser.cc"
+  
 test:
   <<: *default
 ```
@@ -576,7 +578,7 @@ end
 class WechatsController < ActionController::Base
   # 当无任何responder处理用户信息时，转发至客服处理。
   on :fallback do |message|
-	message.reply.transfer_customer_service
+    message.reply.transfer_customer_service
   end
 end
 ```

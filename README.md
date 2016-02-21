@@ -115,6 +115,7 @@ production:
 
 development:
   <<: *default
+  trusted_domain_hostname: "your_dev.proxy.qqbrowser.cc"
 
 test:
   <<: *default
@@ -142,7 +143,7 @@ default: &default
   token:    ""
   encoding_aes_key:  ""
   jsapi_ticket: "C:/Users/[user_name]/wechat_jsapi_ticket"
-
+  
 production:
   corpid:     <%= ENV['WECHAT_CORPID'] %>
   corpsecret: <%= ENV['WECHAT_CORPSECRET'] %>
@@ -156,6 +157,7 @@ production:
 
 development:
   <<: *default
+  trusted_domain_hostname: "your_dev.proxy.qqbrowser.cc"
 
 test:
   <<: *default

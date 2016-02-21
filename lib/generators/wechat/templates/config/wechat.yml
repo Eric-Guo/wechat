@@ -28,6 +28,7 @@ production:
 
 development:
   <<: *default
+  trusted_domain_hostname: "your_dev.proxy.qqbrowser.cc"
 
 test:
   <<: *default

@@ -115,6 +115,7 @@ RSpec.describe WechatCorpController, type: :controller do
       expect(controller.class.agentid).to eq 1
       expect(controller.class.encrypt_mode).to eq true
       expect(controller.class.encoding_aes_key).to eq ENCODING_AES_KEY
+      expect(controller.class.trusted_domain_hostname).to be_nil
     end
 
     describe 'response' do

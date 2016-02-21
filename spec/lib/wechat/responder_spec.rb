@@ -38,7 +38,7 @@ RSpec.describe WechatController, type: :controller do
     controller do
       wechat_responder appid: 'controller_appid', secret: 'controller_secret', token: 'controller_token',
                        access_token: 'controller_access_token',
-                       agentid: 1, encoding_aes_key: 'encoding_aes_key'
+                       agentid: 1, encoding_aes_key: 'encoding_aes_key', trusted_domain_hostname: 'your_dev.proxy.qqbrowser.cc'
     end
     specify 'will set controller wechat api and token' do
       access_token = controller.class.wechat.access_token
@@ -49,6 +49,7 @@ RSpec.describe WechatController, type: :controller do
       expect(controller.class.agentid).to eq(1)
       expect(controller.class.encrypt_mode).to eq(false)
       expect(controller.class.encoding_aes_key).to eq('encoding_aes_key')
+      expect(controller.class.trusted_domain_hostname).to eq('your_dev.proxy.qqbrowser.cc')
     end
   end
 
