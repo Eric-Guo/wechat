@@ -174,13 +174,23 @@ class WechatFirstController < ActionController::Base
 end
 ```
 
-#### jssdk 支持
+#### JS-SDK 支持
 
-jssdk 使用前需通过config接口注入权限验证配置, 所需参数可以通过 signature 方法获取:
+通过JS-SDK可以在HTML网页中控制微信客户端的行为，但必须先注入配置信息，wechat gems提供了帮助方法`wechat_config_js`使这个过程更简单：
 
-```ruby
-WechatsController.wechat.jsapi_ticket.signature(request.original_url)
+```erb
+<body>
+<%= wechat_config_js debug: false, api: %w(hideMenuItems closeWindow) -%>
+<script type="application/javascript">
+  wx.ready(function() {
+      wx.hideOptionMenu();
+  });
+</script>
+<a href="javascript:wx.closeWindow();">Close</a>
+</body>
 ```
+
+在开发模式下，由于程序往往通过微信调试工具的服务器端调试工具反向代理被访问，此时需要配置`trusted_domain_fullname`以便wechat gem可以使用正确的域名做JS-SDK的权限签名。
 
 ## 关于接口权限
 

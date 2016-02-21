@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7.5 (released at 2/21/2016)
+
+* New wechat_config_js to simplify the Wechat jsapi config.
+* Support sent shortvideo.
+
 ## v0.7.4 (released at 1/23/2016)
 
 * Add Redis store token/ticket support, close #76, #60

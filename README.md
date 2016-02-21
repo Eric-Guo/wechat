@@ -189,11 +189,21 @@ end
 
 #### JS-SDK helper
 
-JS-SDK enable you control wechat behavior in your web page, but need inject a config with signature methods first, you can obtain those signature hash via below
+JS-SDK enable you control Wechat App behavior in html, by inject a config signature, helper `wechat_config_js` do that in more simple way:
 
-```ruby
-WechatsController.wechat.jsapi_ticket.signature(request.original_url)
+```erb
+<body>
+<%= wechat_config_js debug: false, api: %w(hideMenuItems closeWindow) -%>
+<script type="application/javascript">
+  wx.ready(function() {
+      wx.hideOptionMenu();
+  });
+</script>
+<a href="javascript:wx.closeWindow();">Close</a>
+</body>
 ```
+
+Configure the `trusted_domain_fullname` if you are in development mode and app running behind a reverse proxy server, otherwise wechat gem can not get the correct url to be signature later.
 
 ## The API privilege
 
