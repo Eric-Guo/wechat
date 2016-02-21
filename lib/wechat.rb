@@ -1,6 +1,7 @@
 require 'wechat/api_loader'
 require 'wechat/api'
 require 'wechat/corp_api'
+require 'wechat/helpers'
 require 'action_controller/wechat_responder'
 
 module Wechat
@@ -25,3 +26,5 @@ module Wechat
     @wechat_api ||= ApiLoader.with({})
   end
 end
+
+ActionView::Base.send :include, Wechat::Helpers if defined? ActionView::Base

@@ -105,7 +105,7 @@ production:
 
 development:
   <<: *default
-  trusted_domain_hostname: "your_dev.proxy.qqbrowser.cc"
+  trusted_domain_fullname: "http://your_dev.proxy.qqbrowser.cc"
 
 test:
   <<: *default
@@ -144,7 +144,7 @@ production:
 
 development:
   <<: *default
-  trusted_domain_hostname: "your_dev.proxy.qqbrowser.cc"
+  trusted_domain_fullname: "http://your_dev.proxy.qqbrowser.cc"
   
 test:
   <<: *default

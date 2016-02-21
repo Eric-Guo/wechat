@@ -76,7 +76,7 @@ HELP
         skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
         encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
         jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'],
-        trusted_domain_hostname: ENV['WECHAT_TRUSTED_DOMAIN_HOSTNAME'] }
+        trusted_domain_fullname: ENV['WECHAT_TRUSTED_DOMAIN_FULLNAME'] }
     end
 
     def self.class_exists?(class_name)

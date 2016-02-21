@@ -10,7 +10,7 @@ module ActionController
       self.skip_verify_ssl = opts[:skip_verify_ssl]
       self.token = opts[:token] || Wechat.config.token
       self.encoding_aes_key = opts[:encoding_aes_key] || Wechat.config.encoding_aes_key
-      self.trusted_domain_hostname = opts[:trusted_domain_hostname] || Wechat.config.trusted_domain_hostname
+      self.trusted_domain_fullname = opts[:trusted_domain_fullname] || Wechat.config.trusted_domain_fullname
 
       return self.wechat = Wechat.api if opts.empty?
       return self.wechat = Wechat::CorpApi.new(corpid, opts[:corpsecret], opts[:access_token], \
