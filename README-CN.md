@@ -572,9 +572,10 @@ end
 - :text 响应文字消息,可以用`:with`参数来匹配文本内容 `on(:text, with:'help'){|message, content| ...}`
 - :image 响应图片消息
 - :voice 响应语音消息
+- :shortvideo 响应短视频消息
 - :video 响应视频消息
 - :link 响应链接消息
-- :event 响应事件消息, 可以用`:with`参数来匹配事件类型
+- :event 响应事件消息, 可以用`:with`参数来匹配事件类型，同文字消息类似，支持正则表达式匹配
 - :click 虚拟响应事件消息, 微信传入:event，但gem内部会单独处理
 - :view 虚拟响应事件消息, 微信传入:event，但gem内部会单独处理
 - :scan  虚拟响应事件消息

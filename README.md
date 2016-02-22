@@ -586,9 +586,10 @@ Below is current supported message_type:
 - :text  text message, using `:with` to match text content like `on(:text, with:'help'){|message, content| ...}`
 - :image image message
 - :voice voice message
+- :shortvideo shortvideo message
 - :video video message
 - :link  link message
-- :event event message, using `:with` to match particular event
+- :event event message, using `:with` to match particular event, support regular expression match similr to text message.
 - :click virtual event message, wechat still sent event message，but gems will mapping to menu click event.
 - :view  virtual view message, wechat still sent event message，but gems will mapping to menu view page event.
 - :scan  virtual scan message, wechat still sent event message, but gems will mapping on scan event
