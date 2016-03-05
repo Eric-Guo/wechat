@@ -8,7 +8,7 @@ module Wechat
   class CorpApi < ApiBase
     attr_reader :agentid
 
-    API_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
+    API_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'.freeze
 
     def initialize(appid, secret, token_file, agentid, timeout, skip_verify_ssl, jsapi_ticket_file)
       @client = Client.new(API_BASE, timeout, skip_verify_ssl)

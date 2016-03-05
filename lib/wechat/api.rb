@@ -5,8 +5,8 @@ require 'wechat/ticket/public_jsapi_ticket'
 
 module Wechat
   class Api < ApiBase
-    API_BASE = 'https://api.weixin.qq.com/cgi-bin/'
-    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/oauth2/'
+    API_BASE = 'https://api.weixin.qq.com/cgi-bin/'.freeze
+    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/oauth2/'.freeze
 
     def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file)
       @client = Client.new(API_BASE, timeout, skip_verify_ssl)

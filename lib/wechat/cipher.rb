@@ -7,7 +7,7 @@ module Wechat
     extend ActiveSupport::Concern
 
     BLOCK_SIZE = 32
-    CIPHER = 'AES-256-CBC'
+    CIPHER = 'AES-256-CBC'.freeze
 
     def encrypt(plain, encoding_aes_key)
       cipher = OpenSSL::Cipher.new(CIPHER)

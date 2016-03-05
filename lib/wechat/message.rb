@@ -143,9 +143,9 @@ module Wechat
       'MediaId' => 'media_id',
       'ThumbMediaId' => 'thumb_media_id',
       'TemplateId' => 'template_id'
-    }
+    }.freeze
 
-    TO_JSON_ALLOWED = %w(touser msgtype content image voice video music news articles template agentid)
+    TO_JSON_ALLOWED = %w(touser msgtype content image voice video music news articles template agentid).freeze
 
     def to_json
       json_hash = deep_recursive(message_hash) do |key, value|
