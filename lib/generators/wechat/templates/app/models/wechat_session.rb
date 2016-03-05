@@ -10,7 +10,7 @@ class WechatSession < ActiveRecord::Base
   end
 
   # called by wechat gems after response Techent server at controller#create
-  def save_session(response_message)
+  def save_session(_response_message)
     touch unless new_record? # Always refresh updated_at even no change
     save!
   end
