@@ -329,8 +329,9 @@ $ wechat menu
 ```
 
 ##### 创建菜单
-创建菜单需要一个定义菜单内容的yaml文件，比如
-menu.yaml
+
+
+通过运行`rails g wechat:menu`可以生成一个定义菜单内容的yaml文件,菜单可以包含下列内容：
 
 ```
 button:
@@ -366,12 +367,13 @@ button:
   url:  "http://blog.cloud-mes.com/"
 ```
 
-然后执行命令行，需确保设置，权限管理中有对此应用的管理权限，否则会报[60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E)错。
+下列命令行将上传自定义菜单：
 
 ```
 $ wechat menu_create menu.yaml
-
 ```
+
+需确保设置，权限管理中有对此应用的管理权限，否则会报[60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E)错。
 
 ##### 发送客服图文消息
 需定义一个图文消息内容的yaml文件，比如

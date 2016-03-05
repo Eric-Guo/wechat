@@ -344,7 +344,7 @@ $ wechat menu
 
 ##### Menu create
 
-menu content for a wechat application can be defined as a yaml files, like `menu.yaml`
+Running command `rails g wechat:menu` to generate a menu defination yaml file:
 
 ```
 button:
@@ -380,11 +380,13 @@ button:
   url:  "http://blog.cloud-mes.com/"
 ```
 
-Caution: make sure you having management privilege for those application below running below command, other will got [60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E) error.
+Running below command to upload the menu:
 
 ```
 $ wechat menu_create menu.yaml
 ```
+
+Caution: make sure you having management privilege for those application， otherwise will got [60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E) error.
 
 ##### Sent custom news
 
