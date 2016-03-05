@@ -85,6 +85,11 @@ module Wechat
       post 'menu/create', JSON.generate(menu)
     end
 
+    def menu_addconditional(menu)
+      # Wechat not accept 7bit escaped json(eg \uxxxx), must using UTF-8, possible security vulnerability?
+      post 'menu/addconditional', JSON.generate(menu)
+    end
+
     def menu_trymatch(user_id)
       post 'menu/trymatch', JSON.generate(user_id: user_id)
     end

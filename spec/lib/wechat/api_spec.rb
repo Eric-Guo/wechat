@@ -211,6 +211,15 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#menu_addconditional' do
+    specify 'will post menu/addconditional with access_token and json_data' do
+      conditional_menu = { button: [{ type: 'view', name: 'Testing', url: 'http://xxx.proxy.qqbrowser.cc' }],
+                           matchrule: { client_platform_type: 1 } }
+      expect(subject.client).to receive(:post).with('menu/addconditional', conditional_menu.to_json, params: { access_token: 'access_token' }).and_return(true)
+      expect(subject.menu_addconditional(conditional_menu)).to be true
+    end
+  end
+
   describe '#menu_trymatch' do
     specify 'will post menu/trymatch with access_token and user_id in json' do
       user_menu = { user_id: 'weixin' }

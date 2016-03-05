@@ -320,6 +320,13 @@ class App < Thor
     puts 'Menu created' if wechat_api.menu_create(menu)
   end
 
+  desc 'menu_addconditional [CONDITIONAL_MENU_YAML_PATH]', '创建个性化菜单'
+  def menu_addconditional(conditional_menu_yaml_path)
+    conditional_menu = YAML.load(File.read(conditional_menu_yaml_path))
+    add_result = wechat_api.menu_addconditional(conditional_menu)
+    puts "Conditional menu created: #{add_result}" if add_result
+  end
+
   desc 'menu_trymatch [USER_ID]', '测试个性化菜单匹配结果'
   def menu_trymatch(user_id)
     puts wechat_api.menu_trymatch(user_id)
