@@ -226,6 +226,7 @@ Wechat commands:
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat menu                                              # 当前菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
+  wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单  
   wechat menu_delete                                       # 删除菜单
   wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果  
   wechat oauth2_url [REDIRECT_URI]                         # 生成OAuth2.0验证URL

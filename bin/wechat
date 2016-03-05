@@ -325,6 +325,11 @@ class App < Thor
     puts wechat_api.menu_trymatch(user_id)
   end
 
+  desc 'menu_delconditional [MENU_ID]', '删除个性化菜单'
+  def menu_delconditional(menuid)
+    puts wechat_api.menu_delconditional(menuid)
+  end
+
   desc 'media [MEDIA_ID, PATH]', '媒体下载'
   def media(media_id, path)
     tmp_file = wechat_api.media(media_id)

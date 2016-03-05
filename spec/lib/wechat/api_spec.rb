@@ -215,8 +215,17 @@ RSpec.describe Wechat::Api do
     specify 'will post menu/trymatch with access_token and user_id in json' do
       user_menu = { user_id: 'weixin' }
       menu_result = 'menu_result'
-      expect(subject.client).to receive(:post).with('menu/trymatch', user_menu.to_json, params: { access_token: 'access_token' }).and_return(true)
-      expect(subject.menu_trymatch('weixin')).to be true
+      expect(subject.client).to receive(:post).with('menu/trymatch', user_menu.to_json, params: { access_token: 'access_token' }).and_return(menu_result)
+      expect(subject.menu_trymatch('weixin')).to eq(menu_result)
+    end
+  end
+
+  describe '#menu_delconditional' do
+    specify 'will post menu/delconditional with access_token and user_id in json' do
+      menuid = { menuid: 'menuid' }
+      delconditional_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post).with('menu/delconditional', menuid.to_json, params: { access_token: 'access_token' }).and_return(delconditional_result)
+      expect(subject.menu_delconditional('menuid')).to eq(delconditional_result)
     end
   end
 
