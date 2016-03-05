@@ -242,6 +242,7 @@ Wechat commands:
   wechat menu                                              # 当前菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
   wechat menu_delete                                       # 删除菜单
+  wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果  
   wechat oauth2_url [REDIRECT_URI]                         # 生成OAuth2.0验证URL
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码

@@ -211,6 +211,15 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#menu_trymatch' do
+    specify 'will post menu/trymatch with access_token and user_id in json' do
+      user_menu = { user_id: 'weixin' }
+      menu_result = 'menu_result'
+      expect(subject.client).to receive(:post).with('menu/trymatch', user_menu.to_json, params: { access_token: 'access_token' }).and_return(true)
+      expect(subject.menu_trymatch('weixin')).to be true
+    end
+  end
+
   describe '#media' do
     specify 'will get media/get with access_token and media_id at file based api endpoint as file' do
       media_result = 'media_result'

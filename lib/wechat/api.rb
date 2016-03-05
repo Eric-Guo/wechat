@@ -85,6 +85,10 @@ module Wechat
       post 'menu/create', JSON.generate(menu)
     end
 
+    def menu_trymatch(user_id)
+      post 'menu/trymatch', JSON.generate(user_id: user_id)
+    end
+
     def material(media_id)
       get 'material/get', params: { media_id: media_id }, as: :file
     end

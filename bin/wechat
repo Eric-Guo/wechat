@@ -320,6 +320,11 @@ class App < Thor
     puts 'Menu created' if wechat_api.menu_create(menu)
   end
 
+  desc 'menu_trymatch [USER_ID]', '测试个性化菜单匹配结果'
+  def menu_trymatch(user_id)
+    puts wechat_api.menu_trymatch(user_id)
+  end
+
   desc 'media [MEDIA_ID, PATH]', '媒体下载'
   def media(media_id, path)
     tmp_file = wechat_api.media(media_id)
