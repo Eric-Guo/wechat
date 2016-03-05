@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.6 (released at 3/05/2016)
+
+* Support wechat public account conditional menu. #95
+
 ## v0.7.5 (released at 2/21/2016)
 
 * New wechat_config_js to simplify the Wechat jsapi config.
