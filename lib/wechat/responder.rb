@@ -162,9 +162,17 @@ module Wechat
     def show
       if self.class.corpid.present?
         echostr, _corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), self.class.encoding_aes_key))
-        render plain: echostr
+        if Rails::VERSION::MAJOR >= 4
+          render plain: echostr
+        else
+          render text: echostr
+        end
       else
-        render plain: params[:echostr]
+        if Rails::VERSION::MAJOR >= 4
+          render plain: params[:echostr]
+        else
+          render text: params[:echostr]
+        end
       end
     end
 
@@ -173,7 +181,11 @@ module Wechat
       response_msg = run_responder(request_msg)
 
       if response_msg.respond_to? :to_xml
-        Rails.version.start_with?('3.') ? (render text: process_response(response)) : (render plain: process_response(response))
+        if Rails::VERSION::MAJOR >= 4
+          render plain: process_response(response_msg)
+        else
+          render text: process_response(response_msg)
+        end
       else
         render nothing: true, status: 200, content_type: 'text/html'
       end
