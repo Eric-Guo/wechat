@@ -173,7 +173,7 @@ module Wechat
       response_msg = run_responder(request_msg)
 
       if response_msg.respond_to? :to_xml
-        render plain: process_response(response_msg)
+        Rails.version.start_with?('3.') ? (render text: process_response(response)) : (render plain: process_response(response))
       else
         render nothing: true, status: 200, content_type: 'text/html'
       end
