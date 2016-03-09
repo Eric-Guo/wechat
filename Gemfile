@@ -4,7 +4,7 @@ gemspec
 
 # jquery-rails is used by the dummy application
 gem 'jquery-rails'
-gem 'rake', '~> 10.4'
+gem 'rake'
 gem 'codeclimate-test-reporter', group: :test, require: nil
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
