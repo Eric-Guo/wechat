@@ -159,6 +159,17 @@ module Wechat
       self.class.wechat # Make sure user can continue access wechat at instance level similar to class level
     end
 
+    def wechat_oauth2_url(page_url = nil)
+      appid = self.class.corpid || self.class.appid
+      page_url ||= if self.class.trusted_domain_fullname
+                     "#{self.class.trusted_domain_fullname}#{request.original_fullpath}"
+                   else
+                     request.original_url
+                   end
+      redirect_uri = CGI.escape(page_url)
+      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=snsapi_base#wechat_redirect"
+    end
+
     def show
       if self.class.corpid.present?
         echostr, _corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), self.class.encoding_aes_key))

@@ -293,12 +293,6 @@ class App < Thor
     puts wechat_api.user(open_id)
   end
 
-  desc 'oauth2_url [REDIRECT_URI]', '生成OAuth2.0验证URL'
-  def oauth2_url(redirect_uri)
-    appid = Wechat.config.corpid || Wechat.config.appid
-    puts wechat_api.oauth2_url(redirect_uri, appid)
-  end
-
   desc 'user_update_remark [OPEN_ID, REMARK]', '设置备注名'
   def user_update_remark(openid, remark)
     puts wechat_api.user_update_remark(openid, remark)
