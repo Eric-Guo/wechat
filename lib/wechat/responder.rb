@@ -9,8 +9,15 @@ module Wechat
     included do
       # Rails 5 remove before_filter and skip_before_filter
       if respond_to?(:skip_before_action)
-        # Rails 5 API mode won't define verify_authenticity_token
-        skip_before_action :verify_authenticity_token if respond_to?(:verify_authenticity_token)
+        if respond_to?(:verify_authenticity_token)
+          skip_before_action :verify_authenticity_token
+        else
+          # Rails 5 API mode won't define verify_authenticity_token
+          # https://github.com/rails/rails/blob/v5.0.0.beta3/actionpack/lib/abstract_controller/callbacks.rb#L66
+          # https://github.com/rails/rails/blob/v5.0.0.beta3/activesupport/lib/active_support/callbacks.rb#L640
+          skip_before_action :verify_authenticity_token, raise: false
+        end
+
         before_action :verify_signature, only: [:show, :create]
       else
         skip_before_filter :verify_authenticity_token
