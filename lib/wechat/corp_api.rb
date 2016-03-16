@@ -34,7 +34,7 @@ module Wechat
     end
 
     def oauth2_url(redirect_uri, appid)
-      ActiveSupport::Deprecation.warn('oauth2_url is deprecated. use wechat_oauth2_url instead.')
+      ActiveSupport::Deprecation.warn('oauth2_url is deprecated. use wechat_oauth2 instead.')
 
       redirect_uri = CGI.escape(redirect_uri)
       "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=snsapi_base#wechat_redirect"

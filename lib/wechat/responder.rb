@@ -166,7 +166,7 @@ module Wechat
       self.class.wechat # Make sure user can continue access wechat at instance level similar to class level
     end
 
-    def wechat_oauth2_url(scope = 'snsapi_base', page_url = nil)
+    def wechat_oauth2(scope = 'snsapi_base', page_url = nil)
       appid = self.class.corpid || self.class.appid
       page_url ||= if self.class.trusted_domain_fullname
                      "#{self.class.trusted_domain_fullname}#{request.original_fullpath}"
@@ -174,7 +174,20 @@ module Wechat
                      request.original_url
                    end
       redirect_uri = CGI.escape(page_url)
-      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}#wechat_redirect"
+      oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}#wechat_redirect"
+
+      return oauth2_url unless block_given?
+      if cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].blank?
+        redirect_to oauth2_url
+      elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present?
+        userinfo = Wechat.api.getuserinfo(params[:code])
+        cookies.signed_or_encrypted[:we_userid] = { value: userinfo['UserId'], expires: 1.hour.from_now }
+        cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: 1.hour.from_now }
+        cookies.signed_or_encrypted[:we_openid] = { value: userinfo['OpenId'], expires: 1.hour.from_now }
+        yield userinfo['UserId'], userinfo['DeviceId'], userinfo['OpenId']
+      else
+        yield cookies.signed_or_encrypted[:we_userid], cookies.signed_or_encrypted[:we_deviceid], cookies.signed_or_encrypted[:we_openid]
+      end
     end
 
     def show
