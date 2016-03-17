@@ -177,6 +177,7 @@ module Wechat
       oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}#wechat_redirect"
 
       return oauth2_url unless block_given?
+      raise 'Currently wechat_oauth2 only support enterprise account.' unless self.class.corpid
       if cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].blank?
         redirect_to oauth2_url
       elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present?
@@ -184,9 +185,11 @@ module Wechat
         cookies.signed_or_encrypted[:we_userid] = { value: userinfo['UserId'], expires: 1.hour.from_now }
         cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: 1.hour.from_now }
         cookies.signed_or_encrypted[:we_openid] = { value: userinfo['OpenId'], expires: 1.hour.from_now }
-        yield userinfo['UserId'], userinfo['DeviceId'], userinfo['OpenId']
+        yield userinfo['UserId'], userinfo
       else
-        yield cookies.signed_or_encrypted[:we_userid], cookies.signed_or_encrypted[:we_deviceid], cookies.signed_or_encrypted[:we_openid]
+        yield cookies.signed_or_encrypted[:we_userid], { 'UserId' => cookies.signed_or_encrypted[:we_userid],
+                                                         'DeviceId' => cookies.signed_or_encrypted[:we_deviceid],
+                                                         'OpenId' => cookies.signed_or_encrypted[:we_openid] }
       end
     end
 
