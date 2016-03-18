@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7.7 (released at 3/18/2016)
+
+* New wechat_oauth2, only support enterprise account still.
+* fix 'skip_before_action :verify_authenticity_token' bug for v5.0.0.beta3 by @vkill #97
+* Support Rails 3.2 again after support Rails 5.0, by @guange2015 #96
+
 ## v0.7.6 (released at 3/05/2016)
 
 * Support wechat public account conditional menu. #95
