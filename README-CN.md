@@ -13,7 +13,7 @@ WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平
 
 命令行工具`wechat`可以调用各种无需web环境的API。同时也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理，包括主动推送的和被动响应的消息。
 
-如果您的App还需要集成微信OAuth2.0, 您可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 以便和devise集成，提供完整的用户认证。
+如果您的App还需要集成微信OAuth2.0, 除了简便的`wechat_oauth2`指令，也可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 以便和devise集成，提供完整的用户认证。
 
 如果您对如何制作微信网页UI没有灵感，可以参考官方的[weui](https://github.com/weui/weui)，针对Rails的Gem是[weui-rails](https://github.com/Eric-Guo/weui-rails)。
 
@@ -191,6 +191,26 @@ end
 ```
 
 在开发模式下，由于程序往往通过微信调试工具的服务器端调试工具反向代理被访问，此时需要配置`trusted_domain_fullname`以便wechat gem可以使用正确的域名做JS-SDK的权限签名。
+
+#### OAuth2.0验证接口支持
+
+目前企业号可以使用如下代码直接取得用户企业号userid：
+
+```ruby
+class WechatsController < ActionController::Base
+  layout 'wechat'
+  wechat_responder
+  def apply_new
+    wechat_oauth2 do |userid|
+      @current_user = User.find_by(wechat_userid: userid)
+      @apply = Apply.new
+      @apply.user_id = @current_user.id
+    end
+  end
+end
+```
+
+`wechat_oauth2`封装了OAuth2.0验证接口和cookie处理逻辑，用户仅需提供业务代码块即可，userid就是微信成员UserID。
 
 ## 关于接口权限
 

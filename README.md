@@ -20,7 +20,7 @@ WeChat gem trying to helping Rails developer to integrated [enterprise account](
 
 A responder DSL can used in Rails controller, so giving a event based interface to handler message sent by end user from wechat server.
 
-Wechat provide OAuth2.0 as authentication service and possible to intergrated with devise/other authorization gems, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) is a good start
+Wechat provide OAuth2.0 authentication method `wechat_oauth2`, possible the easiest way, for the user perfer using devise style authorization gems, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) can be a good option.
 
 There is official [weui](https://github.com/weui/weui), which corresponding Rails gems called [weui-rails](https://github.com/Eric-Guo/weui-rails) available, if you prefer following the same UI design as wechat.
 
@@ -204,6 +204,27 @@ JS-SDK enable you control Wechat App behavior in html, by inject a config signat
 ```
 
 Configure the `trusted_domain_fullname` if you are in development mode and app running behind a reverse proxy server, otherwise wechat gem can not get the correct url to be signature later.
+
+#### OAuth2.0 authentication
+
+For enterprise account, user can using userid directly by provide a block in wechat_oauth2:
+
+```ruby
+class WechatsController < ActionController::Base
+  layout 'wechat'
+  wechat_responder
+  def apply_new
+    wechat_oauth2 do |userid|
+      @current_user = User.find_by(wechat_userid: userid)
+      @apply = Apply.new
+      @apply.user_id = @current_user.id
+    end
+  end
+end
+```
+
+`wechat_oauth2` already implement the necessory OAuth2.0 and cookie logic, userid available as a member UserID for the whole block.
+
 
 ## The API privilege
 
