@@ -29,22 +29,22 @@ module Wechat
       attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :timeout, :skip_verify_ssl, :encoding_aes_key, :trusted_domain_fullname
 
       def on(message_type, with: nil, respond: nil, &block)
-        fail 'Unknow message type' unless [:text, :image, :voice, :video, :shortvideo, :link, :event, :click, :view, :scan, :batch_job, :location, :fallback].include?(message_type)
+        raise 'Unknow message type' unless [:text, :image, :voice, :video, :shortvideo, :link, :event, :click, :view, :scan, :batch_job, :location, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config.merge!(proc: block) if block_given?
 
         if with.present?
-          fail 'Only text, event, click, view, scan and batch_job can having :with parameters' unless [:text, :event, :click, :view, :scan, :batch_job].include?(message_type)
+          raise 'Only text, event, click, view, scan and batch_job can having :with parameters' unless [:text, :event, :click, :view, :scan, :batch_job].include?(message_type)
           config.merge!(with: with)
           if message_type == :scan
             if with.is_a?(String)
               self.known_scan_key_lists = with
             else
-              fail 'on :scan only support string in parameter with, detail see https://github.com/Eric-Guo/wechat/issues/84'
+              raise 'on :scan only support string in parameter with, detail see https://github.com/Eric-Guo/wechat/issues/84'
             end
           end
         else
-          fail 'Message type click, view, scan and batch_job must specify :with parameters' if [:click, :view, :scan, :batch_job].include?(message_type)
+          raise 'Message type click, view, scan and batch_job must specify :with parameters' if [:click, :view, :scan, :batch_job].include?(message_type)
         end
 
         case message_type

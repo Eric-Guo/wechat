@@ -44,7 +44,7 @@ module Wechat
       header.merge!('Accept' => 'application/json')
       response = yield(url, header)
 
-      fail "Request not OK, response status #{response.status}" if response.status != 200
+      raise "Request not OK, response status #{response.status}" if response.status != 200
       parse_response(response, as || :json) do |parse_as, data|
         break data unless parse_as == :json && data['errcode'].present?
 
@@ -56,9 +56,9 @@ module Wechat
         # 40001, invalid credential, access_token is invalid or not latest hint
         # 48001, api unauthorized hint, for qrcode creation # 71
         when 42001, 40014, 40001, 48001
-          fail AccessTokenExpiredError
+          raise AccessTokenExpiredError
         else
-          fail ResponseError.new(data['errcode'], data['errmsg'])
+          raise ResponseError.new(data['errcode'], data['errmsg'])
         end
       end
     end
