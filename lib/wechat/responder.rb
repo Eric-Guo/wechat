@@ -31,11 +31,11 @@ module Wechat
       def on(message_type, with: nil, respond: nil, &block)
         raise 'Unknow message type' unless [:text, :image, :voice, :video, :shortvideo, :link, :event, :click, :view, :scan, :batch_job, :location, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
-        config.merge!(proc: block) if block_given?
+        config[:proc] = block if block_given?
 
         if with.present?
           raise 'Only text, event, click, view, scan and batch_job can having :with parameters' unless [:text, :event, :click, :view, :scan, :batch_job].include?(message_type)
-          config.merge!(with: with)
+          config[:with] = with
           if message_type == :scan
             if with.is_a?(String)
               self.known_scan_key_lists = with
