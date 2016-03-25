@@ -106,6 +106,12 @@ RSpec.describe WechatCorpController, type: :controller do
       on :batch_job, with: 'replace_user' do |request, batch_job|
         request.reply.text "Replace user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
       end
+
+      def oauth2_page
+        wechat_oauth2 do |userid|
+          render plain: userid
+        end
+      end
     end
 
     specify 'will set controller wechat api and token' do
@@ -274,6 +280,14 @@ RSpec.describe WechatCorpController, type: :controller do
         message = Hash.from_xml(xml_message)['xml']
         expect(message['MsgType']).to eq 'text'
         expect(message['Content']).to eq 'Replace user job job_id finished, return code 0, return message ok'
+      end
+
+      describe 'oauth2_page' do
+        it 'will redirect_to tencent page at first visit' do
+          routes.draw { get 'oauth2_page', to: 'wechat_corp#oauth2_page' }
+          get :oauth2_page
+          expect(response).to redirect_to(controller.wechat_oauth2)
+        end
       end
     end
   end
