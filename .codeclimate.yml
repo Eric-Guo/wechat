@@ -14,3 +14,4 @@ ratings:
   - "**.rb"
 exclude_paths:
 - lib/generators/wechat/templates/app/controllers/wechats_controller.rb
+- spec/**/*
