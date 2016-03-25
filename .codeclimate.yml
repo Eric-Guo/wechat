@@ -1,6 +1,16 @@
-# Save as .codeclimate.yml (note leading .) in project root directory
-languages:
-  Ruby: true
-
+---
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+  fixme:
+    enabled: true
+  rubocop:
+    enabled: true
+ratings:
+  paths:
+  - "**.rb"
 exclude_paths:
-- "lib/generators/wechat/templates/app/controllers/wechats_controller.rb"
+- lib/generators/wechat/templates/app/controllers/wechats_controller.rb
