@@ -3,6 +3,12 @@ module ActionController
     def wechat_responder(opts = {})
       include Wechat::Responder
 
+      self.wechat = load_controller_wechat(opts)
+    end
+
+    private_class_method
+
+    def load_controller_wechat(opts = {})
       self.corpid = opts[:corpid] || Wechat.config.corpid
       self.agentid = opts[:agentid] || Wechat.config.agentid
       self.encrypt_mode = opts[:encrypt_mode] || Wechat.config.encrypt_mode || corpid.present?
@@ -13,10 +19,13 @@ module ActionController
       self.trusted_domain_fullname = opts[:trusted_domain_fullname] || Wechat.config.trusted_domain_fullname
 
       return self.wechat = Wechat.api if opts.empty?
-      return self.wechat = Wechat::CorpApi.new(corpid, opts[:corpsecret], opts[:access_token], \
-                                               agentid, timeout, skip_verify_ssl, opts[:jsapi_ticket]) if corpid.present?
-      self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], \
-                                    timeout, skip_verify_ssl, opts[:jsapi_ticket])
+      if corpid.present?
+        Wechat::CorpApi.new(corpid, opts[:corpsecret], opts[:access_token], \
+                            agentid, timeout, skip_verify_ssl, opts[:jsapi_ticket])
+      else
+        Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], \
+                        timeout, skip_verify_ssl, opts[:jsapi_ticket])
+      end
     end
   end
 
