@@ -290,6 +290,15 @@ RSpec.describe WechatCorpController, type: :controller do
           expect(response).to redirect_to(controller.wechat_oauth2)
         end
 
+        it 'will record cookites when tecent oauth2 success' do
+          oauth2_result = { 'UserId' => 'userid', 'DeviceId' => 'deviceid' }
+          expect(Wechat.api).to receive(:getuserinfo)
+            .with('code_id').and_return(oauth2_result)
+          get :oauth2_page, code: 'code_id'
+          expect(response.body).to eq 'userid'
+          expect(cookies.signed_or_encrypted[:we_deviceid]).to eq 'deviceid'
+        end
+
         it 'will render page with proper cookies' do
           cookies.signed_or_encrypted[:we_userid] = 'userid'
           cookies.signed_or_encrypted[:we_deviceid] = 'deviceid'
