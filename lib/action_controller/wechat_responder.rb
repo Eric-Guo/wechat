@@ -1,8 +1,12 @@
 module ActionController
   module WechatResponder
+    def wechat_api(opts = {})
+      include Wechat::ControllerApi
+      self.wechat = load_controller_wechat(opts)
+    end
+
     def wechat_responder(opts = {})
       include Wechat::Responder
-
       self.wechat = load_controller_wechat(opts)
     end
 
