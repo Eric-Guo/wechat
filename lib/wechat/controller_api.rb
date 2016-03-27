@@ -1,5 +1,11 @@
 module Wechat
   module ControllerApi
+    extend ActiveSupport::Concern
+
+    module ClassMethods
+      attr_accessor :wechat, :token, :corpid, :agentid, :encrypt_mode, :timeout, :skip_verify_ssl, :encoding_aes_key, :trusted_domain_fullname
+    end
+
     def wechat
       self.class.wechat # Make sure user can continue access wechat at instance level similar to class level
     end

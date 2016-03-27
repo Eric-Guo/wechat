@@ -2,7 +2,6 @@ module ActionController
   module WechatResponder
     def wechat_responder(opts = {})
       include Wechat::Responder
-      include Wechat::ControllerApi
 
       self.corpid = opts[:corpid] || Wechat.config.corpid
       self.agentid = opts[:agentid] || Wechat.config.agentid
