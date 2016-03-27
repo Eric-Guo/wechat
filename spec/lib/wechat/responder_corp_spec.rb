@@ -283,14 +283,14 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       describe 'oauth2_page' do
+        before(:each) { routes.draw { get 'oauth2_page', to: 'wechat_corp#oauth2_page' } }
+
         it 'will redirect_to tencent page at first visit' do
-          routes.draw { get 'oauth2_page', to: 'wechat_corp#oauth2_page' }
           get :oauth2_page
           expect(response).to redirect_to(controller.wechat_oauth2)
         end
 
         it 'will render page with proper cookies' do
-          routes.draw { get 'oauth2_page', to: 'wechat_corp#oauth2_page' }
           cookies.signed_or_encrypted[:we_userid] = 'userid'
           cookies.signed_or_encrypted[:we_deviceid] = 'deviceid'
           get :oauth2_page
