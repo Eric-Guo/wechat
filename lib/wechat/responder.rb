@@ -210,9 +210,9 @@ module Wechat
       msg_encrypt = nil unless self.class.corpid.present?
 
       render plain: 'Forbidden', status: 403 if signature != Signature.hexdigest(self.class.token,
-                                                                                params[:timestamp],
-                                                                                params[:nonce],
-                                                                                msg_encrypt)
+                                                                                 params[:timestamp],
+                                                                                 params[:nonce],
+                                                                                 msg_encrypt)
     end
 
     def post_xml
@@ -253,11 +253,7 @@ module Wechat
     end
 
     def process_response(response)
-      if response[:MsgType] == 'success'
-        msg = 'success'
-      else
-        msg = response.to_xml
-      end
+      msg = response[:MsgType] == 'success' ? 'success' : response.to_xml
 
       if self.class.encrypt_mode
         encrypt = Base64.strict_encode64(encrypt(pack(msg, @app_id), self.class.encoding_aes_key))

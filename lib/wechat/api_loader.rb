@@ -27,7 +27,7 @@ HELP
       @config
     end
 
-    private
+    private_class_method
 
     def self.loading_config!
       config ||= config_from_file || config_from_environment
