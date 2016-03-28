@@ -292,7 +292,7 @@ RSpec.describe WechatCorpController, type: :controller do
 
         it 'will record cookites when tecent oauth2 success' do
           oauth2_result = { 'UserId' => 'userid', 'DeviceId' => 'deviceid' }
-          expect(Wechat.api).to receive(:getuserinfo)
+          expect(controller.wechat).to receive(:getuserinfo)
             .with('code_id').and_return(oauth2_result)
           get :oauth2_page, code: 'code_id'
           expect(response.body).to eq 'userid'

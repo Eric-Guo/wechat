@@ -25,7 +25,7 @@ module Wechat
       if cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].blank?
         redirect_to oauth2_url
       elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present?
-        userinfo = Wechat.api.getuserinfo(params[:code])
+        userinfo = wechat.getuserinfo(params[:code])
         cookies.signed_or_encrypted[:we_userid] = { value: userinfo['UserId'], expires: 1.hour.from_now }
         cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: 1.hour.from_now }
         cookies.signed_or_encrypted[:we_openid] = { value: userinfo['OpenId'], expires: 1.hour.from_now }
