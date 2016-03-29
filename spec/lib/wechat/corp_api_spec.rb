@@ -390,10 +390,11 @@ RSpec.describe Wechat::CorpApi do
   describe '#media_uploadimg' do
     specify 'will post media/uploadimg with access_token and media payload at file based api endpoint' do
       image_file = 'picture.png'
+      media_result = { url: 'http://shp.qpic.cn/mmocbiz/xxxxxxxxxxxxx/' }
       expect(subject.client).to receive(:post_file)
         .with('media/uploadimg', image_file,
-              params: { access_token: 'access_token' }).and_return(true)
-      expect(subject.media_uploadimg(image_file)).to be true
+              params: { access_token: 'access_token' }).and_return(media_result)
+      expect(subject.media_uploadimg(image_file)).to eq(media_result)
     end
   end
 
