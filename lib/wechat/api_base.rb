@@ -20,6 +20,10 @@ module Wechat
       post_file 'media/upload', file, params: { type: type }
     end
 
+    def media_uploadimg(file)
+      post_file 'media/uploadimg', file
+    end
+
     protected
 
     def get(path, headers = {})

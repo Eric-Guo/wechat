@@ -343,6 +343,11 @@ class App < Thor
     puts wechat_api.media_create(type, path)
   end
 
+  desc 'media_uploadimg [IMAGE_PATH]', '上传图文消息内的图片'
+  def media_uploadimg(image_path)
+    puts wechat_api.media_uploadimg(image_path)
+  end
+
   desc 'material [MEDIA_ID, PATH]', '永久媒体下载'
   def material(media_id, path)
     tmp_file = wechat_api.material(media_id)

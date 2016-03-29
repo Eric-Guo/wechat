@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.8 (released at 3/31/2016)
+
+* New media_uploadimg API.
+
 ## v0.7.7 (released at 3/18/2016)
 
 * New wechat_oauth2, only support enterprise account still.
