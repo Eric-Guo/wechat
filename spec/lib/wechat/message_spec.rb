@@ -253,6 +253,18 @@ RSpec.describe Wechat::Message do
         }.to_json)
       end
 
+      specify 'can convert file message' do
+        request = Wechat::Message.to('toUser').file('file_media_id')
+
+        expect(request.to_json).to eq({
+          touser: 'toUser',
+          msgtype: 'file',
+          file: {
+            media_id: 'file_media_id'
+          }
+        }.to_json)
+      end
+
       specify 'can convert music message' do
         request = Wechat::Message.to('toUser')
                   .music('thumb_media_id', 'music_url', title: 'title', description: 'description', HQ_music_url: 'hq_music_url')

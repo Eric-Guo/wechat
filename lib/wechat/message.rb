@@ -106,6 +106,10 @@ module Wechat
       update(MsgType: 'video', Video: video_fields)
     end
 
+    def file(media_id)
+      update(MsgType: 'file', File: { MediaId: media_id })
+    end
+
     def music(thumb_media_id, music_url, opts = {})
       music_fields = camelize_hash_keys(opts.slice(:title, :description, :HQ_music_url).merge(music_url: music_url, thumb_media_id: thumb_media_id))
       update(MsgType: 'music', Music: music_fields)
@@ -145,7 +149,7 @@ module Wechat
       'TemplateId' => 'template_id'
     }.freeze
 
-    TO_JSON_ALLOWED = %w(touser msgtype content image voice video music news articles template agentid).freeze
+    TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid).freeze
 
     def to_json
       json_hash = deep_recursive(message_hash) do |key, value|
