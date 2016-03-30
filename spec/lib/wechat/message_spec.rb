@@ -221,32 +221,32 @@ RSpec.describe Wechat::Message do
       end
 
       specify 'can convert image message' do
-        request = Wechat::Message.to('toUser').image('media_id')
+        request = Wechat::Message.to('toUser').image('image_media_id')
         expect(request.to_json).to eq({
           touser: 'toUser',
           msgtype: 'image',
-          image: { media_id: 'media_id' }
+          image: { media_id: 'image_media_id' }
         }.to_json)
       end
 
       specify 'can convert voice message' do
-        request = Wechat::Message.to('toUser').voice('media_id')
+        request = Wechat::Message.to('toUser').voice('voice_media_id')
 
         expect(request.to_json).to eq({
           touser: 'toUser',
           msgtype: 'voice',
-          voice: { media_id: 'media_id' }
+          voice: { media_id: 'voice_media_id' }
         }.to_json)
       end
 
       specify 'can convert video message' do
-        request = Wechat::Message.to('toUser').video('media_id', title: 'title', description: 'description')
+        request = Wechat::Message.to('toUser').video('video_media_id', title: 'title', description: 'description')
 
         expect(request.to_json).to eq({
           touser: 'toUser',
           msgtype: 'video',
           video: {
-            media_id: 'media_id',
+            media_id: 'video_media_id',
             title: 'title',
             description: 'description'
           }
