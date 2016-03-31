@@ -24,7 +24,7 @@ Wechat provide OAuth2.0 authentication method `wechat_oauth2`, possible the easi
 
 There is official [weui](https://github.com/weui/weui), which corresponding Rails gems called [weui-rails](https://github.com/Eric-Guo/weui-rails) available, if you prefer following the same UI design as wechat.
 
-For web page only wechat application, using `wechat_api`, which only contain web feature compare with traditional message type `wechat_responder`. 
+For web page only wechat application, using [`wechat_api`](#wechat_api---rails-controller-wechat-api), which only contain web feature compare with traditional message type [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl). 
 
 There is a more complete [wechat-starter](https://github.com/goofansu/wechat-starter) demo available, even include the payment SDK feature.
 
@@ -469,6 +469,17 @@ $ wechat template_message oCfEht9oM*********** template.yml
 ## wechat_api - Rails Controller Wechat API
 
 Although user can always access all wechat feature via Wechat.api, but it's much more recommand to using `wechat` directly in controller. It's not only mandatory require if you plan to support multi-account, also help to seperate the wechat specific logic from the model layer.
+
+```ruby
+class WechatReportsController < ApplicationController
+  wechat_api
+  layout 'wechat'
+
+  def index
+    @lots = Lot.with_preloading.wip_lot
+  end
+end
+```
 
 ## wechat_responder - Rails Responder Controller DSL
 
