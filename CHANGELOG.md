@@ -2,7 +2,10 @@
 
 ## v0.7.8 (released at 3/31/2016)
 
+* New wechat_api, similar to wechat_responder, but without messange handle DSL, support web page only wechat application
 * New media_uploadimg API.
+* New file type of Message.
+* Improved multi account support per different controller.
 
 ## v0.7.7 (released at 3/18/2016)
 

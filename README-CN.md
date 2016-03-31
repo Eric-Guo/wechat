@@ -17,6 +17,8 @@ WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平
 
 如果您对如何制作微信网页UI没有灵感，可以参考官方的[weui](https://github.com/weui/weui)，针对Rails的Gem是[weui-rails](https://github.com/Eric-Guo/weui-rails)。
 
+主页型应用请使用`wechat_api`，传统消息型应用请使用`wechat_responder`。
+
 如果您想从一个稍微完整一些的示例开始微信开发，可以参考[wechat-starter](https://github.com/goofansu/wechat-starter)，这个示例甚至包括了微信支付的内容。
 
 ## 安装
@@ -164,7 +166,7 @@ Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://
 
 #### 为每个Responder配置不同的appid和secret
 
-在个别情况下，单个Rails应用可能需要处理来自多个账号的消息，此时可以配置多个responder controller。
+有些情况下，单个Rails应用可能需要处理来自多个微信公众号的消息，您可以通过在`wechat_responder`和`wechat_api`后配置多个相关参数来支持多账号。
 
 ```ruby
 class WechatFirstController < ActionController::Base
@@ -449,7 +451,11 @@ template:
 $ wechat template_message oCfEht9oM*********** template.yml
 ```
 
-## Rails Responder Controller DSL
+## wechat_api - Rails Controller Wechat API
+
+虽然用户可以随时通过`Wechat.api`在任意代码中访问wechat的API功能，但是更推荐的做法是仅在controller中，通过引入`wechat_api`，使用`wechat`调用API功能，不仅因为这样是支持多个微信公众号的必然要求，而且也避免了在模型层内过多引入微信相关代码。
+
+## wechat_responder - Rails Responder Controller DSL
 
 为了在Rails app中响应用户的消息，开发者需要创建一个wechat responder controller. 首先在router中定义
 
