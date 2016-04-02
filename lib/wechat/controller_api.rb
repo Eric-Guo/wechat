@@ -1,9 +1,13 @@
+require 'securerandom'
+
 module Wechat
   module ControllerApi
     extend ActiveSupport::Concern
 
     module ClassMethods
       attr_accessor :wechat, :token, :appid, :corpid, :agentid, :encrypt_mode, :timeout, :skip_verify_ssl, :encoding_aes_key, :trusted_domain_fullname
+      attr_reader :wechat_oauth2_state
+      @wechat_oauth2_state = SecureRandom.hex(16)
     end
 
     def wechat
@@ -18,13 +22,13 @@ module Wechat
                      request.original_url
                    end
       redirect_uri = CGI.escape(page_url)
-      oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}#wechat_redirect"
+      oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}&state=#{self.class.wechat_oauth2_state}#wechat_redirect"
 
       return oauth2_url unless block_given?
       raise 'Currently wechat_oauth2 only support enterprise account.' unless self.class.corpid
       if cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].blank?
         redirect_to oauth2_url
-      elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present?
+      elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present? && params[:state] == self.class.wechat_oauth2_state
         userinfo = wechat.getuserinfo(params[:code])
         cookies.signed_or_encrypted[:we_userid] = { value: userinfo['UserId'], expires: 1.hour.from_now }
         cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: 1.hour.from_now }

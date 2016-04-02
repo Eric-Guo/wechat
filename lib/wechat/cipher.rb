@@ -1,5 +1,4 @@
 require 'openssl/cipher'
-require 'securerandom'
 require 'base64'
 
 module Wechat
