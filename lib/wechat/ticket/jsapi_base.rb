@@ -1,9 +1,10 @@
 require 'digest/sha1'
+require 'securerandom'
 
 module Wechat
   module Ticket
     class JsapiBase
-      attr_reader :client, :access_token, :jsapi_ticket_file, :access_ticket, :ticket_life_in_seconds, :got_ticket_at
+      attr_reader :client, :access_token, :oauth2_state, :jsapi_ticket_file, :access_ticket, :ticket_life_in_seconds, :got_ticket_at
 
       def initialize(client, access_token, jsapi_ticket_file)
         @client = client
@@ -17,6 +18,10 @@ module Wechat
         read_ticket_from_store
         refresh if remain_life_seconds < @random_generator.rand(30..3 * 60)
         access_ticket
+      end
+
+      def state
+        oauth2_state
       end
 
       # Obtain the wechat jssdk config signature parameter and return below hash
@@ -47,6 +52,7 @@ module Wechat
         td = read_ticket
         @ticket_life_in_seconds = td.fetch('ticket_expires_in').to_i
         @got_ticket_at = td.fetch('got_ticket_at').to_i
+        @oauth2_state = td.fetch('oauth2_state')
         @access_ticket = td.fetch('ticket') # return access_ticket same time
       rescue JSON::ParserError, Errno::ENOENT, KeyError, TypeError
         refresh
