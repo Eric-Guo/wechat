@@ -21,11 +21,18 @@ module Wechat
       oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}&state=#{wechat.jsapi_ticket.state}#wechat_redirect"
 
       return oauth2_url unless block_given?
-      raise 'Currently wechat_oauth2 only support enterprise account.' unless self.class.corpid
-      wechat_corp_oauth2(oauth2_url, &block)
+      if self.class.corpid
+        wechat_corp_oauth2(oauth2_url, &block)
+      else
+        wechat_public_oauth2(oauth2_url, &block)
+      end
     end
 
     private
+
+    def wechat_public_oauth2(scope, oauth2_url)
+      raise 'Currently wechat_oauth2 only support public account yet.'
+    end
 
     def wechat_corp_oauth2(oauth2_url)
       if cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].blank?
