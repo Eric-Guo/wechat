@@ -10,7 +10,7 @@ module Wechat
       self.class.wechat # Make sure user can continue access wechat at instance level similar to class level
     end
 
-    def wechat_oauth2(scope = 'snsapi_base', page_url = nil)
+    def wechat_oauth2(scope = 'snsapi_base', page_url = nil, &block)
       appid = self.class.corpid || self.class.appid
       page_url ||= if self.class.trusted_domain_fullname
                      "#{self.class.trusted_domain_fullname}#{request.original_fullpath}"
@@ -22,6 +22,12 @@ module Wechat
 
       return oauth2_url unless block_given?
       raise 'Currently wechat_oauth2 only support enterprise account.' unless self.class.corpid
+      wechat_corp_oauth2(oauth2_url, &block)
+    end
+
+    private
+
+    def wechat_corp_oauth2(oauth2_url)
       if cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].blank?
         redirect_to oauth2_url
       elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present? && params[:state] == wechat.jsapi_ticket.state
