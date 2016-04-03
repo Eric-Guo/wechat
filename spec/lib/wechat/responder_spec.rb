@@ -419,8 +419,8 @@ RSpec.describe WechatController, type: :controller do
     controller do
       wechat_api
       def oauth2_page
-        wechat_oauth2 do |userid|
-          render plain: userid
+        wechat_oauth2 do |openid|
+          render plain: openid
         end
       end
     end

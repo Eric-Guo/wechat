@@ -209,7 +209,21 @@ Configure the `trusted_domain_fullname` if you are in development mode and app r
 
 #### OAuth2.0 authentication
 
-For enterprise account, user can using userid directly by provide a block in wechat_oauth2:
+For public account, below code will get flollowing user's info.
+
+```ruby
+class CartController < ActionController::Base
+  wechat_api
+  def index
+    wechat_oauth2 do |openid|
+      @current_user = User.find_by(wechat_openid: openid)
+      @articles = @current_user.articles
+    end
+  end
+end
+```
+
+For enterprise account, below code will get enterprise member's userinfo.
 
 ```ruby
 class WechatsController < ActionController::Base
@@ -225,7 +239,7 @@ class WechatsController < ActionController::Base
 end
 ```
 
-`wechat_oauth2` already implement the necessory OAuth2.0 and cookie logic, userid available as a member UserID for the whole block.
+`wechat_oauth2` already implement the necessory OAuth2.0 and cookie logic. userid defined as the enterprise member UserID. openid defined as the user who following the public account, also notice openid will be different for the same user for different following public account.
 
 
 ## The API privilege

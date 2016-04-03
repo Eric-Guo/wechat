@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7.9 (released at 4/06/2016)
+
+* wechat_oauth2 support public account now.
+* Refresh and store state on jsapi ticket, using it on oauth2_url to more secure.
+
 ## v0.7.8 (released at 3/31/2016)
 
 * New wechat_api, similar to wechat_responder, but without messange handle DSL, support web page only wechat application

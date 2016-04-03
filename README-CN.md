@@ -196,7 +196,21 @@ end
 
 #### OAuth2.0验证接口支持
 
-目前企业号可以使用如下代码直接取得用户企业号userid：
+公众号可使用如下代码取得关注用户的相关信息。
+
+```ruby
+class CartController < ActionController::Base
+  wechat_api
+  def index
+    wechat_oauth2 do |openid|
+      @current_user = User.find_by(wechat_openid: openid)
+      @articles = @current_user.articles
+    end
+  end
+end
+```
+
+企业号可使用如下代码取得企业用户的相关信息。
 
 ```ruby
 class WechatsController < ActionController::Base
@@ -212,7 +226,7 @@ class WechatsController < ActionController::Base
 end
 ```
 
-`wechat_oauth2`封装了OAuth2.0验证接口和cookie处理逻辑，用户仅需提供业务代码块即可，userid就是微信成员UserID。
+`wechat_oauth2`封装了OAuth2.0验证接口和cookie处理逻辑，用户仅需提供业务代码块即可。userid指的是微信企业成员UserID，openid是关注该公众号的用户openid。
 
 ## 关于接口权限
 
