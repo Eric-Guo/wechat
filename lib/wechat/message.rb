@@ -115,7 +115,7 @@ module Wechat
       update(MsgType: 'music', Music: music_fields)
     end
 
-    def news(collection, &block)
+    def news(collection, &_block)
       if block_given?
         article = ArticleBuilder.new
         collection.take(10).each_with_index { |item, index| yield(article, item, index) }
