@@ -30,8 +30,16 @@ module Wechat
 
     private
 
-    def wechat_public_oauth2(scope, oauth2_url)
-      raise 'Currently wechat_oauth2 only support public account yet.'
+    def wechat_public_oauth2(oauth2_url)
+      if cookies.signed_or_encrypted[:we_openid].blank? && params[:code].blank?
+        redirect_to oauth2_url
+      elsif cookies.signed_or_encrypted[:we_openid].blank? && params[:code].present? && params[:state] == wechat.jsapi_ticket.oauth2_state
+        access_info = wechat.web_access_token(params[:code])
+        cookies.signed_or_encrypted[:we_openid] = { value: access_info['openid'], expires: 1.hour.from_now }
+        yield access_info['openid'], access_info
+      else
+        yield cookies.signed_or_encrypted[:we_openid], { 'openid' => cookies.signed_or_encrypted[:we_openid] }
+      end
     end
 
     def wechat_corp_oauth2(oauth2_url)
