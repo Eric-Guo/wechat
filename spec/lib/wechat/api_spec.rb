@@ -367,4 +367,20 @@ RSpec.describe Wechat::Api do
       expect(subject.customservice_getonlinekflist).to eq(kf_list)
     end
   end
+
+  describe '#web_access_token' do
+    specify 'will get access_token, refresh_token and openid with authorization_code' do
+      oauth_result = { access_token: 'ACCESS_TOKEN',
+                       expires_in: 7200,
+                       refresh_token: 'REFRESH_TOKEN',
+                       openid: 'OPENID',
+                       scope: 'snsapi_userinfo' }
+      expect(subject.client).to receive(:get)
+        .with('access_token', params: { appid: 'appid',
+                                        secret: 'secret',
+                                        code: 'code',
+                                        grant_type: 'authorization_code' }, base: Wechat::Api::OAUTH2_BASE).and_return(oauth_result)
+      expect(subject.web_access_token('code')).to eq(oauth_result)
+    end
+  end
 end

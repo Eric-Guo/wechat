@@ -6,7 +6,6 @@ require 'wechat/ticket/public_jsapi_ticket'
 module Wechat
   class Api < ApiBase
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'.freeze
-    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/oauth2/'.freeze
 
     def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file)
       @client = Client.new(API_BASE, timeout, skip_verify_ssl)
@@ -130,8 +129,8 @@ module Wechat
       get 'customservice/getonlinekflist'
     end
 
-    # http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html
-    # 第二步：通过code换取网页授权access_token
+    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/oauth2/'.freeze
+
     def web_access_token(code)
       params = {
         appid: access_token.appid,
@@ -139,7 +138,7 @@ module Wechat
         code: code,
         grant_type: 'authorization_code'
       }
-      get 'access_token', params: params, base: OAUTH2_BASE
+      client.get 'access_token', params: params, base: OAUTH2_BASE
     end
   end
 end
