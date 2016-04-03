@@ -39,10 +39,10 @@ module Wechat
     private
 
     def request(path, header = {}, &_block)
-      url = "#{header.delete(:base) || base}#{path}"
+      url_base = header.delete(:base) || base
       as = header.delete(:as)
       header['Accept'] = 'application/json'
-      response = yield(url, header)
+      response = yield("#{url_base}#{path}", header)
 
       raise "Request not OK, response status #{response.status}" if response.status != 200
       parse_response(response, as || :json) do |parse_as, data|
