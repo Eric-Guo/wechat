@@ -18,7 +18,7 @@ module Wechat
                      request.original_url
                    end
       redirect_uri = CGI.escape(page_url)
-      oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}&state=#{wechat.jsapi_ticket.state}#wechat_redirect"
+      oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}&state=#{wechat.jsapi_ticket.oauth2_state}#wechat_redirect"
 
       return oauth2_url unless block_given?
       if self.class.corpid
@@ -37,7 +37,7 @@ module Wechat
     def wechat_corp_oauth2(oauth2_url)
       if cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].blank?
         redirect_to oauth2_url
-      elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present? && params[:state] == wechat.jsapi_ticket.state
+      elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present? && params[:state] == wechat.jsapi_ticket.oauth2_state
         userinfo = wechat.getuserinfo(params[:code])
         cookies.signed_or_encrypted[:we_userid] = { value: userinfo['UserId'], expires: 1.hour.from_now }
         cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: 1.hour.from_now }

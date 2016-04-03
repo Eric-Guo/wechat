@@ -20,10 +20,6 @@ module Wechat
         access_ticket
       end
 
-      def state
-        oauth2_state
-      end
-
       # Obtain the wechat jssdk config signature parameter and return below hash
       #  params = {
       #    noncestr: noncestr,
