@@ -384,8 +384,23 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#web_refresh_access_token' do
+    specify 'will get access_token, refresh_token and openid with user_refresh_token' do
+      oauth_result = { access_token: 'ACCESS_TOKEN',
+                       expires_in: 7200,
+                       refresh_token: 'REFRESH_TOKEN',
+                       openid: 'OPENID',
+                       scope: 'snsapi_userinfo' }
+      expect(subject.client).to receive(:get)
+        .with('oauth2/refresh_token', params: { appid: 'appid',
+                                                grant_type: 'refresh_token',
+                                                refresh_token: 'user_refresh_token' }, base: Wechat::Api::OAUTH2_BASE).and_return(oauth_result)
+      expect(subject.web_refresh_access_token('user_refresh_token')).to eq(oauth_result)
+    end
+  end
+
   describe '#web_userinfo' do
-    specify 'will get access_token, refresh_token and openid with authorization_code' do
+    specify 'will get user_info with web_access_token and openid' do
       user_info = { openid: 'OPENID',
                     nickname: 'NICKNAME',
                     sex: '1',
@@ -397,8 +412,8 @@ RSpec.describe Wechat::Api do
                     unionid: 'o6_bmasdasdsad6_2sgVt7hMZOPfL' }
       expect(subject.client).to receive(:get)
         .with('sns/userinfo', params: { access_token: 'web_access_token',
-                                           openid: 'openid',
-                                           lang: 'zh_CN' }, base: Wechat::Api::OAUTH2_BASE).and_return(user_info)
+                                        openid: 'openid',
+                                        lang: 'zh_CN' }, base: Wechat::Api::OAUTH2_BASE).and_return(user_info)
       expect(subject.web_userinfo('web_access_token', 'openid')).to eq(user_info)
     end
   end
