@@ -164,7 +164,7 @@ module Wechat
       when 'news'
         json_hash['news'] = { 'articles' => json_hash.delete('articles') }
       when 'template'
-        json_hash.merge! json_hash['template']
+        json_hash = { 'touser' => json_hash['touser'] }.merge!(json_hash['template'])
       end
       JSON.generate(json_hash)
     end
