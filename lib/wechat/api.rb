@@ -140,5 +140,9 @@ module Wechat
       }
       client.get 'oauth2/access_token', params: params, base: OAUTH2_BASE
     end
+
+    def web_userinfo(web_access_token, openid, lang = 'zh_CN')
+      client.get 'sns/userinfo', params: { access_token: web_access_token, openid: openid, lang: lang }, base: OAUTH2_BASE
+    end
   end
 end

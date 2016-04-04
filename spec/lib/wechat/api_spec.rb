@@ -383,4 +383,23 @@ RSpec.describe Wechat::Api do
       expect(subject.web_access_token('code')).to eq(oauth_result)
     end
   end
+
+  describe '#web_userinfo' do
+    specify 'will get access_token, refresh_token and openid with authorization_code' do
+      user_info = { openid: 'OPENID',
+                    nickname: 'NICKNAME',
+                    sex: '1',
+                    province: 'PROVINCE',
+                    city: 'CITY',
+                    country: 'COUNTRY',
+                    headimgurl: 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46',
+                    privilege: %w(PRIVILEGE1 PRIVILEGE2),
+                    unionid: 'o6_bmasdasdsad6_2sgVt7hMZOPfL' }
+      expect(subject.client).to receive(:get)
+        .with('sns/userinfo', params: { access_token: 'web_access_token',
+                                           openid: 'openid',
+                                           lang: 'zh_CN' }, base: Wechat::Api::OAUTH2_BASE).and_return(user_info)
+      expect(subject.web_userinfo('web_access_token', 'openid')).to eq(user_info)
+    end
+  end
 end
