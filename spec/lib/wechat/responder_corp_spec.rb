@@ -65,7 +65,7 @@ RSpec.describe WechatCorpController, type: :controller do
   describe 'corp' do
     controller do
       wechat_responder corpid: 'corpid', corpsecret: 'corpsecret', token: 'token', access_token: 'controller_access_token',
-                       agentid: 1, encoding_aes_key: ENCODING_AES_KEY
+                       agentid: 1, encoding_aes_key: ENCODING_AES_KEY, trusted_domain_fullname: 'http://trusted.host'
 
       on :text do |request, content|
         request.reply.text "echo: #{content}"
@@ -121,7 +121,7 @@ RSpec.describe WechatCorpController, type: :controller do
       expect(controller.class.agentid).to eq 1
       expect(controller.class.encrypt_mode).to eq true
       expect(controller.class.encoding_aes_key).to eq ENCODING_AES_KEY
-      expect(controller.class.trusted_domain_fullname).to be_nil
+      expect(controller.class.trusted_domain_fullname).to eq 'http://trusted.host'
     end
 
     describe 'response' do
