@@ -4,6 +4,7 @@
 
 * wechat_oauth2 support public account now.
 * Refresh and store state on jsapi ticket, using it on oauth2_url to more secure.
+* Remove extra sending payload in message template send json
 
 ## v0.7.8 (released at 3/31/2016)
 
