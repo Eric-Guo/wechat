@@ -384,6 +384,16 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#web_auth_access_token' do
+    specify 'will validate web access token with web_access_token and openid' do
+      oauth_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:get)
+        .with('auth', params: { access_token: 'web_access_token',
+                                        openid: 'openid' }, base: Wechat::Api::OAUTH2_BASE).and_return(oauth_result)
+      expect(subject.web_auth_access_token('web_access_token', 'openid')).to eq(oauth_result)
+    end
+  end
+
   describe '#web_refresh_access_token' do
     specify 'will get access_token, refresh_token and openid with user_refresh_token' do
       oauth_result = { access_token: 'ACCESS_TOKEN',

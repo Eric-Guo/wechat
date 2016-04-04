@@ -141,6 +141,10 @@ module Wechat
       client.get 'oauth2/access_token', params: params, base: OAUTH2_BASE
     end
 
+    def web_auth_access_token(web_access_token, openid)
+      client.get 'auth', params: { access_token: web_access_token, openid: openid }, base: OAUTH2_BASE
+    end
+
     def web_refresh_access_token(user_refresh_token)
       params = {
         appid: access_token.appid,
