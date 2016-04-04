@@ -376,10 +376,10 @@ RSpec.describe Wechat::Api do
                        openid: 'OPENID',
                        scope: 'snsapi_userinfo' }
       expect(subject.client).to receive(:get)
-        .with('access_token', params: { appid: 'appid',
-                                        secret: 'secret',
-                                        code: 'code',
-                                        grant_type: 'authorization_code' }, base: Wechat::Api::OAUTH2_BASE).and_return(oauth_result)
+        .with('oauth2/access_token', params: { appid: 'appid',
+                                               secret: 'secret',
+                                               code: 'code',
+                                               grant_type: 'authorization_code' }, base: Wechat::Api::OAUTH2_BASE).and_return(oauth_result)
       expect(subject.web_access_token('code')).to eq(oauth_result)
     end
   end

@@ -129,7 +129,7 @@ module Wechat
       get 'customservice/getonlinekflist'
     end
 
-    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/oauth2/'.freeze
+    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
 
     def web_access_token(code)
       params = {
@@ -138,7 +138,7 @@ module Wechat
         code: code,
         grant_type: 'authorization_code'
       }
-      client.get 'access_token', params: params, base: OAUTH2_BASE
+      client.get 'oauth2/access_token', params: params, base: OAUTH2_BASE
     end
   end
 end
