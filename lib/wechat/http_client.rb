@@ -1,7 +1,7 @@
 require 'http'
 
 module Wechat
-  class Client
+  class HttpClient
     attr_reader :base, :ssl_context
 
     def initialize(base, timeout, skip_verify_ssl)
