@@ -108,12 +108,14 @@ default: &default
   secret: "app_secret"
   token:  "app_token"
   access_token: "/var/tmp/wechat_access_token"
+  jsapi_ticket: "/var/tmp/wechat_jsapi_ticket"
 
 production:
   appid: <%= ENV['WECHAT_APPID'] %>
   secret: <%= ENV['WECHAT_APP_SECRET'] %>
   token:   <%= ENV['WECHAT_TOKEN'] %>
-  access_token:  <%= ENV['WECHAT_ACCESS_TOKEN'] %>
+  access_token: <%= ENV['WECHAT_ACCESS_TOKEN'] %>
+  jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
 
 development:
   <<: *default
