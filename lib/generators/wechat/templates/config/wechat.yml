@@ -24,7 +24,8 @@ production:
   access_token:  <%%= ENV['WECHAT_ACCESS_TOKEN'] %>
   encrypt_mode: false # if true must fill encoding_aes_key
   encoding_aes_key:  <%%= ENV['WECHAT_ENCODING_AES_KEY'] %>
-  jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
+  jsapi_ticket: <%%= ENV['WECHAT_JSAPI_TICKET'] %>
+  oauth2_cookie_duration: <%%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %>
 
 development:
   <<: *default

@@ -3,7 +3,8 @@ module Wechat
     extend ActiveSupport::Concern
 
     module ClassMethods
-      attr_accessor :wechat, :token, :appid, :corpid, :agentid, :encrypt_mode, :timeout, :skip_verify_ssl, :encoding_aes_key, :trusted_domain_fullname
+      attr_accessor :wechat, :token, :appid, :corpid, :agentid, :encrypt_mode, :timeout,
+                    :skip_verify_ssl, :encoding_aes_key, :trusted_domain_fullname, :oauth2_cookie_duration
     end
 
     def wechat
@@ -35,7 +36,7 @@ module Wechat
         redirect_to oauth2_url
       elsif cookies.signed_or_encrypted[:we_openid].blank? && params[:code].present? && params[:state] == wechat.jsapi_ticket.oauth2_state
         access_info = wechat.web_access_token(params[:code])
-        cookies.signed_or_encrypted[:we_openid] = { value: access_info['openid'], expires: 1.hour.from_now }
+        cookies.signed_or_encrypted[:we_openid] = { value: access_info['openid'], expires: self.class.oauth2_cookie_duration.from_now }
         yield access_info['openid'], access_info
       else
         yield cookies.signed_or_encrypted[:we_openid], { 'openid' => cookies.signed_or_encrypted[:we_openid] }
@@ -47,9 +48,9 @@ module Wechat
         redirect_to oauth2_url
       elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present? && params[:state] == wechat.jsapi_ticket.oauth2_state
         userinfo = wechat.getuserinfo(params[:code])
-        cookies.signed_or_encrypted[:we_userid] = { value: userinfo['UserId'], expires: 1.hour.from_now }
-        cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: 1.hour.from_now }
-        cookies.signed_or_encrypted[:we_openid] = { value: userinfo['OpenId'], expires: 1.hour.from_now }
+        cookies.signed_or_encrypted[:we_userid] = { value: userinfo['UserId'], expires: self.class.oauth2_cookie_duration.from_now }
+        cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: self.class.oauth2_cookie_duration.from_now }
+        cookies.signed_or_encrypted[:we_openid] = { value: userinfo['OpenId'], expires: self.class.oauth2_cookie_duration.from_now }
         yield userinfo['UserId'], userinfo
       else
         yield cookies.signed_or_encrypted[:we_userid], { 'UserId' => cookies.signed_or_encrypted[:we_userid],

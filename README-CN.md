@@ -106,6 +106,7 @@ production:
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token: <%= ENV['WECHAT_ACCESS_TOKEN'] %>
   jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
+  oauth2_cookie_duration: <%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %>
 
 development:
   <<: *default
@@ -145,6 +146,7 @@ production:
   skip_verify_ssl: true
   encoding_aes_key:  <%= ENV['WECHAT_ENCODING_AES_KEY'] %>
   jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
+  oauth2_cookie_duration: <%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %>
 
 development:
   <<: *default

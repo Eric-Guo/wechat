@@ -1,10 +1,11 @@
 # Changelog
 
-## v0.7.9 (released at 4/06/2016)
+## v0.7.9 (released at 4/12/2016)
 
 * wechat_oauth2 support public account now.
 * Refresh and store state on jsapi ticket, using it on oauth2_url to more secure.
 * Remove extra sending payload in message template send json
+* Allow setting oauth2_cookie_duration in config
 
 ## v0.7.8 (released at 3/31/2016)
 
