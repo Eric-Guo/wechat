@@ -197,6 +197,8 @@ end
 
 JS-SDK enable you control Wechat App behavior in html, by inject a config signature, helper `wechat_config_js` do that in more simple way:
 
+To make wechat_config_js works, you need put [`wechat_api`](#wechat_api---rails-controller-wechat-api) or [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl) at controller first.
+
 ```erb
 <body>
 <%= wechat_config_js debug: false, api: %w(hideMenuItems closeWindow) -%>

@@ -184,6 +184,8 @@ end
 
 通过JS-SDK可以在HTML网页中控制微信客户端的行为，但必须先注入配置信息，wechat gems提供了帮助方法`wechat_config_js`使这个过程更简单：
 
+注意wechat_config_js指令依赖于[`wechat_api`](#wechat_api---rails-controller-wechat-api) 或 [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl) ，需要先在controller里面添加。
+
 ```erb
 <body>
 <%= wechat_config_js debug: false, api: %w(hideMenuItems closeWindow) -%>
