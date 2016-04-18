@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.11 (released at 4/18/2016)
+
+* To cover wrong release 0.7.10, nothing change
+
 ## v0.7.10 (released at 4/18/2016) (yanked)
 
 ## v0.7.9 (released at 4/12/2016)
