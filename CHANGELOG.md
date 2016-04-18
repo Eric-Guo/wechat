@@ -1,8 +1,6 @@
 # Changelog
 
-## v0.7.10 (released at 4/18/2016)
-
-* allow wechat_config_js even user not declare wechat_api at controller for #104
+## v0.7.10 (released at 4/18/2016) (yanked)
 
 ## v0.7.9 (released at 4/12/2016)
 
