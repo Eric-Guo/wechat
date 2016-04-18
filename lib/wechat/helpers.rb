@@ -1,7 +1,7 @@
 module Wechat
   module Helpers
     def wechat_config_js(config_options = {})
-      page_url = if controller.class.trusted_domain_fullname
+      page_url = if controller.class.respond_to?(:trusted_domain_fullname) && controller.class.trusted_domain_fullname
                    "#{controller.class.trusted_domain_fullname}#{controller.request.original_fullpath}"
                  else
                    controller.request.original_url
