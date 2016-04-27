@@ -68,6 +68,13 @@ Redis存贮相比默认的文件存贮，可以允许Rails应用运行在多台�
 
 ## 配置
 
+####微信配置
+请先确保在服务器上配置成功，再到微信官网提交链接。否则微信会提示错误。
+
+URL请使用： `http://your-server.com/wechat`
+
+appid和secret请看下面的配置
+
 #### 命令行程序的配置
 
 要使用命令行程序，需要在home目录中创建一个`~/.wechat.yml`，包含以下内容。其中`access_token`是存放access_token的文件位置。
