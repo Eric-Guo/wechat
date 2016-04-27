@@ -75,12 +75,13 @@ Redis store support Rails application running in multi-server, no need to enable
 
 ## Configuration
 
-#### Configure for wechat
-Please make sure you finish all the setup on your server before you configure for wechat. Otherwise, wechat will raise error.
+#### Configure for wechat for first time
 
-URL address for wechat is `http://your-server.com/wechat`
+Make sure finish all the setup on rails side first, then submit to wechat. Otherwise, wechat will raise error.
 
-appid and secret please look at the following document.
+URL address for wechat by running `rails g wechat:install` is `http://your-server.com/wechat`
+
+How to setup appid/corpid and secret see section.
 
 #### Configure for command line
 
