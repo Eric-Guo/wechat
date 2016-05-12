@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.12 (released at 5/12/2016)
+
+* Fix web_userinfo wrong URL, found by @gabrieltong #110
+
 ## v0.7.11 (released at 4/18/2016)
 
 * To cover wrong release 0.7.10, nothing change
