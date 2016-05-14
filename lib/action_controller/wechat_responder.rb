@@ -22,7 +22,7 @@ module ActionController
       self.skip_verify_ssl = opts[:skip_verify_ssl]
       self.encoding_aes_key = opts[:encoding_aes_key] || Wechat.config.encoding_aes_key
       self.trusted_domain_fullname = opts[:trusted_domain_fullname] || Wechat.config.trusted_domain_fullname
-      self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || Wechat.config.oauth2_cookie_duration || 1.hour
+      self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || Wechat.config.oauth2_cookie_duration.to_i.seconds || 1.hour
 
       return self.wechat = Wechat.api if opts.empty?
       if corpid.present?

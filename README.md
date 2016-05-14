@@ -124,7 +124,7 @@ production:
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token: <%= ENV['WECHAT_ACCESS_TOKEN'] %>
   jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
-  oauth2_cookie_duration: <%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %>
+  oauth2_cookie_duration: <%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %> # seconds
 
 development:
   <<: *default
