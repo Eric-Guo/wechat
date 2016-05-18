@@ -255,6 +255,8 @@ end
 
 `wechat_oauth2` already implement the necessory OAuth2.0 and cookie logic. userid defined as the enterprise member UserID. openid defined as the user who following the public account, also notice openid will be different for the same user for different following public account.
 
+Notice: If you use `wechat_responder` in your controller, you cannot use `create` and `show` action in your controller, otherwise will throw errors.
+
 
 ## The API privilege
 
