@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activesupport', '>= 3.2', '< 5.1.x'
   s.add_runtime_dependency 'nokogiri', '>=1.6.0'
   s.add_runtime_dependency 'thor'
-  s.add_runtime_dependency 'http', '~> 1.0.4', '< 3'
+  s.add_runtime_dependency 'http', '>= 1.0.4', '< 3'
   s.add_development_dependency 'rspec-rails', '~> 3.4'
   s.add_development_dependency 'rails', '>= 3.2'
   s.add_development_dependency 'sqlite3'
