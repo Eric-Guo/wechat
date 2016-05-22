@@ -44,7 +44,9 @@ module Wechat
     end
 
     def wechat_corp_oauth2(oauth2_url)
-      if cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].blank?
+      if (cookies.signed_or_encrypted[:we_userid].blank? || 
+          cookies.signed_or_encrypted[:we_deviceid].blank? || 
+          cookies.signed_or_encrypted[:we_openid].blank? ) &&  params[:code].blank?
         redirect_to oauth2_url
       elsif cookies.signed_or_encrypted[:we_deviceid].blank? && params[:code].present? && params[:state] == wechat.jsapi_ticket.oauth2_state
         userinfo = wechat.getuserinfo(params[:code])

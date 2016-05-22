@@ -302,6 +302,7 @@ RSpec.describe WechatCorpController, type: :controller do
         it 'will render page with proper cookies' do
           cookies.signed_or_encrypted[:we_userid] = 'userid'
           cookies.signed_or_encrypted[:we_deviceid] = 'deviceid'
+          cookies.signed_or_encrypted[:we_openid] = 'openid'
           get :oauth2_page
           expect(response.body).to eq 'userid'
         end
