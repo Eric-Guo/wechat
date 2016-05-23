@@ -71,6 +71,10 @@ module Wechat
       end
     end
 
+    def shorturl(long_url)
+      post 'shorturl', JSON.generate(action: 'long2short', long_url: long_url)
+    end
+
     def menu
       get 'menu/get'
     end

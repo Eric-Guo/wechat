@@ -282,6 +282,11 @@ class App < Thor
       puts wechat_api.qrcode_create_limit_scene(scene_id_or_str)
     end
 
+    desc 'short_url [LONG_URL]', '长链接转短链接'
+    def short_url(long_url)
+      puts wechat_api.short_url(long_url)
+    end
+
     desc 'customservice_getonlinekflist', '获取在线客服接待信息'
     def customservice_getonlinekflist
       puts wechat_api.customservice_getonlinekflist

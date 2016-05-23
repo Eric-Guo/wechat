@@ -188,6 +188,19 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#shorturl' do
+    shorturl_result = { errcode: 0, errmsg: 'ok',
+                        short_url: 'http://w.url.cn/s/AvCo6Ih' }
+
+    specify 'will post short_url with access_token and long_url' do
+      long_url = 'http://wap.koudaitong.com/v2/showcase/goods?alias=128wi9shh&spm=h56083&redirect_count=1'
+      shorturl_req = { action: 'long2short', long_url: long_url }
+      expect(subject.client).to receive(:post)
+        .with('shorturl', JSON.generate(shorturl_req), params: { access_token: 'access_token' }).and_return(shorturl_result)
+      expect(subject.shorturl(long_url)).to eq shorturl_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token' do
       menu_result = 'menu_result'

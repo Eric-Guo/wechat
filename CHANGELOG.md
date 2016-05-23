@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.14
+
+* New short_url allowing convert from long URL to short.
+
 ## v0.7.13 (released at 5/14/2016)
 
 * Wechat.config.oauth2_cookie_duration need convert to secondes, found by @gabrieltong #111
