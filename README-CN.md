@@ -482,14 +482,14 @@ template:
 $ wechat template_message oCfEht9oM*********** template.yml
 ```
 
-可以在Controller中这样使用:
+在代码中可以这样使用：
 
 ```ruby
 template = YAML.load(File.read(template_yaml_path)).symbolize_keys
 Wechat.api.template_message_send Wechat::Message.to(openid).template(template)
 ```
 
-如果你在Controller中使用wechat_api或者wechat_responder,你可以这样使用:
+若在Controller中使用wechat_api或者wechat_responder，可以使用wechat：
 
 ```ruby
 template = YAML.load(File.read(template_yaml_path)).symbolize_keys

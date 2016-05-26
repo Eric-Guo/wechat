@@ -497,14 +497,14 @@ After that, can running command:
 $ wechat template_message oCfEht9oM*********** template.yml
 ```
 
-In Controller you can use template like that:
+In code:
 
 ```ruby
 template = YAML.load(File.read(template_yaml_path)).symbolize_keys
 Wechat.api.template_message_send Wechat::Message.to(openid).template(template)
 ```
 
-If you use wechat_api or wechat_responder in Controller, you can alse use template like that:
+If using wechat_api or wechat_responder in Controller, can alse use wechat as shortcut(Support multi account):
 
 ```ruby
 template = YAML.load(File.read(template_yaml_path)).symbolize_keys
