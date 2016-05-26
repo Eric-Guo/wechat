@@ -482,6 +482,20 @@ template:
 $ wechat template_message oCfEht9oM*********** template.yml
 ```
 
+可以在Controller中这样使用:
+
+```ruby
+template = YAML.load(File.read(template_yaml_path)).symbolize_keys
+Wechat.api.template_message_send Wechat::Message.to(openid).template(template)
+```
+
+如果你在Controller中使用wechat_api或者wechat_responder,你可以这样使用:
+
+```ruby
+template = YAML.load(File.read(template_yaml_path)).symbolize_keys
+wechat.template_message_send Wechat::Message.to(openid).template(template)
+```
+
 ## wechat_api - Rails Controller Wechat API
 
 虽然用户可以随时通过`Wechat.api`在任意代码中访问wechat的API功能，但是更推荐的做法是仅在controller中，通过引入`wechat_api`，使用`wechat`调用API功能，不仅因为这样是支持多个微信公众号的必然要求，而且也避免了在模型层内过多引入微信相关代码。
