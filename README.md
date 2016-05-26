@@ -442,7 +442,7 @@ Caution: make sure you having management privilege for those application， othe
 ##### Sent custom news
 
 
-Sending custom_news should also defined as a yaml file, like `articles.yaml`
+Sending custom_news should also defined as a yaml file, like `articles.yml`
 
 ```
 articles:
@@ -492,6 +492,20 @@ After that, can running command:
 
 ```
 $ wechat template_message oCfEht9oM*********** template.yml
+```
+
+In Controller you can use template like that:
+
+```ruby
+template = YAML.load(File.read(template_yaml_path)).symbolize_keys
+Wechat.api.template_message_send Wechat::Message.to(openid).template(template)
+```
+
+If you use wechat_api or wechat_responder in Controller, you can alse use template like that:
+
+```ruby
+template = YAML.load(File.read(template_yaml_path)).symbolize_keys
+wechat.template_message_send Wechat::Message.to(openid).template(template)
 ```
 
 ## wechat_api - Rails Controller Wechat API
