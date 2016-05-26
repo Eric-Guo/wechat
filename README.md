@@ -607,7 +607,7 @@ class WechatsController < ActionController::Base
 
   # When user sent location
   on :location do |request|
-    request.reply.text("Latitude: #{message[:Latitude]} Longitude: #{message[:Longitude]} Precision: #{message[:Precision]}")
+    request.reply.text("Latitude: #{request[:Latitude]} Longitude: #{request[:Longitude]} Precision: #{request[:Precision]}")
   end
 
   on :event, with: 'unsubscribe' do |request|
