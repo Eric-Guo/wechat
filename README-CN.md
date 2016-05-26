@@ -592,7 +592,7 @@ class WechatsController < ActionController::Base
 
   # 处理上报地理位置事件
   on :location do |request|
-    request.reply.text("Latitude: #{message[:Latitude]} Longitude: #{message[:Longitude]} Precision: #{message[:Precision]}")
+    request.reply.text("Latitude: #{request[:Latitude]} Longitude: #{request[:Longitude]} Precision: #{request[:Precision]}")
   end
 
   # 当用户取消关注订阅
