@@ -330,7 +330,7 @@ Wechat commands:
   wechat menu                                              # 当前菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
   wechat menu_delete                                       # 删除菜单
-  wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
+  wechat message_send [USERID, TEXT_MESSAGE]               # 发送文字消息
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
   wechat tag [TAG_ID]                                      # 获取标签成员
   wechat tag_add_department [TAG_ID, PARTY_IDS]            # 增加标签部门
