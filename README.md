@@ -5,38 +5,38 @@ WeChat [![Gem Version][version-badge]][rubygems] [![Build Status][travis-badge]]
 
 [中文文档 Chinese document](/README-CN.md)
 
-[Wechat](http://www.wechat.com/) is a free messaging and calling app developed by [Tencent](http://tencent.com/en-us/index.shtml), after linked billion people, Wechat become a platform of application
+[Wechat](http://www.wechat.com/) is a free messaging and calling app developed by [Tencent](http://tencent.com/en-us/index.shtml), after linking billion people, Wechat has become a platform of application
 
-WeChat gem trying to helping Rails developer to integrated [enterprise account](https://qy.weixin.qq.com) / [public account](https://mp.weixin.qq.com/) easily. Below feature is ready and no need writing adapter code talking to wechat server directly.
+WeChat gem tries to help Rails developer to integrate [enterprise account](https://qy.weixin.qq.com) / [public account](https://mp.weixin.qq.com/) easily. Features below are ready and there is no need writing adapter code for talking to wechat server directly.
 
 - [Sending message](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF) API（Can access via console or in rails）
-- [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（You must running on rails server to receiving message）
+- [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（You must run on rails server to receiving message）
 - [Wechat JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config signature
 - OAuth 2.0 authentication
-- Record session when received message from user (Optional)
+- Record session when receiving message from user (Optional)
 
 
-`wechat` command share the same API in console, so you can interactive with wechat server quickly, without starting up web environment/code.
+`wechat` command shares the same API in console, so you can interactive with wechat server quickly, without starting up web environment/code.
 
-A responder DSL can used in Rails controller, so giving a event based interface to handler message sent by end user from wechat server.
+A responder DSL can be used in Rails controller, so giving an event based interface to handle messages sent by end user from wechat server.
 
-Wechat provide OAuth2.0 authentication method `wechat_oauth2`, possible the easiest way, for the user perfer using devise style authorization gems, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) can be a good option.
+Wechat provides OAuth2.0 authentication method `wechat_oauth2`, possibly the easiest way, for the users who perfer using devise style authorization gems, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) can be a good option.
 
 There is official [weui](https://github.com/weui/weui), which corresponding Rails gems called [weui-rails](https://github.com/Eric-Guo/weui-rails) available, if you prefer following the same UI design as wechat.
 
-For web page only wechat application, using [`wechat_api`](#wechat_api---rails-controller-wechat-api), which only contain web feature compare with traditional message type [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl). 
+For web page only wechat application, please use [`wechat_api`](#wechat_api---rails-controller-wechat-api), which only contains web feature compare with traditional message type [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl). 
 
 There is a more complete [wechat-starter](https://github.com/goofansu/wechat-starter) demo available, even include the payment SDK feature.
 
 ## Installation
 
-Using `gem install`
+Use `gem install`
 
 ```
 gem install "wechat"
 ```
 
-Or add to your app's `Gemfile`:
+Or add it to your app's `Gemfile`:
 
 ```
 gem 'wechat'
@@ -54,7 +54,7 @@ Run the generator:
 rails generate wechat:install
 ```
 
-`rails g wechat:install` will generated the initial `wechat.yml` configuration, example wechat controller and corresponding routes.
+`rails g wechat:install` will generated the initial `wechat.yml` configuration file, including an example wechat controller and corresponding routes.
 
 Enable session record:
 
