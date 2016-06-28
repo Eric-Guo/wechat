@@ -242,7 +242,9 @@ end
 
 `wechat_oauth2`封装了OAuth2.0验证接口和cookie处理逻辑，用户仅需提供业务代码块即可。userid指的是微信企业成员UserID，openid是关注该公众号的用户openid。
 
-注意: 如果使用 `wechat_responder`, 请不要在 Controller 里定义 `show` 和 `create` 方法, 否则会报错。
+注意: 
+1. 如果使用 `wechat_responder`, 请不要在 Controller 里定义 `show` 和 `create` 方法, 否则会报错。
+2. 如果遇到“redirect_uri参数错误”的错误信息，请登录服务号管理后台，查看“开发者中心/网页服务/网页授权获取用户基本信息”的授权回调页面域名已正确配置。
 
 ## 关于接口权限
 
