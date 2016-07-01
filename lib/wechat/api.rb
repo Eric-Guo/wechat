@@ -141,8 +141,8 @@ module Wechat
       post 'tags/create', JSON.generate(tag: {name: name})
     end
 
-    def tag_user openid, tagid
-      post 'tags/members/batchtagging', JSON.generate(tagid: tagid, openid_list: [openid])
+    def tag_user tagid, openids
+      post 'tags/members/batchtagging', JSON.generate(tagid: tagid, openid_list: openids)
     end
 
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
