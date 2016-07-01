@@ -451,6 +451,11 @@ class App < Thor
   def tags_create name
     puts wechat_api.tags_create name
   end
+
+  desc 'tag_user [OPENID, TAGID]', "给用户打标签"
+  def tag_user openid,tagid
+    puts wechat_api.tag_user openid, tagid
+  end
 end
 
 App.start
