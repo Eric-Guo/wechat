@@ -15,7 +15,8 @@ RSpec.describe WechatApiController, type: :controller do
     end
 
     it '#wechat_config_js' do
-      controller.request = ActionController::TestRequest.new(host: 'test.host')
+      controller.request = ActionController::TestRequest.create
+      controller.request.host = 'test.host'
       expect(controller.wechat.jsapi_ticket).to receive(:signature)
         .with('http://test.host').and_return(js_hash_result)
       expect(wechat_config_js(debug: false, api: %w(hideMenuItems openEnterpriseChat))).to end_with '</script>'
@@ -28,7 +29,8 @@ RSpec.describe WechatApiController, type: :controller do
     end
 
     it 'called with trusted_domain' do
-      controller.request = ActionController::TestRequest.new(host: 'trusted.host')
+      controller.request = ActionController::TestRequest.create
+      controller.request.host = 'test.host'
       expect(controller.wechat.jsapi_ticket).to receive(:signature)
         .with('http://trusted.host').and_return(js_hash_result)
       expect(wechat_config_js(debug: false, api: %w(hideMenuItems))).to end_with '</script>'
