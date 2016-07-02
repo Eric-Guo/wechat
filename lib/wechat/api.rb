@@ -141,7 +141,15 @@ module Wechat
       post 'tags/create', JSON.generate(tag: {name: name})
     end
 
-    def tag_user tagid, openids
+    def tags_update name
+      post 'tags/create', JSON.generate(tag: {name: name})
+    end
+
+    def tags_delete id
+      post 'tags/delete', JSON.generate(tag: {name: name})
+    end
+
+    def tag_users tagid, openids
       post 'tags/members/batchtagging', JSON.generate(tagid: tagid, openid_list: openids)
     end
 
