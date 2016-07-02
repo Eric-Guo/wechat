@@ -189,7 +189,7 @@ module Wechat
           render text: process_response(response_msg)
         end
       else
-        render nothing: true, status: 200, content_type: 'text/html'
+        head :ok, content_type: 'text/html'
       end
 
       response_msg.save_session if response_msg.is_a?(Wechat::Message) && Wechat.config.have_session_class
