@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'http', '>= 1.0.4', '< 3'
   s.add_development_dependency 'rspec-rails', '~> 3.5'
-  s.add_development_dependency 'rails', '>= 3.2', '< 5'
+  s.add_development_dependency 'rails', '>= 5'
   s.add_development_dependency 'sqlite3'
 end
