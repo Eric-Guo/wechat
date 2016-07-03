@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.15 (released at 7/03/2016)
+
+* RSpec testing case on Rails 5 now.
+
 ## v0.7.14 (released at 5/29/2016)
 
 * Fix when access_token failed lead ticket can not refresh problem.
