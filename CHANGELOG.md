@@ -3,6 +3,7 @@
 ## v0.7.15 (released at 7/03/2016)
 
 * RSpec testing case on Rails 5 now.
+* Resolve Rails 5 ActionController::Parameters issue.
 
 ## v0.7.14 (released at 5/29/2016)
 
