@@ -153,6 +153,10 @@ module Wechat
       post 'tags/members/batchtagging', JSON.generate(tagid: tagid, openid_list: openids)
     end
 
+    def users_of_tag tagid, next_openid=nil
+      post 'user/tag/get', JSON.generate(tagid: tagid, next_openid: next_openid)
+    end
+
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
 
     def web_access_token(code)

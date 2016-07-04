@@ -465,6 +465,11 @@ class App < Thor
   def tag_user tagid, *openids
     puts wechat_api.tag_users tagid, openids
   end
+
+  desc 'users_of_tag [TAGID]', "列出标签下的用户"
+  def users_of_tag tagid
+    puts wechat_api.users_of_tag tagid
+  end
 end
 
 App.start
