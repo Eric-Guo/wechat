@@ -12,7 +12,7 @@ wx.config({
   debug: #{config_options[:debug]},
   appId: "#{controller.class.corpid || controller.class.appid}",
   timestamp: "#{js_hash[:timestamp]}",
-  nonceStr: "#{js_hash[:nonceStr]}",
+  nonceStr: "#{js_hash[:noncestr]}",
   signature: "#{js_hash[:signature]}",
   jsApiList: ['#{config_options[:api].join("','")}']
 });

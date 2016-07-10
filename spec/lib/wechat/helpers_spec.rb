@@ -7,7 +7,7 @@ RSpec.describe WechatApiController, type: :controller do
   include Wechat::Helpers
   include ActionView::Helpers::JavaScriptHelper
   include ActionView::Helpers::TagHelper
-  let(:js_hash_result) { { timestamp: 'timestamp', nonceStr: 'nonceStr', signature: 'signature' } }
+  let(:js_hash_result) { { timestamp: 'timestamp', noncestr: 'noncestr', signature: 'signature' } }
 
   describe '#wechat_config_js with original_url' do
     controller do

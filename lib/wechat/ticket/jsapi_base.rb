@@ -25,7 +25,7 @@ module Wechat
 
       # Obtain the wechat jssdk config signature parameter and return below hash
       #  params = {
-      #    nonceStr: nonceStr,
+      #    noncestr: noncestr,
       #    timestamp: timestamp,
       #    jsapi_ticket: ticket,
       #    url: url,
@@ -33,7 +33,7 @@ module Wechat
       #  }
       def signature(url)
         params = {
-          nonceStr: SecureRandom.base64(16),
+          noncestr: SecureRandom.base64(16),
           timestamp: Time.now.to_i,
           jsapi_ticket: ticket,
           url: url
