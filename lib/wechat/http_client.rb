@@ -8,6 +8,7 @@ module Wechat
       @base = base
       HTTP.timeout(:global, write: timeout, connect: timeout, read: timeout)
       @ssl_context = OpenSSL::SSL::SSLContext.new
+      @ssl_context.ssl_version = :TLSv1_client
       @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE if skip_verify_ssl
     end
 
