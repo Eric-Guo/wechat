@@ -116,11 +116,6 @@ class App < Thor
       puts wechat_api.invite_user(userid)
     end
 
-    desc 'tag_delete [TAG_ID]', '删除标签'
-    def tag_delete(tagid)
-      puts wechat_api.tag_delete(tagid)
-    end
-
     desc 'tag [TAG_ID]', '获取标签成员'
     def tag(tagid)
       puts wechat_api.tag(tagid)
@@ -448,9 +443,9 @@ class App < Thor
     puts wechat_api.tag_update(tagid, tagname)
   end
 
-  desc 'tags_delete [ID]', '删除标签'
-  def tags_delete(id)
-    puts wechat_api.tags_delete id
+  desc 'tag_delete [TAG_ID]', '删除标签'
+  def tag_delete(tagid)
+    puts wechat_api.tag_delete(tagid)
   end
 
   desc 'tag_users [TAGID, OPENIDS]', '给用户打标签'

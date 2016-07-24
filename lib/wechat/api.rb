@@ -145,8 +145,8 @@ module Wechat
       post 'tags/update', JSON.generate(tag: { id: tagid, name: new_tag_name })
     end
 
-    def tags_delete(id)
-      post 'tags/delete', JSON.generate(tag: { id: id })
+    def tag_delete(tagid)
+      post 'tags/delete', JSON.generate(tag: { id: tagid })
     end
 
     def tag_users(tagid, openids)
