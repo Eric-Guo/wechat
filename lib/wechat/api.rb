@@ -137,23 +137,23 @@ module Wechat
       get 'tags/get'
     end
 
-    def tags_create name
-      post 'tags/create', JSON.generate(tag: {name: name})
+    def tags_create(name)
+      post 'tags/create', JSON.generate(tag: { name: name })
     end
 
-    def tags_update name
-      post 'tags/create', JSON.generate(tag: {name: name})
+    def tags_update(id, new_name)
+      post 'tags/create', JSON.generate(tag: { id: id, name: new_name })
     end
 
-    def tags_delete id
-      post 'tags/delete', JSON.generate(tag: {name: name})
+    def tags_delete(id)
+      post 'tags/delete', JSON.generate(tag: { id: id })
     end
 
-    def tag_users tagid, openids
+    def tag_users(tagid, openids)
       post 'tags/members/batchtagging', JSON.generate(tagid: tagid, openid_list: openids)
     end
 
-    def users_of_tag tagid, next_openid=nil
+    def users_of_tag(tagid, next_openid = nil)
       post 'user/tag/get', JSON.generate(tagid: tagid, next_openid: next_openid)
     end
 
