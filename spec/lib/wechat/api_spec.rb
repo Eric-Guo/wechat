@@ -406,6 +406,16 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#tag_update' do
+    specify 'will post tags/update with access_token, id and new_tag_name' do
+      payload = { tag: { id: 134, name: '广东人' } }
+      result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('tags/update', payload.to_json, params: { access_token: 'access_token' }).and_return(result)
+      expect(subject.tag_update(134, '广东人')).to eq result
+    end
+  end
+
   describe '#web_access_token' do
     specify 'will get access_token, refresh_token and openid with authorization_code' do
       oauth_result = { access_token: 'ACCESS_TOKEN',

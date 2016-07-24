@@ -141,8 +141,8 @@ module Wechat
       post 'tags/create', JSON.generate(tag: { name: tag_name })
     end
 
-    def tags_update(id, new_name)
-      post 'tags/create', JSON.generate(tag: { id: id, name: new_name })
+    def tag_update(tagid, new_tag_name)
+      post 'tags/update', JSON.generate(tag: { id: tagid, name: new_tag_name })
     end
 
     def tags_delete(id)
