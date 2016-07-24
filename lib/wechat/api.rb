@@ -137,8 +137,8 @@ module Wechat
       get 'tags/get'
     end
 
-    def tags_create(name)
-      post 'tags/create', JSON.generate(tag: { name: name })
+    def tag_create(tag_name)
+      post 'tags/create', JSON.generate(tag: { name: tag_name })
     end
 
     def tags_update(id, new_name)

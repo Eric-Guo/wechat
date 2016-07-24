@@ -381,6 +381,31 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#tags' do
+    specify 'will get tags/get with access_token' do
+      tags_result = { tags: [{ id: 1,
+                               name: '每天一罐可乐星人',
+                               count: 0 # fans count under this tag
+                             },
+                             { id: 2, name: '星标组', count: 0 },
+                             { id: 127, name: '广东', count: 5 }] }
+      expect(subject.client).to receive(:get)
+        .with('tags/get', params: { access_token: 'access_token' }).and_return(tags_result)
+      expect(subject.tags).to eq tags_result
+    end
+  end
+
+  describe '#tag_create' do
+    specify 'will post tags/create with access_token and tag_name' do
+      payload = { tag: { name: '广东' } }
+      tag_result = { tag: { id: 134, # tag id
+                            name: '广东' } }
+      expect(subject.client).to receive(:post)
+        .with('tags/create', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_result)
+      expect(subject.tag_create('广东')).to eq tag_result
+    end
+  end
+
   describe '#web_access_token' do
     specify 'will get access_token, refresh_token and openid with authorization_code' do
       oauth_result = { access_token: 'ACCESS_TOKEN',

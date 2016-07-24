@@ -38,7 +38,9 @@ class App < Thor
     puts 'File downloaded'
   end
 
-  if Wechat::ApiLoader.with(options).is_a?(Wechat::CorpApi)
+  in_corp_api_cmd = Wechat::ApiLoader.with(options).is_a?(Wechat::CorpApi)
+
+  if in_corp_api_cmd
     desc 'department_create [NAME, PARENT_ID]', '创建部门'
     method_option :parentid, aliases: '-p', desc: '父亲部门id。根部门id为1'
     def department_create(name)
@@ -114,13 +116,6 @@ class App < Thor
       puts wechat_api.invite_user(userid)
     end
 
-    desc 'tag_create [TAGNAME, TAG_ID]', '创建标签'
-    method_option :tagid, aliases: '-id', desc: '整型，指定此参数时新增的标签会生成对应的标签id，不指定时则以目前最大的id自增'
-    def tag_create(name)
-      api_opts = options.slice(:tagid)
-      puts wechat_api.tag_create(name, api_opts[:tagid])
-    end
-
     desc 'tag_update [TAG_ID, TAGNAME]', '更新标签名字'
     def tag_update(tagid, tagname)
       puts wechat_api.tag_update(tagid, tagname)
@@ -154,11 +149,6 @@ class App < Thor
     desc 'tag_del_department [TAG_ID, PARTY_IDS]', '删除标签部门'
     def tag_del_department(tagid, partyids)
       puts wechat_api.tag_del_user(tagid, nil, partyids.split(','))
-    end
-
-    desc 'tags', '获取标签列表'
-    def tags
-      puts wechat_api.tags
     end
 
     desc 'batch_job_result [JOB_ID]', '获取异步任务结果'
@@ -447,9 +437,15 @@ class App < Thor
     puts wechat_api.tags
   end
 
-  desc 'tags_create [NAME]', '创建标签'
-  def tags_create(name)
-    puts wechat_api.tags_create name
+  desc 'tag_create [TAGNAME, TAG_ID]', '创建标签'
+  method_option :tagid, aliases: '-id', desc: '整型，指定此参数时新增的标签会生成对应的标签id，不指定时则以目前最大的id自增' if in_corp_api_cmd
+  def tag_create(tag_name)
+    if in_corp_api_cmd
+      api_opts = options.slice(:tagid)
+      puts wechat_api.tag_create(tag_name, api_opts[:tagid])
+    else
+      puts wechat_api.tag_create(tag_name)
+    end
   end
 
   desc 'tags_update [ID, NAME]', '更新标签'
