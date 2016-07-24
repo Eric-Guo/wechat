@@ -441,6 +441,35 @@ class App < Thor
     template = YAML.load(File.read(template_yaml_path))
     puts wechat_api.template_message_send Wechat::Message.to(openid).template(template['template'])
   end
+
+  desc 'tags', "获取所有标签"
+  def tags
+    puts wechat_api.tags
+  end
+
+  desc 'tags_create [NAME]', "创建标签"
+  def tags_create name
+    puts wechat_api.tags_create name
+  end
+
+  desc 'tags_update [ID, NAME]', "更新标签"
+  def tags_update id, name
+    puts wechat_api.tags_update id, name
+  end
+  desc 'tags_delete [ID]', "删除标签"
+  def tags_delete id
+    puts wechat_api.tags_delete id
+  end
+
+  desc 'tag_users [TAGID, OPENIDS]', "给用户打标签"
+  def tag_user tagid, *openids
+    puts wechat_api.tag_users tagid, openids
+  end
+
+  desc 'users_of_tag [TAGID]', "列出标签下的用户"
+  def users_of_tag tagid
+    puts wechat_api.users_of_tag tagid
+  end
 end
 
 App.start

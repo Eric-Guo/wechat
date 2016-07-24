@@ -133,6 +133,30 @@ module Wechat
       get 'customservice/getonlinekflist'
     end
 
+    def tags
+      get 'tags/get'
+    end
+
+    def tags_create name
+      post 'tags/create', JSON.generate(tag: {name: name})
+    end
+
+    def tags_update name
+      post 'tags/create', JSON.generate(tag: {name: name})
+    end
+
+    def tags_delete id
+      post 'tags/delete', JSON.generate(tag: {name: name})
+    end
+
+    def tag_users tagid, openids
+      post 'tags/members/batchtagging', JSON.generate(tagid: tagid, openid_list: openids)
+    end
+
+    def users_of_tag tagid, next_openid=nil
+      post 'user/tag/get', JSON.generate(tagid: tagid, next_openid: next_openid)
+    end
+
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
 
     def web_access_token(code)
