@@ -126,11 +126,6 @@ class App < Thor
       puts wechat_api.tag_add_user(tagid, nil, partyids.split(','))
     end
 
-    desc 'tag_del_user [TAG_ID, USER_IDS]', '删除标签成员'
-    def tag_del_user(tagid, userids)
-      puts wechat_api.tag_del_user(tagid, userids.split(','))
-    end
-
     desc 'tag_del_department [TAG_ID, PARTY_IDS]', '删除标签部门'
     def tag_del_department(tagid, partyids)
       puts wechat_api.tag_del_user(tagid, nil, partyids.split(','))
@@ -446,10 +441,19 @@ class App < Thor
   if in_corp_api_cmd
     desc 'tag_add_user [TAG_ID, USER_IDS]', '增加标签成员'
   else
-    desc 'tag_add_user [TAG_ID, OPEN_IDS]', '给用户打标签'
+    desc 'tag_add_user [TAG_ID, OPEN_IDS]', '批量为用户打标签'
   end
   def tag_add_user(tagid, open_or_user_ids)
     puts wechat_api.tag_add_user(tagid, open_or_user_ids.split(','))
+  end
+
+  if in_corp_api_cmd
+    desc 'tag_del_user [TAG_ID, USER_IDS]', '删除标签成员'
+  else
+    desc 'tag_del_user [TAG_ID, OPEN_IDS]', '批量为用户取消标签'
+  end
+  def tag_del_user(tagid, open_or_user_ids)
+    puts wechat_api.tag_del_user(tagid, open_or_user_ids.split(','))
   end
 
   desc 'users_of_tag [TAGID]', '列出标签下的用户'

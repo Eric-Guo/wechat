@@ -427,13 +427,24 @@ RSpec.describe Wechat::Api do
   end
 
   describe '#tag_add_user' do
-    specify 'will post tags/members/batchtagging with access_token and tagid' do
+    specify 'will post tags/members/batchtagging with access_token, openids and tagid' do
       payload = { openid_list: ['ocYxcuAEy30bX0NXmGn4ypqx3tI0', # fans openid list
                                 'ocYxcuBt0mRugKZ7tGAHPnUaOW7Y'], tagid: 134 }
       tag_add_user_result = { errcode: 0, errmsg: 'ok' }
       expect(subject.client).to receive(:post)
         .with('tags/members/batchtagging', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_add_user_result)
       expect(subject.tag_add_user(134, %w(ocYxcuAEy30bX0NXmGn4ypqx3tI0 ocYxcuBt0mRugKZ7tGAHPnUaOW7Y))).to eq tag_add_user_result
+    end
+  end
+
+  describe '#tag_del_user' do
+    specify 'will post tags/members/batchuntagging with access_token, openids and tagid' do
+      payload = { openid_list: ['ocYxcuAEy30bX0NXmGn4ypqx3tI0', # fans openid list
+                                'ocYxcuBt0mRugKZ7tGAHPnUaOW7Y'], tagid: 134 }
+      tag_add_user_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('tags/members/batchuntagging', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_add_user_result)
+      expect(subject.tag_del_user(134, %w(ocYxcuAEy30bX0NXmGn4ypqx3tI0 ocYxcuBt0mRugKZ7tGAHPnUaOW7Y))).to eq tag_add_user_result
     end
   end
 
