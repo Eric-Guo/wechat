@@ -448,6 +448,19 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#tag' do
+    specify 'will post user/tag/get with access_token and tagid' do
+      payload = { tagid: 134, next_openid: '' } # next_openid empty will get from begin
+      tag_result = { count: 2, # total tag fans number
+                     data: { openid: ['ocYxcuAEy30bX0NXmGn4ypqx3tI0', # fans list
+                                      'ocYxcuBt0mRugKZ7tGAHPnUaOW7Y'] },
+                     next_openid: 'ocYxcuBt0mRugKZ7tGAHPnUaOW7Y' } # last openid of this fetch fans list
+      expect(subject.client).to receive(:post)
+        .with('user/tag/get', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_result)
+      expect(subject.tag(134)).to eq tag_result
+    end
+  end
+
   describe '#web_access_token' do
     specify 'will get access_token, refresh_token and openid with authorization_code' do
       oauth_result = { access_token: 'ACCESS_TOKEN',

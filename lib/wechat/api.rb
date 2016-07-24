@@ -157,7 +157,7 @@ module Wechat
       post 'tags/members/batchuntagging', JSON.generate(openid_list: openids, tagid: tagid)
     end
 
-    def users_of_tag(tagid, next_openid = nil)
+    def tag(tagid, next_openid = '')
       post 'user/tag/get', JSON.generate(tagid: tagid, next_openid: next_openid)
     end
 

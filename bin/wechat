@@ -116,11 +116,6 @@ class App < Thor
       puts wechat_api.invite_user(userid)
     end
 
-    desc 'tag [TAG_ID]', '获取标签成员'
-    def tag(tagid)
-      puts wechat_api.tag(tagid)
-    end
-
     desc 'tag_add_department [TAG_ID, PARTY_IDS]', '增加标签部门'
     def tag_add_department(tagid, partyids)
       puts wechat_api.tag_add_user(tagid, nil, partyids.split(','))
@@ -456,9 +451,13 @@ class App < Thor
     puts wechat_api.tag_del_user(tagid, open_or_user_ids.split(','))
   end
 
-  desc 'users_of_tag [TAGID]', '列出标签下的用户'
-  def users_of_tag(tagid)
-    puts wechat_api.users_of_tag tagid
+  if in_corp_api_cmd
+    desc 'tag [TAG_ID]', '获取标签成员'
+  else
+    desc 'tag [TAGID]', '获取标签下粉丝列表'
+  end
+  def tag(tagid)
+    puts wechat_api.tag tagid
   end
 end
 
