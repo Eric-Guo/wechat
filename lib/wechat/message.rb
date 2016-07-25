@@ -69,8 +69,8 @@ module Wechat
       end
     end
 
-    def to(openid)
-      update(ToUserName: openid)
+    def to(openid_or_userid)
+      update(ToUserName: openid_or_userid)
     end
 
     def agent_id(agentid)

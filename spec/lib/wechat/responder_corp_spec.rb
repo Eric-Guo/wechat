@@ -46,19 +46,19 @@ RSpec.describe WechatCorpController, type: :controller do
 
   describe 'Verify signature' do
     it 'on create action faild' do
-      post :create, signature_params.merge(msg_signature: 'invalid')
+      post :create, params: signature_params.merge(msg_signature: 'invalid')
       expect(response.code).to eq '403'
     end
 
     it 'on create action success' do
-      post :create, signature_params(MsgType: 'voice', Voice: { MediaId: 'mediaID' })
+      post :create, params: signature_params(MsgType: 'voice', Voice: { MediaId: 'mediaID' })
       expect(response.code).to eq '200'
       expect(response.body.length).to eq 0
     end
   end
 
   specify "echo 'echostr' param when show" do
-    get :show, signature_echostr('hello')
+    get :show, params: signature_echostr('hello')
     expect(response.body).to eq('hello')
   end
 
@@ -126,7 +126,7 @@ RSpec.describe WechatCorpController, type: :controller do
 
     describe 'response' do
       it 'Verify response signature' do
-        post :create, signature_params(MsgType: 'text', Content: 'hello')
+        post :create, params: signature_params(MsgType: 'text', Content: 'hello')
         expect(response.code).to eq '200'
         expect(response.body.empty?).to eq false
 
@@ -137,7 +137,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'on text' do
-        post :create, signature_params(MsgType: 'text', Content: 'hello')
+        post :create, params: signature_params(MsgType: 'text', Content: 'hello')
         expect(response.code).to eq '200'
         expect(response.body.empty?).to eq false
 
@@ -153,7 +153,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'on mpnews' do
-        post :create, signature_params(MsgType: 'text', Content: 'mpnews')
+        post :create, params: signature_params(MsgType: 'text', Content: 'mpnews')
         expect(response.code).to eq '200'
         expect(response.body.empty?).to eq false
 
@@ -175,7 +175,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'on subscribe' do
-        post :create, signature_params(MsgType: 'event', Event: 'subscribe')
+        post :create, params: signature_params(MsgType: 'event', Event: 'subscribe')
         expect(response.code).to eq '200'
 
         data = Hash.from_xml(response.body)['xml']
@@ -190,7 +190,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'on enter_agent' do
-        post :create, signature_params(MsgType: 'event', Event: 'click', EventKey: 'enter_agent')
+        post :create, params: signature_params(MsgType: 'event', Event: 'click', EventKey: 'enter_agent')
         expect(response.code).to eq '200'
 
         data = Hash.from_xml(response.body)['xml']
@@ -205,7 +205,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'on click BOOK_LUNCH' do
-        post :create, signature_params(MsgType: 'event', Event: 'click', EventKey: 'BOOK_LUNCH')
+        post :create, params: signature_params(MsgType: 'event', Event: 'click', EventKey: 'BOOK_LUNCH')
         expect(response.code).to eq '200'
 
         data = Hash.from_xml(response.body)['xml']
@@ -220,7 +220,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'on view http://xxx.proxy.qqbrowser.cc/wechat/view_url' do
-        post :create, signature_params(MsgType: 'event', Event: 'view', EventKey: 'http://xxx.proxy.qqbrowser.cc/wechat/view_url')
+        post :create, params: signature_params(MsgType: 'event', Event: 'view', EventKey: 'http://xxx.proxy.qqbrowser.cc/wechat/view_url')
         expect(response.code).to eq '200'
 
         data = Hash.from_xml(response.body)['xml']
@@ -235,7 +235,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'on BINDING_QR_CODE' do
-        post :create, signature_params(FromUserName: 'userid', MsgType: 'event', Event: 'scancode_push', EventKey: 'BINDING_QR_CODE',
+        post :create, params: signature_params(FromUserName: 'userid', MsgType: 'event', Event: 'scancode_push', EventKey: 'BINDING_QR_CODE',
                                        ScanCodeInfo: { ScanType: 'qrcode', ScanResult: 'scan_result' })
         expect(response.code).to eq '200'
 
@@ -251,7 +251,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'response scancode event with matched event' do
-        post :create, signature_params(FromUserName: 'userid', MsgType: 'event', Event: 'scancode_waitmsg', EventKey: 'BINDING_BARCODE',
+        post :create, params: signature_params(FromUserName: 'userid', MsgType: 'event', Event: 'scancode_waitmsg', EventKey: 'BINDING_BARCODE',
                                        ScanCodeInfo: { ScanType: 'qrcode', ScanResult: 'CODE_39,SAP0D00' })
         expect(response.code).to eq '200'
 
@@ -267,7 +267,7 @@ RSpec.describe WechatCorpController, type: :controller do
       end
 
       it 'on replace_user' do
-        post :create, signature_params(FromUserName: 'sys', MsgType: 'event', Event: 'batch_job_result',
+        post :create, params: signature_params(FromUserName: 'sys', MsgType: 'event', Event: 'batch_job_result',
                                        BatchJob: { JobId: 'job_id', JobType: 'replace_user', ErrCode: 0, ErrMsg: 'ok' })
         expect(response.code).to eq '200'
 
@@ -294,7 +294,7 @@ RSpec.describe WechatCorpController, type: :controller do
           oauth2_result = { 'UserId' => 'userid', 'DeviceId' => 'deviceid' }
           expect(controller.wechat).to receive(:getuserinfo)
             .with('code_id').and_return(oauth2_result)
-          get :oauth2_page, code: 'code_id'
+          get :oauth2_page, params: { code: 'code_id' }
           expect(response.body).to eq 'userid'
           expect(cookies.signed_or_encrypted[:we_deviceid]).to eq 'deviceid'
         end

@@ -13,11 +13,14 @@ module Wechat
         @random_generator = Random.new
       end
 
-      def ticket
+      def ticket(tries = 2)
         # Possible two worker running, one worker refresh ticket, other unaware, so must read every time
         read_ticket_from_store
         refresh if remain_life_seconds < @random_generator.rand(30..3 * 60)
         access_ticket
+      rescue AccessTokenExpiredError
+        access_token.refresh
+        retry unless (tries -= 1).zero?
       end
 
       # Obtain the wechat jssdk config signature parameter and return below hash

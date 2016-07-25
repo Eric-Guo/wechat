@@ -188,6 +188,19 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#shorturl' do
+    shorturl_result = { errcode: 0, errmsg: 'ok',
+                        short_url: 'http://w.url.cn/s/AvCo6Ih' }
+
+    specify 'will post short_url with access_token and long_url' do
+      long_url = 'http://wap.koudaitong.com/v2/showcase/goods?alias=128wi9shh&spm=h56083&redirect_count=1'
+      shorturl_req = { action: 'long2short', long_url: long_url }
+      expect(subject.client).to receive(:post)
+        .with('shorturl', JSON.generate(shorturl_req), params: { access_token: 'access_token' }).and_return(shorturl_result)
+      expect(subject.shorturl(long_url)).to eq shorturl_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token' do
       menu_result = 'menu_result'
@@ -368,6 +381,86 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#tags' do
+    specify 'will get tags/get with access_token' do
+      tags_result = { tags: [{ id: 1,
+                               name: '每天一罐可乐星人',
+                               count: 0 # fans count under this tag
+                             },
+                             { id: 2, name: '星标组', count: 0 },
+                             { id: 127, name: '广东', count: 5 }] }
+      expect(subject.client).to receive(:get)
+        .with('tags/get', params: { access_token: 'access_token' }).and_return(tags_result)
+      expect(subject.tags).to eq tags_result
+    end
+  end
+
+  describe '#tag_create' do
+    specify 'will post tags/create with access_token and tag_name' do
+      payload = { tag: { name: '广东' } }
+      tag_result = { tag: { id: 134, # tag id
+                            name: '广东' } }
+      expect(subject.client).to receive(:post)
+        .with('tags/create', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_result)
+      expect(subject.tag_create('广东')).to eq tag_result
+    end
+  end
+
+  describe '#tag_update' do
+    specify 'will post tags/update with access_token, id and new_tag_name' do
+      payload = { tag: { id: 134, name: '广东人' } }
+      result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('tags/update', payload.to_json, params: { access_token: 'access_token' }).and_return(result)
+      expect(subject.tag_update(134, '广东人')).to eq result
+    end
+  end
+
+  describe '#tag_delete' do
+    specify 'will post tags/delete with access_token and tagid' do
+      payload = { tag: { id: 134 } }
+      tag_delete_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('tags/delete', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_delete_result)
+      expect(subject.tag_delete(134)).to eq tag_delete_result
+    end
+  end
+
+  describe '#tag_add_user' do
+    specify 'will post tags/members/batchtagging with access_token, openids and tagid' do
+      payload = { openid_list: ['ocYxcuAEy30bX0NXmGn4ypqx3tI0', # fans openid list
+                                'ocYxcuBt0mRugKZ7tGAHPnUaOW7Y'], tagid: 134 }
+      tag_add_user_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('tags/members/batchtagging', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_add_user_result)
+      expect(subject.tag_add_user(134, %w(ocYxcuAEy30bX0NXmGn4ypqx3tI0 ocYxcuBt0mRugKZ7tGAHPnUaOW7Y))).to eq tag_add_user_result
+    end
+  end
+
+  describe '#tag_del_user' do
+    specify 'will post tags/members/batchuntagging with access_token, openids and tagid' do
+      payload = { openid_list: ['ocYxcuAEy30bX0NXmGn4ypqx3tI0', # fans openid list
+                                'ocYxcuBt0mRugKZ7tGAHPnUaOW7Y'], tagid: 134 }
+      tag_add_user_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('tags/members/batchuntagging', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_add_user_result)
+      expect(subject.tag_del_user(134, %w(ocYxcuAEy30bX0NXmGn4ypqx3tI0 ocYxcuBt0mRugKZ7tGAHPnUaOW7Y))).to eq tag_add_user_result
+    end
+  end
+
+  describe '#tag' do
+    specify 'will post user/tag/get with access_token and tagid' do
+      payload = { tagid: 134, next_openid: '' } # next_openid empty will get from begin
+      tag_result = { count: 2, # total tag fans number
+                     data: { openid: ['ocYxcuAEy30bX0NXmGn4ypqx3tI0', # fans list
+                                      'ocYxcuBt0mRugKZ7tGAHPnUaOW7Y'] },
+                     next_openid: 'ocYxcuBt0mRugKZ7tGAHPnUaOW7Y' } # last openid of this fetch fans list
+      expect(subject.client).to receive(:post)
+        .with('user/tag/get', payload.to_json, params: { access_token: 'access_token' }).and_return(tag_result)
+      expect(subject.tag(134)).to eq tag_result
+    end
+  end
+
   describe '#web_access_token' do
     specify 'will get access_token, refresh_token and openid with authorization_code' do
       oauth_result = { access_token: 'ACCESS_TOKEN',
@@ -421,9 +514,9 @@ RSpec.describe Wechat::Api do
                     privilege: %w(PRIVILEGE1 PRIVILEGE2),
                     unionid: 'o6_bmasdasdsad6_2sgVt7hMZOPfL' }
       expect(subject.client).to receive(:get)
-        .with('sns/userinfo', params: { access_token: 'web_access_token',
-                                        openid: 'openid',
-                                        lang: 'zh_CN' }, base: Wechat::Api::OAUTH2_BASE).and_return(user_info)
+        .with('userinfo', params: { access_token: 'web_access_token',
+                                    openid: 'openid',
+                                    lang: 'zh_CN' }, base: Wechat::Api::OAUTH2_BASE).and_return(user_info)
       expect(subject.web_userinfo('web_access_token', 'openid')).to eq(user_info)
     end
   end

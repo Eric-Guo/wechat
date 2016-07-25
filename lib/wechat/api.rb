@@ -71,6 +71,10 @@ module Wechat
       end
     end
 
+    def shorturl(long_url)
+      post 'shorturl', JSON.generate(action: 'long2short', long_url: long_url)
+    end
+
     def menu
       get 'menu/get'
     end
@@ -129,6 +133,34 @@ module Wechat
       get 'customservice/getonlinekflist'
     end
 
+    def tags
+      get 'tags/get'
+    end
+
+    def tag_create(tag_name)
+      post 'tags/create', JSON.generate(tag: { name: tag_name })
+    end
+
+    def tag_update(tagid, new_tag_name)
+      post 'tags/update', JSON.generate(tag: { id: tagid, name: new_tag_name })
+    end
+
+    def tag_delete(tagid)
+      post 'tags/delete', JSON.generate(tag: { id: tagid })
+    end
+
+    def tag_add_user(tagid, openids)
+      post 'tags/members/batchtagging', JSON.generate(openid_list: openids, tagid: tagid)
+    end
+
+    def tag_del_user(tagid, openids)
+      post 'tags/members/batchuntagging', JSON.generate(openid_list: openids, tagid: tagid)
+    end
+
+    def tag(tagid, next_openid = '')
+      post 'user/tag/get', JSON.generate(tagid: tagid, next_openid: next_openid)
+    end
+
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
 
     def web_access_token(code)
@@ -155,7 +187,7 @@ module Wechat
     end
 
     def web_userinfo(web_access_token, openid, lang = 'zh_CN')
-      client.get 'sns/userinfo', params: { access_token: web_access_token, openid: openid, lang: lang }, base: OAUTH2_BASE
+      client.get 'userinfo', params: { access_token: web_access_token, openid: openid, lang: lang }, base: OAUTH2_BASE
     end
   end
 end

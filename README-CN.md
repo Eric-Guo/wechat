@@ -68,12 +68,13 @@ Redis存贮相比默认的文件存贮，可以允许Rails应用运行在多台�
 
 ## 配置
 
-####微信配置
+#### 微信的第一次配置
+
 请先确保在服务器上配置成功，再到微信官网提交链接。否则微信会提示错误。
 
-URL请使用： `http://your-server.com/wechat`
+默认通过`rails g wechat:install`生成的URL是： `http://your-server.com/wechat`
 
-appid和secret请看下面的配置
+appid/corpid，以及secret的配置请阅读下一节
 
 #### 命令行程序的配置
 
@@ -113,7 +114,7 @@ production:
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token: <%= ENV['WECHAT_ACCESS_TOKEN'] %>
   jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
-  oauth2_cookie_duration: <%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %>
+  oauth2_cookie_duration: <%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %> # seconds
 
 development:
   <<: *default
@@ -241,6 +242,10 @@ end
 
 `wechat_oauth2`封装了OAuth2.0验证接口和cookie处理逻辑，用户仅需提供业务代码块即可。userid指的是微信企业成员UserID，openid是关注该公众号的用户openid。
 
+注意: 
+* 如果使用 `wechat_responder`, 请不要在 Controller 里定义 `show` 和 `create` 方法, 否则会报错。
+* 如果遇到“redirect_uri参数错误”的错误信息，请登录服务号管理后台，查看“开发者中心/网页服务/网页授权获取用户基本信息”的授权回调页面域名已正确配置。
+
 ## 关于接口权限
 
 wechat gems 内部不会检查权限。但因公众号类型不同，和微信服务器端通讯时，可能会被拒绝，详细权限控制可参考[官方文档](http://mp.weixin.qq.com/wiki/7/2d301d4b757dedc333b9a9854b457b47.html)。
@@ -261,7 +266,7 @@ Wechat commands:
   wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
   wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
   wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息
-  wechat customservice_getonlinekflist                     # 获取在线客服接待信息  
+  wechat customservice_getonlinekflist                     # 获取在线客服接待信息
   wechat group_create [GROUP_NAME]                         # 创建分组
   wechat group_delete [GROUP_ID]                           # 删除分组
   wechat group_update [GROUP_ID, NEW_GROUP_NAME]           # 修改分组名
@@ -275,17 +280,25 @@ Wechat commands:
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat media_uploadimg [IMAGE_PATH]                      # 上传图文消息内的图片
   wechat menu                                              # 当前菜单
-  wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]  # 创建个性化菜单  
+  wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]  # 创建个性化菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
-  wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单  
+  wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单
   wechat menu_delete                                       # 删除菜单
-  wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果  
+  wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
+  wechat short_url [LONG_URL]                              # 长链接转短链接
+  wechat tag [TAGID]                                       # 获取标签下粉丝列表
+  wechat tag_add_user [TAG_ID, OPEN_IDS]                   # 批量为用户打标签
+  wechat tag_create [TAGNAME, TAG_ID]                      # 创建标签
+  wechat tag_del_user [TAG_ID, OPEN_IDS]                   # 批量为用户取消标签
+  wechat tag_delete [TAG_ID]                               # 删除标签
+  wechat tag_update [TAG_ID, TAGNAME]                      # 更新标签名字
+  wechat tags                                              # 获取所有标签
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 获取用户基本信息
-  wechat user_batchget [OPEN_ID_LIST]                      # 批量获取用户基本信息  
+  wechat user_batchget [OPEN_ID_LIST]                      # 批量获取用户基本信息
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
   wechat user_group [OPEN_ID]                              # 查询用户所在分组
   wechat user_update_remark [OPEN_ID, REMARK]              # 设置备注名
@@ -324,8 +337,11 @@ Wechat commands:
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat media_uploadimg [IMAGE_PATH]                      # 上传图文消息内的图片
   wechat menu                                              # 当前菜单
+  wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]  # 创建个性化菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
+  wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单
   wechat menu_delete                                       # 删除菜单
+  wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
   wechat tag [TAG_ID]                                      # 获取标签成员
@@ -336,7 +352,7 @@ Wechat commands:
   wechat tag_del_user [TAG_ID, USER_IDS]                   # 删除标签成员
   wechat tag_delete [TAG_ID]                               # 删除标签
   wechat tag_update [TAG_ID, TAGNAME]                      # 更新标签名字
-  wechat tags                                              # 获取标签列表
+  wechat tags                                              # 获取所有标签
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat upload_replaceparty [BATCH_PARTY_CSV_PATH]        # 上传文件方式全量覆盖部门
   wechat upload_replaceuser [BATCH_USER_CSV_PATH]          # 上传文件方式全量覆盖成员
@@ -478,6 +494,20 @@ template:
 $ wechat template_message oCfEht9oM*********** template.yml
 ```
 
+在代码中可以这样使用：
+
+```ruby
+template = YAML.load(File.read(template_yaml_path)).symbolize_keys
+Wechat.api.template_message_send Wechat::Message.to(openid).template(template)
+```
+
+若在Controller中使用wechat_api或者wechat_responder，可以使用wechat：
+
+```ruby
+template = YAML.load(File.read(template_yaml_path)).symbolize_keys
+wechat.template_message_send Wechat::Message.to(openid).template(template)
+```
+
 ## wechat_api - Rails Controller Wechat API
 
 虽然用户可以随时通过`Wechat.api`在任意代码中访问wechat的API功能，但是更推荐的做法是仅在controller中，通过引入`wechat_api`，使用`wechat`调用API功能，不仅因为这样是支持多个微信公众号的必然要求，而且也避免了在模型层内过多引入微信相关代码。
@@ -588,7 +618,7 @@ class WechatsController < ActionController::Base
 
   # 处理上报地理位置事件
   on :location do |request|
-    request.reply.text("Latitude: #{message[:Latitude]} Longitude: #{message[:Longitude]} Precision: #{message[:Precision]}")
+    request.reply.text("Latitude: #{request[:Latitude]} Longitude: #{request[:Longitude]} Precision: #{request[:Precision]}")
   end
 
   # 当用户取消关注订阅
@@ -683,7 +713,7 @@ end
 
 * 企业号接受菜单消息时，Wechat腾讯服务器无法解析部分域名，请使用IP绑定回调URL，用户的普通消息目前不受影响。
 * 企业号全量覆盖成员使用的csv通讯录格式，直接将下载的模板导入[是不工作的](http://qydev.weixin.qq.com/qa/index.php?qa=13978)，必须使用Excel打开，然后另存为csv格式才会变成合法格式。
-
+* 如果使用nginx+unicron部署方案，并且使用了https，必须设置`trusted_domain_fullname`为https，否则会导致JS-SDK签名失效。
 
 [version-badge]: https://badge.fury.io/rb/wechat.svg
 [rubygems]: https://rubygems.org/gems/wechat

@@ -38,7 +38,9 @@ class App < Thor
     puts 'File downloaded'
   end
 
-  if Wechat::ApiLoader.with(options).is_a?(Wechat::CorpApi)
+  in_corp_api_cmd = Wechat::ApiLoader.with(options).is_a?(Wechat::CorpApi)
+
+  if in_corp_api_cmd
     desc 'department_create [NAME, PARENT_ID]', '创建部门'
     method_option :parentid, aliases: '-p', desc: '父亲部门id。根部门id为1'
     def department_create(name)
@@ -114,51 +116,14 @@ class App < Thor
       puts wechat_api.invite_user(userid)
     end
 
-    desc 'tag_create [TAGNAME, TAG_ID]', '创建标签'
-    method_option :tagid, aliases: '-id', desc: '整型，指定此参数时新增的标签会生成对应的标签id，不指定时则以目前最大的id自增'
-    def tag_create(name)
-      api_opts = options.slice(:tagid)
-      puts wechat_api.tag_create(name, api_opts[:tagid])
-    end
-
-    desc 'tag_update [TAG_ID, TAGNAME]', '更新标签名字'
-    def tag_update(tagid, tagname)
-      puts wechat_api.tag_update(tagid, tagname)
-    end
-
-    desc 'tag_delete [TAG_ID]', '删除标签'
-    def tag_delete(tagid)
-      puts wechat_api.tag_delete(tagid)
-    end
-
-    desc 'tag [TAG_ID]', '获取标签成员'
-    def tag(tagid)
-      puts wechat_api.tag(tagid)
-    end
-
-    desc 'tag_add_user [TAG_ID, USER_IDS]', '增加标签成员'
-    def tag_add_user(tagid, userids)
-      puts wechat_api.tag_add_user(tagid, userids.split(','))
-    end
-
     desc 'tag_add_department [TAG_ID, PARTY_IDS]', '增加标签部门'
     def tag_add_department(tagid, partyids)
       puts wechat_api.tag_add_user(tagid, nil, partyids.split(','))
     end
 
-    desc 'tag_del_user [TAG_ID, USER_IDS]', '删除标签成员'
-    def tag_del_user(tagid, userids)
-      puts wechat_api.tag_del_user(tagid, userids.split(','))
-    end
-
     desc 'tag_del_department [TAG_ID, PARTY_IDS]', '删除标签部门'
     def tag_del_department(tagid, partyids)
       puts wechat_api.tag_del_user(tagid, nil, partyids.split(','))
-    end
-
-    desc 'tags', '获取标签列表'
-    def tags
-      puts wechat_api.tags
     end
 
     desc 'batch_job_result [JOB_ID]', '获取异步任务结果'
@@ -280,6 +245,11 @@ class App < Thor
     desc 'qrcode_create_limit_scene [SCENE_ID_OR_STR]', '请求永久二维码'
     def qrcode_create_limit_scene(scene_id_or_str)
       puts wechat_api.qrcode_create_limit_scene(scene_id_or_str)
+    end
+
+    desc 'short_url [LONG_URL]', '长链接转短链接'
+    def short_url(long_url)
+      puts wechat_api.short_url(long_url)
     end
 
     desc 'customservice_getonlinekflist', '获取在线客服接待信息'
@@ -435,6 +405,59 @@ class App < Thor
   def template_message(openid, template_yaml_path)
     template = YAML.load(File.read(template_yaml_path))
     puts wechat_api.template_message_send Wechat::Message.to(openid).template(template['template'])
+  end
+
+  desc 'tags', '获取所有标签'
+  def tags
+    puts wechat_api.tags
+  end
+
+  desc 'tag_create [TAGNAME, TAG_ID]', '创建标签'
+  method_option :tagid, aliases: '-id', desc: '整型，指定此参数时新增的标签会生成对应的标签id，不指定时则以目前最大的id自增' if in_corp_api_cmd
+  def tag_create(tag_name)
+    if in_corp_api_cmd
+      api_opts = options.slice(:tagid)
+      puts wechat_api.tag_create(tag_name, api_opts[:tagid])
+    else
+      puts wechat_api.tag_create(tag_name)
+    end
+  end
+
+  desc 'tag_update [TAG_ID, TAGNAME]', '更新标签名字'
+  def tag_update(tagid, tagname)
+    puts wechat_api.tag_update(tagid, tagname)
+  end
+
+  desc 'tag_delete [TAG_ID]', '删除标签'
+  def tag_delete(tagid)
+    puts wechat_api.tag_delete(tagid)
+  end
+
+  if in_corp_api_cmd
+    desc 'tag_add_user [TAG_ID, USER_IDS]', '增加标签成员'
+  else
+    desc 'tag_add_user [TAG_ID, OPEN_IDS]', '批量为用户打标签'
+  end
+  def tag_add_user(tagid, open_or_user_ids)
+    puts wechat_api.tag_add_user(tagid, open_or_user_ids.split(','))
+  end
+
+  if in_corp_api_cmd
+    desc 'tag_del_user [TAG_ID, USER_IDS]', '删除标签成员'
+  else
+    desc 'tag_del_user [TAG_ID, OPEN_IDS]', '批量为用户取消标签'
+  end
+  def tag_del_user(tagid, open_or_user_ids)
+    puts wechat_api.tag_del_user(tagid, open_or_user_ids.split(','))
+  end
+
+  if in_corp_api_cmd
+    desc 'tag [TAG_ID]', '获取标签成员'
+  else
+    desc 'tag [TAGID]', '获取标签下粉丝列表'
+  end
+  def tag(tagid)
+    puts wechat_api.tag tagid
   end
 end
 

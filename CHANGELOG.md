@@ -1,5 +1,24 @@
 # Changelog
 
+## v0.7.15 (released at 7/03/2016)
+
+* RSpec testing case on Rails 5 now.
+* Resolve Rails 5 ActionController::Parameters issue.
+
+## v0.7.14 (released at 5/29/2016)
+
+* Fix when access_token failed lead ticket can not refresh problem.
+* Default duration should be 1 hours instead of 0 seconds for wechat_oauth2.
+* New short_url allowing convert from long URL to short.
+
+## v0.7.13 (released at 5/14/2016)
+
+* Wechat.config.oauth2_cookie_duration need convert to secondes, found by @gabrieltong #111
+
+## v0.7.12 (released at 5/12/2016)
+
+* Fix web_userinfo wrong URL, found by @gabrieltong #110
+
 ## v0.7.11 (released at 4/18/2016)
 
 * To cover wrong release 0.7.10, nothing change
