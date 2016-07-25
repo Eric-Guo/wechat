@@ -23,25 +23,25 @@ WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平
 
 ## 安装
 
-Using `gem install`
+使用 `gem install`
 
 ```
 gem install "wechat"
 ```
 
-Or add to your app's `Gemfile`:
+或者添加下面这行到 `Gemfile`:
 
 ```
 gem 'wechat'
 ```
 
-Run the following command to install it:
+运行下面这行代码来安装:
 
 ```console
 bundle install
 ```
 
-Run the generator:
+运行下面这行代码来生成必要文件:
 
 ```console
 rails generate wechat:install
