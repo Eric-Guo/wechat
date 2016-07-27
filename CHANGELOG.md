@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7.16 (released at 7/27/2016)
+
+* FIX: consider '' in params as equal with nil, in ControllerApi#wechat_public_oauth2, by @snow #135
+* New tag API for public account, by @pynixwang #127
+* fix SSLv3 error by use TLSv1_client, by @IvanChou #133
+
 ## v0.7.15 (released at 7/03/2016)
 
 * RSpec testing case on Rails 5 now.
