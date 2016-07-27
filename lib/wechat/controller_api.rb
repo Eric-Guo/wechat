@@ -36,7 +36,7 @@ module Wechat
         redirect_to oauth2_url
       elsif cookies.signed_or_encrypted[:we_openid].blank? &&
             params[:code].present? &&
-            params[:state].to_s == wechat.jsapi_ticket.oauth2_state.to_s # params[:state] maybe nil and wechat.jsapi_ticket.oauth2_state may be nil
+            params[:state].to_s == wechat.jsapi_ticket.oauth2_state.to_s # params[:state] maybe '' and wechat.jsapi_ticket.oauth2_state may be nil
         access_info = wechat.web_access_token(params[:code])
         cookies.signed_or_encrypted[:we_openid] = { value: access_info['openid'], expires: self.class.oauth2_cookie_duration.from_now }
         yield access_info['openid'], access_info
