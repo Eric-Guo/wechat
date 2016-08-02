@@ -2,12 +2,16 @@ module ActionController
   module WechatResponder
     def wechat_api(opts = {})
       include Wechat::ControllerApi
-      self.wechat = load_controller_wechat(opts)
+      self.wechat_api_client = load_controller_wechat(opts)
     end
 
     def wechat_responder(opts = {})
       include Wechat::Responder
-      self.wechat = load_controller_wechat(opts)
+      self.wechat_api_client = load_controller_wechat(opts)
+    end
+
+    def wechat
+      self.wechat_api_client ||= load_controller_wechat
     end
 
     private_class_method
@@ -25,7 +29,7 @@ module ActionController
       Wechat.config.oauth2_cookie_duration ||= 1.hour
       self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || Wechat.config.oauth2_cookie_duration.to_i.seconds
 
-      return self.wechat = Wechat.api if opts.empty?
+      return self.wechat_api_client = Wechat.api if opts.empty?
       if corpid.present?
         Wechat::CorpApi.new(corpid, opts[:corpsecret], opts[:access_token], \
                             agentid, timeout, skip_verify_ssl, opts[:jsapi_ticket])
