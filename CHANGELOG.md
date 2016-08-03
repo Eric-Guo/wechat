@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.17 (released at 8/18/2016)
+
+* Allow declare wechat_api at ApplicationController, but using wechat at sub controller. #104 
+
 ## v0.7.16 (released at 7/27/2016)
 
 * FIX: consider '' in params as equal with nil, in ControllerApi#wechat_public_oauth2, by @snow #135
