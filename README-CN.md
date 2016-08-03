@@ -159,7 +159,7 @@ production:
 development:
   <<: *default
   trusted_domain_fullname: "http://your_dev.proxy.qqbrowser.cc"
-  
+
 test:
   <<: *default
 ```
@@ -242,7 +242,7 @@ end
 
 `wechat_oauth2`封装了OAuth2.0验证接口和cookie处理逻辑，用户仅需提供业务代码块即可。userid指的是微信企业成员UserID，openid是关注该公众号的用户openid。
 
-注意: 
+注意:
 * 如果使用 `wechat_responder`, 请不要在 Controller 里定义 `show` 和 `create` 方法, 否则会报错。
 * 如果遇到“redirect_uri参数错误”的错误信息，请登录服务号管理后台，查看“开发者中心/网页服务/网页授权获取用户基本信息”的授权回调页面域名已正确配置。
 
@@ -487,15 +487,15 @@ $ wechat template_message oCfEht9oM*********** template.yml
 在代码中可以这样使用：
 
 ```ruby
-template = YAML.load(File.read(template_yaml_path)).symbolize_keys
-Wechat.api.template_message_send Wechat::Message.to(openid).template(template)
+template = YAML.load(File.read(template_yaml_path))
+Wechat.api.template_message_send Wechat::Message.to(openid).template(template['template'])
 ```
 
 若在Controller中使用wechat_api或者wechat_responder，可以使用wechat：
 
 ```ruby
-template = YAML.load(File.read(template_yaml_path)).symbolize_keys
-wechat.template_message_send Wechat::Message.to(openid).template(template)
+template = YAML.load(File.read(template_yaml_path))
+wechat.template_message_send Wechat::Message.to(openid).template(template['template'])
 ```
 
 ## wechat_api - Rails Controller Wechat API
