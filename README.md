@@ -24,7 +24,7 @@ Wechat provides OAuth2.0 authentication method `wechat_oauth2`, possibly the eas
 
 There is official [weui](https://github.com/weui/weui), which corresponding Rails gems called [weui-rails](https://github.com/Eric-Guo/weui-rails) available, if you prefer following the same UI design as wechat.
 
-For web page only wechat application, please use [`wechat_api`](#wechat_api---rails-controller-wechat-api), which only contains web feature compare with traditional message type [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl). 
+For web page only wechat application, please use [`wechat_api`](#wechat_api---rails-controller-wechat-api), which only contains web feature compare with traditional message type [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl).
 
 There is a more complete [wechat-starter](https://github.com/goofansu/wechat-starter) demo available, even include the payment SDK feature.
 
@@ -156,7 +156,7 @@ default: &default
   token:    ""
   encoding_aes_key:  ""
   jsapi_ticket: "C:/Users/[user_name]/wechat_jsapi_ticket"
-  
+
 production:
   corpid:     <%= ENV['WECHAT_CORPID'] %>
   corpsecret: <%= ENV['WECHAT_CORPSECRET'] %>
@@ -255,7 +255,7 @@ end
 
 `wechat_oauth2` already implement the necessory OAuth2.0 and cookie logic. userid defined as the enterprise member UserID. openid defined as the user who following the public account, also notice openid will be different for the same user for different following public account.
 
-Notice: 
+Notice:
 * If you use `wechat_responder` in your controller, you cannot use `create` and `show` action in your controller, otherwise will throw errors.
 * If you get *redirect_uri parameter error* message, make sure you set the correct callback site url value in wechat management console with path *Development center / Webpage service / Webpage authorization for retrieving user basic informaiton*.
 
@@ -512,15 +512,15 @@ $ wechat template_message oCfEht9oM*********** template.yml
 In code:
 
 ```ruby
-template = YAML.load(File.read(template_yaml_path)).symbolize_keys
-Wechat.api.template_message_send Wechat::Message.to(openid).template(template)
+template = YAML.load(File.read(template_yaml_path))
+Wechat.api.template_message_send Wechat::Message.to(openid).template(template["template"])
 ```
 
 If using wechat_api or wechat_responder in Controller, can alse use wechat as shortcut(Support multi account):
 
 ```ruby
-template = YAML.load(File.read(template_yaml_path)).symbolize_keys
-wechat.template_message_send Wechat::Message.to(openid).template(template)
+template = YAML.load(File.read(template_yaml_path))
+wechat.template_message_send Wechat::Message.to(openid).template(template["template"])
 ```
 
 ## wechat_api - Rails Controller Wechat API
