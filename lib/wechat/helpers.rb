@@ -20,7 +20,7 @@ WECHAT_CONFIG_JS
     end
 
     def wechat_config_js(config_options = {})
-      config_js = wechat_raw_config_js(config_options = {})
+      config_js = wechat_raw_config_js(config_options)
       javascript_tag config_js, type: 'application/javascript'
     end
 
