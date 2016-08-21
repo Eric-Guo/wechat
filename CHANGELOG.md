@@ -3,6 +3,7 @@
 ## v0.7.18 (released at 8/21/2016)
 
 * Support label_location message, similar to location event, but sent by user with Label. #144
+* Add gem signature as additional security methods.
 
 ## v0.7.17 (released at 8/18/2016)
 
