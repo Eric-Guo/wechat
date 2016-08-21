@@ -28,7 +28,7 @@ module Wechat
 
     module ClassMethods
       def on(message_type, with: nil, respond: nil, &block)
-        raise 'Unknow message type' unless [:text, :image, :voice, :video, :shortvideo, :link, :event, :click, :view, :scan, :batch_job, :location, :fallback].include?(message_type)
+        raise 'Unknow message type' unless [:text, :image, :voice, :video, :shortvideo, :link, :event, :click, :view, :scan, :batch_job, :location, :label_location, :fallback].include?(message_type)
         config = respond.nil? ? {} : { respond: respond }
         config[:proc] = block if block_given?
 
@@ -57,6 +57,8 @@ module Wechat
           user_defined_scan_responders << config
         when :location
           user_defined_location_responders << config
+        when :label_location
+          user_defined_label_location_responders << config
         else
           user_defined_responders(message_type) << config
         end
@@ -87,6 +89,10 @@ module Wechat
         @location_responders ||= []
       end
 
+      def user_defined_label_location_responders
+        @label_location_responders ||= []
+      end
+
       def user_defined_responders(type)
         @responders ||= {}
         @responders[type] ||= []
@@ -115,6 +121,8 @@ module Wechat
           else
             yield(* match_responders(responders, message[:Event]))
           end
+        when :location
+          yield(* user_defined_label_location_responders, message)
         else
           yield(responders.first)
         end

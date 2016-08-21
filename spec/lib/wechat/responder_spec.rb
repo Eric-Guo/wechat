@@ -269,6 +269,10 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("Latitude: #{message[:Latitude]} Longitude: #{message[:Longitude]}")
       end
 
+      on :label_location do |message|
+        message.reply.text("Label: #{message[:Label]} Location_X: #{message[:Location_X]} Location_Y: #{message[:Location_Y]} Scale: #{message[:Scale]}")
+      end
+
       on :image do |message|
         message.reply.text("image: #{message[:PicUrl]}")
       end
@@ -384,6 +388,12 @@ RSpec.describe WechatController, type: :controller do
       message = message_base.merge(MsgType: 'event', Event: 'LOCATION', Latitude: 23.137466, Longitude: 113.352425, Precision: 119.385040)
       post :create, params: signature_params.merge(xml: message)
       expect(xml_to_hash(response)[:Content]).to eq('Latitude: 23.137466 Longitude: 113.352425')
+    end
+
+    specify 'response label_location' do
+      message = message_base.merge(MsgType: 'location', Location_X: 23.134521, Location_Y: 113.358803, Scale: 20, Label: '位置信息')
+      post :create, params: signature_params.merge(xml: message)
+      expect(xml_to_hash(response)[:Content]).to eq('Label: 位置信息 Location_X: 23.134521 Location_Y: 113.358803 Scale: 20')
     end
 
     specify 'response image' do

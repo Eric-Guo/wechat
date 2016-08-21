@@ -616,6 +616,11 @@ class WechatsController < ActionController::Base
     request.reply.video(request[:MediaId], title: '回声', description: "#{nickname}发来的视频请求") #直接视频返回给用户
   end
 
+  # 处理地理位置消息
+  on :label_location do |request|
+    request.reply.text("Label: #{request[:Label]} Location_X: #{request[:Location_X]} Location_Y: #{request[:Location_Y]} Scale: #{request[:Scale]}")
+  end  
+
   # 处理上报地理位置事件
   on :location do |request|
     request.reply.text("Latitude: #{request[:Latitude]} Longitude: #{request[:Longitude]} Precision: #{request[:Precision]}")
@@ -673,6 +678,7 @@ end
 - :voice 响应语音消息
 - :shortvideo 响应短视频消息
 - :video 响应视频消息
+- :label_location 响应地理位置消息
 - :link 响应链接消息
 - :event 响应事件消息, 可以用`:with`参数来匹配事件类型，同文字消息类似，支持正则表达式匹配
 - :click 虚拟响应事件消息, 微信传入:event，但gem内部会单独处理

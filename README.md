@@ -631,6 +631,11 @@ class WechatsController < ActionController::Base
     request.reply.video(request[:MediaId], title: 'Echo', description: "Got #{nickname} sent video") # Echo the sent video to user
   end
 
+  # When user sent location message with label
+  on :label_location do |request|
+    request.reply.text("Label: #{request[:Label]} Location_X: #{request[:Location_X]} Location_Y: #{request[:Location_Y]} Scale: #{request[:Scale]}")
+  end
+
   # When user sent location
   on :location do |request|
     request.reply.text("Latitude: #{request[:Latitude]} Longitude: #{request[:Longitude]} Precision: #{request[:Precision]}")
@@ -688,6 +693,7 @@ Below is current supported message_type:
 - :voice voice message
 - :shortvideo shortvideo message
 - :video video message
+- :label_location location message with label
 - :link  link message
 - :event event message, using `:with` to match particular event, support regular expression match similr to text message.
 - :click virtual event message, wechat still sent event message，but gems will mapping to menu click event.
