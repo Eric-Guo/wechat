@@ -215,6 +215,8 @@ RSpec.describe WechatController, type: :controller do
   describe '#create use cases' do
     controller do
       wechat_responder
+      on :fallback, respond: 'fallback message'
+
       on :text, respond: 'text message' do |message, _content|
         message.replay.text('should not be here')
       end
