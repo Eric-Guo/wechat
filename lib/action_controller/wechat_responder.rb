@@ -28,14 +28,18 @@ module ActionController
       self.trusted_domain_fullname = opts[:trusted_domain_fullname] || Wechat.config.trusted_domain_fullname
       Wechat.config.oauth2_cookie_duration ||= 1.hour
       self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || Wechat.config.oauth2_cookie_duration.to_i.seconds
+      self.corpsecret = opts[:corpsecret] || Wechat.config.corpsecret
+      self.access_token = opts[:access_token] || Wechat.config.access_token
+      self.jsapi_ticket = opts[:jsapi_ticket] || Wechat.config.jsapi_ticket
+      self.secret = opts[:secret] || Wechat.config.secret
 
       return self.wechat_api_client = Wechat.api if opts.empty?
       if corpid.present?
-        Wechat::CorpApi.new(corpid, opts[:corpsecret], opts[:access_token], \
-                            agentid, timeout, skip_verify_ssl, opts[:jsapi_ticket])
+        Wechat::CorpApi.new(corpid, corpsecret, access_token, \
+                            agentid, timeout, skip_verify_ssl, jsapi_ticket)
       else
-        Wechat::Api.new(appid, opts[:secret], opts[:access_token], \
-                        timeout, skip_verify_ssl, opts[:jsapi_ticket])
+        Wechat::Api.new(appid, secret, access_token, \
+                        timeout, skip_verify_ssl, jsapi_ticket)
       end
     end
   end
