@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7.19 (released at 8/25/2016)
+
+* Enterprise account now custom_image/voice/file works now. by @zymiboxpay #145
+* Fix timeout setting no effective since introduct HTTP. found by @hsluo #74
+
 ## v0.7.18 (released at 8/21/2016)
 
 * Support label_location message, similar to location event, but sent by user with Label. #144
