@@ -471,4 +471,22 @@ RSpec.describe Wechat::CorpApi do
       expect(subject.message_send 'userid', 'message content').to be true
     end
   end
+
+  describe '#custom_message_send' do
+    specify 'will post message/send with access_token, and json payload' do
+      payload = {
+          touser: 'openid',
+          msgtype: 'text',
+          agentid: '1',
+          text: { content: 'message content' }
+      }
+
+      expect(subject.client).to receive(:post)
+                                    .with('message/send', payload.to_json,
+                                          params: { access_token: 'access_token' }, content_type: :json).and_return(true)
+
+      expect(subject.custom_message_send Wechat::Message.to('openid').text('message content')).to be true
+    end
+  end
+
 end
