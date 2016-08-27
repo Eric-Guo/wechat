@@ -27,9 +27,7 @@ HELP
       @config
     end
 
-    private_class_method
-
-    def self.loading_config!
+    private_class_method def self.loading_config!
       config ||= config_from_file || config_from_environment
 
       if defined?(::Rails)
@@ -42,7 +40,7 @@ HELP
       @config = OpenStruct.new(config)
     end
 
-    def self.config_from_file
+    private_class_method def self.config_from_file
       if defined?(::Rails)
         config_file = Rails.root.join('config/wechat.yml')
         return YAML.load(ERB.new(File.read(config_file)).result)[Rails.env] if File.exist?(config_file)
@@ -63,7 +61,7 @@ HELP
       end
     end
 
-    def self.config_from_environment
+    private_class_method def self.config_from_environment
       { appid: ENV['WECHAT_APPID'],
         secret: ENV['WECHAT_SECRET'],
         corpid: ENV['WECHAT_CORPID'],
@@ -79,7 +77,7 @@ HELP
         trusted_domain_fullname: ENV['WECHAT_TRUSTED_DOMAIN_FULLNAME'] }
     end
 
-    def self.class_exists?(class_name)
+    private_class_method def self.class_exists?(class_name)
       return Module.const_get(class_name).present?
     rescue NameError
       return false

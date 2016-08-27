@@ -14,7 +14,7 @@ module ActionController
       self.wechat_api_client ||= load_controller_wechat
     end
 
-    private_class_method
+    private
 
     def load_controller_wechat(opts = {})
       self.token = opts[:token] || Wechat.config.token
