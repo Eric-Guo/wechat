@@ -5,7 +5,7 @@ WeChat [![Gem Version][version-badge]][rubygems] [![Build Status][travis-badge]]
 
 [中文文档 Chinese document](/README-CN.md)
 
-[Wechat](http://www.wechat.com/) is a free messaging and calling app developed by [Tencent](http://tencent.com/en-us/index.shtml), after linking billion people, Wechat has become a platform of application
+[Wechat](http://www.wechat.com/) is a free messaging and calling app developed by [Tencent](http://tencent.com/en-us/index.shtml), after linking billion people, Wechat had become [a platform of application](https://uxdesign.cc/wechat-the-invincible-app-a-key-to-business-success-in-china-8e9a920deb26?source=wechat_gem).
 
 WeChat gem tries to help Rails developer to integrate [enterprise account](https://qy.weixin.qq.com) / [public account](https://mp.weixin.qq.com/) easily. Features below are ready and there is no need writing adapter code for talking to wechat server directly.
 
