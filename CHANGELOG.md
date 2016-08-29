@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.20 (released at 8/29/2016)
+
+* Apply opt and config together when loading controller_wechat, to simplify wechat_responder params. by @bzhang443 #147
+
 ## v0.7.19 (released at 8/25/2016)
 
 * Enterprise account now custom_image/voice/file works now. by @zymiboxpay #145
