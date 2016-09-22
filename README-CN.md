@@ -107,6 +107,7 @@ default: &default
   token:  "app_token"
   access_token: "/var/tmp/wechat_access_token"
   jsapi_ticket: "/var/tmp/wechat_jsapi_ticket"
+  card_api_ticket: "/var/tmp/wechat_card_api_ticket"
 
 production:
   appid: <%= ENV['WECHAT_APPID'] %>
@@ -114,6 +115,7 @@ production:
   token:   <%= ENV['WECHAT_TOKEN'] %>
   access_token: <%= ENV['WECHAT_ACCESS_TOKEN'] %>
   jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
+  card_api_ticket: <%= ENV['WECHAT_CARD_API_TICKET'] %>
   oauth2_cookie_duration: <%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %> # seconds
 
 development:
@@ -143,6 +145,7 @@ default: &default
   token:    ""
   encoding_aes_key:  ""
   jsapi_ticket: "C:/Users/[user_name]/wechat_jsapi_ticket"
+  card_api_ticket: "C:/Users/[user_name]/wechat_card_api_ticket"
 
 production:
   corpid:     <%= ENV['WECHAT_CORPID'] %>
@@ -154,6 +157,7 @@ production:
   skip_verify_ssl: true
   encoding_aes_key:  <%= ENV['WECHAT_ENCODING_AES_KEY'] %>
   jsapi_ticket: <%= ENV['WECHAT_JSAPI_TICKET'] %>
+  card_api_ticket: <%= ENV['WECHAT_CARD_API_TICKET'] %>
   oauth2_cookie_duration: <%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %>
 
 development:

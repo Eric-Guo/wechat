@@ -10,6 +10,7 @@ default: &default
   encrypt_mode: false # if true must fill encoding_aes_key
   encoding_aes_key:  "my_encoding_aes_key"
   jsapi_ticket: "C:/Users/[user_name]/wechat_jsapi_ticket"
+  card_api_ticket: "C:/Users/[user_name]/chat_card_api_ticket"
 
 production:
   corpid:     <%%= ENV['WECHAT_CORPID'] %>
@@ -25,6 +26,7 @@ production:
   encrypt_mode: false # if true must fill encoding_aes_key
   encoding_aes_key:  <%%= ENV['WECHAT_ENCODING_AES_KEY'] %>
   jsapi_ticket: <%%= ENV['WECHAT_JSAPI_TICKET'] %>
+  card_api_ticket: <%%= ENV['WECHAT_CARD_API_TICKET'] %>
   oauth2_cookie_duration: <%%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %> # seconds
 
 development:
