@@ -2,15 +2,17 @@ require 'wechat/api_base'
 require 'wechat/http_client'
 require 'wechat/token/public_access_token'
 require 'wechat/ticket/public_jsapi_ticket'
+require 'wechat/ticket/card_api_ticket'
 
 module Wechat
   class Api < ApiBase
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'.freeze
 
-    def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file)
+    def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file, card_api_ticket_file)
       @client = HttpClient.new(API_BASE, timeout, skip_verify_ssl)
       @access_token = Token::PublicAccessToken.new(@client, appid, secret, token_file)
       @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
+      @card_api_ticket = Ticket::CardApiTicket.new(@client, @access_token, card_api_ticket_file)
     end
 
     def groups

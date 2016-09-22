@@ -5,6 +5,7 @@ module Wechat
 
       token_file = options[:token_file] || c.access_token || '/var/tmp/wechat_access_token'
       js_token_file = options[:js_token_file] || c.jsapi_ticket || '/var/tmp/wechat_jsapi_ticket'
+      card_token_file = options[:card_token_file] || c.card_api_ticket || '/var/tmp/wechat_card_api_ticket'
 
       if c.appid && c.secret && token_file.present?
         Wechat::Api.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
@@ -33,6 +34,7 @@ HELP
       if defined?(::Rails)
         config[:access_token] ||= Rails.root.join('tmp/access_token').to_s
         config[:jsapi_ticket] ||= Rails.root.join('tmp/jsapi_ticket').to_s
+        config[:card_api_ticket] ||= Rails.root.join('tmp/card_api_ticket').to_s
       end
       config[:timeout] ||= 20
       config[:have_session_class] = class_exists?('WechatSession')
@@ -74,6 +76,7 @@ HELP
         skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
         encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
         jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'],
+        card_api_ticket: ENV['WECHAT_CARD_API_TICKET'],
         trusted_domain_fullname: ENV['WECHAT_TRUSTED_DOMAIN_FULLNAME'] }
     end
 

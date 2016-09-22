@@ -31,16 +31,17 @@ module ActionController
 
       access_token = opts[:access_token] || Wechat.config.access_token
       jsapi_ticket = opts[:jsapi_ticket] || Wechat.config.jsapi_ticket
+      card_api_ticket = opts[:card_api_ticket] || Wechat.config.card_api_ticket
 
       return self.wechat_api_client = Wechat.api if opts.empty?
       if corpid.present?
         corpsecret = opts[:corpsecret] || Wechat.config.corpsecret
         Wechat::CorpApi.new(corpid, corpsecret, access_token, \
-                            agentid, timeout, skip_verify_ssl, jsapi_ticket)
+                            agentid, timeout, skip_verify_ssl, jsapi_ticket, card_api_ticket)
       else
         secret = opts[:secret] || Wechat.config.secret
         Wechat::Api.new(appid, secret, access_token, \
-                        timeout, skip_verify_ssl, jsapi_ticket)
+                        timeout, skip_verify_ssl, jsapi_ticket, card_api_ticket)
       end
     end
   end
