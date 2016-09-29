@@ -17,8 +17,7 @@ require 'cgi'
 
 class App < Thor
   package_name 'Wechat'
-  option :token_file, aliases: '-t', desc: 'File to store access token'
-  option :account, aliases: '-a', desc: 'Name of Wechat account configuration.Uses default when missing.'
+  class_option :account, aliases: '-a', default: :default, desc: 'Name of Wechat account configuration.'
 
   attr_reader :wechat_api_client
   no_commands do
@@ -27,6 +26,7 @@ class App < Thor
     end
   end
 
+  option :token_file, aliases: '-t', desc: 'File to store access token'
   desc 'callbackip', '获取微信服务器IP地址'
   def callbackip
     puts wechat_api.callbackip

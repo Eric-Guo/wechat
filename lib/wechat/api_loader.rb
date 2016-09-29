@@ -70,18 +70,12 @@ HELP
           rails_env = ENV['RAILS_ENV'] || 'development'
           config = resovle_config_file(rails_config_file, rails_env)
           if config.present? && (default = config[:default])  && (default['appid'] || default['corpid'])
-            puts "Using rails project config/wechat.yml #{rails_env} setting..."
+            puts "Using rails project #{ENV['WECHAT_CONF_FILE'] || "config/wechat.yml"} #{rails_env} setting..."
             return config
           end
         end
         if File.exist?(home_config_file)
-          # Causion:
-          # .wechat.yml and config/wechat.yml are the same format and rule now.
-          # It supports env and multiple accounts also.
-          # Old .wechat.yml maybe not work.
-
-          rails_env = ENV['RAILS_ENV'] || 'development'
-          return resovle_config_file(rails_config_file, rails_env)
+          return resovle_config_file(rails_config_file, ENV['RAILS_ENV'])
         end
       end
     end
@@ -90,12 +84,18 @@ HELP
       if File.exist?(config_file)
         raw_data = YAML.load(ERB.new(File.read(config_file)).result)
         configs = {}
-        raw_data.each do |key, value|
-          if key == env
-            configs[:default] = value
-          elsif m = /(.*?)_#{env}$/.match(key)
-            configs[m[1].to_sym] = value
+        if env
+          # Process multiple accounts when env is given
+          raw_data.each do |key, value|
+            if key == env
+              configs[:default] = value
+            elsif m = /(.*?)_#{env}$/.match(key)
+              configs[m[1].to_sym] = value
+            end
           end
+        else
+          # Treat is as one account when env is omitted
+          configs = raw_data
         end
         configs
       end
