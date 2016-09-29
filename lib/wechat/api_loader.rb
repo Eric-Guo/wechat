@@ -23,13 +23,12 @@ HELP
     @configs = nil
 
     def self.config(account = :default)
-      return @configs[account.to_sym] unless @configs.nil?
       @configs ||= loading_config!
-      @configs[account.to_sym]
+      @configs[account.to_sym] || raise("Wechat configuration for #{account} is missing.")
     end
 
     private_class_method def self.loading_config!
-      configs ||= config_from_file || config_from_environment
+      configs = config_from_file || config_from_environment
 
       configs.symbolize_keys!
 
@@ -55,13 +54,13 @@ HELP
 
     private_class_method def self.config_from_file
       if defined?(::Rails)
-        config_file = Rails.root.join('config/wechat.yml')
+        config_file = ENV['WECHAT_CONF_FILE'] || Rails.root.join('config/wechat.yml')
         return resovle_config_file(config_file, Rails.env.to_s)
       else
-        rails_config_file = File.join(Dir.getwd, 'config/wechat.yml')
+        rails_config_file = ENV['WECHAT_CONF_FILE'] || File.join(Dir.getwd, 'config/wechat.yml')
         home_config_file = File.join(Dir.home, '.wechat.yml')
         if File.exist?(rails_config_file)
-          rails_env = ENV['RAILS_ENV'] || 'default'
+          rails_env = ENV['RAILS_ENV'] || 'development'
           config = resovle_config_file(rails_config_file, rails_env)
           if config.present? && (default = config[:default])  && (default['appid'] || default['corpid'])
             puts "Using rails project config/wechat.yml #{rails_env} setting..."
@@ -74,7 +73,7 @@ HELP
           # It supports env and multiple accounts also.
           # Old .wechat.yml maybe not work.
 
-          rails_env = ENV['RAILS_ENV'] || 'default'
+          rails_env = ENV['RAILS_ENV'] || 'development'
           return resovle_config_file(rails_config_file, rails_env)
         end
       end
@@ -83,7 +82,7 @@ HELP
     private_class_method def self.resovle_config_file(config_file, env)
       if File.exist?(config_file)
         raw_data = YAML.load(ERB.new(File.read(config_file)).result)
-        config = {}
+        configs = {}
         raw_data.each do |key, value|
           if key == env
             configs[:default] = value
@@ -91,7 +90,7 @@ HELP
             configs[m[1].to_sym] = value
           end
         end
-        config
+        configs
       end
     end
 
