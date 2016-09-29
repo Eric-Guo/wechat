@@ -17,28 +17,34 @@ module ActionController
     private
 
     def load_controller_wechat(opts = {})
-      self.token = opts[:token] || Wechat.config.token
-      self.appid = opts[:appid] || Wechat.config.appid
-      self.corpid = opts[:corpid] || Wechat.config.corpid
-      self.agentid = opts[:agentid] || Wechat.config.agentid
-      self.encrypt_mode = opts[:encrypt_mode] || Wechat.config.encrypt_mode || corpid.present?
+      if opts.is_a?(Symbol) || opts.is_a?(String)
+        account = opts.to_sym
+        opts = {}
+      else
+        account = :default
+      end
+      self.token = opts[:token] || Wechat.config(account).token
+      self.appid = opts[:appid] || Wechat.config(account).appid
+      self.corpid = opts[:corpid] || Wechat.config(account).corpid
+      self.agentid = opts[:agentid] || Wechat.config(account).agentid
+      self.encrypt_mode = opts[:encrypt_mode] || Wechat.config(account).encrypt_mode || corpid.present?
       self.timeout = opts[:timeout] || 20
       self.skip_verify_ssl = opts[:skip_verify_ssl]
-      self.encoding_aes_key = opts[:encoding_aes_key] || Wechat.config.encoding_aes_key
-      self.trusted_domain_fullname = opts[:trusted_domain_fullname] || Wechat.config.trusted_domain_fullname
-      Wechat.config.oauth2_cookie_duration ||= 1.hour
-      self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || Wechat.config.oauth2_cookie_duration.to_i.seconds
+      self.encoding_aes_key = opts[:encoding_aes_key] || Wechat.config(account).encoding_aes_key
+      self.trusted_domain_fullname = opts[:trusted_domain_fullname] || Wechat.config(account).trusted_domain_fullname
+      Wechat.config(account).oauth2_cookie_duration ||= 1.hour
+      self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || Wechat.config(account).oauth2_cookie_duration.to_i.seconds
 
-      access_token = opts[:access_token] || Wechat.config.access_token
-      jsapi_ticket = opts[:jsapi_ticket] || Wechat.config.jsapi_ticket
+      access_token = opts[:access_token] || Wechat.config(account).access_token
+      jsapi_ticket = opts[:jsapi_ticket] || Wechat.config(account).jsapi_ticket
 
-      return self.wechat_api_client = Wechat.api if opts.empty?
+      return self.wechat_api_client = Wechat.api if account == :default && opts.empty?
       if corpid.present?
-        corpsecret = opts[:corpsecret] || Wechat.config.corpsecret
+        corpsecret = opts[:corpsecret] || Wechat.config(account).corpsecret
         Wechat::CorpApi.new(corpid, corpsecret, access_token, \
                             agentid, timeout, skip_verify_ssl, jsapi_ticket)
       else
-        secret = opts[:secret] || Wechat.config.secret
+        secret = opts[:secret] || Wechat.config(account).secret
         Wechat::Api.new(appid, secret, access_token, \
                         timeout, skip_verify_ssl, jsapi_ticket)
       end

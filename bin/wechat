@@ -18,6 +18,7 @@ require 'cgi'
 class App < Thor
   package_name 'Wechat'
   option :token_file, aliases: '-t', desc: 'File to store access token'
+  option :account, aliases: '-a', desc: 'Name of Wechat account configuration.Uses default when missing.'
 
   attr_reader :wechat_api_client
   no_commands do
