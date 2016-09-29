@@ -31,6 +31,13 @@ HELP
       configs = config_from_file || config_from_environment
 
       configs.symbolize_keys!
+      configs.each do |key, cfg|
+        if cfg.is_a?(Hash)
+          cfg.symbolize_keys!
+        else
+          raise "wrong wechat configuration format for #{key}"
+        end
+      end
 
       if defined?(::Rails)
         configs.each do |_, cfg|
