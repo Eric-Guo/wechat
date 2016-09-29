@@ -7,7 +7,7 @@ module Wechat
   module Token
     class AccessTokenBase
       def read_token
-        JSON.parse(Wechat.redis.get(redis_key))
+        JSON.parse(Wechat.redis.get(redis_key)) || {}
       end
 
       def write_token(token_hash)
@@ -25,7 +25,7 @@ module Wechat
   module Ticket
     class JsapiBase
       def read_ticket
-        JSON.parse(Wechat.redis.get(redis_key))
+        JSON.parse(Wechat.redis.get(redis_key))  || {}
       end
 
       def write_ticket(ticket_hash)

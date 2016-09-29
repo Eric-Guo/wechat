@@ -17,12 +17,8 @@ module ActionController
     private
 
     def load_controller_wechat(opts = {})
-      if opts.is_a?(Symbol) || opts.is_a?(String)
-        account = opts.to_sym
-        opts = {}
-      else
-        account = :default
-      end
+      account = opts[:account].present? ? opts[:account].to_sym : :default
+
       self.token = opts[:token] || Wechat.config(account).token
       self.appid = opts[:appid] || Wechat.config(account).appid
       self.corpid = opts[:corpid] || Wechat.config(account).corpid
@@ -39,6 +35,7 @@ module ActionController
       jsapi_ticket = opts[:jsapi_ticket] || Wechat.config(account).jsapi_ticket
 
       return self.wechat_api_client = Wechat.api if account == :default && opts.empty?
+
       if corpid.present?
         corpsecret = opts[:corpsecret] || Wechat.config(account).corpsecret
         Wechat::CorpApi.new(corpid, corpsecret, access_token, \
