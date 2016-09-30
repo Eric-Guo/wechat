@@ -175,6 +175,25 @@ development:
 
 test:
   <<: *default
+
+ # Multiple Accounts
+ #
+ # wx2_development:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
+ #  access_token: "tmp/wechat_access_token2"
+ #  jsapi_ticket: "tmp/wechat_jsapi_ticket2"
+ #
+ # wx2_test:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
+ #
+ # wx2_production:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
 ```
 
 ##### Configure priority
@@ -187,11 +206,20 @@ Stability various even for Tencent wechat server, so setting a long timeout may 
 
 ##### Skip the SSL verification
 
-SSL Certification can also be corrupted by some reason in China, [it's reported](http://qydev.weixin.qq.com/qa/index.php?qa=11037) and if it's happen to you, can setting `skip_verify_ssl: true`. (not recommend)  
+SSL Certification can also be corrupted by some reason in China, [it's reported](http://qydev.weixin.qq.com/qa/index.php?qa=11037) and if it's happen to you, can setting `skip_verify_ssl: true`. (not recommend)
 
 #### Configure individual responder with different appid
 
 Sometime, you may want to hosting more than one enterprise/public wechat account in one Rails application, so you can given those configuration info when calling `wechat_responder` or `wechat_api`
+
+```ruby
+class WechatFirstController < ActionController::Base
+   wechat_responder account: :new_account
+
+   on :text, with:"help", respond: "help content"
+end
+
+Or you can config full options.
 
 ```ruby
 class WechatFirstController < ActionController::Base
@@ -487,19 +515,19 @@ template:
   data:
     first:
       value: "Hello, you successfully registed"
-      color: "#0A0A0A"      
+      color: "#0A0A0A"
     keynote1:
       value: "5km Health Running"
-      color: "#CCCCCC"      
+      color: "#CCCCCC"
     keynote2:
       value: "2014-09-16"
-      color: "#CCCCCC"     
+      color: "#CCCCCC"
     keynote3:
       value: "Centry Park, Pudong, Shanghai"
-      color: "#CCCCCC"                 
+      color: "#CCCCCC"
     remark:
       value: "Welcome back"
-      color: "#173177"          
+      color: "#173177"
 
 ```
 

@@ -33,3 +33,40 @@ development:
 
 test:
   <<: *default
+
+# Multiple Accounts
+#
+# wx2_development:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#  access_token: "tmp/wechat_access_token2"
+#  jsapi_ticket: "tmp/wechat_jsapi_ticket2"
+#
+# wx2_test:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#
+# wx2_production:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#
+# wx3_development:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#  access_token: "tmp/wechat_access_token3"
+#  jsapi_ticket: "tmp/wechat_jsapi_ticket3"
+#
+# wx3_test:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#
+# wx3_production:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#

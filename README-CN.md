@@ -162,6 +162,25 @@ development:
 
 test:
   <<: *default
+
+ # Multiple Accounts
+ #
+ # wx2_development:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
+ #  access_token: "tmp/wechat_access_token2"
+ #  jsapi_ticket: "tmp/wechat_jsapi_ticket2"
+ #
+ # wx2_test:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
+ #
+ # wx2_production:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
 ```
 
 ##### 配置优先级
@@ -179,6 +198,16 @@ Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://
 #### 为每个Responder配置不同的appid和secret
 
 有些情况下，单个Rails应用可能需要处理来自多个微信公众号的消息，您可以通过在`wechat_responder`和`wechat_api`后配置多个相关参数来支持多账号。
+
+```ruby
+class WechatFirstController < ActionController::Base
+   wechat_responder account: :new_account
+
+   on :text, with:"help", respond: "help content"
+end
+```
+
+或者直接完整配置
 
 ```ruby
 class WechatFirstController < ActionController::Base
@@ -472,19 +501,19 @@ template:
   data:
     first:
       value: "您好，您已报名成功"
-      color: "#0A0A0A"      
+      color: "#0A0A0A"
     keynote1:
       value: "XX活动"
-      color: "#CCCCCC"      
+      color: "#CCCCCC"
     keynote2:
       value: "2014年9月16日"
-      color: "#CCCCCC"     
+      color: "#CCCCCC"
     keynote3:
       value: "上海徐家汇xxx城"
-      color: "#CCCCCC"                 
+      color: "#CCCCCC"
     remark:
       value: "欢迎再次使用。"
-      color: "#173177"          
+      color: "#173177"
 
 ```
 
@@ -619,7 +648,7 @@ class WechatsController < ActionController::Base
   # 处理地理位置消息
   on :label_location do |request|
     request.reply.text("Label: #{request[:Label]} Location_X: #{request[:Location_X]} Location_Y: #{request[:Location_Y]} Scale: #{request[:Scale]}")
-  end  
+  end
 
   # 处理上报地理位置事件
   on :location do |request|
