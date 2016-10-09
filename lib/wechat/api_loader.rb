@@ -75,7 +75,7 @@ HELP
           end
         end
         if File.exist?(home_config_file)
-          return resovle_config_file(rails_config_file, ENV['RAILS_ENV'])
+          return resovle_config_file(home_config_file, nil)
         end
       end
     end
@@ -95,7 +95,7 @@ HELP
           end
         else
           # Treat is as one account when env is omitted
-          configs = raw_data
+          configs[:default] = raw_data
         end
         configs
       end
