@@ -41,8 +41,8 @@ HELP
 
       if defined?(::Rails)
         configs.each do |_, cfg|
-          cfg[:access_token] ||= Rails.root.join('tmp/access_token').to_s
-          cfg[:jsapi_ticket] ||= Rails.root.join('tmp/jsapi_ticket').to_s
+          cfg[:access_token] ||= Rails.root.try(:join, 'tmp/access_token').try(:to_path)
+          cfg[:jsapi_ticket] ||= Rails.root.try(:join, 'tmp/jsapi_ticket').try(:to_path)
         end
       end
 
@@ -65,8 +65,13 @@ HELP
         return resovle_config_file(config_file, Rails.env.to_s)
       else
         rails_config_file = ENV['WECHAT_CONF_FILE'] || File.join(Dir.getwd, 'config/wechat.yml')
+        application_config_file = File.join(Dir.getwd, 'config/application.yml')
         home_config_file = File.join(Dir.home, '.wechat.yml')
         if File.exist?(rails_config_file)
+          if File.exist?(application_config_file) && !defined?(::Figaro)
+            require 'figaro'
+            Figaro::Application.new(path: application_config_file).load
+          end
           rails_env = ENV['RAILS_ENV'] || 'development'
           config = resovle_config_file(rails_config_file, rails_env)
           if config.present? && (default = config[:default])  && (default['appid'] || default['corpid'])
