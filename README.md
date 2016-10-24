@@ -196,6 +196,8 @@ test:
  #  secret: "my_secret"
 ```
 
+Detail multiple accounts can reference [PR 150](https://github.com/Eric-Guo/wechat/pull/150)
+
 ##### Configure priority
 
 Running `wechat` command in the root folder of Rails application will using the Rails configuration first (`default` section), if can not find it, will relay on `~\.wechat.yml`, such behavior enable manage more wechat public account and enterprise account without changing your home `~\.wechat.yml` file.

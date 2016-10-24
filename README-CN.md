@@ -183,6 +183,8 @@ test:
  #  secret: "my_secret"
 ```
 
+进一步的多账号支持参见[PR 150](https://github.com/Eric-Guo/wechat/pull/150)。
+
 ##### 配置优先级
 
 注意在Rails项目根目录下运行`wechat`命令行工具会优先使用`config/wechat.yml`中的`default`配置，如果失败则使用`~\.wechat.yml`中的配置，以便于在生产环境下管理多个微信账号应用。
