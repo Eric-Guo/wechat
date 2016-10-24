@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.0 (released at 10/24/2016)
+
+* Complete support multi-wechat public account. by @xiewenwei #150
+* Support loading configure value from Figaro if application.yml exist.
+
 ## v0.7.20 (released at 8/29/2016)
 
 * Apply opt and config together when loading controller_wechat, to simplify wechat_responder params. by @bzhang443 #147
