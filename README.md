@@ -1,7 +1,7 @@
-WeChat [![Gem Version][version-badge]][rubygems] [![Build Status][travis-badge]][travis] [![Code Climate][codeclimate-badge]][codeclimate] [![Code Coverage][codecoverage-badge]][codecoverage]
+WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.org/gems/wechat) [![Build Status](https://travis-ci.org/Eric-Guo/wechat.svg)](https://travis-ci.org/Eric-Guo/wechat) [![Code Climate](https://codeclimate.com/github/Eric-Guo/wechat.png)](https://codeclimate.com/github/Eric-Guo/wechat) [![Code Coverage](https://codeclimate.com/github/Eric-Guo/wechat/coverage.png)](https://codeclimate.com/github/Eric-Guo/wechat/coverage)
 ======
 
-[![Join the chat][gitter-badge]][gitter] [![Issue Stats][issue-badge]][issuestats] [![PR Stats][pr-badge]][issuestats]
+[![Join the chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [中文文档 Chinese document](/README-CN.md)
 
@@ -763,17 +763,3 @@ end
 * Sometime, enterprise account can not receive the menu message due to Tencent server can not resolved the DNS, so using IP as a callback URL more stable, but it's never happen for user sent text message.
 * Enterprise batch replace users using a CSV format file, but if you using the download template directly, it's [not working](http://qydev.weixin.qq.com/qa/index.php?qa=13978), must open the CSV file in excel first, then save as CSV format again, seems Tencent only support Excel save as CSV file format.
 * If you using unicorn behind nginx and https, you need setting `trusted_domain_fullname` and point to https, other will got http and lead invalid signature in the JS-SDK.
-
-[version-badge]: https://badge.fury.io/rb/wechat.svg
-[rubygems]: https://rubygems.org/gems/wechat
-[travis-badge]: https://travis-ci.org/Eric-Guo/wechat.svg
-[travis]: https://travis-ci.org/Eric-Guo/wechat
-[codeclimate-badge]: https://codeclimate.com/github/Eric-Guo/wechat.png
-[codeclimate]: https://codeclimate.com/github/Eric-Guo/wechat
-[codecoverage-badge]: https://codeclimate.com/github/Eric-Guo/wechat/coverage.png
-[codecoverage]: https://codeclimate.com/github/Eric-Guo/wechat/coverage
-[gitter-badge]: https://badges.gitter.im/Join%20Chat.svg
-[gitter]: https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-[issue-badge]: http://issuestats.com/github/Eric-Guo/wechat/badge/issue
-[pr-badge]: http://issuestats.com/github/Eric-Guo/wechat/badge/pr
-[issuestats]: http://issuestats.com/github/Eric-Guo/wechat
