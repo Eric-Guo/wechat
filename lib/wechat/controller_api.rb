@@ -13,6 +13,11 @@ module Wechat
 
     def wechat_oauth2(scope = 'snsapi_base', page_url = nil, &block)
       appid = self.class.corpid || self.class.appid
+      if appid.blank?
+        self.class.wechat # to initialize wechat_api_client at first time call wechat_oauth2
+        appid = self.class.corpid || self.class.appid
+        raise 'Can not get corpid or appid, so please configure it first to using wechat_oauth2' if appid.blank?
+      end
       page_url ||= if self.class.trusted_domain_fullname
                      "#{self.class.trusted_domain_fullname}#{request.original_fullpath}"
                    else
