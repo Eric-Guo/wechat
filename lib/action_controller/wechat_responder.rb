@@ -2,23 +2,23 @@ module ActionController
   module WechatResponder
     def wechat_api(opts = {})
       include Wechat::ControllerApi
-      self.wechat_api_client = load_controller_wechat(opts)
+      self.wechat_cfg_account = opts[:account].present? ? opts[:account].to_sym : :default
+      self.wechat_api_client = load_controller_wechat(wechat_cfg_account, opts)
     end
 
     def wechat_responder(opts = {})
       include Wechat::Responder
-      self.wechat_api_client = load_controller_wechat(opts)
+      self.wechat_cfg_account = opts[:account].present? ? opts[:account].to_sym : :default
+      self.wechat_api_client = load_controller_wechat(wechat_cfg_account, opts)
     end
 
     def wechat
-      self.wechat_api_client ||= load_controller_wechat
+      self.wechat_api_client ||= load_controller_wechat(wechat_cfg_account)
     end
 
     private
 
-    def load_controller_wechat(opts = {})
-      account = opts[:account].present? ? opts[:account].to_sym : :default
-
+    def load_controller_wechat(account, opts = {})
       self.token = opts[:token] || Wechat.config(account).token
       self.appid = opts[:appid] || Wechat.config(account).appid
       self.corpid = opts[:corpid] || Wechat.config(account).corpid

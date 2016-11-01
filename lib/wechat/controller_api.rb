@@ -3,7 +3,7 @@ module Wechat
     extend ActiveSupport::Concern
 
     module ClassMethods
-      attr_accessor :wechat_api_client, :token, :appid, :corpid, :agentid, :encrypt_mode, :timeout,
+      attr_accessor :wechat_api_client, :wechat_cfg_account, :token, :appid, :corpid, :agentid, :encrypt_mode, :timeout,
                     :skip_verify_ssl, :encoding_aes_key, :trusted_domain_fullname, :oauth2_cookie_duration
     end
 
