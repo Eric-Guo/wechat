@@ -24,7 +24,11 @@ module Wechat
                      request.original_url
                    end
       redirect_uri = CGI.escape(page_url)
-      oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}&state=#{wechat.jsapi_ticket.oauth2_state}#wechat_redirect"
+      if scope == 'snsapi_login'
+        oauth2_url = "https://open.weixin.qq.com/connect/qrconnect?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}&state=#{wechat.jsapi_ticket.oauth2_state}#wechat_redirect"
+      else
+        oauth2_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{appid}&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}&state=#{wechat.jsapi_ticket.oauth2_state}#wechat_redirect"
+      end
 
       return oauth2_url unless block_given?
       if self.class.corpid
