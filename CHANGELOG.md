@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.1
+
+* After allow sub controller using wechat_api, it's possible not initialise at first time. by @IvanChou #155
+* Support web application login scope snsapi_login.
+
 ## v0.8.0 (released at 10/24/2016)
 
 * Complete support multi-wechat public account. by @xiewenwei #150
