@@ -48,9 +48,11 @@ module Wechat
             params[:state].to_s == wechat.jsapi_ticket.oauth2_state.to_s # params[:state] maybe '' and wechat.jsapi_ticket.oauth2_state may be nil
         access_info = wechat.web_access_token(params[:code])
         cookies.signed_or_encrypted[:we_openid] = { value: access_info['openid'], expires: self.class.oauth2_cookie_duration.from_now }
+        cookies.signed_or_encrypted[:we_unionid] = { value: access_info['unionid'], expires: self.class.oauth2_cookie_duration.from_now }
         yield access_info['openid'], access_info
       else
-        yield cookies.signed_or_encrypted[:we_openid], { 'openid' => cookies.signed_or_encrypted[:we_openid] }
+        yield cookies.signed_or_encrypted[:we_openid], { 'openid' => cookies.signed_or_encrypted[:we_openid],
+                                                         'unionid' => cookies.signed_or_encrypted[:we_unionid] }
       end
     end
 
