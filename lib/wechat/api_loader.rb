@@ -23,6 +23,7 @@ HELP
     @configs = nil
 
     def self.config(account = :default)
+      account = :default if account.nil?
       @configs ||= loading_config!
       @configs[account.to_sym] || raise("Wechat configuration for #{account} is missing.")
     end
