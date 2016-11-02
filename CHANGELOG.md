@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.2 (released at 11/2/2016)
+
+# Bug which if not using multi-account but using web login.
+
 ## v0.8.1 (released at 11/2/2016)
 
 * After allow sub controller using wechat_api, it's possible not initialise at first time. by @IvanChou #155
