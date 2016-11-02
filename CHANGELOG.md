@@ -1,9 +1,10 @@
 # Changelog
 
-## v0.8.1
+## v0.8.1 (released at 11/2/2016)
 
 * After allow sub controller using wechat_api, it's possible not initialise at first time. by @IvanChou #155
 * Support web application login scope snsapi_login.
+* Add unionid support for public account.
 * Remove OpenId in Enterprise OAuth2 as it's not supported by Tecent.
 
 ## v0.8.0 (released at 10/24/2016)
