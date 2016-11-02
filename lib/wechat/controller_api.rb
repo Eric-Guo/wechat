@@ -61,12 +61,10 @@ module Wechat
         userinfo = wechat.getuserinfo(params[:code])
         cookies.signed_or_encrypted[:we_userid] = { value: userinfo['UserId'], expires: self.class.oauth2_cookie_duration.from_now }
         cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: self.class.oauth2_cookie_duration.from_now }
-        cookies.signed_or_encrypted[:we_openid] = { value: userinfo['OpenId'], expires: self.class.oauth2_cookie_duration.from_now }
         yield userinfo['UserId'], userinfo
       else
         yield cookies.signed_or_encrypted[:we_userid], { 'UserId' => cookies.signed_or_encrypted[:we_userid],
-                                                         'DeviceId' => cookies.signed_or_encrypted[:we_deviceid],
-                                                         'OpenId' => cookies.signed_or_encrypted[:we_openid] }
+                                                         'DeviceId' => cookies.signed_or_encrypted[:we_deviceid] }
       end
     end
   end
