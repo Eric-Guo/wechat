@@ -131,7 +131,7 @@ module Wechat
     end
 
     def template(opts = {})
-      template_fields = camelize_hash_keys(opts.symbolize_keys.slice(:template_id, :topcolor, :url, :data))
+      template_fields = opts.symbolize_keys.slice(:template_id, :topcolor, :url, :data)
       update(MsgType: 'template', Template: template_fields)
     end
 
@@ -154,10 +154,9 @@ module Wechat
     def to_json
       json_hash = deep_recursive(message_hash) do |key, value|
         key = key.to_s
-        [(TO_JSON_KEY_MAP[key] || key.downcase), value]
+        [(TO_JSON_KEY_MAP[key] || key), value]
       end
-
-      json_hash = json_hash.select { |k, _v| TO_JSON_ALLOWED.include? k }
+      json_hash = json_hash.transform_keys{ |key| key.downcase }.select { |k, _v| TO_JSON_ALLOWED.include? k }
       case json_hash['msgtype']
       when 'text'
         json_hash['text'] = { 'content' => json_hash.delete('content') }
