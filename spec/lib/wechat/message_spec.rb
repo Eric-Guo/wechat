@@ -303,16 +303,24 @@ RSpec.describe Wechat::Message do
       end
 
       specify 'can convert template message' do
-        request = Wechat::Message.to('toUser')
-                                 .template(template_id: 'template_id', url: 'http://weixin.qq.com/download',
-                                           data: { first: { value: '恭喜你购买成功！' } })
+        request = Wechat::Message.to('toUser').template(template_id: 'template_id', 
+                                          url: 'http://weixin.qq.com/download',
+                                          data: { 
+                                            first: { value: "恭喜你购买成功！" }, 
+                                            orderProductName: { value: "巧克力" }, 
+                                            orderMoneySum: { value: "39.8元" }, 
+                                            Remark: { value: "欢迎再次购买！" }
+                                          })
 
         expect(request.to_json).to eq({
           touser: 'toUser',
           template_id: 'template_id',
           url: 'http://weixin.qq.com/download',
-          data: {
-            first: { value: '恭喜你购买成功！' }
+          data: { 
+            first: { value: "恭喜你购买成功！" }, 
+            orderProductName: { value: "巧克力" }, 
+            orderMoneySum: { value: "39.8元" }, 
+            Remark: { value: "欢迎再次购买！" }
           }
         }.to_json)
       end
