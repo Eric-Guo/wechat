@@ -19,12 +19,13 @@ module Wechat
     end
   end
 
-  def self.config
-    ApiLoader.config
+  def self.config(account = :default)
+    ApiLoader.config(account)
   end
 
-  def self.api
-    @wechat_api ||= ApiLoader.with({})
+  def self.api(account = :default)
+    @wechat_apis ||= {}
+    @wechat_apis[account.to_sym] ||= ApiLoader.with(account: account)
   end
 end
 

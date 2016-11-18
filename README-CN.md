@@ -1,7 +1,7 @@
-WeChat [![Gem Version][version-badge]][rubygems] [![Build Status][travis-badge]][travis] [![Code Climate][codeclimate-badge]][codeclimate] [![Code Coverage][codecoverage-badge]][codecoverage]
+WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.org/gems/wechat) [![Build Status](https://travis-ci.org/Eric-Guo/wechat.svg)](https://travis-ci.org/Eric-Guo/wechat) [![Code Climate](https://codeclimate.com/github/Eric-Guo/wechat.png)](https://codeclimate.com/github/Eric-Guo/wechat) [![Code Coverage](https://codeclimate.com/github/Eric-Guo/wechat/coverage.png)](https://codeclimate.com/github/Eric-Guo/wechat/coverage)
 ======
 
-[![Join the chat][gitter-badge]][gitter] [![Issue Stats][issue-badge]][issuestats] [![PR Stats][pr-badge]][issuestats]
+[![Join the chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平台](https://mp.weixin.qq.com/)和[企业平台](https://qy.weixin.qq.com)提供的服务，包括：
 
@@ -23,25 +23,25 @@ WeChat gem 可以帮助开发者方便地在Rails环境中集成微信[公众平
 
 ## 安装
 
-Using `gem install`
+使用 `gem install`
 
 ```
 gem install "wechat"
 ```
 
-Or add to your app's `Gemfile`:
+或者添加下面这行到 `Gemfile`:
 
 ```
 gem 'wechat'
 ```
 
-Run the following command to install it:
+运行下面这行代码来安装:
 
 ```console
 bundle install
 ```
 
-Run the generator:
+运行下面这行代码来生成必要文件:
 
 ```console
 rails generate wechat:install
@@ -159,10 +159,31 @@ production:
 development:
   <<: *default
   trusted_domain_fullname: "http://your_dev.proxy.qqbrowser.cc"
-  
+
 test:
   <<: *default
+
+ # Multiple Accounts
+ #
+ # wx2_development:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
+ #  access_token: "tmp/wechat_access_token2"
+ #  jsapi_ticket: "tmp/wechat_jsapi_ticket2"
+ #
+ # wx2_test:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
+ #
+ # wx2_production:
+ #  <<: *default
+ #  appid: "my_appid"
+ #  secret: "my_secret"
 ```
+
+进一步的多账号支持参见[PR 150](https://github.com/Eric-Guo/wechat/pull/150)。
 
 ##### 配置优先级
 
@@ -179,6 +200,16 @@ Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://
 #### 为每个Responder配置不同的appid和secret
 
 有些情况下，单个Rails应用可能需要处理来自多个微信公众号的消息，您可以通过在`wechat_responder`和`wechat_api`后配置多个相关参数来支持多账号。
+
+```ruby
+class WechatFirstController < ActionController::Base
+   wechat_responder account: :new_account
+
+   on :text, with:"help", respond: "help content"
+end
+```
+
+或者直接完整配置
 
 ```ruby
 class WechatFirstController < ActionController::Base
@@ -242,7 +273,7 @@ end
 
 `wechat_oauth2`封装了OAuth2.0验证接口和cookie处理逻辑，用户仅需提供业务代码块即可。userid指的是微信企业成员UserID，openid是关注该公众号的用户openid。
 
-注意: 
+注意:
 * 如果使用 `wechat_responder`, 请不要在 Controller 里定义 `show` 和 `create` 方法, 否则会报错。
 * 如果遇到“redirect_uri参数错误”的错误信息，请登录服务号管理后台，查看“开发者中心/网页服务/网页授权获取用户基本信息”的授权回调页面域名已正确配置。
 
@@ -266,7 +297,7 @@ Wechat commands:
   wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
   wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
   wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息
-  wechat customservice_getonlinekflist                     # 获取在线客服接待信息  
+  wechat customservice_getonlinekflist                     # 获取在线客服接待信息
   wechat group_create [GROUP_NAME]                         # 创建分组
   wechat group_delete [GROUP_ID]                           # 删除分组
   wechat group_update [GROUP_ID, NEW_GROUP_NAME]           # 修改分组名
@@ -280,18 +311,25 @@ Wechat commands:
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat media_uploadimg [IMAGE_PATH]                      # 上传图文消息内的图片
   wechat menu                                              # 当前菜单
-  wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]  # 创建个性化菜单  
+  wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]  # 创建个性化菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
-  wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单  
+  wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单
   wechat menu_delete                                       # 删除菜单
-  wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果  
+  wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
   wechat short_url [LONG_URL]                              # 长链接转短链接
+  wechat tag [TAGID]                                       # 获取标签下粉丝列表
+  wechat tag_add_user [TAG_ID, OPEN_IDS]                   # 批量为用户打标签
+  wechat tag_create [TAGNAME, TAG_ID]                      # 创建标签
+  wechat tag_del_user [TAG_ID, OPEN_IDS]                   # 批量为用户取消标签
+  wechat tag_delete [TAG_ID]                               # 删除标签
+  wechat tag_update [TAG_ID, TAGNAME]                      # 更新标签名字
+  wechat tags                                              # 获取所有标签
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat user [OPEN_ID]                                    # 获取用户基本信息
-  wechat user_batchget [OPEN_ID_LIST]                      # 批量获取用户基本信息  
+  wechat user_batchget [OPEN_ID_LIST]                      # 批量获取用户基本信息
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]          # 移动用户分组
   wechat user_group [OPEN_ID]                              # 查询用户所在分组
   wechat user_update_remark [OPEN_ID, REMARK]              # 设置备注名
@@ -330,9 +368,12 @@ Wechat commands:
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat media_uploadimg [IMAGE_PATH]                      # 上传图文消息内的图片
   wechat menu                                              # 当前菜单
+  wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]  # 创建个性化菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
+  wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单
   wechat menu_delete                                       # 删除菜单
-  wechat message_send [USERID, TEXT_MESSAGE]               # 发送文字消息
+  wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
+  wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
   wechat tag [TAG_ID]                                      # 获取标签成员
   wechat tag_add_department [TAG_ID, PARTY_IDS]            # 增加标签部门
@@ -342,7 +383,7 @@ Wechat commands:
   wechat tag_del_user [TAG_ID, USER_IDS]                   # 删除标签成员
   wechat tag_delete [TAG_ID]                               # 删除标签
   wechat tag_update [TAG_ID, TAGNAME]                      # 更新标签名字
-  wechat tags                                              # 获取标签列表
+  wechat tags                                              # 获取所有标签
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
   wechat upload_replaceparty [BATCH_PARTY_CSV_PATH]        # 上传文件方式全量覆盖部门
   wechat upload_replaceuser [BATCH_USER_CSV_PATH]          # 上传文件方式全量覆盖成员
@@ -462,19 +503,19 @@ template:
   data:
     first:
       value: "您好，您已报名成功"
-      color: "#0A0A0A"      
+      color: "#0A0A0A"
     keynote1:
       value: "XX活动"
-      color: "#CCCCCC"      
+      color: "#CCCCCC"
     keynote2:
       value: "2014年9月16日"
-      color: "#CCCCCC"     
+      color: "#CCCCCC"
     keynote3:
       value: "上海徐家汇xxx城"
-      color: "#CCCCCC"                 
+      color: "#CCCCCC"
     remark:
       value: "欢迎再次使用。"
-      color: "#173177"          
+      color: "#173177"
 
 ```
 
@@ -487,15 +528,15 @@ $ wechat template_message oCfEht9oM*********** template.yml
 在代码中可以这样使用：
 
 ```ruby
-template = YAML.load(File.read(template_yaml_path)).symbolize_keys
-Wechat.api.template_message_send Wechat::Message.to(openid).template(template)
+template = YAML.load(File.read(template_yaml_path))
+Wechat.api.template_message_send Wechat::Message.to(openid).template(template['template'])
 ```
 
 若在Controller中使用wechat_api或者wechat_responder，可以使用wechat：
 
 ```ruby
-template = YAML.load(File.read(template_yaml_path)).symbolize_keys
-wechat.template_message_send Wechat::Message.to(openid).template(template)
+template = YAML.load(File.read(template_yaml_path))
+wechat.template_message_send Wechat::Message.to(openid).template(template['template'])
 ```
 
 ## wechat_api - Rails Controller Wechat API
@@ -606,6 +647,11 @@ class WechatsController < ActionController::Base
     request.reply.video(request[:MediaId], title: '回声', description: "#{nickname}发来的视频请求") #直接视频返回给用户
   end
 
+  # 处理地理位置消息
+  on :label_location do |request|
+    request.reply.text("Label: #{request[:Label]} Location_X: #{request[:Location_X]} Location_Y: #{request[:Location_Y]} Scale: #{request[:Scale]}")
+  end
+
   # 处理上报地理位置事件
   on :location do |request|
     request.reply.text("Latitude: #{request[:Latitude]} Longitude: #{request[:Longitude]} Precision: #{request[:Precision]}")
@@ -663,6 +709,7 @@ end
 - :voice 响应语音消息
 - :shortvideo 响应短视频消息
 - :video 响应视频消息
+- :label_location 响应地理位置消息
 - :link 响应链接消息
 - :event 响应事件消息, 可以用`:with`参数来匹配事件类型，同文字消息类似，支持正则表达式匹配
 - :click 虚拟响应事件消息, 微信传入:event，但gem内部会单独处理
@@ -704,17 +751,3 @@ end
 * 企业号接受菜单消息时，Wechat腾讯服务器无法解析部分域名，请使用IP绑定回调URL，用户的普通消息目前不受影响。
 * 企业号全量覆盖成员使用的csv通讯录格式，直接将下载的模板导入[是不工作的](http://qydev.weixin.qq.com/qa/index.php?qa=13978)，必须使用Excel打开，然后另存为csv格式才会变成合法格式。
 * 如果使用nginx+unicron部署方案，并且使用了https，必须设置`trusted_domain_fullname`为https，否则会导致JS-SDK签名失效。
-
-[version-badge]: https://badge.fury.io/rb/wechat.svg
-[rubygems]: https://rubygems.org/gems/wechat
-[travis-badge]: https://travis-ci.org/Eric-Guo/wechat.svg
-[travis]: https://travis-ci.org/Eric-Guo/wechat
-[codeclimate-badge]: https://codeclimate.com/github/Eric-Guo/wechat.png
-[codeclimate]: https://codeclimate.com/github/Eric-Guo/wechat
-[codecoverage-badge]: https://codeclimate.com/github/Eric-Guo/wechat/coverage.png
-[codecoverage]: https://codeclimate.com/github/Eric-Guo/wechat/coverage
-[gitter-badge]: https://badges.gitter.im/Join%20Chat.svg
-[gitter]: https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-[issue-badge]: http://issuestats.com/github/Eric-Guo/wechat/badge/issue
-[pr-badge]: http://issuestats.com/github/Eric-Guo/wechat/badge/pr
-[issuestats]: http://issuestats.com/github/Eric-Guo/wechat

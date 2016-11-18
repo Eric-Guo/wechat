@@ -12,8 +12,11 @@ Gem::Specification.new do |s|
   s.summary     = 'DSL for wechat message handling and API'
   s.description = 'API, command and message handling for WeChat in Rails'
 
-  s.files = Dir['{bin,lib}/**/*'] + %w(LICENSE Rakefile README.md README-CN.md CHANGELOG.md)
+  s.files = Dir['{bin,lib}/**/*'] + %w(LICENSE README.md README-CN.md CHANGELOG.md)
   s.executables << 'wechat'
+
+  s.cert_chain  = ['certs/Eric-Guo.pem']
+  s.signing_key = File.expand_path('~/.ssh/gem-private_key.pem') if $PROGRAM_NAME.end_with?('gem')
 
   s.add_runtime_dependency 'activesupport', '>= 3.2', '< 5.1.x'
   s.add_runtime_dependency 'nokogiri', '>=1.6.0'

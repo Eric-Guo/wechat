@@ -1,5 +1,45 @@
 # Changelog
 
+## v0.8.2 (released at 11/2/2016)
+
+# Bug which if not using multi-account but using web login.
+
+## v0.8.1 (released at 11/2/2016)
+
+* After allow sub controller using wechat_api, it's possible not initialise at first time. by @IvanChou #155
+* Support web application login scope snsapi_login.
+* Add unionid support for public account.
+* Remove OpenId in Enterprise OAuth2 as it's not supported by Tecent.
+
+## v0.8.0 (released at 10/24/2016)
+
+* Complete support multi-wechat public account. by @xiewenwei #150
+* Support loading configure value from Figaro if application.yml exist.
+
+## v0.7.20 (released at 8/29/2016)
+
+* Apply opt and config together when loading controller_wechat, to simplify wechat_responder params. by @bzhang443 #147
+
+## v0.7.19 (released at 8/25/2016)
+
+* Enterprise account now custom_image/voice/file works now. by @zymiboxpay #145
+* Fix timeout setting no effective since introduct HTTP. found by @hsluo #74
+
+## v0.7.18 (released at 8/21/2016)
+
+* Support label_location message, similar to location event, but sent by user with Label. #144
+* Add gem signature as additional security methods.
+
+## v0.7.17 (released at 8/18/2016)
+
+* Allow declare wechat_api at ApplicationController, but using wechat at sub controller. #104 
+
+## v0.7.16 (released at 7/27/2016)
+
+* FIX: consider '' in params as equal with nil, in ControllerApi#wechat_public_oauth2, by @snow #135
+* New tag API for public account, by @pynixwang #127
+* fix SSLv3 error by use TLSv1_client, by @IvanChou #133
+
 ## v0.7.15 (released at 7/03/2016)
 
 * RSpec testing case on Rails 5 now.

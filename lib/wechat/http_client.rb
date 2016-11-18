@@ -2,11 +2,11 @@ require 'http'
 
 module Wechat
   class HttpClient
-    attr_reader :base, :ssl_context
+    attr_reader :base, :ssl_context, :httprb
 
     def initialize(base, timeout, skip_verify_ssl)
       @base = base
-      HTTP.timeout(:global, write: timeout, connect: timeout, read: timeout)
+      @httprb = HTTP.timeout(:global, write: timeout, connect: timeout, read: timeout)
       @ssl_context = OpenSSL::SSL::SSLContext.new
       @ssl_context.ssl_version = :TLSv1_client
       @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE if skip_verify_ssl
@@ -15,21 +15,21 @@ module Wechat
     def get(path, get_header = {})
       request(path, get_header) do |url, header|
         params = header.delete(:params)
-        HTTP.headers(header).get(url, params: params, ssl_context: ssl_context)
+        httprb.headers(header).get(url, params: params, ssl_context: ssl_context)
       end
     end
 
     def post(path, payload, post_header = {})
       request(path, post_header) do |url, header|
         params = header.delete(:params)
-        HTTP.headers(header).post(url, params: params, body: payload, ssl_context: ssl_context)
+        httprb.headers(header).post(url, params: params, body: payload, ssl_context: ssl_context)
       end
     end
 
     def post_file(path, file, post_header = {})
       request(path, post_header) do |url, header|
         params = header.delete(:params)
-        HTTP.headers(header)
+        httprb.headers(header)
           .post(url, params: params,
                      form: { media: HTTP::FormData::File.new(file),
                              hack: 'X' }, # Existing here for http-form_data 1.0.1 handle single param improperly
