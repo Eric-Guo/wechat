@@ -152,20 +152,13 @@ module Wechat
     TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid).freeze
 
     def to_json
-      if message_hash[:MsgType] == "template"
-        json_hash = deep_recursive(message_hash) do |key, value|
-          key = key.to_s
-          [(TO_JSON_KEY_MAP[key] || key), value]
-        end
-        json_hash = json_hash.transform_keys{ |key| key.downcase }.select { |k, _v| TO_JSON_ALLOWED.include? k }
-      else
-        json_hash = deep_recursive(message_hash) do |key, value|
-          key = key.to_s
-          [(TO_JSON_KEY_MAP[key] || key.downcase), value]
-        end
-        json_hash = json_hash.select { |k, _v| TO_JSON_ALLOWED.include? k }
+      keep_camel_case_key = message_hash[:MsgType] == 'template'
+      json_hash = deep_recursive(message_hash) do |key, value|
+        key = key.to_s
+        [(TO_JSON_KEY_MAP[key] || (keep_camel_case_key ? key : key.downcase)), value]
       end
-      
+      json_hash = json_hash.transform_keys(&:downcase).select { |k, _v| TO_JSON_ALLOWED.include? k }
+
       case json_hash['msgtype']
       when 'text'
         json_hash['text'] = { 'content' => json_hash.delete('content') }
