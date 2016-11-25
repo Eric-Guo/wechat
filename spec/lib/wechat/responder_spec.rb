@@ -437,7 +437,10 @@ RSpec.describe WechatController, type: :controller do
       end
     end
 
-    before(:each) { routes.draw { get 'oauth2_page', to: 'wechat#oauth2_page' } }
+    before(:each) do
+      routes.draw { get 'oauth2_page', to: 'wechat#oauth2_page' }
+      allow(controller.wechat.jsapi_ticket).to receive(:oauth2_state) {'oauth2_state'}
+    end
 
     it 'will redirect_to tencent page at first visit' do
       get :oauth2_page
@@ -448,7 +451,7 @@ RSpec.describe WechatController, type: :controller do
       oauth2_result = { 'openid' => 'openid' }
       expect(controller.wechat).to receive(:web_access_token)
         .with('code_id').and_return(oauth2_result)
-      get :oauth2_page, params: { code: 'code_id' }
+      get :oauth2_page, params: { code: 'code_id', state: 'oauth2_state' }
       expect(response.body).to eq 'openid'
       expect(cookies.signed_or_encrypted[:we_openid]).to eq 'openid'
     end
