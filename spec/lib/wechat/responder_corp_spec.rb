@@ -294,7 +294,7 @@ RSpec.describe WechatCorpController, type: :controller do
           oauth2_result = { 'UserId' => 'userid', 'DeviceId' => 'deviceid' }
           expect(controller.wechat).to receive(:getuserinfo)
             .with('code_id').and_return(oauth2_result)
-          get :oauth2_page, params: { code: 'code_id' }
+          get :oauth2_page, params: { code: 'code_id', state: controller.wechat.jsapi_ticket.oauth2_state }
           expect(response.body).to eq 'userid'
           expect(cookies.signed_or_encrypted[:we_deviceid]).to eq 'deviceid'
         end
