@@ -12,19 +12,19 @@ module Wechat
     end
 
     def wechat_oauth2(scope = 'snsapi_base', page_url = nil, &block)
-      appid = self.class.corpid || self.class.appid || -> {
+      appid = self.class.corpid || self.class.appid || lambda do
         self.class.wechat # to initialize wechat_api_client at first time call wechat_oauth2
         self.class.corpid || self.class.appid
-      }.call
+      end.call
       raise 'Can not get corpid or appid, so please configure it first to using wechat_oauth2' if appid.blank?
 
       wechat.jsapi_ticket.ticket if wechat.jsapi_ticket.oauth2_state.nil?
       oauth2_params = {
-          appid: appid,
-          redirect_uri: page_url,
-          scope: scope,
-          response_type: 'code',
-          state: wechat.jsapi_ticket.oauth2_state
+        appid: appid,
+        redirect_uri: page_url,
+        scope: scope,
+        response_type: 'code',
+        state: wechat.jsapi_ticket.oauth2_state
       }
 
       return generate_oauth2_url(oauth2_params) unless block_given?
@@ -34,7 +34,8 @@ module Wechat
     private
 
     def wechat_public_oauth2(oauth2_params)
-      openid, unionid = cookies.signed_or_encrypted[:we_openid], cookies.signed_or_encrypted[:we_unionid]
+      openid  = cookies.signed_or_encrypted[:we_openid]
+      unionid = cookies.signed_or_encrypted[:we_unionid]
       if openid.present?
         yield openid, { 'openid' => openid, 'unionid' => unionid }
       elsif params[:code].present? && params[:state] == oauth2_params[:state]
@@ -48,7 +49,8 @@ module Wechat
     end
 
     def wechat_corp_oauth2(oauth2_params)
-      userid, deviceid = cookies.signed_or_encrypted[:we_userid], cookies.signed_or_encrypted[:we_deviceid]
+      userid   = cookies.signed_or_encrypted[:we_userid]
+      deviceid = cookies.signed_or_encrypted[:we_deviceid]
       if userid.present? && deviceid.present?
         yield userid, { 'UserId' => userid, 'DeviceId' => deviceid }
       elsif params[:code].present? && params[:state] == oauth2_params[:state]
@@ -74,6 +76,5 @@ module Wechat
         "https://open.weixin.qq.com/connect/oauth2/authorize?#{oauth2_params.to_query}#wechat_redirect"
       end
     end
-
   end
 end
