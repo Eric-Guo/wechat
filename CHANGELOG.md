@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.3 (released at 11/26/2016)
+
+# Fix wechat template key has camelCase problem, by @RyanChenDji #159
+# Fix long time of oauth2_state bug for wechat_oauth2 methods, by @IvanChou #162
+
 ## v0.8.2 (released at 11/2/2016)
 
 # Bug which if not using multi-account but using web login.
