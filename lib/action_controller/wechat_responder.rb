@@ -52,9 +52,7 @@ module ActionController
     class << Base
       include WechatResponder
     end
-  end
-
-  if defined? API
+  elsif defined? API
     class << API
       include WechatResponder
     end
