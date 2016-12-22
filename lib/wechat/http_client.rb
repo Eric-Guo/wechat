@@ -68,7 +68,8 @@ module Wechat
       content_type = response.headers[:content_type]
       parse_as = {
         %r{^application\/json} => :json,
-        %r{^image\/.*} => :file
+        %r{^image\/.*}         => :file,
+        %r{^text\/html}        => :xml
       }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || as || :text
 
       case parse_as
@@ -81,6 +82,8 @@ module Wechat
 
       when :json
         data = JSON.parse response.body.to_s.gsub(/[\u0000-\u001f]+/, '')
+      when :xml
+        data = Hash.from_xml(response.body.to_s)
       else
         data = response.body
       end
