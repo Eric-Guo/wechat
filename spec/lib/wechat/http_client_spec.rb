@@ -51,11 +51,12 @@ RSpec.describe Wechat::HttpClient do
     specify 'will add accept=>:xml for request' do
       block = lambda do |url, headers|
         expect(url).to eq('http://host/token')
-        expect(headers).to eq(params: { access_token: '1234' }, 'Accept' => 'text/html')
+        expect(headers).to eq(params: { access_token: '1234' }, 'Accept' => 'application/json')
         response_xml
       end
 
-      subject.send(:request, 'token', params: { access_token: '1234' }, 'Accept' => 'text/html', &block)
+      return_hash_by_xml = subject.send(:request, 'token', params: { access_token: '1234' }, as: :xml, &block)
+      expect(return_hash_by_xml).to include({"xml"=>{"result_code"=>"SUCCESS"}})
     end
 
     specify 'will use base option to construct url' do

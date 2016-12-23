@@ -42,7 +42,7 @@ module Wechat
     def request(path, header = {}, &_block)
       url_base = header.delete(:base) || base
       as = header.delete(:as)
-      header['Accept'] ||= 'application/json'
+      header['Accept'] = 'application/json'
       response = yield("#{url_base}#{path}", header)
 
       raise "Request not OK, response status #{response.status}" if response.status != 200
