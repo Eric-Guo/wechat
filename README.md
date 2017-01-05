@@ -5,9 +5,9 @@ WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.or
 
 [中文文档 Chinese document](/README-CN.md)
 
-[Wechat](http://www.wechat.com/) is a free messaging and calling app developed by [Tencent](http://tencent.com/en-us/index.shtml), after linking billion people, Wechat had become [a platform of application](https://uxdesign.cc/wechat-the-invincible-app-a-key-to-business-success-in-china-8e9a920deb26?source=wechat_gem).
+[Wechat](http://www.wechat.com/) is a free messaging and calling app developed by [Tencent](http://tencent.com/en-us/index.shtml), after linking billion people, Wechat had become [an application platform](https://uxdesign.cc/wechat-the-invincible-app-a-key-to-business-success-in-china-8e9a920deb26?source=wechat_gem).
 
-WeChat gem tries to help Rails developer to integrate [enterprise account](https://qy.weixin.qq.com) / [public account](https://mp.weixin.qq.com/) easily. Features below are ready and there is no need writing adapter code for talking to wechat server directly.
+WeChat gem tries to help Rails developer to integrate [enterprise account](https://qy.weixin.qq.com) / [public account](https://mp.weixin.qq.com/) easily. Features below are ready and there is no need to write adapter code for talking to wechat server directly.
 
 - [Sending message](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF) API（Can access via console or in rails）
 - [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（You must run on rails server to receiving message）
@@ -18,15 +18,15 @@ WeChat gem tries to help Rails developer to integrate [enterprise account](https
 
 `wechat` command shares the same API in console, so you can interactive with wechat server quickly, without starting up web environment/code.
 
-A responder DSL can be used in Rails controller, so giving an event based interface to handle messages sent by end user from wechat server.
+A responder DSL can be used in Rails controller, giving an event based interface to handle messages sent by end user from wechat server.
 
-Wechat provides OAuth2.0 authentication method `wechat_oauth2`, possibly the easiest way, for the users who perfer using devise style authorization gems, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) can be a good option.
+Wechat provides OAuth2.0 authentication method `wechat_oauth2`, possibly the easiest way, for the users who prefer using devise style authorization gems, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) can be a good option.
 
-There is official [weui](https://github.com/weui/weui), which corresponding Rails gems called [weui-rails](https://github.com/Eric-Guo/weui-rails) available, if you prefer following the same UI design as wechat.
+There is official [weui](https://github.com/weui/weui), corresponding Rails gem called [weui-rails](https://github.com/Eric-Guo/weui-rails) is available, if you prefer following the same UI design as wechat.
 
 For web page only wechat application, please use [`wechat_api`](#wechat_api---rails-controller-wechat-api), which only contains web feature compare with traditional message type [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl).
 
-There is a more complete [wechat-starter](https://github.com/goofansu/wechat-starter) demo available, even include the payment SDK feature.
+There is a more complete [wechat-starter](https://github.com/goofansu/wechat-starter) demo available, which even includes the payment SDK feature.
 
 ## Installation
 
@@ -54,7 +54,7 @@ Run the generator:
 rails generate wechat:install
 ```
 
-`rails g wechat:install` will generated the initial `wechat.yml` configuration file, including an example wechat controller and corresponding routes.
+`rails g wechat:install` will generated the initial `wechat.yml` configuration file, including an sample wechat controller and corresponding routes.
 
 Enable session record:
 
@@ -63,7 +63,7 @@ rails g wechat:session
 rake db:migrate
 ```
 
-Enable session record will generate two files in Rails folder,  User can add more column fields in *wechat_session* table and add declare to link to users table, it's also possible to store data directly in **hash_store**. if you are using PostgreSQL, using [hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)/json maybe better, but the best way is still add dedicate column to record the data, the Rails way.
+Enabling session will generate two files in Rails folder, you can add more columns to *wechat_session* table and add declaration to link to users table, it's also possible to store data directly in **hash_store**. if you are using PostgreSQL, using [hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)/json maybe better, but the best way is still to add a dedicate column to record the data, the Rails way.
 
 Using Redis to store wechat token and ticket:
 
@@ -71,21 +71,21 @@ Using Redis to store wechat token and ticket:
 rails g wechat:redis_store
 ```
 
-Redis store support Rails application running in multi-server, no need to enable it if your Rails application running in one server only, the wechat command won't read the token/ticket store in Redis.
+Redis store supports Rails application running in multi-server, no need to enable it if your Rails application is running on one server only, the wechat command won't read the token/ticket stored in Redis.
 
 ## Configuration
 
-#### Configure for wechat for first time
+#### Configure wechat for the first time
 
-Make sure finish all the setup on rails side first, then submit to wechat. Otherwise, wechat will raise error.
+Make sure to finish all the setup on rails side first, then submit to wechat. Otherwise, wechat will raise error.
 
-URL address for wechat by running `rails g wechat:install` is `http://your-server.com/wechat`
+URL address for wechat created by running `rails g wechat:install` is `http://your-server.com/wechat`
 
 How to setup appid/corpid and secret see below section.
 
 #### Configure for command line
 
-To using `wechat` command solely, needs created configure file `~/.wechat.yml` and including below content for public account. the access_token will be write as a file.
+To use `wechat` command solely, you need to create configuration file `~/.wechat.yml` and include content below  for public account. The access_token will be written to a file.
 
 ```
 appid: "my_appid"
@@ -93,22 +93,22 @@ secret: "my_secret"
 access_token: "/var/tmp/wechat_access_token"
 ```
 
-For enterprise account, need using `corpid` instead of `appid` as enterprise account support multiply application (Tencent called agent) in one enterprise account. Obtain the `corpsecret` is a little tricky, must created at management mode->privilege setting and create any of management group to obtain. Due to Tencent currently only provide Chinese interface for they management console, it's highly recommend you find a college knowing Mandarin to help you to obtain.
+For enterprise account, you need to use `corpid` instead of `appid` as enterprise account supports multiply application (Tencent calls them agents) in one enterprise account. Obtaining the `corpsecret` is a little bit tricky, must be created at management mode->privilege setting and create any of management group to obtain. Due to Tencent currently only providing Chinese interface for their management console, it's highly recommended you find a colleague knowing Mandarin to help you to obtain the `corpsecret`.
 
-Windows user need store `.wechat.yml` at `C:/Users/[user_name]/` (replace your user name), also be caution the direction of folder separator.
+Windows users need to store `.wechat.yml` at `C:/Users/[user_name]/` (replace with your user name), also pay attention to the direction of folder separator.
 
 ```
 corpid: "my_appid"
 corpsecret: "my_secret"
-agentid: 1 # Integer, which can be obtain from application, settings
+agentid: 1 # Integer, which can be obtained from application settings
 access_token: "C:/Users/[user_name]/wechat_access_token"
 ```
 
 #### Configure for Rails
 
-Rails configuration files support different environment similar to database.yml, after running `rails generate wechat:install` you can find configuration files at `config/wechat.yml`
+Rails configuration file supports different environment similar to database.yml, after running `rails generate wechat:install` you can find configuration file at `config/wechat.yml`
 
-Public account congfigure example：
+Public account configuration example：
 
 ```
 default: &default
@@ -134,7 +134,7 @@ test:
   <<: *default
 ```
 
-Although it's optional for public account, but highly recommend to enable encrypt mode by add below two items to `wechat.yml`
+Although it's optional for public account, but highly recommended to enable encrypt mode by adding these two items to `wechat.yml`
 
 
 ```
@@ -143,9 +143,9 @@ default: &default
   encoding_aes_key:  "my_encoding_aes_key"
 ```
 
-Enterprise account must using encrypt mode (`encrypt_mode: true` is default on, no need configure).
+Enterprise account must use encrypt mode (`encrypt_mode: true` is on by default, no need to configure).
 
-The `token` and `encoding_aes_key` can be obtain from management console -> one of the agent application -> Mode selection, select callback mode and get/set.
+The `token` and `encoding_aes_key` can be obtained from management console -> one of the agent application -> Mode selection, select callback mode and get/set.
 
 ```
 default: &default
@@ -196,23 +196,23 @@ test:
  #  secret: "my_secret"
 ```
 
-Detail multiple accounts can reference [PR 150](https://github.com/Eric-Guo/wechat/pull/150)
+For multiple accounts details reference [PR 150](https://github.com/Eric-Guo/wechat/pull/150)
 
 ##### Configure priority
 
-Running `wechat` command in the root folder of Rails application will using the Rails configuration first (`default` section), if can not find it, will relay on `~\.wechat.yml`, such behavior enable manage more wechat public account and enterprise account without changing your home `~\.wechat.yml` file.
+Running `wechat` command in the root folder of Rails application will be using the Rails configuration first (`default` section), if can not find it, will relay on `~\.wechat.yml`, such behavior enables managing more wechat public account and enterprise account without changing your home `~\.wechat.yml` file.
 
 ##### Wechat server timeout setting
 
-Stability various even for Tencent wechat server, so setting a long timeout may needed, default is 20 seconds if not set.
+Stability varies for Tencent wechat server, so setting a long timeout may be needed, default is 20 seconds if not set.
 
 ##### Skip the SSL verification
 
-SSL Certification can also be corrupted by some reason in China, [it's reported](http://qydev.weixin.qq.com/qa/index.php?qa=11037) and if it's happen to you, can setting `skip_verify_ssl: true`. (not recommend)
+SSL Certification can also be corrupted for some reason in China, [it's reported](http://qydev.weixin.qq.com/qa/index.php?qa=11037) and if it happens to you, you can set `skip_verify_ssl: true`. (not recommend)
 
 #### Configure individual responder with different appid
 
-Sometime, you may want to hosting more than one enterprise/public wechat account in one Rails application, so you can given those configuration info when calling `wechat_responder` or `wechat_api`
+Sometimes, you may want to host more than one enterprise/public wechat account in one Rails application, so you can provide this configuration info when calling `wechat_responder` or `wechat_api`
 
 ```ruby
 class WechatFirstController < ActionController::Base
@@ -221,7 +221,7 @@ class WechatFirstController < ActionController::Base
    on :text, with:"help", respond: "help content"
 end
 
-Or you can config full options.
+Or you can provide full list of options.
 
 ```ruby
 class WechatFirstController < ActionController::Base
@@ -233,9 +233,9 @@ end
 
 #### JS-SDK helper
 
-JS-SDK enable you control Wechat App behavior in html, by inject a config signature, helper `wechat_config_js` do that in more simple way:
+JS-SDK gives you control over Wechat App behavior in html, by injecting a config signature, helper `wechat_config_js` does that in a simple way:
 
-To make wechat_config_js works, you need put [`wechat_api`](#wechat_api---rails-controller-wechat-api) or [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl) at controller first.
+To make wechat_config_js work, you need to put [`wechat_api`](#wechat_api---rails-controller-wechat-api) or [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl) at controller first.
 
 ```erb
 <body>
@@ -249,11 +249,11 @@ To make wechat_config_js works, you need put [`wechat_api`](#wechat_api---rails-
 </body>
 ```
 
-Configure the `trusted_domain_fullname` if you are in development mode and app running behind a reverse proxy server, otherwise wechat gem can not get the correct url to be signature later.
+Configure the `trusted_domain_fullname` if you are in development mode and app is running behind a reverse proxy server, otherwise wechat gem won't be able to get the correct url to be signed later.
 
 #### OAuth2.0 authentication
 
-For public account, below code will get flollowing user's info.
+For public account, code below will get following user's info.
 
 ```ruby
 class CartController < ActionController::Base
@@ -267,7 +267,7 @@ class CartController < ActionController::Base
 end
 ```
 
-For enterprise account, below code will get enterprise member's userinfo.
+For enterprise account, code below will get enterprise member's userinfo.
 
 ```ruby
 class WechatsController < ActionController::Base
@@ -283,22 +283,22 @@ class WechatsController < ActionController::Base
 end
 ```
 
-`wechat_oauth2` already implement the necessory OAuth2.0 and cookie logic. userid defined as the enterprise member UserID. openid defined as the user who following the public account, also notice openid will be different for the same user for different following public account.
+`wechat_oauth2` already implements the necessary OAuth2.0 and cookie logic. userid defined as the enterprise member UserID. openid defined as the user who following the public account, also notice openid will be different for the same user for different following public accounts.
 
 Notice:
-* If you use `wechat_responder` in your controller, you cannot use `create` and `show` action in your controller, otherwise will throw errors.
-* If you get *redirect_uri parameter error* message, make sure you set the correct callback site url value in wechat management console with path *Development center / Webpage service / Webpage authorization for retrieving user basic informaiton*.
+* If you use `wechat_responder` in your controller, you cannot use `create` and `show` action in your controller, otherwise it will throw errors.
+* If you get *redirect_uri parameter error* message, make sure you set the correct callback url value in wechat management console with path *Development center / Webpage service / Webpage authorization for retrieving user basic information*.
 
 
 ## The API privilege
 
-wechat gems won't handle any privilege exception. (except token time out, but it's not important to you as it's auto retry/recovery in gems internally), but Tencent will control a lot of privilege based on your public account type and certification, more info, please reference [official document](http://mp.weixin.qq.com/wiki/7/2d301d4b757dedc333b9a9854b457b47.html).
+wechat gems won't handle any privilege exceptions. (except token timeout, but it's not important to you as it's auto retry/recovery in gems internally), but Tencent will control a lot of privilege based on your public account type and certification, for more info please reference [official document](http://mp.weixin.qq.com/wiki/7/2d301d4b757dedc333b9a9854b457b47.html).
 
 ## Command line mode
 
 The available API is different between public account and enterprise account, so wechat gems provide different set of command.
 
-Feel safe if you can not read Chinese in the comments, it's keep there in order to copy & find in official document more easier.
+Feel safe if you can not read Chinese in the comments, it's kept there in order to copy & find in the official documentation easier.
 
 #### Public account command line
 
@@ -440,7 +440,7 @@ $ wechat menu
 
 ##### Menu create
 
-Running command `rails g wechat:menu` to generate a menu defination yaml file:
+Running command `rails g wechat:menu` to generate a menu definition yaml file:
 
 ```
 button:
@@ -476,18 +476,18 @@ button:
   url:  "http://blog.cloud-mes.com/"
 ```
 
-Running below command to upload the menu:
+Running command below to upload the menu:
 
 ```
 $ wechat menu_create menu.yaml
 ```
 
-Caution: make sure you having management privilege for those application， otherwise will got [60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E) error.
+Caution: make sure you have management privilege for this application， otherwise you will get [60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E) error.
 
-##### Sent custom news
+##### Send custom news
 
 
-Sending custom_news should also defined as a yaml file, like `articles.yml`
+Sending custom_news should also be defined as a yaml file, like `articles.yml`
 
 ```
 articles:
@@ -498,16 +498,16 @@ articles:
   pic_url: "http://i3.sinaimg.cn/dy/c/2014-04-01/1396366518_bYays1.jpg"
 ```
 
-After that, can running command:
+After that, you can run this command:
 
 ```
 $ wechat custom_news oCfEht9oM*********** articles.yml
 
 ```
 
-##### Sent template message
+##### Send template message
 
-Sending template message via yaml file similar too, defined `template.yml` and content is just the template content.
+Sending template message via yaml file is similar, too, define `template.yml` and content is just the template content.
 
 ```
 template:
@@ -516,7 +516,7 @@ template:
   topcolor: "#FF0000"
   data:
     first:
-      value: "Hello, you successfully registed"
+      value: "Hello, you successfully registered"
       color: "#0A0A0A"
     keynote1:
       value: "5km Health Running"
@@ -533,7 +533,7 @@ template:
 
 ```
 
-After that, can running command:
+After that, you can run this command:
 
 ```
 $ wechat template_message oCfEht9oM*********** template.yml
@@ -546,7 +546,7 @@ template = YAML.load(File.read(template_yaml_path))
 Wechat.api.template_message_send Wechat::Message.to(openid).template(template["template"])
 ```
 
-If using wechat_api or wechat_responder in Controller, can alse use wechat as shortcut(Support multi account):
+If using wechat_api or wechat_responder in controller, can also use wechat as shortcut (supports multi account):
 
 ```ruby
 template = YAML.load(File.read(template_yaml_path))
@@ -555,7 +555,7 @@ wechat.template_message_send Wechat::Message.to(openid).template(template["templ
 
 ## wechat_api - Rails Controller Wechat API
 
-Although user can always access all wechat feature via Wechat.api, but it's much more recommand to using `wechat` directly in controller. It's not only mandatory require if you plan to support multi-account, also help to seperate the wechat specific logic from the model layer.
+Although user can always access all wechat features via Wechat.api, but it's highly recommended to use `wechat` directly in the controller. It's not only mandatory required if you plan to support multi-account, it also helps to separate the wechat specific logic from the model layer.
 
 ```ruby
 class WechatReportsController < ApplicationController
@@ -570,13 +570,13 @@ end
 
 ## wechat_responder - Rails Responder Controller DSL
 
-In order to responding the message user sent, Rails developer need create a wechat responder controller and defined the routing in `routes.rb`
+In order to respond to the message user sent, Rails developer needs to create a wechat responder controller and define the routing in `routes.rb`
 
 ```ruby
-  resource :wechat, only:[:show, :create]
+  resource :wechat, only: [:show, :create]
 ```
 
-So the ActionController should defined like below:
+So the ActionController should be defined like below:
 
 ```ruby
 class WechatsController < ActionController::Base
@@ -592,9 +592,9 @@ class WechatsController < ActionController::Base
     request.reply.text 'help content'
   end
 
-  # When receive '<n>news', will match and will got count as <n> as parameter
+  # When receive '<n>news', will match and will get count as <n> as parameter
   on :text, with: /^(\d+) news$/ do |request, count|
-    # Wechat article can only contain max 10 items, large than 10 will dropped.
+    # Wechat article can only contain max 10 items, large than 10 will be dropped.
     news = (1..count.to_i).each_with_object([]) { |n, memo| memo << { title: 'News title', content: "No. #{n} news content" } }
     request.reply.news(news) do |article, n, index| # article is return object
       article.item title: "#{index} #{n[:title]}", description: n[:content], pic_url: 'http://www.baidu.com/img/bdlogo.gif', url: 'http://www.baidu.com/'
@@ -606,7 +606,7 @@ class WechatsController < ActionController::Base
   end
 
   # When unsubscribe user scan qrcode qrscene_xxxxxx to subscribe in public account
-  # notice user will subscribe public account at same time, so wechat won't trigger subscribe event any more
+  # notice user will subscribe public account at the same time, so wechat won't trigger subscribe event anymore
   on :scan, with: 'qrscene_xxxxxx' do |request, ticket|
     request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
@@ -616,7 +616,7 @@ class WechatsController < ActionController::Base
     request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
-  # When no any on :scan responder can match subscribe user scaned scene_id
+  # When no any on :scan responder can match subscribe user scanned scene_id
   on :event, with: 'scan' do |request|
     if request[:EventKey].present?
       request.reply.text "event scan got EventKey #{request[:EventKey]} Ticket #{request[:Ticket]}"
@@ -635,38 +635,38 @@ class WechatsController < ActionController::Base
     end
   end
 
-  # When user click the menu button
+  # When user clicks the menu button
   on :click, with: 'BOOK_LUNCH' do |request, key|
     request.reply.text "User: #{request[:FromUserName]} click #{key}"
   end
 
-  # When user view URL in the menu button
+  # When user views URL in the menu button
   on :view, with: 'http://wechat.somewhere.com/view_url' do |request, view|
     request.reply.text "#{request[:FromUserName]} view #{view}"
   end
 
-  # When user sent the imsage
+  # When user sends an image
   on :image do |request|
     request.reply.image(request[:MediaId]) # Echo the sent image to user
   end
 
-  # When user sent the voice
+  # When user sends a voice
   on :voice do |request|
     request.reply.voice(request[:MediaId]) # Echo the sent voice to user
   end
 
-  # When user sent the video
+  # When user sends a video
   on :video do |request|
     nickname = wechat.user(request[:FromUserName])['nickname'] # Call wechat api to get sender nickname
     request.reply.video(request[:MediaId], title: 'Echo', description: "Got #{nickname} sent video") # Echo the sent video to user
   end
 
-  # When user sent location message with label
+  # When user sends location message with label
   on :label_location do |request|
     request.reply.text("Label: #{request[:Label]} Location_X: #{request[:Location_X]} Location_Y: #{request[:Location_Y]} Scale: #{request[:Scale]}")
   end
 
-  # When user sent location
+  # When user sends location
   on :location do |request|
     request.reply.text("Latitude: #{request[:Latitude]} Longitude: #{request[:Longitude]} Precision: #{request[:Precision]}")
   end
@@ -675,37 +675,37 @@ class WechatsController < ActionController::Base
     request.reply.success # user can not receive this message
   end
 
-  # When user enter the app / agent app
+  # When user enters the app / agent app
   on :event, with: 'enter_agent' do |request|
     request.reply.text "#{request[:FromUserName]} enter agent app now"
   end
 
-  # When batch job create/update user (incremental) finished.
+  # When batch job "create/update user (incremental)" is finished.
   on :batch_job, with: 'sync_user' do |request, batch_job|
     request.reply.text "sync_user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
-  # When batch job replace user (full sync) finished.
+  # When batch job "replace user (full sync)" is finished.
   on :batch_job, with: 'replace_user' do |request, batch_job|
     request.reply.text "replace_user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
-  # When batch job invent user finished.
+  # When batch job "invite user" is finished.
   on :batch_job, with: 'invite_user' do |request, batch_job|
     request.reply.text "invite_user job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
-  # When batch job replace department (full sync) finished.
+  # When batch job "replace department (full sync)" is finished.
   on :batch_job, with: 'replace_party' do |request, batch_job|
     request.reply.text "replace_party job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
-  # Any not match above will fail to below
+  # If no match above will fallback to below
   on :fallback, respond: 'fallback message'
 end
 ```
 
-So the importent statement is only `wechat_responder`, all other is just a DSL:
+So the important statement is only `wechat_responder`, all other is just a DSL:
 
 ```
 on <message_type> do |message|
@@ -713,10 +713,10 @@ on <message_type> do |message|
 end
 ```
 
-The block code will be running to responding user's message.
+The block code will be running to respond to user's message.
 
 
-Below is current supported message_type:
+Below are currently supported message_types:
 
 - :text  text message, using `:with` to match text content like `on(:text, with:'help'){|message, content| ...}`
 - :image image message
@@ -725,13 +725,13 @@ Below is current supported message_type:
 - :video video message
 - :label_location location message with label
 - :link  link message
-- :event event message, using `:with` to match particular event, support regular expression match similr to text message.
-- :click virtual event message, wechat still sent event message，but gems will mapping to menu click event.
-- :view  virtual view message, wechat still sent event message，but gems will mapping to menu view page event.
-- :scan  virtual scan message, wechat still sent event message, but gems will mapping on scan event
+- :event event message, using `:with` to match particular event, supports regular expression match similar to text message.
+- :click virtual event message, wechat still sends event message，but gems will map to menu click event.
+- :view  virtual view message, wechat still sends event message，but gems will map to menu view page event.
+- :scan  virtual scan message, wechat still sends event message, but gems will map to scan event.
 - :batch_job  virtual batch job message
 - :location virtual location message
-- :fallback default message, when no other responder can handle incoming messsage, will using fallback to handle
+- :fallback default message, when no other responder can handle incoming message, will be used as a fallback handler
 
 ### Transfer to customer service
 
@@ -744,11 +744,11 @@ class WechatsController < ActionController::Base
 end
 ```
 
-Caution: do not setting default text responder if you want to using [multiply human customer service](http://dkf.qq.com/), other will lead text message can not transfer.
+Caution: do not set default text responder if you want to use [multiply human customer service](http://dkf.qq.com/), other will lead text message can not transfer.
 
 ### Notifications
 
-* `wechat.responder.after_create` data include request<Wechat::Message> and response<Wechat::Message>.
+* `wechat.responder.after_create` data includes request <Wechat::Message> and response <Wechat::Message>.
 
 Example:
 
@@ -758,8 +758,8 @@ ActiveSupport::Notifications.subscribe('wechat.responder.after_create') do |name
 end
 ```
 
-## Known Issue
+## Known Issues
 
-* Sometime, enterprise account can not receive the menu message due to Tencent server can not resolved the DNS, so using IP as a callback URL more stable, but it's never happen for user sent text message.
-* Enterprise batch replace users using a CSV format file, but if you using the download template directly, it's [not working](http://qydev.weixin.qq.com/qa/index.php?qa=13978), must open the CSV file in excel first, then save as CSV format again, seems Tencent only support Excel save as CSV file format.
-* If you using unicorn behind nginx and https, you need setting `trusted_domain_fullname` and point to https, other will got http and lead invalid signature in the JS-SDK.
+* Sometimes, enterprise account can not receive the menu message due to Tencent server unable to resolve DNS, so using IP as a callback URL is more stable, but it never happens for user sent text messages.
+* Enterprise batch "replace users" uses a CSV format file, but if you are using the downloaded template directly, it's [not working](http://qydev.weixin.qq.com/qa/index.php?qa=13978), must open the CSV file in Excel first, then save as CSV format again, seems Tencent only supports Excel "Save as CSV" file format.
+* If you using unicorn behind nginx and https, you need to set `trusted_domain_fullname` and point it to https, otherwise it will be http and will lead to invalid signature in the JS-SDK.
