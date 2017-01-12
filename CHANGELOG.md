@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.4 (released at 1/12/2017)
+
+# Support Ruby 2.4.0 
+# Add support of Enterprise RedPacket API, by @zhangbin #169
+
 ## v0.8.3 (released at 11/26/2016)
 
 # Fix wechat template key has camelCase problem, by @RyanChenDji #159
