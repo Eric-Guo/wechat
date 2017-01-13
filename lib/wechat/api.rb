@@ -75,6 +75,10 @@ module Wechat
       post 'shorturl', JSON.generate(action: 'long2short', long_url: long_url)
     end
 
+    def wxa_create_qrcode(path, width = 430)
+      post 'wxaapp/createwxaqrcode', JSON.generate(path: path, width: width)
+    end
+
     def menu
       get 'menu/get'
     end
