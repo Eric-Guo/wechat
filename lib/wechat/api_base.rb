@@ -16,6 +16,10 @@ module Wechat
       get 'media/get', params: { media_id: media_id }, as: :file
     end
 
+    def media_hq(media_id)
+      get 'media/get/jssdk', params: {media_id: media_id }, as: :file
+    end
+
     def media_create(type, file)
       post_file 'media/upload', file, params: { type: type }
     end
