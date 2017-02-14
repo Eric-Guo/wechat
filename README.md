@@ -323,6 +323,7 @@ Wechat commands:
   wechat material_delete [MEDIA_ID]                        # 删除永久素材
   wechat material_list [TYPE, OFFSET, COUNT]               # 获取永久素材列表
   wechat media [MEDIA_ID, PATH]                            # 媒体下载
+  wechat media_hq [MEDIA_ID, PATH]                         # 高清音频下载
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat media_uploadimg [IMAGE_PATH]                      # 上传图文消息内的图片
   wechat menu                                              # 当前菜单

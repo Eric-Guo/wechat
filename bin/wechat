@@ -309,6 +309,13 @@ class App < Thor
     puts 'File downloaded'
   end
 
+  desc 'media_hq [MEDIA_ID, PATH]', '高清音频媒体下载'
+  def media_hq(media_id, path)
+    tmp_file = wechat_api.media_hq(media_id)
+    FileUtils.mv(tmp_file.path, path)
+    puts 'File downloaded'
+  end
+
   desc 'media_create [MEDIA_TYPE, PATH]', '媒体上传'
   def media_create(type, path)
     puts wechat_api.media_create(type, path)
