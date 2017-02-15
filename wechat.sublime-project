@@ -3,7 +3,7 @@
   [
     {
       "path": ".",
-      "folder_exclude_patterns": [".bundle",".idea","tmp","log","pkg"],
+      "folder_exclude_patterns": [".bundle",".idea","certs","coverage","tmp","log","pkg"],
       "file_exclude_patterns": ["*.sublime-workspace","*.sqlite3","spec/examples.txt",".byebug_history",".DS_Store"]
     }
   ],
