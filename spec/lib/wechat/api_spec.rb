@@ -275,6 +275,17 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#media_hq' do
+    specify 'will get media/get/jssdk with access_token and media_id at file based api endpoint as file' do
+      media_hq_result = 'raw speex file format' # http://speex.org/
+
+      expect(subject.client).to receive(:get)
+        .with('media/get/jssdk', params: { access_token: 'access_token', media_id: 'media_id' },
+                                 as: :file).and_return(media_hq_result)
+      expect(subject.media_hq('media_id')).to eq(media_hq_result)
+    end
+  end
+
   describe '#media_create' do
     specify 'will post media/upload with access_token, type and media payload at file based api endpoint' do
       file = 'README.md'
