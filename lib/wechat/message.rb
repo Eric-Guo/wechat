@@ -118,7 +118,7 @@ module Wechat
     def news(collection, &_block)
       if block_given?
         article = ArticleBuilder.new
-        collection.take(10).each_with_index { |item, index| yield(article, item, index) }
+        collection.take(8).each_with_index { |item, index| yield(article, item, index) }
         items = article.items
       else
         items = collection.collect do |item|
