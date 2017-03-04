@@ -595,7 +595,7 @@ class WechatsController < ActionController::Base
 
   # When receive '<n>news', will match and will get count as <n> as parameter
   on :text, with: /^(\d+) news$/ do |request, count|
-    # Wechat article can only contain max 10 items, large than 10 will be dropped.
+    # Wechat article can only contain max 8 items, large than 8 will be dropped.
     news = (1..count.to_i).each_with_object([]) { |n, memo| memo << { title: 'News title', content: "No. #{n} news content" } }
     request.reply.news(news) do |article, n, index| # article is return object
       article.item title: "#{index} #{n[:title]}", description: n[:content], pic_url: 'http://www.baidu.com/img/bdlogo.gif', url: 'http://www.baidu.com/'
