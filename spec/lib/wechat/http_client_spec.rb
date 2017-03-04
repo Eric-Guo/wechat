@@ -18,8 +18,8 @@ RSpec.describe Wechat::HttpClient do
                                          headers: { content_type: 'application/json' })
   end
   let(:response_xml) do
-    double 'xml', response_params.merge(body: "<xml><result_code>SUCCESS</result_code></xml>",
-                                         headers: { content_type: 'text/html' })
+    double 'xml', response_params.merge(body: '<xml><result_code>SUCCESS</result_code></xml>',
+                                        headers: { content_type: 'text/html' })
   end
   let(:response_image) { double 'image', response_params.merge(body: 'image data', headers: { content_type: 'image/gif' }) }
 
@@ -56,7 +56,7 @@ RSpec.describe Wechat::HttpClient do
       end
 
       return_hash_by_xml = subject.send(:request, 'token', params: { access_token: '1234' }, as: :xml, &block)
-      expect(return_hash_by_xml).to include({"xml"=>{"result_code"=>"SUCCESS"}})
+      expect(return_hash_by_xml).to include('xml' => { 'result_code' => 'SUCCESS' })
     end
 
     specify 'will use base option to construct url' do
