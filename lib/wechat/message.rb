@@ -10,7 +10,7 @@ module Wechat
       end
     end
 
-    class ArticleBuilder
+    class NewsArticleBuilder
       attr_reader :items
       delegate :count, to: :items
       def initialize
@@ -117,7 +117,7 @@ module Wechat
 
     def news(collection, &_block)
       if block_given?
-        article = ArticleBuilder.new
+        article = NewsArticleBuilder.new
         collection.take(8).each_with_index { |item, index| yield(article, item, index) }
         items = article.items
       else
