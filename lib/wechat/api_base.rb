@@ -28,6 +28,10 @@ module Wechat
       post_file 'media/uploadimg', file
     end
 
+    def media_uploadnews(mpnews_message)
+      post 'media/uploadnews', mpnews_message.to_json
+    end
+
     protected
 
     def get(path, headers = {})

@@ -150,7 +150,7 @@ module Wechat
         end
       end
 
-      update(MsgType: 'mpnews', Articles: items.collect { |item| camelize_hash_keys(item) })
+      update(MsgType: message_hash[:MsgType] || 'mpnews', Articles: items.collect { |item| camelize_hash_keys(item) })
     end
 
     def template(opts = {})
@@ -169,7 +169,9 @@ module Wechat
       'ToUserName' => 'touser',
       'MediaId' => 'media_id',
       'ThumbMediaId' => 'thumb_media_id',
-      'TemplateId' => 'template_id'
+      'TemplateId' => 'template_id',
+      'ContentSourceUrl' => 'content_source_url',
+      'ShowCoverPic' => 'show_cover_pic'
     }.freeze
 
     TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid).freeze
@@ -189,6 +191,8 @@ module Wechat
         json_hash['news'] = { 'articles' => json_hash.delete('articles') }
       when 'mpnews'
         json_hash['mpnews'] = { 'articles' => json_hash.delete('articles') }
+      when 'uploadnews'
+        json_hash = { 'articles' => json_hash['articles'] }
       when 'template'
         json_hash = { 'touser' => json_hash['touser'] }.merge!(json_hash['template'])
       end
