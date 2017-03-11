@@ -190,6 +190,36 @@ RSpec.describe Wechat::Message do
       end
     end
 
+    describe '#mpnews' do
+      let(:items) do
+        [
+          { thumb_media_id: 'qI6_Ze_6PtV7svjolgs-rN6stStuHIjs9_DidOHaj0Q-mwvBelOXCFZiq2OsIU-p',
+            author: 'xxx', title: 'Happy Day', content_source_url: 'www.qq.com',
+            content: 'content', digest: 'digest', show_cover_pic: 1 },
+          { thumb_media_id: 'qI6_Ze_6PtV7svjolgs-rN6stStuHIjs9_DidOHaj0Q-mwvBelOXCFZiq2OsIU-p',
+            author: 'xxx', title: 'Happy Day', content_source_url: 'www.qq.com',
+            content: 'content', digest: 'digest', show_cover_pic: 0 }
+        ]
+      end
+
+      after :each do
+        expect(message[:MsgType]).to eq('mpnews')
+        expect(message[:Articles][0][:Title]).to eq 'Happy Day'
+        expect(message[:Articles][0][:Content]).to eq 'content'
+        expect(message[:Articles][0][:ContentSourceUrl]).to eq 'www.qq.com'
+        expect(message[:Articles][0][:ShowCoverPic]).to eq 1
+        expect(message[:Articles][1].key?(:ShowCoverPic)).to eq true
+      end
+
+      specify 'when no block is given, whill take the items argument as an array articals hash' do
+        message.mpnews(items)
+      end
+
+      specify 'will update MesageType, ArticleCount, Articles field and return self' do
+        message.mpnews(items) { |articals, item| articals.item item }
+      end
+    end
+
     describe '#to_xml' do
       let(:response) { Wechat::Message.from_hash(response_base) }
 

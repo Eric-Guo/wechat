@@ -10,15 +10,24 @@ module Wechat
       end
     end
 
-    class NewsArticleBuilder
+    class ArticleBuilder
       attr_reader :items
       delegate :count, to: :items
       def initialize
         @items = []
       end
+    end
 
+    class NewsArticleBuilder < ArticleBuilder
       def item(title: 'title', description: nil, pic_url: nil, url: nil)
         items << { Title: title, Description: description, PicUrl: pic_url, Url: url }.reject { |_k, v| v.nil? }
+      end
+    end
+
+    class MpNewsArticleBuilder < ArticleBuilder
+      def item(thumb_media_id:, title:, content:, author: nil, content_source_url: nil, digest: nil, show_cover_pic: '0')
+        items << { Thumb_Media_ID: thumb_media_id, Author: author, Title: title, ContentSourceUrl: content_source_url,
+                   Content: content, Digest: digest, ShowCoverPic: show_cover_pic }.reject { |_k, v| v.nil? }
       end
     end
 
@@ -130,6 +139,20 @@ module Wechat
              Articles: items.collect { |item| camelize_hash_keys(item) })
     end
 
+    def mpnews(collection, &_block)
+      if block_given?
+        article = MpNewsArticleBuilder.new
+        collection.take(8).each_with_index { |item, index| yield(article, item, index) }
+        items = article.items
+      else
+        items = collection.collect do |item|
+          camelize_hash_keys(item.symbolize_keys.slice(:thumb_media_id, :title, :content, :author, :content_source_url, :digest, :show_cover_pic).reject { |_k, v| v.nil? })
+        end
+      end
+
+      update(MsgType: 'mpnews', Articles: items.collect { |item| camelize_hash_keys(item) })
+    end
+
     def template(opts = {})
       template_fields = opts.symbolize_keys.slice(:template_id, :topcolor, :url, :data)
       update(MsgType: 'template', Template: template_fields)
@@ -164,6 +187,8 @@ module Wechat
         json_hash['text'] = { 'content' => json_hash.delete('content') }
       when 'news'
         json_hash['news'] = { 'articles' => json_hash.delete('articles') }
+      when 'mpnews'
+        json_hash['mpnews'] = { 'articles' => json_hash.delete('articles') }
       when 'template'
         json_hash = { 'touser' => json_hash['touser'] }.merge!(json_hash['template'])
       end
