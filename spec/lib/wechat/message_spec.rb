@@ -297,7 +297,7 @@ RSpec.describe Wechat::Message do
 
       specify 'can convert music message' do
         request = Wechat::Message.to('toUser')
-                  .music('thumb_media_id', 'music_url', title: 'title', description: 'description', HQ_music_url: 'hq_music_url')
+                                 .music('thumb_media_id', 'music_url', title: 'title', description: 'description', HQ_music_url: 'hq_music_url')
 
         expect(request.to_json).to eq({
           touser: 'toUser',
@@ -314,7 +314,7 @@ RSpec.describe Wechat::Message do
 
       specify 'can convert news message' do
         request = Wechat::Message.to('toUser')
-                  .news([{ title: 'title', description: 'description', url: 'url', pic_url: 'pic_url' }])
+                                 .news([{ title: 'title', description: 'description', url: 'url', pic_url: 'pic_url' }])
 
         expect(request.to_json).to eq({
           touser: 'toUser',
@@ -333,24 +333,24 @@ RSpec.describe Wechat::Message do
       end
 
       specify 'can convert template message' do
-        request = Wechat::Message.to('toUser').template(template_id: 'template_id', 
-                                          url: 'http://weixin.qq.com/download',
-                                          data: { 
-                                            first: { value: "恭喜你购买成功！" }, 
-                                            orderProductName: { value: "巧克力" }, 
-                                            orderMoneySum: { value: "39.8元" }, 
-                                            Remark: { value: "欢迎再次购买！" }
-                                          })
+        request = Wechat::Message.to('toUser').template(template_id: 'template_id',
+                                                        url: 'http://weixin.qq.com/download',
+                                                        data: {
+                                                          first: { value: '恭喜你购买成功！' },
+                                                          orderProductName: { value: '巧克力' },
+                                                          orderMoneySum: { value: '39.8元' },
+                                                          Remark: { value: '欢迎再次购买！' }
+                                                        })
 
         expect(request.to_json).to eq({
           touser: 'toUser',
           template_id: 'template_id',
           url: 'http://weixin.qq.com/download',
-          data: { 
-            first: { value: "恭喜你购买成功！" }, 
-            orderProductName: { value: "巧克力" }, 
-            orderMoneySum: { value: "39.8元" }, 
-            Remark: { value: "欢迎再次购买！" }
+          data: {
+            first: { value: '恭喜你购买成功！' },
+            orderProductName: { value: '巧克力' },
+            orderMoneySum: { value: '39.8元' },
+            Remark: { value: '欢迎再次购买！' }
           }
         }.to_json)
       end
