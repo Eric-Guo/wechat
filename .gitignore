@@ -20,3 +20,4 @@ pkg
 *.sublime-workspace
 spec/examples.txt
 .byebug_history
+.idea
