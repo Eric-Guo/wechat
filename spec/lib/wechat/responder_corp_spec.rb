@@ -71,7 +71,7 @@ RSpec.describe WechatCorpController, type: :controller do
         request.reply.text "echo: #{content}"
       end
 
-      on :text, with: 'mpnews' do |request|
+      on :text, with: 'news' do |request|
         request.reply.news(0...1) do |article|
           article.item title: 'title', description: 'desc', pic_url: 'http://www.baidu.com/img/bdlogo.gif', url: 'http://www.baidu.com/'
         end
@@ -152,8 +152,8 @@ RSpec.describe WechatCorpController, type: :controller do
         expect(message['Content']).to eq 'echo: hello'
       end
 
-      it 'on mpnews' do
-        post :create, params: signature_params(MsgType: 'text', Content: 'mpnews')
+      it 'on news' do
+        post :create, params: signature_params(MsgType: 'text', Content: 'news')
         expect(response.code).to eq '200'
         expect(response.body.empty?).to eq false
 
