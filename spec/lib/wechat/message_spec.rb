@@ -39,6 +39,16 @@ RSpec.describe Wechat::Message do
     end
   end
 
+  describe 'to_mass' do
+    let(:message) { Wechat::Message.from_hash(text_request) }
+    specify 'will create base message' do
+      reply = Wechat::Message.to_mass
+      expect(reply).to be_a(Wechat::Message)
+      expect(reply.message_hash).to include(filter: { is_to_all: true })
+      expect(reply.message_hash[:send_ignore_reprint]).to eq 0
+    end
+  end
+
   describe '#reply' do
     let(:message) { Wechat::Message.from_hash(text_request) }
     specify 'will create base response message' do
@@ -329,6 +339,28 @@ RSpec.describe Wechat::Message do
               }
             ]
           }
+        }.to_json)
+      end
+
+      specify 'can convert to mass text message' do
+        request = Wechat::Message.to_mass(tag_id: 1).text('mass text content')
+
+        expect(request.to_json).to eq({
+          filter: { is_to_all: false, tag_id: 1 },
+          send_ignore_reprint: 0,
+          msgtype: 'text',
+          text: { content: 'mass text content' }
+        }.to_json)
+      end
+
+      specify 'can convert to mass mpnews message' do
+        request = Wechat::Message.to_mass(send_ignore_reprint: 1).ref_mpnews('mpnews_media_id')
+
+        expect(request.to_json).to eq({
+          filter: { is_to_all: true },
+          send_ignore_reprint: 1,
+          msgtype: 'mpnews',
+          mpnews: { media_id: 'mpnews_media_id' }
         }.to_json)
       end
 

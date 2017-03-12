@@ -8,6 +8,14 @@ module Wechat
       def to(to_user)
         new(ToUserName: to_user, CreateTime: Time.now.to_i)
       end
+
+      def to_mass(tag_id: nil, send_ignore_reprint: 0)
+        if tag_id
+          new(filter: { is_to_all: false, tag_id: tag_id }, send_ignore_reprint: send_ignore_reprint)
+        else
+          new(filter: { is_to_all: true }, send_ignore_reprint: send_ignore_reprint)
+        end
+      end
     end
 
     class ArticleBuilder
@@ -153,6 +161,10 @@ module Wechat
       update(MsgType: message_hash[:MsgType] || 'mpnews', Articles: items.collect { |item| camelize_hash_keys(item) })
     end
 
+    def ref_mpnews(media_id)
+      update(MsgType: 'ref_mpnews', MpNews: { MediaId: media_id })
+    end
+
     def template(opts = {})
       template_fields = opts.symbolize_keys.slice(:template_id, :topcolor, :url, :data)
       update(MsgType: 'template', Template: template_fields)
@@ -168,13 +180,14 @@ module Wechat
     TO_JSON_KEY_MAP = {
       'ToUserName' => 'touser',
       'MediaId' => 'media_id',
+      'MpNews' => 'mpnews',
       'ThumbMediaId' => 'thumb_media_id',
       'TemplateId' => 'template_id',
       'ContentSourceUrl' => 'content_source_url',
       'ShowCoverPic' => 'show_cover_pic'
     }.freeze
 
-    TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid).freeze
+    TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid filter send_ignore_reprint mpnews).freeze
 
     def to_json
       keep_camel_case_key = message_hash[:MsgType] == 'template'
@@ -193,6 +206,9 @@ module Wechat
         json_hash['mpnews'] = { 'articles' => json_hash.delete('articles') }
       when 'uploadnews'
         json_hash = { 'articles' => json_hash['articles'] }
+      when 'ref_mpnews'
+        json_hash['msgtype'] = 'mpnews'
+        json_hash.delete('articles')
       when 'template'
         json_hash = { 'touser' => json_hash['touser'] }.merge!(json_hash['template'])
       end
