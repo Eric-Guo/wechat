@@ -198,6 +198,12 @@ class App < Thor
       puts wechat_api.message_send openid, text_message
     end
   else
+    desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'
+    def media_uploadnews(mpnews_yaml_path)
+      mpnew = YAML.load(File.read(mpnews_yaml_path))
+      puts wechat_api.media_uploadnews(Wechat::Message.new(MsgType: 'uploadnews').mpnews(mpnew[:articles]))
+    end
+
     desc 'group_create [GROUP_NAME]', '创建分组'
     def group_create(group_name)
       puts wechat_api.group_create(group_name)
@@ -324,12 +330,6 @@ class App < Thor
   desc 'media_uploadimg [IMAGE_PATH]', '上传图文消息内的图片'
   def media_uploadimg(image_path)
     puts wechat_api.media_uploadimg(image_path)
-  end
-
-  desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'
-  def media_uploadnews(mpnews_yaml_path)
-    mpnew = YAML.load(File.read(mpnews_yaml_path))
-    puts wechat_api.media_uploadnews(Wechat::Message.new(MsgType: 'uploadnews').mpnews(mpnew[:articles]))
   end
 
   desc 'material [MEDIA_ID, PATH]', '永久媒体下载'

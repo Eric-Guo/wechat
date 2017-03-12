@@ -384,7 +384,6 @@ Wechat commands:
   wechat media [MEDIA_ID, PATH]                            # 媒体下载
   wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
   wechat media_uploadimg [IMAGE_PATH]                      # 上传图文消息内的图片
-  wechat media_uploadnews [MPNEWS_YAML_PATH]               # 上传图文消息素材
   wechat menu                                              # 当前菜单
   wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]  # 创建个性化菜单
   wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
