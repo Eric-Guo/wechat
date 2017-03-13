@@ -253,6 +253,14 @@ RSpec.describe Wechat::Api do
       expect(subject.client).to receive(:post).with('message/mass/preview', ref_mpnews_to_openid.to_json, params: { access_token: 'access_token' }).and_return(result)
       expect(subject.message_mass_preview(Wechat::Message.to('OPENID').ref_mpnews('123dsdajkasd231jhksad'))).to eq(result)
     end
+    specify 'will post message/mass/preview with access_token, towxname and mpnews media id in json' do
+      ref_mpnews_to_openid = { towxname: '示例的微信号',
+                               msgtype: 'mpnews',
+                               mpnews: { media_id: '123dsdajkasd231jhksad' } }
+      result = { errcode: 0, errmsg: 'preview success', msg_id: 34182 }
+      expect(subject.client).to receive(:post).with('message/mass/preview', ref_mpnews_to_openid.to_json, params: { access_token: 'access_token' }).and_return(result)
+      expect(subject.message_mass_preview(Wechat::Message.to(towxname: '示例的微信号').ref_mpnews('123dsdajkasd231jhksad'))).to eq(result)
+    end
   end
 
   describe '#wxa_create_qrcode' do

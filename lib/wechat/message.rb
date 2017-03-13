@@ -5,11 +5,13 @@ module Wechat
         new(message_hash)
       end
 
-      def to(to_users, send_ignore_reprint: 0)
-        if send_ignore_reprint == 0
-          new(ToUserName: to_users, CreateTime: Time.now.to_i)
-        else
+      def to(to_users = '', towxname: nil, send_ignore_reprint: 0)
+        if towxname.present?
+          new(ToWxName: towxname, CreateTime: Time.now.to_i)
+        elsif send_ignore_reprint == 1
           new(ToUserName: to_users, CreateTime: Time.now.to_i, send_ignore_reprint: send_ignore_reprint)
+        else
+          new(ToUserName: to_users, CreateTime: Time.now.to_i)
         end
       end
 
@@ -183,6 +185,7 @@ module Wechat
 
     TO_JSON_KEY_MAP = {
       'ToUserName' => 'touser',
+      'ToWxName' => 'towxname',
       'MediaId' => 'media_id',
       'MpNews' => 'mpnews',
       'ThumbMediaId' => 'thumb_media_id',
@@ -191,7 +194,7 @@ module Wechat
       'ShowCoverPic' => 'show_cover_pic'
     }.freeze
 
-    TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid filter send_ignore_reprint mpnews).freeze
+    TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid filter send_ignore_reprint mpnews towxname).freeze
 
     def to_json
       keep_camel_case_key = message_hash[:MsgType] == 'template'
