@@ -235,7 +235,7 @@ RSpec.describe Wechat::Api do
   end
 
   describe '#message_mass_delete' do
-    specify 'will post short_url with access_token and long_url' do
+    specify 'will post message/mass/delete with access_token and msg_id' do
       mass_delete_req = { msg_id: 30124 }
       mass_delete_result = { errcode: 0, errmsg: 'ok' }
       expect(subject.client).to receive(:post)
@@ -260,6 +260,16 @@ RSpec.describe Wechat::Api do
       result = { errcode: 0, errmsg: 'preview success', msg_id: 34182 }
       expect(subject.client).to receive(:post).with('message/mass/preview', ref_mpnews_to_openid.to_json, params: { access_token: 'access_token' }).and_return(result)
       expect(subject.message_mass_preview(Wechat::Message.to(towxname: '示例的微信号').ref_mpnews('123dsdajkasd231jhksad'))).to eq(result)
+    end
+  end
+
+  describe '#message_mass_get' do
+    specify 'will post message/mass/get with access_token and msg_id' do
+      mass_get_req = { msg_id: 201053012 }
+      mass_get_result = { msg_id: 201053012, msg_status: 'SEND_SUCCESS' }
+      expect(subject.client).to receive(:post)
+        .with('message/mass/get', JSON.generate(mass_get_req), params: { access_token: 'access_token' }).and_return(mass_get_result)
+      expect(subject.message_mass_get(201053012)).to eq mass_get_result
     end
   end
 

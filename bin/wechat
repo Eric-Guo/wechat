@@ -215,6 +215,11 @@ class App < Thor
       puts wechat_api.message_mass_preview(Wechat::Message.to(towxname: wx_name).ref_mpnews(mpnews_media_id))
     end
 
+    desc 'message_mass_get [MSG_ID]', '查询群发消息发送状态'
+    def message_mass_get(msg_id)
+      puts wechat_api.message_mass_get(msg_id)
+    end
+
     desc 'group_create [GROUP_NAME]', '创建分组'
     def group_create(group_name)
       puts wechat_api.group_create(group_name)

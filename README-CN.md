@@ -319,6 +319,7 @@ Wechat Public Account commands:
   wechat menu_delete                                       # 删除菜单
   wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
   wechat message_mass_delete [MSG_ID]                      # 删除群发消息
+  wechat message_mass_get [MSG_ID]                         # 查询群发消息发送状态
   wechat message_mass_preview [WX_NAME, MPNEWS_MEDIA_ID]   # 预览图文消息素材
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
