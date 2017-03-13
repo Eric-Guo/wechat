@@ -318,6 +318,7 @@ Wechat commands:
   wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单
   wechat menu_delete                                       # 删除菜单
   wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
+  wechat message_mass_delete [MSG_ID]                      # 删除群发消息
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]       # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID, EXPIRE_SECONDS]    # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码

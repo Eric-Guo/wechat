@@ -234,6 +234,16 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#message_mass_delete' do
+    specify 'will post short_url with access_token and long_url' do
+      mass_delete_req = { msg_id: 30124 }
+      mass_delete_result = { errcode: 0, errmsg: 'ok' }
+      expect(subject.client).to receive(:post)
+        .with('message/mass/delete', JSON.generate(mass_delete_req), params: { access_token: 'access_token' }).and_return(mass_delete_result)
+      expect(subject.message_mass_delete(30124)).to eq mass_delete_result
+    end
+  end
+
   describe '#wxa_create_qrcode' do
     qrcode_result = { errcode: 0, errmsg: 'ok',
                       url: 'qr_code_pic_url' }

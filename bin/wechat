@@ -204,6 +204,11 @@ class App < Thor
       puts wechat_api.media_uploadnews(Wechat::Message.new(MsgType: 'uploadnews').mpnews(mpnew[:articles]))
     end
 
+    desc 'message_mass_delete [MSG_ID]', '删除群发消息'
+    def message_mass_delete(msg_id)
+      puts wechat_api.message_mass_delete(msg_id)
+    end
+
     desc 'group_create [GROUP_NAME]', '创建分组'
     def group_create(group_name)
       puts wechat_api.group_create(group_name)
