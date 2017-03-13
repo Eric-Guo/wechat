@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class WechatApiController < ActionController::Base
+class WechatApiController < ActionController::API
 end
 
 RSpec.describe WechatApiController, type: :controller do
