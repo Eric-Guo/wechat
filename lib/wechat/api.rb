@@ -83,6 +83,10 @@ module Wechat
       post 'message/mass/delete', JSON.generate(msg_id: msg_id)
     end
 
+    def message_mass_preview(message)
+      post 'message/mass/preview', message.to_json
+    end
+
     def wxa_create_qrcode(path, width = 430)
       post 'wxaapp/createwxaqrcode', JSON.generate(path: path, width: width)
     end
