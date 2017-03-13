@@ -16,7 +16,6 @@ require 'wechat/api_loader'
 require 'cgi'
 
 class App < Thor
-  package_name 'Wechat'
   class_option :account, aliases: '-a', default: :default, desc: 'Name of Wechat account configuration.'
 
   attr_reader :wechat_api_client
@@ -42,6 +41,7 @@ class App < Thor
   in_corp_api_cmd = Wechat::ApiLoader.with(options).is_a?(Wechat::CorpApi)
 
   if in_corp_api_cmd
+    package_name 'Wechat Enterprise Account'
     desc 'department_create [NAME, PARENT_ID]', '创建部门'
     method_option :parentid, aliases: '-p', desc: '父亲部门id。根部门id为1'
     def department_create(name)
@@ -198,6 +198,7 @@ class App < Thor
       puts wechat_api.message_send openid, text_message
     end
   else
+    package_name 'Wechat Public Account'
     desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'
     def media_uploadnews(mpnews_yaml_path)
       mpnew = YAML.load(File.read(mpnews_yaml_path))

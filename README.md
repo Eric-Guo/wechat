@@ -304,7 +304,7 @@ Feel safe if you can not read Chinese in the comments, it's kept there in order 
 
 ```
 $ wechat
-Wechat commands:
+Wechat Public Account commands:
   wechat callbackip                                        # 获取微信服务器IP地址
   wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
@@ -357,7 +357,7 @@ Wechat commands:
 #### Enterprise account command line
 ```
 $ wechat
-Wechat commands:
+Wechat Enterprise Account commands:
   wechat agent [AGENT_ID]                                  # 获取企业号应用详情
   wechat agent_list                                        # 获取应用概况列表
   wechat batch_job_result [JOB_ID]                         # 获取异步任务结果
