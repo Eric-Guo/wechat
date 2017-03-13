@@ -705,6 +705,12 @@ class WechatsController < ActionController::Base
     request.reply.text "replace_party job #{batch_job[:JobId]} finished, return code #{batch_job[:ErrCode]}, return message #{batch_job[:ErrMsg]}"
   end
 
+  # mass sent job finish result notification
+  on :event, with: 'masssendjobfinish' do |request|
+    # https://mp.weixin.qq.com/wiki?action=doc&id=mp1481187827_i0l21&t=0.03571905015619936#8
+    request.reply.success # request is XML result hash.
+  end
+
   # If no match above will fallback to below
   on :fallback, respond: 'fallback message'
 end
