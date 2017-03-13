@@ -5,8 +5,12 @@ module Wechat
         new(message_hash)
       end
 
-      def to(to_user)
-        new(ToUserName: to_user, CreateTime: Time.now.to_i)
+      def to(to_users, send_ignore_reprint: 0)
+        if send_ignore_reprint == 0
+          new(ToUserName: to_users, CreateTime: Time.now.to_i)
+        else
+          new(ToUserName: to_users, CreateTime: Time.now.to_i, send_ignore_reprint: send_ignore_reprint)
+        end
       end
 
       def to_mass(tag_id: nil, send_ignore_reprint: 0)

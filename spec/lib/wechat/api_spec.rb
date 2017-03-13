@@ -222,6 +222,16 @@ RSpec.describe Wechat::Api do
       expect(subject.client).to receive(:post).with('message/mass/sendall', ref_mpnews.to_json, params: { access_token: 'access_token' }).and_return(result)
       expect(subject.message_mass_sendall(Wechat::Message.to_mass(tag_id: 2).image('123dsdajkasd231jhksad'))).to eq(result)
     end
+    specify 'will post message/mass/sendall with access_token, openid and mpnews media id in json' do
+      ref_mpnews_to_openid = { touser: %w(OPENID1 OPENID2),
+                               send_ignore_reprint: 1,
+                               msgtype: 'mpnews',
+                               mpnews: { media_id: '123dsdajkasd231jhksad' } }
+      result = { errcode: 0, errmsg: 'send job submission success',
+                 msg_id: 34182, msg_data_id: 206227730 }
+      expect(subject.client).to receive(:post).with('message/mass/sendall', ref_mpnews_to_openid.to_json, params: { access_token: 'access_token' }).and_return(result)
+      expect(subject.message_mass_sendall(Wechat::Message.to(['OPENID1', 'OPENID2'], send_ignore_reprint: 1).ref_mpnews('123dsdajkasd231jhksad'))).to eq(result)
+    end
   end
 
   describe '#wxa_create_qrcode' do
