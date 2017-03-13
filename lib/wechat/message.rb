@@ -164,7 +164,7 @@ module Wechat
         end
       end
 
-      update(MsgType: message_hash[:MsgType] || 'mpnews', Articles: items.collect { |item| camelize_hash_keys(item) })
+      update(MsgType: 'mpnews', Articles: items.collect { |item| camelize_hash_keys(item) })
     end
 
     def ref_mpnews(media_id)
@@ -210,8 +210,6 @@ module Wechat
       when 'news'
         json_hash['news'] = { 'articles' => json_hash.delete('articles') }
       when 'mpnews'
-        json_hash['mpnews'] = { 'articles' => json_hash.delete('articles') }
-      when 'uploadnews'
         json_hash = { 'articles' => json_hash['articles'] }
       when 'ref_mpnews'
         json_hash['msgtype'] = 'mpnews'

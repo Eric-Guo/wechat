@@ -404,7 +404,7 @@ RSpec.describe Wechat::Api do
       }
       result = { type: 'news', media_id: 'CsEf3ldqkAYJAU6EJeIkStVDSvffUJ54vqbThMgplD-VJXXof6ctX5fI6-aYyUiQ', created_at: 1391857799 }
       expect(subject.client).to receive(:post).with('media/uploadnews', mpnews.to_json, params: { access_token: 'access_token' }).and_return(result)
-      expect(subject.media_uploadnews(Wechat::Message.new(MsgType: 'uploadnews').mpnews(items))).to eq(result)
+      expect(subject.media_uploadnews(Wechat::Message.new(MsgType: 'mpnews').mpnews(items))).to eq(result)
     end
   end
 
