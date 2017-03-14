@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.8.5 (released at 3/14/2017)
+
+* Support mass send API #176
+* Support new media_hq API
+* Support new createwxaqrcode API for miniapp
+* Fix wechat_responder not proper injected in rails 5 API #165
+* parse response support XML return, by @zhangbin #167
+* WeChat only allow 8 article per one news, by @kikyous #175
+* Store token at cookies, by @jstdoit #174
+
 ## v0.8.4 (released at 1/12/2017)
 
 # Support Ruby 2.4.0 
