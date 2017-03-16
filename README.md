@@ -77,7 +77,7 @@ Redis store supports Rails application running in multi-server, no need to enabl
 
 #### Configure wechat for the first time
 
-Make sure to finish all the setup on rails side first, then submit to wechat. Otherwise, wechat will raise error.
+Make sure to finish all the setup on rails side first, then submit those setting to Tencent wechat management website. Otherwise, wechat will raise error.
 
 URL address for wechat created by running `rails g wechat:install` is `http://your-server.com/wechat`
 
