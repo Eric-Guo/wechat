@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.6 (released at 3/17/2017)
+
+* Support Rails 5.1 officially.
+* make sure the formfile can be created outside. by @mechiland #181
+
 ## v0.8.5 (released at 3/14/2017)
 
 * Support mass send API #176
