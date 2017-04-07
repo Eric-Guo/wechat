@@ -35,7 +35,15 @@ RSpec.describe Wechat::Token::CorpAccessToken do
     specify "won't set access_token if response value invalid" do
       allow(client).to receive(:get).and_return('rubbish')
 
-      expect { subject.refresh }.to raise_error
+      expect { subject.refresh }.to raise_error(Wechat::InvalidCredentialError)
+      expect(subject.access_token).to be_nil
+    end
+
+    # it will be nil(content_length 0) if appid and secret is invalid
+    specify "won't set access_token if response value is nil" do
+      allow(client).to receive(:get).and_return(nil)
+
+      expect { subject.refresh }.to raise_error(Wechat::InvalidCredentialError)
       expect(subject.access_token).to be_nil
     end
   end
