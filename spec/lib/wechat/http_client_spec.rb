@@ -17,6 +17,9 @@ RSpec.describe Wechat::HttpClient do
     double 'json', response_params.merge(body: { result: 'success' }.to_json,
                                          headers: { content_type: 'application/json' })
   end
+  let(:response_json_as_text_plain) do
+    double 'json', response_params.merge(body: { result: 'success' }.to_json)
+  end
   let(:response_xml) do
     double 'xml', response_params.merge(body: '<xml><result_code>SUCCESS</result_code></xml>',
                                         headers: { content_type: 'text/html' })
@@ -88,9 +91,35 @@ RSpec.describe Wechat::HttpClient do
         expect(subject.send(:request, 'image') { response_image }).to be_a(Tempfile)
       end
 
+      specify 'will return response body as file for audio' do
+        response_audio = double 'audio', response_params.merge(body: 'stream', headers: { content_type: 'audio/amr' })
+        expect(subject.send(:request, 'media') { response_audio }).to be_a(Tempfile)
+      end
+
+      specify 'will return response body as file for speex' do
+        response_speex = double 'speex', response_params.merge(body: 'stream', headers: { content_type: 'voice/speex' })
+        expect(subject.send(:request, 'media') { response_speex }).to be_a(Tempfile)
+      end
+
       specify 'will return response body as file for unknown content_type' do
         response_stream = double 'image', response_params.merge(body: 'stream', headers: { content_type: 'stream' })
         expect(subject.send(:request, 'image', as: :file) { response_stream }).to be_a(Tempfile)
+      end
+    end
+
+    context 'parse content_type of text/plain' do
+      specify 'will return response body as json for text/plain content_type' do
+        expect(subject.send(:request, 'json') { response_json_as_text_plain }).to be_a(Hash)
+      end
+
+      specify 'raise ResponseError given response has error json with content_type of text/plain' do
+        allow(response_json_as_text_plain).to receive(:body).and_return({ errcode: 40007, errmsg: 'invalid media_id' }.to_json)
+        expect { subject.send(:request, 'media', as: :file) { response_json_as_text_plain } }.to raise_error(Wechat::ResponseError)
+      end
+
+      specify 'will fallback to user-specified format for not json' do
+        allow(response_json_as_text_plain).to receive(:body).and_return('not a json string')
+        expect(subject.send(:request, 'media', as: :file) { response_json_as_text_plain }).to be_a(Tempfile)
       end
     end
 
