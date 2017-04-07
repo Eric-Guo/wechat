@@ -1,6 +1,6 @@
 module Wechat
   module Helpers
-    def wechat_config_js(config_options = {})
+    def wechat_raw_config_js(config_options = {})
       page_url = if controller.class.trusted_domain_fullname
                    "#{controller.class.trusted_domain_fullname}#{controller.request.original_fullpath}"
                  else
@@ -17,7 +17,12 @@ wx.config({
   jsApiList: ['#{config_options[:api].join("','")}']
 });
 WECHAT_CONFIG_JS
+    end
+
+    def wechat_config_js(config_options = {})
+      config_js = wechat_raw_config_js(config_options)
       javascript_tag config_js, type: 'application/javascript'
     end
+
   end
 end
