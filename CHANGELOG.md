@@ -17,17 +17,17 @@
 
 ## v0.8.4 (released at 1/12/2017)
 
-# Support Ruby 2.4.0 
-# Add support of Enterprise RedPacket API, by @zhangbin #169
+* Support Ruby 2.4.0
+* Add support of Enterprise RedPacket API, by @zhangbin #169
 
 ## v0.8.3 (released at 11/26/2016)
 
-# Fix wechat template key has camelCase problem, by @RyanChenDji #159
-# Fix long time of oauth2_state bug for wechat_oauth2 methods, by @IvanChou #162
+* Fix wechat template key has camelCase problem, by @RyanChenDji #159
+* Fix long time of oauth2_state bug for wechat_oauth2 methods, by @IvanChou #162
 
 ## v0.8.2 (released at 11/2/2016)
 
-# Bug which if not using multi-account but using web login.
+* Bug which if not using multi-account but using web login.
 
 ## v0.8.1 (released at 11/2/2016)
 
@@ -57,7 +57,7 @@
 
 ## v0.7.17 (released at 8/18/2016)
 
-* Allow declare wechat_api at ApplicationController, but using wechat at sub controller. #104 
+* Allow declare wechat_api at ApplicationController, but using wechat at sub controller. #104
 
 ## v0.7.16 (released at 7/27/2016)
 
@@ -135,9 +135,9 @@
 * Optional session support by @zfben #81, #88, #91
 * Replace after_wechat_response with Rails Nofications facility, by @zfben, original issue is #79
 * New user_batchget API. #89
-* Support Rails 3.2 again after support Rails 5.0. by @guange2015 #87 
+* Support Rails 3.2 again after support Rails 5.0. by @guange2015 #87
 * Fetch setting from RAILS_ENV first, then fetch default. by @kikyous #85
-* Warning not support on :scan with regular expression, reason see #84 
+* Warning not support on :scan with regular expression, reason see #84
 
 ## v0.7.1 (released at 1/11/2016)
 
@@ -151,9 +151,9 @@
 
 ## v0.6.10 (released at 1/17/2016)
 
-* Support Rails 3.2 again after support Rails 5.0. by @guange2015 #87 
+* Support Rails 3.2 again after support Rails 5.0. by @guange2015 #87
 * Fetch setting from RAILS_ENV first, then fetch default. by @kikyous #85
-* Warning not support on :scan with regular expression. by @kikyous #84 
+* Warning not support on :scan with regular expression. by @kikyous #84
 
 ## v0.6.9 (released at 1/6/2016)
 
@@ -213,7 +213,7 @@
 * Scan 2D barcode using new syntax `on :scan, with: 'BINDING_QR_CODE' ` instead of `on :event, with: 'BINDING_QR_CODE' ` in previous version #55
   Which will fix can not using `on :event, with: "scan" ` problem
 * Batch job using new syntax `on :batch_job, with: 'replace_user' `
-instead of previous `on :event, with: 'replace_user' `. 
+instead of previous `on :event, with: 'replace_user' `.
 * Click menu support new syntax `on :click, with: 'BOOK_LUNCH' `, but `on :event, with: 'BOOK_LUNCH' ` still supported. perfer `on :click` because it running faster and more nature expression.
 * Wechat::Responder using Hash for new :client and :batch_job event, avoid time consuming Array match responder
 * Fix refresh token not working problem under ruby 2.0.0 #54
@@ -232,7 +232,7 @@ instead of previous `on :event, with: 'replace_user' `.
 
 * Fix wrong number of arguments at Wechat::Responder.on by using arity #47
 * Fix can not access wechat method after using instance level context.
-* Fix skip_verify_ssl parameter error. 
+* Fix skip_verify_ssl parameter error.
 
 ## v0.4.1 (released at 9/6/2015)
 
