@@ -70,8 +70,19 @@ module Wechat
       parse_as = {
         %r{^application\/json} => :json,
         %r{^image\/.*}         => :file,
-        %r{^text\/html}        => :xml
+        %r{^text\/html}        => :xml,
+        %r{^text\/plain}       => :probably_json
       }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || as || :text
+
+      # try to parse response as json, fallback to user-specified format or text if failed
+      if parse_as == :probably_json
+        data = JSON.parse response.body.to_s.gsub(/[\u0000-\u001f]+/, '') rescue nil
+        if data
+          return yield(:json, data)
+        else
+          parse_as = as || :text
+        end
+      end
 
       case parse_as
       when :file
