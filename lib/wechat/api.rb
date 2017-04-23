@@ -6,6 +6,7 @@ require 'wechat/ticket/public_jsapi_ticket'
 module Wechat
   class Api < ApiBase
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'.freeze
+    WXA_BASE = 'https://api.weixin.qq.com/wxa/'.freeze
 
     def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file)
       @client = HttpClient.new(API_BASE, timeout, skip_verify_ssl)
@@ -89,6 +90,10 @@ module Wechat
 
     def message_mass_get(msg_id)
       post 'message/mass/get', JSON.generate(msg_id: msg_id)
+    end
+
+    def wxa_get_wxacode(path, width = 430)
+      post 'getwxacode', JSON.generate(path: path, width: width), base: WXA_BASE
     end
 
     def wxa_create_qrcode(path, width = 430)

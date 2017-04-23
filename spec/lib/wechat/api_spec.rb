@@ -273,6 +273,20 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#wxa_get_wxacode' do
+    wxacode_result = { errcode: 0, errmsg: 'ok',
+                       url: 'wxa_code_pic_url' }
+
+    specify 'will post wxa_get_wxacode with path, width and access_token' do
+      path = 'pages/index?query=1'
+      wxa_get_wxacode_req = { path: path, width: 430 }
+      expect(subject.client).to receive(:post)
+        .with('getwxacode', JSON.generate(wxa_get_wxacode_req),
+              params: { access_token: 'access_token' }, base: Wechat::Api::WXA_BASE).and_return(wxacode_result)
+      expect(subject.wxa_get_wxacode(path)).to eq wxacode_result
+    end
+  end
+
   describe '#wxa_create_qrcode' do
     qrcode_result = { errcode: 0, errmsg: 'ok',
                       url: 'qr_code_pic_url' }

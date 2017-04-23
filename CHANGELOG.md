@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.7 (released at 4/23/2017)
+
+* Support new wxa_get_wxacode API for miniapp.
+* Add InvalidCredentialError, support audio/amr, voice/speex as file and text/plain as json. by @acenqiu #184
+
 ## v0.8.6 (released at 3/17/2017)
 
 * Support Rails 5.1 officially.
