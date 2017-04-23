@@ -354,6 +354,7 @@ Wechat Public Account commands:
   wechat user_group [OPEN_ID]                              # 查询用户所在分组
   wechat user_update_remark [OPEN_ID, REMARK]              # 设置备注名
   wechat users                                             # 关注者列表
+  wechat wxacode_download [WXA_CODE_PIC_PATH, PATH, WIDTH] # 下载小程序码
 ```
 
 #### Enterprise account command line

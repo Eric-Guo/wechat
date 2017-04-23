@@ -199,6 +199,13 @@ class App < Thor
     end
   else
     package_name 'Wechat Public Account'
+    desc 'wxacode_download [WXA_CODE_PIC_PATH, PATH, WIDTH]', '下载小程序码'
+    def wxacode_download(wxa_code_pic_path, path = nil, width = 430)
+      tmp_file = wechat_api.wxa_get_wxacode(path, width)
+      FileUtils.mv(tmp_file.path, wxa_code_pic_path)
+      puts 'WXA Code File downloaded'
+    end
+
     desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'
     def media_uploadnews(mpnews_yaml_path)
       mpnew = YAML.load(File.read(mpnews_yaml_path))
