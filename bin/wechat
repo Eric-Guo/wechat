@@ -200,7 +200,7 @@ class App < Thor
   else
     package_name 'Wechat Public Account'
     desc 'wxacode_download [WXA_CODE_PIC_PATH, PATH, WIDTH]', '下载小程序码'
-    def wxacode_download(wxa_code_pic_path, path = nil, width = 430)
+    def wxacode_download(wxa_code_pic_path, path = 'pages/index', width = 430)
       tmp_file = wechat_api.wxa_get_wxacode(path, width)
       FileUtils.mv(tmp_file.path, wxa_code_pic_path)
       puts 'WXA Code File downloaded'
