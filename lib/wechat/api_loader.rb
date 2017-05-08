@@ -69,11 +69,11 @@ HELP
         application_config_file = File.join(Dir.getwd, 'config/application.yml')
         home_config_file = File.join(Dir.home, '.wechat.yml')
         if File.exist?(rails_config_file)
+          rails_env = ENV['RAILS_ENV'] || 'development'
           if File.exist?(application_config_file) && !defined?(::Figaro)
             require 'figaro'
-            Figaro::Application.new(path: application_config_file).load
+            Figaro::Application.new(path: application_config_file, environment: rails_env).load
           end
-          rails_env = ENV['RAILS_ENV'] || 'development'
           config = resovle_config_file(rails_config_file, rails_env)
           if config.present? && (default = config[:default])  && (default['appid'] || default['corpid'])
             puts "Using rails project #{ENV['WECHAT_CONF_FILE'] || "config/wechat.yml"} #{rails_env} setting..."
