@@ -25,12 +25,12 @@ RSpec.describe WechatApiController, type: :controller do
 
   describe '#wechat_config_js with account' do
     before(:all) do
-      clear_wechat_configs
+      Wechat::ApiLoader.class_eval { @configs = nil }
       ENV['WECHAT_CONF_FILE'] = File.join(Dir.getwd, 'spec/dummy/config/dummy_wechat.yml')
     end
 
     after(:all) do
-      clear_wechat_configs
+      Wechat::ApiLoader.class_eval { @configs = nil }
       ENV['WECHAT_CONF_FILE'] = nil
     end
 
@@ -61,9 +61,4 @@ RSpec.describe WechatApiController, type: :controller do
     end
   end
 
-  def clear_wechat_configs
-    Wechat::ApiLoader.class_eval do
-      @configs = nil
-    end
-  end
 end

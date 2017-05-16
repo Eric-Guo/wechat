@@ -13,7 +13,7 @@ module Wechat
         # not default account
         config = Wechat.config(account)
         domain_name = config.trusted_domain_fullname
-        api = Wechat.api(account)
+        api = controller.wechat(account)
         app_id = config.corpid || config.appid
       end
 

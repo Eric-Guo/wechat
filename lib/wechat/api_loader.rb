@@ -46,6 +46,7 @@ module Wechat
       configs.each do |_, cfg|
         cfg[:timeout] ||= 20
         cfg[:have_session_class] = class_exists?('WechatSession')
+        cfg[:oauth2_cookie_duration] ||= 1.hour
       end
 
       # create config object using raw config data

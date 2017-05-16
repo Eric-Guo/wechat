@@ -9,12 +9,12 @@ RSpec.describe Wechat::ApiLoader do
 
   describe "should support multiple accounts config" do
     before(:all) do
-      clear_wechat_configs
+      Wechat::ApiLoader.class_eval { @configs = nil }
       ENV['WECHAT_CONF_FILE'] = File.join(Dir.getwd, 'spec/dummy/config/dummy_wechat.yml')
     end
 
     after(:all) do
-      clear_wechat_configs
+      Wechat::ApiLoader.class_eval { @configs = nil }
       ENV['WECHAT_CONF_FILE'] = nil
     end
 
@@ -34,12 +34,6 @@ RSpec.describe Wechat::ApiLoader do
 
       new_api = Wechat::ApiLoader.with account: :wx2, token: 'new_token2'
       expect(new_api.access_token.appid).to eq 'my_appid2'
-    end
-  end
-
-  def clear_wechat_configs
-    Wechat::ApiLoader.class_eval do
-      @configs = nil
     end
   end
 end
