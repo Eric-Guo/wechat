@@ -14,8 +14,12 @@ module ActionController
       self.wechat_api_client = load_controller_wechat(wechat_cfg_account, opts)
     end
 
-    def wechat
-      self.wechat_api_client ||= load_controller_wechat(wechat_cfg_account)
+    def wechat(account = nil)
+      if account && account != wechat_cfg_account
+        Wechat.api(account)
+      else
+        self.wechat_api_client ||= load_controller_wechat(wechat_cfg_account)
+      end
     end
 
     private
@@ -27,16 +31,20 @@ module ActionController
       self.corpid = opts[:corpid] || cfg.corpid
       self.agentid = opts[:agentid] || cfg.agentid
       self.encrypt_mode = opts[:encrypt_mode] || cfg.encrypt_mode || corpid.present?
-      self.timeout = opts[:timeout] || 20
-      self.skip_verify_ssl = opts[:skip_verify_ssl]
       self.encoding_aes_key = opts[:encoding_aes_key] || cfg.encoding_aes_key
       self.trusted_domain_fullname = opts[:trusted_domain_fullname] || cfg.trusted_domain_fullname
       self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || cfg.oauth2_cookie_duration.to_i.seconds
+      self.timeout = opts[:timeout] || cfg.timeout
+      if opts.key?(:skip_verify_ssl)
+        self.skip_verify_ssl = opts[:skip_verify_ssl]
+      else
+        self.skip_verify_ssl = cfg.skip_verify_ssl
+      end
+
+      return Wechat.api if account == :default && opts.empty?
 
       access_token = opts[:access_token] || cfg.access_token
       jsapi_ticket = opts[:jsapi_ticket] || cfg.jsapi_ticket
-
-      return Wechat.api if account == :default && opts.empty?
 
       if corpid.present?
         corpsecret = opts[:corpsecret] || cfg.corpsecret

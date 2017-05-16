@@ -9,11 +9,7 @@ module Wechat
 
     def wechat(account = nil)
       # Make sure user can continue access wechat at instance level similar to class level
-      if account
-        Wechat.api(account)
-      else
-        self.class.wechat
-      end
+      self.class.wechat(account)
     end
 
     def wechat_oauth2(scope = 'snsapi_base', page_url = nil, account = nil, &block)
