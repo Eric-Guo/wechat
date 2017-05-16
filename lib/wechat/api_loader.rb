@@ -12,11 +12,7 @@ module Wechat
       elsif c.corpid && c.corpsecret && token_file.present?
         Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.timeout, c.skip_verify_ssl, js_token_file)
       else
-        puts <<-HELP
-Need create ~/.wechat.yml with wechat appid and secret
-or running at rails root folder so wechat can read config/wechat.yml
-HELP
-        exit 1
+        raise "Need create ~/.wechat.yml with wechat appid and secret or running at rails root folder so wechat can read config/wechat.yml"
       end
     end
 
