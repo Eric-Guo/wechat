@@ -2,13 +2,15 @@ module ActionController
   module WechatResponder
     def wechat_api(opts = {})
       include Wechat::ControllerApi
-      self.wechat_cfg_account = opts[:account].present? ? opts[:account].to_sym : :default
+      account = opts.delete(:account)
+      self.wechat_cfg_account = account ? account.to_sym : :default
       self.wechat_api_client = load_controller_wechat(wechat_cfg_account, opts)
     end
 
     def wechat_responder(opts = {})
       include Wechat::Responder
-      self.wechat_cfg_account = opts[:account].present? ? opts[:account].to_sym : :default
+      account = opts.delete(:account)
+      self.wechat_cfg_account = account ? account.to_sym : :default
       self.wechat_api_client = load_controller_wechat(wechat_cfg_account, opts)
     end
 
@@ -34,7 +36,7 @@ module ActionController
       access_token = opts[:access_token] || cfg.access_token
       jsapi_ticket = opts[:jsapi_ticket] || cfg.jsapi_ticket
 
-      return self.wechat_api_client = Wechat.api if account == :default && opts.empty?
+      return Wechat.api if account == :default && opts.empty?
 
       if corpid.present?
         corpsecret = opts[:corpsecret] || cfg.corpsecret

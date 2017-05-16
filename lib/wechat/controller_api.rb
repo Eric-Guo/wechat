@@ -17,6 +17,9 @@ module Wechat
     end
 
     def wechat_oauth2(scope = 'snsapi_base', page_url = nil, account = nil, &block)
+      # ensure wechat initialization
+      self.class.corpid || self.class.appid || self.class.wechat
+
       api = wechat(account)
       if account
         config = Wechat.config(account)
