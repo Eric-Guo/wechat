@@ -35,7 +35,7 @@ module Wechat
       private
 
       def redis_key
-        "my_app_wechat_ticket_#{self.appid}"
+        "my_app_wechat_ticket_#{self.access_token.appid}"
       end
     end
   end
