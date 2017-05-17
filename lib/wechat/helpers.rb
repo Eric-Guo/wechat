@@ -1,16 +1,33 @@
 module Wechat
   module Helpers
     def wechat_config_js(config_options = {})
-      page_url = if controller.class.trusted_domain_fullname
-                   "#{controller.class.trusted_domain_fullname}#{controller.request.original_fullpath}"
+      account = config_options[:account]
+
+      # Get domain_name, api and app_id
+      if account.blank? || account == controller.class.wechat_cfg_account
+        # default account
+        domain_name = controller.class.trusted_domain_fullname
+        api = controller.wechat
+        app_id = controller.class.corpid || controller.class.appid
+      else
+        # not default account
+        config = Wechat.config(account)
+        domain_name = config.trusted_domain_fullname
+        api = controller.wechat(account)
+        app_id = config.corpid || config.appid
+      end
+
+      page_url = if domain_name
+                   "#{domain_name}#{controller.request.original_fullpath}"
                  else
                    controller.request.original_url
                  end
-      js_hash = controller.wechat.jsapi_ticket.signature(page_url)
+      js_hash = api.jsapi_ticket.signature(page_url)
+
       config_js = <<-WECHAT_CONFIG_JS
 wx.config({
   debug: #{config_options[:debug]},
-  appId: "#{controller.class.corpid || controller.class.appid}",
+  appId: "#{app_id}",
   timestamp: "#{js_hash[:timestamp]}",
   nonceStr: "#{js_hash[:noncestr]}",
   signature: "#{js_hash[:signature]}",

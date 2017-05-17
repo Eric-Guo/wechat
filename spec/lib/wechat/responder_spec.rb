@@ -462,4 +462,50 @@ RSpec.describe WechatController, type: :controller do
       expect(response.body).to eq 'openid'
     end
   end
+
+  describe 'oauth2_page with account' do
+    before(:all) do
+      Wechat::ApiLoader.class_eval { @configs = nil }
+      ENV['WECHAT_CONF_FILE'] = File.join(Dir.getwd, 'spec/dummy/config/dummy_wechat.yml')
+    end
+
+    after(:all) do
+      Wechat::ApiLoader.class_eval { @configs = nil }
+      ENV['WECHAT_CONF_FILE'] = nil
+    end
+
+    controller do
+      wechat_api
+      def oauth2_page
+        wechat_oauth2('snsapi_base', nil, :wx2) do |openid|
+          render plain: openid
+        end
+      end
+    end
+
+    before(:each) do
+      routes.draw { get 'oauth2_page', to: 'wechat#oauth2_page' }
+      allow(controller.wechat(:wx2).jsapi_ticket).to receive(:oauth2_state) {'oauth2_state'}
+    end
+
+    it 'will redirect_to tencent page at first visit' do
+      get :oauth2_page
+      expect(response).to redirect_to(controller.wechat_oauth2('snsapi_base', nil, :wx2))
+    end
+
+    it 'will record cookites when tecent oauth2 success' do
+      oauth2_result = { 'openid' => 'openid' }
+      expect(controller.wechat(:wx2)).to receive(:web_access_token)
+        .with('code_id').and_return(oauth2_result)
+      get :oauth2_page, params: { code: 'code_id', state: 'oauth2_state' }
+      expect(response.body).to eq 'openid'
+      expect(cookies.signed_or_encrypted[:we_openid]).to eq 'openid'
+    end
+
+    it 'will render page with proper cookies' do
+      cookies.signed_or_encrypted[:we_openid] = 'openid'
+      get :oauth2_page
+      expect(response.body).to eq 'openid'
+    end
+  end
 end

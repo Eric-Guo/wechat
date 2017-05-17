@@ -4,19 +4,15 @@ module Wechat
       account = options[:account] || :default
       c = ApiLoader.config(account)
 
-      token_file = options[:token_file] || c.access_token || '/var/tmp/wechat_access_token'
-      js_token_file = options[:js_token_file] || c.jsapi_ticket || '/var/tmp/wechat_jsapi_ticket'
+      token_file = options[:token_file] || c.access_token.presence || '/var/tmp/wechat_access_token'
+      js_token_file = options[:js_token_file] || c.jsapi_ticket.presence || '/var/tmp/wechat_jsapi_ticket'
 
       if c.appid && c.secret && token_file.present?
         Wechat::Api.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
       elsif c.corpid && c.corpsecret && token_file.present?
         Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.timeout, c.skip_verify_ssl, js_token_file)
       else
-        puts <<-HELP
-Need create ~/.wechat.yml with wechat appid and secret
-or running at rails root folder so wechat can read config/wechat.yml
-HELP
-        exit 1
+        raise "Need create ~/.wechat.yml with wechat appid and secret or running at rails root folder so wechat can read config/wechat.yml"
       end
     end
 
@@ -50,6 +46,7 @@ HELP
       configs.each do |_, cfg|
         cfg[:timeout] ||= 20
         cfg[:have_session_class] = class_exists?('WechatSession')
+        cfg[:oauth2_cookie_duration] ||= 1.hour
       end
 
       # create config object using raw config data
