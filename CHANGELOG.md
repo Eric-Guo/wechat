@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.8 (released at 5/18/2017)
+
+* Better support multiple account. by @xiewenwei #187
+* Allow load figaro via RAILS_ENV. by @goofansu #186
+
 ## v0.8.7 (released at 4/23/2017)
 
 * Support new wxa_get_wxacode API for miniapp.
