@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.9 (released at 6/18/2017)
+
+* wechat material_delete failed to work, thanks @Victorialice report #78
+
 ## v0.8.8 (released at 5/18/2017)
 
 * Better support multiple account. by @xiewenwei #187
