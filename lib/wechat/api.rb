@@ -143,7 +143,7 @@ module Wechat
     end
 
     def material_delete(media_id)
-      post 'material/del_material', media_id: media_id
+      post 'material/del_material', JSON.generate(media_id: media_id)
     end
 
     def custom_message_send(message)

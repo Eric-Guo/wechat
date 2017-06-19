@@ -470,8 +470,9 @@ RSpec.describe Wechat::Api do
     specify 'will post material/del_material with access_token and media_id in payload' do
       media_id = 'media_id'
       material_delete_result = { errcode: 0, errmsg: 'deleted' }
+      payload = { media_id: media_id }
       expect(subject.client).to receive(:post)
-        .with('material/del_material', { media_id: media_id },
+        .with('material/del_material', payload.to_json,
               params: { access_token: 'access_token' }).and_return(material_delete_result)
       expect(subject.material_delete(media_id)).to eq material_delete_result
     end
