@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.10 (released at 6/19/2017)
+
+* fix material_delete correctly.
+
 ## v0.8.9 (released at 6/18/2017)
 
 * wechat material_delete failed to work, thanks @Victorialice report #78
