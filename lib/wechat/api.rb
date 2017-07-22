@@ -55,10 +55,18 @@ module Wechat
       post 'user/info/updateremark', JSON.generate(openid: openid, remark: remark)
     end
 
-    def qrcode_create_scene(scene_id, expire_seconds = 604800)
-      post 'qrcode/create', JSON.generate(expire_seconds: expire_seconds,
-                                          action_name: 'QR_SCENE',
-                                          action_info: { scene: { scene_id: scene_id } })
+    def qrcode_create_scene(scene_id_or_str, expire_seconds = 604800)
+      case scene_id_or_str
+      when Integer
+        post 'qrcode/create', JSON.generate(expire_seconds: expire_seconds,
+                                            action_name: 'QR_SCENE',
+                                            action_info: { scene: { scene_id: scene_id_or_str } })
+      else
+        post 'qrcode/create', JSON.generate(expire_seconds: expire_seconds,
+                                            action_name: 'QR_STR_SCENE',
+                                            action_info: { scene: { scene_str: scene_id_or_str } })
+      end
+
     end
 
     def qrcode_create_limit_scene(scene_id_or_str)

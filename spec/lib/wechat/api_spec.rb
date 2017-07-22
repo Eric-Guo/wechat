@@ -152,16 +152,27 @@ RSpec.describe Wechat::Api do
   end
 
   describe '#qrcode_create_scene' do
+    qrcode_scene_result = { ticket: 'qr_code_ticket',
+                            expire_seconds: 60, url: 'qr_code_ticket_pic_url' }
+
     specify 'will post qrcode/create with access_token, scene_id and expire_seconds' do
       scene_id = 101
       qrcode_scene_req = { expire_seconds: 60,
                            action_name: 'QR_SCENE',
                            action_info: { scene: { scene_id: scene_id } } }
-      qrcode_scene_result = { ticket: 'qr_code_ticket',
-                              expire_seconds: 60, url: 'qr_code_ticket_pic_url' }
       expect(subject.client).to receive(:post)
         .with('qrcode/create', qrcode_scene_req.to_json, params: { access_token: 'access_token' }).and_return(qrcode_scene_result)
       expect(subject.qrcode_create_scene(scene_id, 60)).to eq qrcode_scene_result
+    end
+
+    specify 'will post qrcode/create with access_token, scene_str and expire_seconds' do
+      scene_str = 'scene_str'
+      qrcode_scene_req = { expire_seconds: 60,
+                           action_name: 'QR_STR_SCENE',
+                           action_info: { scene: { scene_str: scene_str } } }
+      expect(subject.client).to receive(:post)
+        .with('qrcode/create', qrcode_scene_req.to_json, params: { access_token: 'access_token' }).and_return(qrcode_scene_result)
+      expect(subject.qrcode_create_scene(scene_str, 60)).to eq qrcode_scene_result
     end
   end
 
