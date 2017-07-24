@@ -4,23 +4,31 @@ require 'securerandom'
 module Wechat
   module Ticket
     class JsapiBase
-      attr_reader :client, :access_token, :oauth2_state, :jsapi_ticket_file, :access_ticket, :ticket_life_in_seconds, :got_ticket_at
+      attr_reader :client, :access_token, :jsapi_ticket_file, :access_ticket, :ticket_life_in_seconds, :got_ticket_at
+
+      EXPIREING_SECONDS = 100
 
       def initialize(client, access_token, jsapi_ticket_file)
         @client = client
         @access_token = access_token
         @jsapi_ticket_file = jsapi_ticket_file
-        @random_generator = Random.new
       end
 
       def ticket(tries = 2)
         # Possible two worker running, one worker refresh ticket, other unaware, so must read every time
         read_ticket_from_store
-        refresh if remain_life_seconds < @random_generator.rand(30..3 * 60)
+        refresh if remain_life_seconds < EXPIREING_SECONDS
         access_ticket
       rescue AccessTokenExpiredError
         access_token.refresh
         retry unless (tries -= 1).zero?
+      end
+
+      def oauth2_state
+        if @oauth2_state.blank? || remain_life_seconds < EXPIREING_SECONDS
+          ticket
+        end
+        @oauth2_state
       end
 
       # Obtain the wechat jssdk config signature parameter and return below hash
