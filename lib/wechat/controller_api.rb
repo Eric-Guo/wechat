@@ -28,7 +28,6 @@ module Wechat
 
       raise 'Can not get corpid or appid, so please configure it first to using wechat_oauth2' if appid.blank?
 
-      api.jsapi_ticket.ticket if api.jsapi_ticket.oauth2_state.nil?
       oauth2_params = {
         appid: appid,
         redirect_uri: page_url || generate_redirect_uri(account),
