@@ -57,7 +57,7 @@ module Wechat
 
     def qrcode_create_scene(scene_id_or_str, expire_seconds = 604800)
       case scene_id_or_str
-      when Integer
+      when 0.class
         post 'qrcode/create', JSON.generate(expire_seconds: expire_seconds,
                                             action_name: 'QR_SCENE',
                                             action_info: { scene: { scene_id: scene_id_or_str } })
@@ -71,7 +71,7 @@ module Wechat
 
     def qrcode_create_limit_scene(scene_id_or_str)
       case scene_id_or_str
-      when Integer
+      when 0.class
         post 'qrcode/create', JSON.generate(action_name: 'QR_LIMIT_SCENE',
                                             action_info: { scene: { scene_id: scene_id_or_str } })
       else
