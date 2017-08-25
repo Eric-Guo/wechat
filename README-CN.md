@@ -279,7 +279,7 @@ end
 
 ## 关于接口权限
 
-wechat gems 内部不会检查权限。但因公众号类型不同，和微信服务器端通讯时，可能会被拒绝，详细权限控制可参考[官方文档](http://mp.weixin.qq.com/wiki/7/2d301d4b757dedc333b9a9854b457b47.html)。
+wechat gems 内部不会检查权限。但因公众号类型不同，和微信服务器端通讯时，可能会被拒绝，详细权限控制可参考[官方文档](https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433401084)。
 
 ## 使用命令行
 

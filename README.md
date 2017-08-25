@@ -293,7 +293,7 @@ Notice:
 
 ## The API privilege
 
-wechat gems won't handle any privilege exceptions. (except token timeout, but it's not important to you as it's auto retry/recovery in gems internally), but Tencent will control a lot of privilege based on your public account type and certification, for more info please reference [official document](http://mp.weixin.qq.com/wiki/7/2d301d4b757dedc333b9a9854b457b47.html).
+wechat gems won't handle any privilege exceptions. (except token timeout, but it's not important to you as it's auto retry/recovery in gems internally), but Tencent will control a lot of privilege based on your public account type and certification, for more info please reference [official document](https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433401084).
 
 ## Command line mode
 
