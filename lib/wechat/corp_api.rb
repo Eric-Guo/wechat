@@ -162,7 +162,7 @@ module Wechat
     end
 
     def custom_message_send(message)
-      post 'message/send', message.agent_id(agentid).to_json, content_type: :json
+      post 'message/send', JSON.generate(message.agent_id(agentid)), content_type: :json
     end
   end
 end
