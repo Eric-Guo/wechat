@@ -497,7 +497,7 @@ RSpec.describe Wechat::CorpApi do
       }
 
       expect(subject.client).to receive(:post)
-                                    .with('message/send', payload.to_json,
+                                    .with('message/send', JSON.generate(payload),
                                           params: { access_token: 'access_token' }, content_type: :json).and_return(true)
 
       expect(subject.custom_message_send Wechat::Message.to('openid').text('message content')).to be true
