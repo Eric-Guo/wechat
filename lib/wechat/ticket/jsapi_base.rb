@@ -24,9 +24,7 @@ module Wechat
       end
 
       def oauth2_state
-        if @oauth2_state.blank? || remain_life_seconds < 180
-          ticket
-        end
+        ticket
         @oauth2_state
       end
 
