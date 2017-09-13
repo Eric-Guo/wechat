@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.12 (released at 9/13/2017)
+
+* Read oauth2_state from ticket store every time to avoid invalid oauth2_state by @xiewenwei #196
+
 ## v0.8.11 (released at 7/25/2017)
 
 * oauth2 state code not refresh at the same time of jsapi tickets refresh bug, many thanks @xiewenwei #192
