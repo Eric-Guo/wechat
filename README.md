@@ -575,6 +575,10 @@ class WechatReportsController < ApplicationController
 end
 ```
 
+## Using wechat api at ActiveJob/Rake tasks
+
+Using `Wechat.api` to access the wechat api function at any place.
+
 ## wechat_responder - Rails Responder Controller DSL
 
 In order to respond to the message user sent, Rails developer needs to create a wechat responder controller and define the routing in `routes.rb`

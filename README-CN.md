@@ -560,6 +560,10 @@ class WechatReportsController < ApplicationController
 end
 ```
 
+## 在ActiveJob/Rake tasks中调用有wechat api
+
+可以通过`Wechat.api`在任意地方使用wechat api的功能。
+
 ## wechat_responder - Rails Responder Controller DSL
 
 为了在Rails app中响应用户的消息，开发者需要创建一个wechat responder controller. 首先在router中定义
