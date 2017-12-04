@@ -63,7 +63,7 @@ class App < Thor
     end
 
     desc 'department [DEPARTMENT_ID]', '获取部门列表'
-    def department(departmentid = 0)
+    def department(departmentid = 1)
       r = wechat_api.department(departmentid)
       puts "errcode: #{r['errcode']} errmsg: #{r['errmsg']}"
       puts 'Or# pid  id name'
@@ -104,7 +104,7 @@ class App < Thor
     desc 'user_simplelist [DEPARTMENT_ID]', '获取部门成员'
     method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员', default: 1
     method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加', default: 0
-    def user_simplelist(departmentid = 0)
+    def user_simplelist(departmentid = 1)
       api_opts = options.slice(:fetch_child, :status)
 
       r = wechat_api.user_simplelist(departmentid, api_opts[:fetch_child], api_opts[:status])
@@ -118,7 +118,7 @@ class App < Thor
     desc 'user_list [DEPARTMENT_ID]', '获取部门成员详情'
     method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员', default: 0
     method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加', default: 0
-    def user_list(departmentid = 0)
+    def user_list(departmentid = 1)
       api_opts = options.slice(:fetch_child, :status)
 
       r = wechat_api.user_list(departmentid, api_opts[:fetch_child], api_opts[:status])
