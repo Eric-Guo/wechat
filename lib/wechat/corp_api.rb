@@ -52,6 +52,10 @@ module Wechat
       get 'user/authsucc', params: { userid: userid }
     end
 
+    def user_create(user)
+      post 'user/create', JSON.generate(user)
+    end
+
     def user_delete(userid)
       get 'user/delete', params: { userid: userid }
     end

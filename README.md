@@ -411,6 +411,7 @@ Wechat Enterprise Account commands:
   wechat upload_replaceuser [BATCH_USER_CSV_PATH]               # 上传文件方式全量覆盖成员
   wechat user [OPEN_ID]                                         # 获取用户基本信息
   wechat user_batchdelete [USER_ID_LIST]                        # 批量删除成员
+  wechat user_create [USER_ID, NAME]                       # 创建成员
   wechat user_delete [USER_ID]                                  # 删除成员
   wechat user_list [DEPARTMENT_ID]                              # 获取部门成员详情
   wechat user_simplelist [DEPARTMENT_ID]                        # 获取部门成员

@@ -112,6 +112,21 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#user_create' do
+    specify 'will create user with access_token and payload position' do
+      userid = 'userid'
+      create_user_request = { userid: userid,
+                              name: '张三',
+                              department: [1, 2],
+                              mobile: '13901234567',
+                              position: '产品经理' }
+      create_user_result = { errcode: 0, errmsg: 'created' }
+      expect(subject.client).to receive(:post)
+        .with('user/create', create_user_request.to_json, params: { access_token: 'access_token' }).and_return(create_user_result)
+      expect(subject.user_create(userid: userid, name: '张三', department: [1, 2], mobile: '13901234567', position: '产品经理')).to eq create_user_result
+    end
+  end
+
   describe '#user_delete' do
     specify 'will get user/delete with access_token and userid' do
       userid = 'userid'

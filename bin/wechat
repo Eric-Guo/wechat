@@ -72,6 +72,25 @@ class App < Thor
       end
     end
 
+    desc 'user_create [USER_ID, NAME]', '创建成员'
+    method_option :departmentid, aliases: '-d', desc: '所属部门id'
+    method_option :mobile, aliases: '-m', desc: '手机号码'
+    method_option :email, aliases: '-e', desc: '邮箱'
+    method_option :weixinid, aliases: '-w', desc: '微信号'
+    def user_create(userid, name)
+      api_opts = options.slice(:departmentid, :mobile, :email, :weixinid)
+      user = { userid: userid, name: name }
+      if api_opts[:departmentid].present?
+        user[:department] = Array(api_opts['departmentid'].to_i)
+      else
+        user[:department] = [1]
+      end
+      user[:mobile] = api_opts[:mobile] if api_opts[:mobile].present?
+      user[:email] = api_opts[:email] if api_opts[:email].present?
+      user[:weixinid] = api_opts[:weixinid] if api_opts[:weixinid].present?
+      puts wechat_api.user_create(user)
+    end
+
     desc 'user_delete [USER_ID]', '删除成员'
     def user_delete(userid)
       puts wechat_api.user_delete(userid)
