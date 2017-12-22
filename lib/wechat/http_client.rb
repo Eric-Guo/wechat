@@ -59,6 +59,9 @@ module Wechat
         # 48001, api unauthorized hint, for qrcode creation # 71
         when 42001, 40014, 40001, 48001
           raise AccessTokenExpiredError
+        # 43004, require subscribe hint # 214
+        when 43004
+          Rails.logger.info("Wechat.template_message_send failure, errcode: #{data['errcode']}, errmsg: #{data['errmsg']}")
         else
           raise ResponseError.new(data['errcode'], data['errmsg'])
         end
