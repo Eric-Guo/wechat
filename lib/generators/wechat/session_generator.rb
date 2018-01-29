@@ -9,7 +9,9 @@ module Wechat
       source_root File.expand_path('../templates', __FILE__)
 
       def copy_wechat_sessions_migration
-        migration_template 'db/migration.rb', 'db/migrate/create_wechat_sessions.rb'
+        version = ActiveRecord::Migration.current_version
+        source = version >= 5 ? create_migration_with_version(version) : 'db/migration.rb'
+        migration_template source, 'db/migrate/create_wechat_sessions.rb'
       end
 
       def copy_wechat_session_model
@@ -20,6 +22,16 @@ module Wechat
 
       def self.next_migration_number(dirname)
         ::ActiveRecord::Generators::Base.next_migration_number(dirname)
+      end
+
+      def create_migration_with_version(version)
+        path = File.join(File.dirname(__FILE__), "templates/db/migration_with_version.rb")
+        File.delete(path) if File.exist?(path)
+        source_path = File.join(File.dirname(__FILE__), "templates/db/migration.rb")
+        text = IO.read(source_path)
+        text = text.sub('ActiveRecord::Migration', "ActiveRecord::Migration[#{version}]")
+        File.open(path, 'w') { |f| f.write text }
+        'db/migration_with_version.rb'
       end
     end
   end
