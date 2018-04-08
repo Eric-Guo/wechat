@@ -10,16 +10,30 @@ class WechatConfig < ActiveRecord::Base
 
   validate :app_config_is_valid
 
+  ATTRIBUTES_TO_REMOVE = %w(environment account created_at updated_at)
+
   def get_hash
-    hash = self.as_json
-    hash.delete(:environment, :account, :created_at, :updated_at)
-    hash
+    self.as_json.delete_if{|key| ATTRIBUTES_TO_REMOVE.include?(key)}
   end
 
   private
 
   def app_config_is_valid
-    self[:appid].present? && self[:secret].present? ||                              # public account
-      self[:corp].present? && self[:corpsecret].present? && self[:agentid].present? # corp account
+    if self[:appid].present?
+      # public account
+      if self[:secret].blank?
+        errors.add(:secret, 'cannot be nil when appid is set')
+      end
+    elsif self[:corpid].present?
+      # corp account
+      if self[:corpsecret].blank?
+        errors.add(:corpsecret, 'cannot be nil when corpid is set')
+      end
+      if self[:agentid].blank?
+        errors.add(:agentid, 'cannot be nil when corpid is set')
+      end
+    else
+      errors[:base] << 'Either appid or corpid must be set'
+    end
   end
 end
