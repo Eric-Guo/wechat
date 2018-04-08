@@ -34,12 +34,12 @@ ActiveRecord::Schema.define do
     t.string :secret
     t.string :corpid
     t.string :corpsecret
-    t.string :agentid
-    t.string :encrypt_mode
+    t.integer :agentid
+    t.boolean :encrypt_mode
     t.string :encoding_aes_key
     t.string :access_token, null: false
     t.string :jsapi_ticket, null: false
-    t.string :skip_verify_ssl
+    t.boolean :skip_verify_ssl
     t.integer :timeout, default: 30
     t.string :trusted_domain_fullname
     t.timestamps null: false

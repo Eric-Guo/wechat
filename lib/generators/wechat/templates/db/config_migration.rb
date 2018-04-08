@@ -15,10 +15,10 @@ class CreateWechatConfigs < ActiveRecord::Migration
       # corp account
       t.string :corpid
       t.string :corpsecret
-      t.string :agentid
+      t.integer :agentid
 
       # when encrypt_mode is true, encoding_aes_key must be specified
-      t.string :encrypt_mode
+      t.boolean :encrypt_mode
       t.string :encoding_aes_key
 
       # path to access token storage file
@@ -26,7 +26,7 @@ class CreateWechatConfigs < ActiveRecord::Migration
       # path to jsapi ticket storage file
       t.string :jsapi_ticket, null: false
       # set to false if RestClient::SSLCertificateNotVerified is thrown
-      t.string :skip_verify_ssl
+      t.boolean :skip_verify_ssl, default: true
       t.integer :timeout, default: 30
       t.string :trusted_domain_fullname
 
