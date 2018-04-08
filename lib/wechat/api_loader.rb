@@ -26,6 +26,7 @@ module Wechat
 
     private_class_method def self.loading_config!
       configs = config_from_file || config_from_environment
+      configs.merge(config_from_db) if read_config_from_db?
 
       configs.symbolize_keys!
       configs.each do |key, cfg|
@@ -55,6 +56,21 @@ module Wechat
         cfg_objs[account] = OpenStruct.new(cfg)
       end
       cfg_objs
+    end
+
+    private_class_method def self.config_from_db
+      unless class_exists?('WechatConfig')
+        return {}
+      end
+
+      environment = defined?(::Rails) ? Rails.env.to_s : ENV['RAILS_ENV'] || 'development'
+      configs = {}
+
+      WechatConfig.where(environment: environment).each do |config|
+        configs[config.account] = config.as_json
+      end
+
+      configs
     end
 
     private_class_method def self.config_from_file
@@ -119,6 +135,10 @@ module Wechat
         jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'],
         trusted_domain_fullname: ENV['WECHAT_TRUSTED_DOMAIN_FULLNAME'] }
       {default: value}
+    end
+
+    private_class_method def self.read_config_from_db?
+      ENV['WECHAT_DB_CONFIG']
     end
 
     private_class_method def self.class_exists?(class_name)
