@@ -1,6 +1,8 @@
 class CreateWechatConfigs < ActiveRecord::Migration
   def change
     create_table :wechat_configs do |t|
+      # config environment, typical values: production, development or test
+      t.string :environment, null: false, default: 'development'
       # account name
       t.string :account, null: false
       # app token
@@ -31,6 +33,6 @@ class CreateWechatConfigs < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :wechat_configs, [:account], unique: true, length: {account: 100}
+    add_index :wechat_configs, [:environment, :account], unique: true, length: {environment: 20, account: 100}
   end
 end
