@@ -16,10 +16,32 @@ Dir[File.join(File.dirname(__FILE__), '../lib/generators/wechat/templates/app/mo
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 ActiveRecord::Migration.verbose = false
 ActiveRecord::Schema.define do
+  # copy from lib/generators/wechat/templates/db/session_migration.rb
+  # add count column
   create_table :wechat_sessions do |t|
     t.string :openid, null: false, index: true
     t.string :hash_store
     t.integer :count, default: 0
+    t.timestamps null: false
+  end
+
+  # copy from lib/generators/wechat/templates/db/config_migration.rb
+  create_table :wechat_configs do |t|
+    t.string :environment, null: false, default: 'development'
+    t.string :account, null: false
+    t.string :token, null: false
+    t.string :appid
+    t.string :secret
+    t.string :corpid
+    t.string :corpsecret
+    t.string :agentid
+    t.string :encrypt_mode
+    t.string :encoding_aes_key
+    t.string :access_token, null: false
+    t.string :jsapi_ticket, null: false
+    t.string :skip_verify_ssl
+    t.integer :timeout, default: 30
+    t.string :trusted_domain_fullname
     t.timestamps null: false
   end
 end
