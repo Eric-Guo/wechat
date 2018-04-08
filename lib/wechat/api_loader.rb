@@ -67,7 +67,7 @@ module Wechat
       configs = {}
 
       WechatConfig.where(environment: environment).each do |config|
-        configs[config.account] = config.as_json
+        configs[config.account] = config.get_hash
       end
 
       configs
@@ -138,7 +138,7 @@ module Wechat
     end
 
     private_class_method def self.read_config_from_db?
-      ENV['WECHAT_DB_CONFIG']
+      ENV['WECHAT_DB_CONFIG']&.downcase == 'true'
     end
 
     private_class_method def self.class_exists?(class_name)

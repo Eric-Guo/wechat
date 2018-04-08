@@ -9,15 +9,16 @@ class WechatConfig < ActiveRecord::Base
 
   validate :app_config_is_valid
 
+  def get_hash
+    hash = self.as_json
+    hash.delete(:environment, :account, :created_at, :updated_at)
+    hash
+  end
+
   private
 
   def app_config_is_valid
-    if !self[:appid].blank?
-      # public account
-      !self[:secret].blank?
-    else
-      # corp account
-      !self[:corp].blank? && !self[:corpsecret].blank? && !self[:agentid].blank?
-    end
+    self[:appid].present? && self[:secret].present? ||                              # public account
+      self[:corp].present? && self[:corpsecret].present? && self[:agentid].present? # corp account
   end
 end
