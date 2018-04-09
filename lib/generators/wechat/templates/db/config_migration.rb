@@ -27,7 +27,7 @@ class CreateWechatConfigs < ActiveRecord::Migration
       t.string :jsapi_ticket, null: false
       # set to false if RestClient::SSLCertificateNotVerified is thrown
       t.boolean :skip_verify_ssl, default: true
-      t.integer :timeout, default: 30
+      t.integer :timeout, default: 20
       t.string :trusted_domain_fullname
 
       t.timestamps null: false

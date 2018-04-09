@@ -40,7 +40,7 @@ ActiveRecord::Schema.define do
     t.string :access_token, null: false
     t.string :jsapi_ticket, null: false
     t.boolean :skip_verify_ssl
-    t.integer :timeout, default: 30
+    t.integer :timeout, default: 20
     t.string :trusted_domain_fullname
     t.timestamps null: false
   end
