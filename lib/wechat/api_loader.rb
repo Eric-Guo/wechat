@@ -26,7 +26,7 @@ module Wechat
 
     private_class_method def self.loading_config!
       configs = config_from_file || config_from_environment
-      configs.merge(config_from_db) if read_config_from_db?
+      configs.merge!(config_from_db) if read_config_from_db?
 
       configs.symbolize_keys!
       configs.each do |key, cfg|
