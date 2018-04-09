@@ -64,13 +64,7 @@ module Wechat
       end
 
       environment = defined?(::Rails) ? Rails.env.to_s : ENV['RAILS_ENV'] || 'development'
-      configs = {}
-
-      WechatConfig.where(environment: environment).each do |config|
-        configs[config.account] = config.get_hash
-      end
-
-      configs
+      WechatConfig.get_all_configs(environment)
     end
 
     private_class_method def self.config_from_file

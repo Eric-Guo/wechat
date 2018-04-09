@@ -143,19 +143,51 @@ RSpec.describe WechatConfig, type: :model do
     end
   end
 
-  describe '#get_hash' do
-    let(:config_hash) { test_account.get_hash }
+  describe '#get_config_hash' do
+    let(:config_hash) { test_account.get_config_hash }
 
-    it 'should include relevant attributes' do
+    it 'includes relevant attributes' do
       (WechatConfig.column_names - WechatConfig::ATTRIBUTES_TO_REMOVE).each do |attribute|
         expect(config_hash).to have_key attribute
       end
     end
 
-    it 'should not include irrelevant attributes' do
+    it 'does not include irrelevant attributes' do
       WechatConfig::ATTRIBUTES_TO_REMOVE.each do |attribute|
         expect(config_hash).to_not have_key attribute
       end
+    end
+  end
+
+  describe '#get_all_configs' do
+    before(:each) do
+      WechatConfig.delete_all
+      create_account('development', 'dev_account_1')
+      create_account('development', 'dev_account_2')
+      create_account('test', 'test_account_1')
+      create_account('test', 'test_account_2')
+    end
+    after(:each) { WechatConfig.delete_all }
+
+    it 'returns empty hash when no config is specified for an environment' do
+      configs = WechatConfig.get_all_configs('production')
+      expect(configs).to be_empty
+    end
+
+    it 'includes all configs for specified environment' do
+      configs = WechatConfig.get_all_configs('development')
+      expect(configs.keys).to eq %w(dev_account_1 dev_account_2)
+
+      configs = WechatConfig.get_all_configs('test')
+      expect(configs.keys).to eq %w(test_account_1 test_account_2)
+    end
+
+    private
+    def create_account(environment, account_name)
+      account = test_account.dup
+      account.environment = environment
+      account.account = account_name
+      account.save
     end
   end
 end

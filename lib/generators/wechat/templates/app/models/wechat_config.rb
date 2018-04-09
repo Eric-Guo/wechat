@@ -12,7 +12,14 @@ class WechatConfig < ActiveRecord::Base
 
   ATTRIBUTES_TO_REMOVE = %w(environment account created_at updated_at)
 
-  def get_hash
+  def self.get_all_configs(environment)
+    WechatConfig.where(environment: environment).inject({}) do |hash, config|
+      hash[config.account] = config.get_config_hash
+      hash
+    end
+  end
+
+  def get_config_hash
     self.as_json.delete_if{|key| ATTRIBUTES_TO_REMOVE.include?(key)}
   end
 
