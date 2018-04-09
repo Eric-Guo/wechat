@@ -41,49 +41,28 @@ RSpec.describe Wechat::ApiLoader do
   end
 
   describe '#config_from_db' do
-    context 'when db config is not set to be read' do
-      before(:each) { ENV['WECHAT_DB_CONFIG'] = nil }
+    it 'includes db config for current environment' do
+      allow(WechatConfig).to receive(:get_all_configs).with('development').and_return({
+          dev_account_1: { appid: 'dev_app_1' },
+          dev_account_2: { appid: 'dev_app_2' }
+      })
+      expect(WechatConfig).to receive(:get_all_configs).with('test').and_return({
+          test_account_1: { appid: 'test_app_1' },
+          test_account_2: { appid: 'test_app_1' }
+      })
 
-      it 'does not include db config' do
-        expect(Wechat::ApiLoader).not_to receive(:config_from_db)
-        expect(WechatConfig).not_to receive(:get_all_configs).with('test')
-
-        Wechat.config
-        expect(Wechat::ApiLoader.instance_variable_get(:@configs).keys).to eq [:default]
-        expect(Wechat.config(:default).appid).to eq 'appid'
-      end
+      Wechat.config
+      expect(Wechat::ApiLoader.instance_variable_get(:@configs).keys).to match_array [:default, :test_account_1, :test_account_2]
+      expect(Wechat.config(:default).appid).to eq 'appid'
+      expect(Wechat.config(:test_account_1).appid).to eq 'test_app_1'
+      expect(Wechat.config(:test_account_2).appid).to eq 'test_app_1'
     end
 
-    context 'when db config is set to be read' do
+    context 'when both file and db config exist' do
       before(:each) do
-        ENV['WECHAT_DB_CONFIG'] = 'true'
-        allow(WechatConfig).to receive(:get_all_configs).with('development').and_return({
-            dev_account_1: { appid: 'dev_app_1' },
-            dev_account_2: { appid: 'dev_app_2' }
-        })
-        expect(WechatConfig).to receive(:get_all_configs).with('test').and_return({
-            test_account_1: { appid: 'test_app_1' },
-            test_account_2: { appid: 'test_app_1' }
-        })
-      end
-      after(:each) { ENV['WECHAT_DB_CONFIG'] = nil }
-
-      it 'includes db config for current environment' do
-        Wechat.config
-        expect(Wechat::ApiLoader.instance_variable_get(:@configs).keys).to match_array [:default, :test_account_1, :test_account_2]
-        expect(Wechat.config(:default).appid).to eq 'appid'
-        expect(Wechat.config(:test_account_1).appid).to eq 'test_app_1'
-        expect(Wechat.config(:test_account_2).appid).to eq 'test_app_1'
-      end
-    end
-
-    context 'when both file and db config is set to be read' do
-      before(:each) do
-        ENV['WECHAT_DB_CONFIG'] = 'true'
         ENV['WECHAT_CONF_FILE'] = File.join(Dir.getwd, 'spec/dummy/config/dummy_wechat.yml')
       end
       after(:each) do
-        ENV['WECHAT_DB_CONFIG'] = nil
         ENV['WECHAT_CONF_FILE'] = nil
       end
 

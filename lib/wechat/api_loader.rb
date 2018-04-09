@@ -26,7 +26,7 @@ module Wechat
 
     private_class_method def self.loading_config!
       configs = config_from_file || config_from_environment
-      configs.merge!(config_from_db) if read_config_from_db?
+      configs.merge!(config_from_db)
 
       configs.symbolize_keys!
       configs.each do |key, cfg|
@@ -129,10 +129,6 @@ module Wechat
         jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'],
         trusted_domain_fullname: ENV['WECHAT_TRUSTED_DOMAIN_FULLNAME'] }
       {default: value}
-    end
-
-    private_class_method def self.read_config_from_db?
-      ENV['WECHAT_DB_CONFIG']&.downcase == 'true'
     end
 
     private_class_method def self.class_exists?(class_name)

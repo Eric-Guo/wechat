@@ -80,7 +80,7 @@ rails g wechat:config
 rake db:migrate
 ```
 
-After running the migration, a `wechat_configs` table will be created that allows storage of multiple wechat accounts. Configurations in this table will only be used if environment variable `WECHAT_DB_CONFI` is set to `true`.
+After running the migration, a `wechat_configs` table will be created that allows storage of multiple wechat accounts.
 
 ## Configuration
 
@@ -234,7 +234,7 @@ For more details about database multi-account configratuion, please refer to [PR
 
 Running `wechat` command in the root folder of Rails application will be using the Rails configuration first (`default` section), if can not find it, will relay on `~\.wechat.yml`, such behavior enables managing more wechat public account and enterprise account without changing your home `~\.wechat.yml` file.
 
-When database account configuration is enabled, and environment variable `WECHAT_DB_CONFIG` is set to `true`, database configurations will be loaded after `default` and `yml` file configurations. When configurations with the same account name exist in both database and `default` or `yml` file, the one in the database will take precedence.
+When database account configuration is enabled, database configurations will be loaded after `yml` configuration file or environment parameters. When configurations with the same account name exist in both database and `yml` file or environment parameter, the one in the database will take precedence.
 
 ##### Wechat server timeout setting
 
@@ -268,7 +268,7 @@ end
 
 #### Configure individual request with different `appid`
 
-If you want the controller to dynamically apply different account configurations for each request, you need to enable database account configuration, set environment variable `WECHAT_DB_CONFIG` to `true`, and call `wechat_oauth2` or `Wechat#api`:
+If you want the controller to dynamically apply different account configurations for each request, you need to enable database account configuration, and call `wechat_oauth2` or `Wechat#api`:
 
 ```ruby
 class WechatReportsController < ApplicationController

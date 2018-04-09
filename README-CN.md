@@ -73,7 +73,7 @@ rails g wechat:config
 rake db:migrate
 ```
 
-运行后会在数据库中创建 `wechat_configs` 表，用来记录不同微信账户的配置。仅当环境变量 `WECHAT_DB_CONFIG` 设置为 `true` 时，数据库中的配置才会被启用。
+运行后会在数据库中创建 `wechat_configs` 表，用来记录不同微信账户的配置。
 
 ## 配置
 
@@ -221,7 +221,7 @@ trusted_domain_fullname | 字串 |
 
 注意在Rails项目根目录下运行`wechat`命令行工具会优先使用`config/wechat.yml`中的`default`配置，如果失败则使用`~\.wechat.yml`中的配置，以便于在生产环境下管理多个微信账号应用。
 
-如果启用数据库账户配置，并且环境变量 `WECHAT_DB_CONFIG` 设置为 `true`，数据库中的账户信息在读入 `default` 和 `yml` 之后被载入。当存在同名账户时，数据库中的配置会覆盖前两者。
+如果启用数据库账户配置，数据库中的账户信息在读入 `wechat.yml` 或环境变量之后被载入。当存在同名账户时，数据库中的配置会覆盖前两者。
 
 ##### 配置微信服务器超时
 
@@ -255,7 +255,7 @@ end
 
 #### 为每个 request 配置不同的 `appid`
 
-若需要动态处理不同微信公众号的消息，您需要用数据库存储账户设置，将环境变量 `WECHAT_DB_CONFIG` 设置为 `true`，然后调用 `wechat_oauth2` 或者 `Wechat#api`:
+若需要动态处理不同微信公众号的消息，您需要用数据库存储账户设置，然后调用 `wechat_oauth2` 或者 `Wechat#api`:
 
 ```ruby
 class WechatReportsController < ApplicationController
