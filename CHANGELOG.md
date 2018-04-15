@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.9.0 (released at 4/15/2018)
+
+* Support multi wechat account dynamically loading from DB. by @tuliren #222
+* user_create API for enterprise account. #206
+* Will ignore template_message_send error 43004 by @insub #214
+* using template with version if the migration version available by @killernova #220
+* Remove Deprecation oauth2_url
+* Remove Ruby 2.2 support, add Rails 5.2 and http v3 support
+
 ## v0.8.12 (released at 9/13/2017)
 
 * Read oauth2_state from ticket store every time to avoid invalid oauth2_state by @xiewenwei #196
