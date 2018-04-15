@@ -66,6 +66,15 @@ rails g wechat:redis_store
 
 Redis存贮相比默认的文件存贮，可以允许Rails应用运行在多台服务器中，如果只有一台服务器，仍然推荐使用默认的文件存贮，另外命令行不会读取Redis存贮的Token或者Ticket。
 
+启用数据库配置微信账户:
+
+```console
+rails g wechat:config
+rake db:migrate
+```
+
+运行后会在数据库中创建 `wechat_configs` 表，用来记录不同微信账户的配置。
+
 ## 配置
 
 #### 微信的第一次配置
@@ -185,9 +194,35 @@ test:
 
 进一步的多账号支持参见[PR 150](https://github.com/Eric-Guo/wechat/pull/150)。
 
+#### 数据库微信账户配置
+启用数据库微信配置之后，会生成如下数据表：
+
+属性 | 类型 |  备注
+---- | ---- | ----
+environment | 字串 | 必填。配置对应的运行环境，一般有：`production`、`development`、`test`。比如 `production` 配置仅在生产环境有效。默认为 `development`。
+account | 字串 | 必填。自定义的微信账户名称。同一 `environment` 下，账户名称不允许重复。
+enabled | 布尔 | 必填。配置是否生效。默认 `true`。
+appid | 字串 | 公众号 id。此字段和 `corpid` 两者必填其一。
+secret | 字串 | 公众号相关配置。当公众号 `appid` 存在时必填。
+corpid | 字串 | 企业号 id。此字段和 `appid` 两者必填其一。
+corpsecret | 字串 | 企业号相关配置。当企业号 `corpid` 存在时必填。
+agentid | 整数 | 企业号相关配置。当企业号 `corpid` 存在时必填。
+encrypt_mode | 布尔 |
+encoding_aes_key | 字串 | 当 `encrypt_mode` 为 `true` 时必填。
+token | 字串 | 必填。
+access_token | 字串 | 必填。存储 `access token` 文件的路径。
+jsapi_ticket | 字串 | 必填。存储 `jsapi ticket` 文件的路径。
+skip_verify_ssl | 布尔
+timeout | 整数 | 默认值是 20。
+trusted_domain_fullname | 字串 |
+
+数据库配置更新后，需要重启服务器或者调用 `Wechat.reload_config!` 载入更新，否则更新不会生效。
+
 ##### 配置优先级
 
 注意在Rails项目根目录下运行`wechat`命令行工具会优先使用`config/wechat.yml`中的`default`配置，如果失败则使用`~\.wechat.yml`中的配置，以便于在生产环境下管理多个微信账号应用。
+
+如果启用数据库账户配置，数据库中的账户信息在读入 `wechat.yml` 或环境变量之后被载入。当存在同名账户时，数据库中的配置会覆盖前两者。
 
 ##### 配置微信服务器超时
 
@@ -216,6 +251,35 @@ class WechatFirstController < ActionController::Base
    wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1")
 
    on :text, with:"help", respond: "help content"
+end
+```
+
+#### 为每个 request 配置不同的 `appid`
+
+若需要动态处理不同微信公众号的消息，您需要用数据库存储账户设置，然后调用 `wechat_oauth2` 或者 `Wechat#api`:
+
+```ruby
+class WechatReportsController < ApplicationController
+  wechat_api
+  layout 'wechat'
+
+  def index
+    # 通过自定义方法，从 request 中得到微信账户名称
+    account_name = get_account_from_url(request)
+
+    wechat_oauth2('snsapi_base', nil, account_name) do |openid|
+      @current_user = User.find_by(wechat_openid: openid)
+      @articles = @current_user.articles
+    end
+
+    Wechat.api(account_name)
+  end
+
+  private
+  # 预期的 URL: .../wechat/<account-name>/...
+  def get_account_from_url(request)
+    request.original_url.match(/wechat\/(.*)\//)[1]
+  end
 end
 ```
 

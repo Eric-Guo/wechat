@@ -2,22 +2,22 @@ require 'rails/generators/active_record'
 
 module Wechat
   module Generators
-    class SessionGenerator < Rails::Generators::Base
+    class ConfigGenerator < Rails::Generators::Base
       include ::Rails::Generators::Migration
 
-      desc 'Enable wechat session support'
+      desc 'Generate wechat configs in database'
       source_root File.expand_path('../templates', __FILE__)
 
-      def copy_wechat_sessions_migration
+      def copy_wechat_config_migration
         migration_template(
-            'db/session_migration.rb.erb',
-            'db/migrate/create_wechat_sessions.rb',
+            'db/config_migration.rb.erb',
+            'db/migrate/create_wechat_configs.rb',
             {migration_version: migration_version}
         )
       end
 
-      def copy_wechat_session_model
-        template 'app/models/wechat_session.rb'
+      def copy_wechat_config_model
+        template 'app/models/wechat_config.rb'
       end
 
       private

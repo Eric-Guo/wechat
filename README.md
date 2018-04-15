@@ -73,6 +73,15 @@ rails g wechat:redis_store
 
 Redis store supports Rails application running in multi-server, no need to enable it if your Rails application is running on one server only, the wechat command won't read the token/ticket stored in Redis.
 
+Enable database wechat configurations:
+
+```console
+rails g wechat:config
+rake db:migrate
+```
+
+After running the migration, a `wechat_configs` table will be created that allows storage of multiple wechat accounts.
+
 ## Configuration
 
 #### Configure wechat for the first time
@@ -198,9 +207,35 @@ test:
 
 For multiple accounts details reference [PR 150](https://github.com/Eric-Guo/wechat/pull/150)
 
+#### Database wechat account configuration
+After enabling database account configuration, the following table will be created:
+
+Attribute | Type | Annotation
+---- | ---- | ----
+environment | string | Required. Environment of account configuration. Typical values are: `production`, `development` and `test`. For example, a `production` config will only be available in `production`. Default to `development`.
+account | string | Required. Custom wechat account name. Account names must be unique within each environment.
+enabled | boolean | Required. Whether this configuration is activated. Default to `true`.
+appid | string | Public account id. Either this attribute or `corpid` must be specified.
+secret | string | Public account configuration. Required when `appid` exists.
+corpid | string | Corp account id. Either this attribute or `appid` must be specified.
+corpsecret | string | Corp account configuration. Required when `corpid` exists.
+agentid | integer | Corp account configuration. Required when `corpid` exists.
+encrypt_mode | boolean |
+encoding_aes_key | string | Required when `encrypt_mode` is `true`.
+token | string | Required.
+access_token | string | Required. Path to `access token` storage file.
+jsapi_ticket | string | Required. Path to `jsapi ticket` storage file.
+skip_verify_ssl | boolean
+timeout | integer | Default to 20.
+trusted_domain_fullname | string |
+
+After updating database account configurations, you need to restart the server, or call `Wechat.reload_config!` to reload the updates.
+
 ##### Configure priority
 
 Running `wechat` command in the root folder of Rails application will be using the Rails configuration first (`default` section), if can not find it, will relay on `~\.wechat.yml`, such behavior enables managing more wechat public account and enterprise account without changing your home `~\.wechat.yml` file.
+
+When database account configuration is enabled, database configurations will be loaded after `yml` configuration file or environment parameters. When configurations with the same account name exist in both database and `yml` file or environment parameter, the one in the database will take precedence.
 
 ##### Wechat server timeout setting
 
@@ -229,6 +264,34 @@ class WechatFirstController < ActionController::Base
    wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1")
 
    on :text, with:"help", respond: "help content"
+end
+```
+
+#### Configure individual request with different `appid`
+
+If you want the controller to dynamically apply different account configurations for each request, you need to enable database account configuration, and call `wechat_oauth2` or `Wechat#api`:
+
+```ruby
+class WechatReportsController < ApplicationController
+  wechat_api
+  layout 'wechat'
+
+  def index
+    account_name = get_account_from_url(request)
+
+    wechat_oauth2('snsapi_base', nil, account_name) do |openid|
+      @current_user = User.find_by(wechat_openid: openid)
+      @articles = @current_user.articles
+    end
+
+    Wechat.api(account_name)
+  end
+
+  private
+  # Expected URL: .../wechat/<account-name>/...
+  def get_account_from_url(request)
+    request.original_url.match(/wechat\/(.*)\//)[1]
+  end
 end
 ```
 

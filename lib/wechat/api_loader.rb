@@ -24,8 +24,13 @@ module Wechat
       @configs[account.to_sym] || raise("Wechat configuration for #{account} is missing.")
     end
 
+    def self.reload_config!
+      @configs = loading_config!
+    end
+
     private_class_method def self.loading_config!
       configs = config_from_file || config_from_environment
+      configs.merge!(config_from_db)
 
       configs.symbolize_keys!
       configs.each do |key, cfg|
@@ -55,6 +60,15 @@ module Wechat
         cfg_objs[account] = OpenStruct.new(cfg)
       end
       cfg_objs
+    end
+
+    private_class_method def self.config_from_db
+      unless class_exists?('WechatConfig')
+        return {}
+      end
+
+      environment = defined?(::Rails) ? Rails.env.to_s : ENV['RAILS_ENV'] || 'development'
+      WechatConfig.get_all_configs(environment)
     end
 
     private_class_method def self.config_from_file
