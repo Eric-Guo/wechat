@@ -16,5 +16,5 @@ bundler_args: --jobs=3 --retry=3
 cache: bundler
 
 script:
-  - bundle exec rake
+  - bundle exec rspec
   - bundle exec codeclimate-test-reporter
