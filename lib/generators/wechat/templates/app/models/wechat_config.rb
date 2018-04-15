@@ -14,13 +14,13 @@ class WechatConfig < ActiveRecord::Base
 
   def self.get_all_configs(environment)
     WechatConfig.where(environment: environment, enabled: true).inject({}) do |hash, config|
-      hash[config.account] = config.get_config_hash
+      hash[config.account] = config.build_config_hash
       hash
     end
   end
 
-  def get_config_hash
-    self.as_json.delete_if{|key| ATTRIBUTES_TO_REMOVE.include?(key)}
+  def build_config_hash
+    self.as_json(except: ATTRIBUTES_TO_REMOVE)
   end
 
   private

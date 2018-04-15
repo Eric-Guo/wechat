@@ -144,8 +144,8 @@ RSpec.describe WechatConfig, type: :model do
     end
   end
 
-  describe '#get_config_hash' do
-    let(:config_hash) { test_account.get_config_hash }
+  describe '#build_config_hash' do
+    let(:config_hash) { test_account.build_config_hash }
 
     it 'includes relevant attributes' do
       (WechatConfig.column_names - WechatConfig::ATTRIBUTES_TO_REMOVE).each do |attribute|
