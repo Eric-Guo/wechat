@@ -28,6 +28,10 @@ module Wechat
     @wechat_apis ||= {}
     @wechat_apis[account.to_sym] ||= ApiLoader.with(account: account)
   end
+
+  def self.reload_config!
+    ApiLoader.reload_config!
+  end
 end
 
 ActionView::Base.send :include, Wechat::Helpers if defined? ActionView::Base

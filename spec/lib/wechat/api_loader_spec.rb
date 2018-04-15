@@ -12,6 +12,35 @@ RSpec.describe Wechat::ApiLoader do
     expect(default_configs.keys).to eq [:default]
   end
 
+  describe '#reload_config!' do
+    before(:each) do
+      ENV['WECHAT_APPID'] = 'appid'
+    end
+    after(:each) do
+      ENV['WECHAT_APPID'] = 'appid'
+    end
+
+    it 'reloads configs' do
+      # setup environment config
+      ENV['WECHAT_APPID'] = 'app_id_1'
+      # setup db config
+      allow(WechatConfig).to receive(:get_all_configs).with('test').and_return({ test_account: { appid: 'test_app' } })
+
+      expect(Wechat.config(:default).appid).to eq 'app_id_1'
+      expect(Wechat.config(:test_account).appid).to eq 'test_app'
+
+      # update environment config
+      ENV['WECHAT_APPID'] = 'app_id_2'
+      # update db config
+      allow(WechatConfig).to receive(:get_all_configs).with('test').and_return({ new_test_account: { appid: 'new_test_app' } })
+
+      Wechat::ApiLoader.reload_config!
+
+      expect(Wechat.config(:default).appid).to eq 'app_id_2'
+      expect(Wechat.config(:new_test_account).appid).to eq 'new_test_app'
+    end
+  end
+
   describe '#config_from_file' do
     before(:all) do
       ENV['WECHAT_CONF_FILE'] = File.join(Dir.getwd, 'spec/dummy/config/dummy_wechat.yml')
@@ -37,6 +66,15 @@ RSpec.describe Wechat::ApiLoader do
 
       new_api = Wechat::ApiLoader.with account: :wx2, token: 'new_token2'
       expect(new_api.access_token.appid).to eq 'my_appid2'
+    end
+  end
+
+  describe '#config_from_environment' do
+    it 'loads default config from environment' do
+      # arguments set in spec_helper.rb
+      expect(Wechat.config(:default).appid).to eq 'appid'
+      expect(Wechat.config(:default).secret).to eq 'secret'
+      expect(Wechat.config(:default).token).to eq 'token'
     end
   end
 

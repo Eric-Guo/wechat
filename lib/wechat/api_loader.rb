@@ -24,6 +24,10 @@ module Wechat
       @configs[account.to_sym] || raise("Wechat configuration for #{account} is missing.")
     end
 
+    def self.reload_config!
+      @configs = loading_config!
+    end
+
     private_class_method def self.loading_config!
       configs = config_from_file || config_from_environment
       configs.merge!(config_from_db)

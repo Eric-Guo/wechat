@@ -229,7 +229,7 @@ skip_verify_ssl | boolean
 timeout | integer | Default to 20.
 trusted_domain_fullname | string |
 
-For more details about database multi-account configratuion, please refer to [PR 222](https://github.com/Eric-Guo/wechat/pull/222).
+After updating database account configurations, you need to restart the server, or call `Wechat.reload_config!` to reload the updates.
 
 ##### Configure priority
 

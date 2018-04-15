@@ -216,7 +216,7 @@ skip_verify_ssl | 布尔
 timeout | 整数 | 默认值是 20。
 trusted_domain_fullname | 字串 |
 
-进一步的数据库多账号支持参见 [PR 222](https://github.com/Eric-Guo/wechat/pull/222)。
+数据库配置更新后，需要重启服务器或者调用 `Wechat.reload_config!` 载入更新，否则更新不会生效。
 
 ##### 配置优先级
 
