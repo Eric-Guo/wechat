@@ -214,7 +214,7 @@ Attribute | Type | Annotation
 ---- | ---- | ----
 environment | string | Required. Environment of account configuration. Typical values are: `production`, `development` and `test`. For example, a `production` config will only be available in `production`. Default to `development`.
 account | string | Required. Custom wechat account name. Account names must be unique within each environment.
-token | string | Required.
+enabled | boolean | Required. Whether this configuration is activated. Default to `true`.
 appid | string | Public account id. Either this attribute or `corpid` must be specified.
 secret | string | Public account configuration. Required when `appid` exists.
 corpid | string | Corp account id. Either this attribute or `appid` must be specified.
@@ -222,6 +222,7 @@ corpsecret | string | Corp account configuration. Required when `corpid` exists.
 agentid | integer | Corp account configuration. Required when `corpid` exists.
 encrypt_mode | boolean |
 encoding_aes_key | string | Required when `encrypt_mode` is `true`.
+token | string | Required.
 access_token | string | Required. Path to `access token` storage file.
 jsapi_ticket | string | Required. Path to `jsapi ticket` storage file.
 skip_verify_ssl | boolean

@@ -201,7 +201,7 @@ test:
 ---- | ---- | ----
 environment | 字串 | 必填。配置对应的运行环境，一般有：`production`、`development`、`test`。比如 `production` 配置仅在生产环境有效。默认为 `development`。
 account | 字串 | 必填。自定义的微信账户名称。同一 `environment` 下，账户名称不允许重复。
-token | 字串 | 必填。
+enabled | 布尔 | 必填。配置是否生效。默认 `true`。
 appid | 字串 | 公众号 id。此字段和 `corpid` 两者必填其一。
 secret | 字串 | 公众号相关配置。当公众号 `appid` 存在时必填。
 corpid | 字串 | 企业号 id。此字段和 `appid` 两者必填其一。
@@ -209,6 +209,7 @@ corpsecret | 字串 | 企业号相关配置。当企业号 `corpid` 存在时必
 agentid | 整数 | 企业号相关配置。当企业号 `corpid` 存在时必填。
 encrypt_mode | 布尔 |
 encoding_aes_key | 字串 | 当 `encrypt_mode` 为 `true` 时必填。
+token | 字串 | 必填。
 access_token | 字串 | 必填。存储 `access token` 文件的路径。
 jsapi_ticket | 字串 | 必填。存储 `jsapi ticket` 文件的路径。
 skip_verify_ssl | 布尔

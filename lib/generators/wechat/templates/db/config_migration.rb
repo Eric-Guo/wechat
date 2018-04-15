@@ -5,8 +5,8 @@ class CreateWechatConfigs < ActiveRecord::Migration
       t.string :environment, null: false, default: 'development'
       # account name
       t.string :account, null: false
-      # app token
-      t.string :token, null: false
+      # whether this config is activated
+      t.boolean :enabled, default: true
 
       # public account
       t.string :appid
@@ -21,6 +21,8 @@ class CreateWechatConfigs < ActiveRecord::Migration
       t.boolean :encrypt_mode
       t.string :encoding_aes_key
 
+      # app token
+      t.string :token, null: false
       # path to access token storage file
       t.string :access_token, null: false
       # path to jsapi ticket storage file

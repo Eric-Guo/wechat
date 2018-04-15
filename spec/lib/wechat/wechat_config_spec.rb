@@ -5,7 +5,7 @@ RSpec.describe WechatConfig, type: :model do
     described_class.new(
         environment: 'test',
         account: 'account',
-        token: 'token',
+        enabled: true,
 
         appid: 'appid',
         secret: 'secret',
@@ -17,6 +17,7 @@ RSpec.describe WechatConfig, type: :model do
         encrypt_mode: true,
         encoding_aes_key: 'aes_key',
 
+        token: 'token',
         access_token: 'tmp/test/account/access_token',
         jsapi_ticket: 'tmp/test/account/jsapi_ticket',
         skip_verify_ssl: true,
@@ -182,12 +183,26 @@ RSpec.describe WechatConfig, type: :model do
       expect(configs.keys).to eq %w(test_account_1 test_account_2)
     end
 
+    it 'does not include disabled config' do
+      account = create_account('test', 'enabled_account')
+      configs = WechatConfig.get_all_configs('test')
+      expect(configs.keys).to eq %w(test_account_1 test_account_2 enabled_account)
+
+      account.account = 'disabled_account'
+      account.enabled = false
+      account.save
+
+      configs = WechatConfig.get_all_configs('test')
+      expect(configs.keys).to eq %w(test_account_1 test_account_2)
+    end
+
     private
     def create_account(environment, account_name)
       account = test_account.dup
       account.environment = environment
       account.account = account_name
       account.save
+      account
     end
   end
 end

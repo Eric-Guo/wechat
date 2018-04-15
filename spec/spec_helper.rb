@@ -29,7 +29,7 @@ ActiveRecord::Schema.define do
   create_table :wechat_configs do |t|
     t.string :environment, null: false, default: 'development'
     t.string :account, null: false
-    t.string :token, null: false
+    t.boolean :enabled, default: true
     t.string :appid
     t.string :secret
     t.string :corpid
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define do
     t.integer :agentid
     t.boolean :encrypt_mode
     t.string :encoding_aes_key
+    t.string :token, null: false
     t.string :access_token, null: false
     t.string :jsapi_ticket, null: false
     t.boolean :skip_verify_ssl

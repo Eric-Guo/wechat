@@ -10,10 +10,10 @@ class WechatConfig < ActiveRecord::Base
 
   validate :app_config_is_valid
 
-  ATTRIBUTES_TO_REMOVE = %w(environment account created_at updated_at)
+  ATTRIBUTES_TO_REMOVE = %w(environment account created_at updated_at enabled)
 
   def self.get_all_configs(environment)
-    WechatConfig.where(environment: environment).inject({}) do |hash, config|
+    WechatConfig.where(environment: environment, enabled: true).inject({}) do |hash, config|
       hash[config.account] = config.get_config_hash
       hash
     end
