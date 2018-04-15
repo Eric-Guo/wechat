@@ -1,4 +1,4 @@
-class CreateWechatConfigs < ActiveRecord::Migration
+class CreateWechatConfigs < ActiveRecord::Migration<%= migration_version %>
   def change
     create_table :wechat_configs do |t|
       # config environment, typical values: production, development or test
