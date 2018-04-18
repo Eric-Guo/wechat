@@ -251,7 +251,7 @@ Sometimes, you may want to host more than one enterprise/public wechat account i
 
 ```ruby
 class WechatFirstController < ActionController::Base
-   wechat_responder account: :new_account
+   wechat_responder account: :new_account, account_from_request: Proc.new{ |request| request.params[:wechat] }
 
    on :text, with:"help", respond: "help content"
 end
@@ -261,39 +261,14 @@ Or you can provide full list of options.
 
 ```ruby
 class WechatFirstController < ActionController::Base
-   wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1")
+   wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1"),
+                    account_from_request: Proc.new{ |request| request.params[:wechat] }
 
    on :text, with:"help", respond: "help content"
 end
 ```
 
-#### Configure individual request with different `appid`
-
-If you want the controller to dynamically apply different account configurations for each request, you need to enable database account configuration, and call `wechat_oauth2` or `Wechat#api`:
-
-```ruby
-class WechatReportsController < ApplicationController
-  wechat_api
-  layout 'wechat'
-
-  def index
-    account_name = get_account_from_url(request)
-
-    wechat_oauth2('snsapi_base', nil, account_name) do |openid|
-      @current_user = User.find_by(wechat_openid: openid)
-      @articles = @current_user.articles
-    end
-
-    Wechat.api(account_name)
-  end
-
-  private
-  # Expected URL: .../wechat/<account-name>/...
-  def get_account_from_url(request)
-    request.original_url.match(/wechat\/(.*)\//)[1]
-  end
-end
-```
+`account_from_request` is a `Proc` that takes in `request` as its parameter, and returns the corresponding wechat account name. In the above examples, `controller` will choose the account based on the `wechat` parameter passed in the `request`. If `account_from_request` is not specified, or this `Proc` evaluates to `nil`, configuration specified by `account` or the full list of options will be used.
 
 #### JS-SDK helper
 
@@ -327,6 +302,11 @@ class CartController < ActionController::Base
       @current_user = User.find_by(wechat_openid: openid)
       @articles = @current_user.articles
     end
+
+    # specify account_name to use arbitrary wechat account configuration
+    # wechat_oauth2('snsapi_base', nil, account_name) do |openid|
+    #  ...
+    # end
   end
 end
 ```

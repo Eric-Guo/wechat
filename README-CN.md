@@ -238,7 +238,7 @@ Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://
 
 ```ruby
 class WechatFirstController < ActionController::Base
-   wechat_responder account: :new_account
+   wechat_responder account: :new_account, account_from_request: Proc.new{ |request| request.params[:wechat] }
 
    on :text, with:"help", respond: "help content"
 end
@@ -248,40 +248,14 @@ end
 
 ```ruby
 class WechatFirstController < ActionController::Base
-   wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1")
+   wechat_responder appid: "app1", secret: "secret1", token: "token1", access_token: Rails.root.join("tmp/access_token1"),
+                    account_from_request: Proc.new{ |request| request.params[:wechat] }
 
    on :text, with:"help", respond: "help content"
 end
 ```
 
-#### 为每个 request 配置不同的 `appid`
-
-若需要动态处理不同微信公众号的消息，您需要用数据库存储账户设置，然后调用 `wechat_oauth2` 或者 `Wechat#api`:
-
-```ruby
-class WechatReportsController < ApplicationController
-  wechat_api
-  layout 'wechat'
-
-  def index
-    # 通过自定义方法，从 request 中得到微信账户名称
-    account_name = get_account_from_url(request)
-
-    wechat_oauth2('snsapi_base', nil, account_name) do |openid|
-      @current_user = User.find_by(wechat_openid: openid)
-      @articles = @current_user.articles
-    end
-
-    Wechat.api(account_name)
-  end
-
-  private
-  # 预期的 URL: .../wechat/<account-name>/...
-  def get_account_from_url(request)
-    request.original_url.match(/wechat\/(.*)\//)[1]
-  end
-end
-```
+其中 `account_from_request` 是一个 `Proc`，接受 `request` 作为唯一参数，返回相应的微信账户名称。以上示例中，`controller` 会根据 `request` 中传入的 `wechat` 参数选择微信账户。如果没有提供 `account_from_request` 或者 `Proc` 的结果是 `nil`，则使用 `account` 或者完整配置。
 
 #### JS-SDK 支持
 
@@ -315,6 +289,11 @@ class CartController < ActionController::Base
       @current_user = User.find_by(wechat_openid: openid)
       @articles = @current_user.articles
     end
+
+    # 指定 account_name，可以使用任意微信账户
+    # wechat_oauth2('snsapi_base', nil, account_name) do |openid|
+    #  ...
+    # end
   end
 end
 ```
