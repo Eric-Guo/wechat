@@ -174,8 +174,8 @@ module Wechat
     end
 
     def show
-      if @corpid.present?
-        echostr, _corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), @encoding_aes_key))
+      if @we_corpid.present?
+        echostr, _corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), @we_encoding_aes_key))
         if Rails::VERSION::MAJOR >= 4
           render plain: echostr
         else
@@ -215,23 +215,23 @@ module Wechat
       account = self.class.account_from_request&.call(request)
       config = account ? Wechat.config(account) : nil
 
-      @encrypt_mode = config&.encrypt_mode || self.class.encrypt_mode
-      @encoding_aes_key = config&.encoding_aes_key || self.class.encoding_aes_key
-      @token = config&.token || self.class.token
-      @corpid = config&.corpid || self.class.corpid
+      @we_encrypt_mode = config&.encrypt_mode || self.class.encrypt_mode
+      @we_encoding_aes_key = config&.encoding_aes_key || self.class.encoding_aes_key
+      @we_token = config&.token || self.class.token
+      @we_corpid = config&.corpid || self.class.corpid
     end
 
     def verify_signature
-      if @encrypt_mode
+      if @we_encrypt_mode
         signature = params[:signature] || params[:msg_signature]
         msg_encrypt = params[:echostr] || request_encrypt_content
       else
         signature = params[:signature]
       end
 
-      msg_encrypt = nil unless @corpid.present?
+      msg_encrypt = nil unless @we_corpid.present?
 
-      render plain: 'Forbidden', status: 403 if signature != Signature.hexdigest(@token,
+      render plain: 'Forbidden', status: 403 if signature != Signature.hexdigest(@we_token,
                                                                                  params[:timestamp],
                                                                                  params[:nonce],
                                                                                  msg_encrypt)
@@ -240,8 +240,8 @@ module Wechat
     def post_xml
       data = request_content
 
-      if @encrypt_mode && request_encrypt_content.present?
-        content, @app_id = unpack(decrypt(Base64.decode64(request_encrypt_content), @encoding_aes_key))
+      if @we_encrypt_mode && request_encrypt_content.present?
+        content, @we_app_id = unpack(decrypt(Base64.decode64(request_encrypt_content), @we_encoding_aes_key))
         data = Hash.from_xml(content)
       end
 
@@ -279,8 +279,8 @@ module Wechat
     def process_response(response)
       msg = response[:MsgType] == 'success' ? 'success' : response.to_xml
 
-      if @encrypt_mode
-        encrypt = Base64.strict_encode64(encrypt(pack(msg, @app_id), @encoding_aes_key))
+      if @we_encrypt_mode
+        encrypt = Base64.strict_encode64(encrypt(pack(msg, @we_app_id), @we_encoding_aes_key))
         msg = gen_msg(encrypt, params[:timestamp], params[:nonce])
       end
 
@@ -288,7 +288,7 @@ module Wechat
     end
 
     def gen_msg(encrypt, timestamp, nonce)
-      msg_sign = Signature.hexdigest(@token, timestamp, nonce, encrypt)
+      msg_sign = Signature.hexdigest(@we_token, timestamp, nonce, encrypt)
 
       { Encrypt: encrypt,
         MsgSignature: msg_sign,
