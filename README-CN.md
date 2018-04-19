@@ -1,4 +1,4 @@
-WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.org/gems/wechat) [![Build Status](https://travis-ci.org/Eric-Guo/wechat.svg)](https://travis-ci.org/Eric-Guo/wechat) [![Code Climate](https://codeclimate.com/github/Eric-Guo/wechat.png)](https://codeclimate.com/github/Eric-Guo/wechat) [![Code Coverage](https://codeclimate.com/github/Eric-Guo/wechat/coverage.png)](https://codeclimate.com/github/Eric-Guo/wechat/coverage)
+WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.org/gems/wechat) [![Build Status](https://travis-ci.org/Eric-Guo/wechat.svg)](https://travis-ci.org/Eric-Guo/wechat) [![Maintainability](https://api.codeclimate.com/v1/badges/12885358487c13e91e00/maintainability)](https://codeclimate.com/github/Eric-Guo/wechat/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/12885358487c13e91e00/test_coverage)](https://codeclimate.com/github/Eric-Guo/wechat/test_coverage)
 ======
 
 [![Join the chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
