@@ -6,7 +6,7 @@ module Wechat
 
       token_file = options[:token_file] || c.access_token.presence || '/var/tmp/wechat_access_token'
       js_token_file = options[:js_token_file] || c.jsapi_ticket.presence || '/var/tmp/wechat_jsapi_ticket'
-      type = options[:token_file] || c.type
+      type = options[:type] || c.type
       if c.appid && c.secret && token_file.present?
         wx_class = (type == 'mp') ? Wechat::MpApi : Wechat::Api
         wx_class.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
