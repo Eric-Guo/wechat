@@ -171,8 +171,21 @@ module Wechat
       update(MsgType: 'ref_mpnews', MpNews: { MediaId: media_id })
     end
 
+    def template_keys
+      [
+        :template_id,
+        :form_id,
+        :page,
+        :color,
+        :emphasis_keyword,
+        :topcolor,
+        :url,
+        :data
+      ]
+    end
+
     def template(opts = {})
-      template_fields = opts.symbolize_keys.slice(:template_id, :form_id, :topcolor, :url, :data)
+      template_fields = opts.symbolize_keys.slice(*template_keys)
       update(MsgType: 'template', Template: template_fields)
     end
 

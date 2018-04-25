@@ -207,6 +207,19 @@ test:
 
 For multiple accounts details reference [PR 150](https://github.com/Eric-Guo/wechat/pull/150)
 
+For wechat mini program, can specified by the item `type`:
+
+```yaml
+# Mini Program Accounts
+
+  mini_development:
+    <<: *default
+    appid: "my_appid"
+    secret: "my_secret"
+    # `mp` is short for **mini program**
+    type: 'mp' 
+```
+
 #### Database wechat account configuration
 After enabling database account configuration, the following table will be created:
 
@@ -622,6 +635,9 @@ end
 ## Using wechat api at ActiveJob/Rake tasks
 
 Using `Wechat.api` to access the wechat api function at any place.
+
+## Checking the signature
+Using `Wechat.decrypt(encrypted_data,session_key, iv)` to decode the data. via. [Signature Checking](https://developers.weixin.qq.com/miniprogram/dev/api/signature.html)
 
 ## wechat_responder - Rails Responder Controller DSL
 
