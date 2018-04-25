@@ -9,6 +9,7 @@ module Wechat
   autoload :Message, 'wechat/message'
   autoload :Responder, 'wechat/responder'
   autoload :Cipher, 'wechat/cipher'
+  autoload :Decryptor, 'wechat/decryptor'
   autoload :ControllerApi, 'wechat/controller_api'
 
   class AccessTokenExpiredError < StandardError; end
@@ -33,6 +34,10 @@ module Wechat
 
   def self.reload_config!
     ApiLoader.reload_config!
+  end
+
+  def self.decrypt(encrypted_data, iv, session_key)
+    Decryptor.new(encrypted_data, iv, session_key).decrypt
   end
 end
 
