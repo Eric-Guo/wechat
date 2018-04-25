@@ -36,8 +36,8 @@ module Wechat
     ApiLoader.reload_config!
   end
 
-  def self.decrypt(encrypted_data, iv, session_key)
-    Decryptor.new(encrypted_data, iv, session_key).decrypt
+  def self.decrypt(encrypted_data, session_key, iv)
+    Decryptor.new(encrypted_data, session_key, iv).decrypt
   end
 end
 
