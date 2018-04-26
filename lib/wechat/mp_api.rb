@@ -7,7 +7,6 @@ require 'wechat/concern/common'
 module Wechat
   class MpApi < ApiBase
     include Concern::Common
-    MPAPI_BASE = 'https://api.weixin.qq.com/cgi-bin/wxopen/'
 
     def template_message_send(message)
       post 'message/wxopen/template/send', message.to_json, content_type: :json

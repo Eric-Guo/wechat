@@ -7,7 +7,6 @@ require 'wechat/concern/common'
 module Wechat
   class Api < ApiBase
     include Concern::Common
-    WXA_BASE = 'https://api.weixin.qq.com/wxa/'.freeze
 
     def template_message_send(message)
       post 'message/template/send', message.to_json, content_type: :json
