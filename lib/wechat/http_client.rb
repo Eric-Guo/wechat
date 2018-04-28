@@ -60,11 +60,11 @@ module Wechat
         when 42001, 40014, 40001, 48001
           raise AccessTokenExpiredError
         # 40029, invalid code for mp
-        when 40029
-          raise InvalidCodeError
+        # when 40029
+        #   raise InvalidCodeError
         # 43004, require subscribe hint # GH-214
-        when 43004
-          Rails.logger.info "wechat gem template_message_send failure, errcode 43004, errmsg: #{data['errmsg']}"
+        # when 43004
+        #   Rails.logger.info "wechat gem template_message_send failure, errcode 43004, errmsg: #{data['errmsg']}"
         else
           raise ResponseError.new(data['errcode'], data['errmsg'])
         end
