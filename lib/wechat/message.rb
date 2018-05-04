@@ -172,7 +172,7 @@ module Wechat
     end
 
     def template(opts = {})
-      template_fields = opts.symbolize_keys.slice(:template_id, :topcolor, :url, :data)
+      template_fields = opts.symbolize_keys.slice(:template_id, :topcolor, :url, :data, :miniprogram)
       update(MsgType: 'template', Template: template_fields)
     end
 
