@@ -386,6 +386,34 @@ RSpec.describe Wechat::Message do
           }
         }.to_json)
       end
+
+      specify 'can convert template message with miniprogram' do
+        request = Wechat::Message.to('toUser').template(template_id: 'template_id',
+                                                        miniprogram: {
+                                                            appid: 'wxabcdefg',
+                                                            pagepath: 'index'
+                                                        },
+                                                        data: {
+                                                            first: { value: '恭喜你购买成功！' },
+                                                            orderProductName: { value: '巧克力' },
+                                                            orderMoneySum: { value: '39.8元' },
+                                                            Remark: { value: '欢迎再次购买！' }
+                                                        })
+
+
+        expect(request.to_json).to eq({touser: 'toUser',
+                                       template_id: 'template_id',
+                                       miniprogram: {
+                                           appid: 'wxabcdefg',
+                                           pagepath: 'index'
+                                       },
+                                       data: {
+                                           first: { value: '恭喜你购买成功！' },
+                                           orderProductName: { value: '巧克力' },
+                                           orderMoneySum: { value: '39.8元' },
+                                           Remark: { value: '欢迎再次购买！' }
+                                       }}.to_json)
+      end
     end
 
     describe '#save_to!' do
