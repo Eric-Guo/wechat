@@ -23,6 +23,5 @@ module Wechat
     def del_message_template(template_id)
       post 'template/del_private_template', JSON.generate(template_id: template_id)
     end
-
   end
 end

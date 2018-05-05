@@ -42,6 +42,5 @@ module Wechat
 
       client.get 'jscode2session', params: params, base: OAUTH2_BASE
     end
-
   end
 end

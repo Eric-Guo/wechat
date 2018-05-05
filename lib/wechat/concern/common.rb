@@ -1,7 +1,6 @@
 module Wechat
   module Concern
     module Common
-
       WXA_BASE    = 'https://api.weixin.qq.com/wxa/'.freeze
       API_BASE    = 'https://api.weixin.qq.com/cgi-bin/'.freeze
       MPAPI_BASE  = 'https://api.weixin.qq.com/cgi-bin/wxopen/'.freeze
@@ -13,7 +12,7 @@ module Wechat
         @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
       end
 
-      # TODO filter the common methods
+      # TODO: filter the common methods
       def groups
         get 'groups/get'
       end
@@ -66,7 +65,6 @@ module Wechat
                                               action_name: 'QR_STR_SCENE',
                                               action_info: { scene: { scene_str: scene_id_or_str } })
         end
-
       end
 
       def qrcode_create_limit_scene(scene_id_or_str)

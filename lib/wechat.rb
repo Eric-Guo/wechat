@@ -1,3 +1,4 @@
+require 'base64'
 require 'openssl/cipher'
 require 'wechat/api_loader'
 require 'wechat/api'
