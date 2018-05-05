@@ -1,3 +1,4 @@
+require 'openssl/cipher'
 require 'wechat/api_loader'
 require 'wechat/api'
 require 'wechat/mp_api'
@@ -9,7 +10,6 @@ module Wechat
   autoload :Message, 'wechat/message'
   autoload :Responder, 'wechat/responder'
   autoload :Cipher, 'wechat/cipher'
-  autoload :Decryptor, 'wechat/decryptor'
   autoload :ControllerApi, 'wechat/controller_api'
 
   class AccessTokenExpiredError < StandardError; end
@@ -37,7 +37,15 @@ module Wechat
   end
 
   def self.decrypt(encrypted_data, session_key, iv)
-    Decryptor.new(encrypted_data, session_key, iv).decrypt
+    cipher = OpenSSL::Cipher.new('AES-128-CBC')
+    cipher.decrypt
+
+    cipher.key     = Base64.decode64(session_key)
+    cipher.iv      = Base64.decode64(iv)
+    decrypted_data = Base64.decode64(encrypted_data)
+    JSON.parse(cipher.update(decrypted_data) + cipher.final)
+  rescue Exception => e
+    { 'errcode': 41003, 'errmsg': e.message }
   end
 end
 

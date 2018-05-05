@@ -1,10 +1,5 @@
-require 'openssl/cipher'
-require 'base64'
-
 module Wechat
   module Cipher
-    extend ActiveSupport::Concern
-
     BLOCK_SIZE = 32
     CIPHER = 'AES-256-CBC'.freeze
 
