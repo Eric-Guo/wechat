@@ -171,21 +171,11 @@ module Wechat
       update(MsgType: 'ref_mpnews', MpNews: { MediaId: media_id })
     end
 
-    def template_keys
-      [
-        :template_id,
-        :form_id,
-        :page,
-        :color,
-        :emphasis_keyword,
-        :topcolor,
-        :url,
-        :data
-      ]
-    end
+    TEMPLATE_KEYS = %i[template_id form_id page color
+                       emphasis_keyword topcolor url miniprogram data].freeze
 
     def template(opts = {})
-      template_fields = opts.symbolize_keys.slice(:template_id, :topcolor, :url, :miniprogram, :data)
+      template_fields = opts.symbolize_keys.slice(*TEMPLATE_KEYS)
       update(MsgType: 'template', Template: template_fields)
     end
 
@@ -208,7 +198,9 @@ module Wechat
       'ShowCoverPic'     => 'show_cover_pic'
     }.freeze
 
-    TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid filter send_ignore_reprint mpnews towxname).freeze
+    TO_JSON_ALLOWED = %w[touser msgtype content image voice video file
+                         music news articles template agentid filter
+                         send_ignore_reprint mpnews towxname].freeze
 
     def to_json
       keep_camel_case_key = message_hash[:MsgType] == 'template'
