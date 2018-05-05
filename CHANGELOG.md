@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9.1
+* Support wechat mini program apis
+* Support signature check
+
 ## v0.9.0 (released at 4/15/2018)
 
 * Support multi wechat account dynamically loading from DB. by @tuliren #222

@@ -171,6 +171,19 @@ module Wechat
       update(MsgType: 'ref_mpnews', MpNews: { MediaId: media_id })
     end
 
+    def template_keys
+      [
+        :template_id,
+        :form_id,
+        :page,
+        :color,
+        :emphasis_keyword,
+        :topcolor,
+        :url,
+        :data
+      ]
+    end
+
     def template(opts = {})
       template_fields = opts.symbolize_keys.slice(:template_id, :topcolor, :url, :miniprogram, :data)
       update(MsgType: 'template', Template: template_fields)
@@ -184,14 +197,15 @@ module Wechat
     end
 
     TO_JSON_KEY_MAP = {
-      'ToUserName' => 'touser',
-      'ToWxName' => 'towxname',
-      'MediaId' => 'media_id',
-      'MpNews' => 'mpnews',
-      'ThumbMediaId' => 'thumb_media_id',
-      'TemplateId' => 'template_id',
+      'ToUserName'       => 'touser',
+      'ToWxName'         => 'towxname',
+      'MediaId'          => 'media_id',
+      'MpNews'           => 'mpnews',
+      'ThumbMediaId'     => 'thumb_media_id',
+      'TemplateId'       => 'template_id',
+      'FormId'           => 'form_id',
       'ContentSourceUrl' => 'content_source_url',
-      'ShowCoverPic' => 'show_cover_pic'
+      'ShowCoverPic'     => 'show_cover_pic'
     }.freeze
 
     TO_JSON_ALLOWED = %w(touser msgtype content image voice video file music news articles template agentid filter send_ignore_reprint mpnews towxname).freeze
