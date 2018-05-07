@@ -298,7 +298,7 @@ module Wechat
     end
 
     def request_encrypt_content
-      request_content['xml']['Encrypt']
+      request_content&.dig('xml', 'Encrypt')
     end
 
     def request_content
