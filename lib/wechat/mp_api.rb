@@ -16,8 +16,8 @@ module Wechat
       post 'wxopen/template/library/list', JSON.generate(offset: offset, count: count)
     end
 
-    def list_template_library_words(word_id)
-      post 'template/library/get', JSON.generate(id: word_id)
+    def list_template_library_keywords(id)
+      post 'wxopen/template/library/get', JSON.generate(id: id)
     end
 
     def add_message_template(template_id, keyword_id_list = [])

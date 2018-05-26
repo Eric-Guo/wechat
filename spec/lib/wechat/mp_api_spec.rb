@@ -56,4 +56,26 @@ RSpec.describe Wechat::MpApi do
       expect(subject.list_template_library(count: 5)).to eq response_result
     end
   end
+
+  describe '#list_template_library_keywords' do
+    specify 'will post wxopen/template/library/get with access_token, and id as params' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok',
+        id: 'AT0002',
+        title: '购买成功通知',
+        keyword_list: [
+          { keyword_id: 3, name: '购买地点', example: 'TIT造舰厂' },
+          { keyword_id: 4, name: '购买时间', example: '2016年6月6日' },
+          { keyword_id: 5, name: '物品名称', example: '咖啡' }
+        ]
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('wxopen/template/library/get', { id: 'AT0002' }.to_json,
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.list_template_library_keywords('AT0002')).to eq response_result
+    end
+  end
 end
