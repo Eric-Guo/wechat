@@ -78,4 +78,20 @@ RSpec.describe Wechat::MpApi do
       expect(subject.list_template_library_keywords('AT0002')).to eq response_result
     end
   end
+
+  describe '#add_message_template' do
+    specify 'will post wxopen/template/add with access_token, and id and keyword_id_list as params' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok',
+        template_id: 'wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc'
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('wxopen/template/add', { id: 'AT0002', keyword_id_list: [3, 4, 5] }.to_json,
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.add_message_template('AT0002', [3, 4, 5])).to eq response_result
+    end
+  end
 end
