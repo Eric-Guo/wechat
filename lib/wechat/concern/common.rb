@@ -3,7 +3,6 @@ module Wechat
     module Common
       WXA_BASE    = 'https://api.weixin.qq.com/wxa/'.freeze
       API_BASE    = 'https://api.weixin.qq.com/cgi-bin/'.freeze
-      MPAPI_BASE  = 'https://api.weixin.qq.com/cgi-bin/wxopen/'.freeze
       OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
 
       def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file)
