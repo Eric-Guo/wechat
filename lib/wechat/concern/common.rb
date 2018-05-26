@@ -11,7 +11,6 @@ module Wechat
         @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
       end
 
-      # TODO: filter the common methods
       def groups
         get 'groups/get'
       end
