@@ -29,7 +29,7 @@ module Wechat
     end
 
     def del_message_template(template_id)
-      post 'template/del', JSON.generate(template_id: template_id)
+      post 'wxopen/template/del', JSON.generate(template_id: template_id)
     end
 
     def login(code)

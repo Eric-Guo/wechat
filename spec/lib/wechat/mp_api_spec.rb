@@ -113,4 +113,19 @@ RSpec.describe Wechat::MpApi do
       expect(subject.list_message_template(count: 1)).to eq response_result
     end
   end
+
+  describe '#del_message_template' do
+    specify 'will post wxopen/template/del with access_token, and template_id as params' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok'
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('wxopen/template/del', { template_id: 'wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc' }.to_json,
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.del_message_template('wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc')).to eq response_result
+    end
+  end
 end
