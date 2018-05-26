@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class WechatAccountsController < ActionController::Base
-  wechat_responder account_from_request: Proc.new{|request| request.params[:account] }
+  wechat_responder account_from_request: proc { |request| request.params[:account] }
   on :text, with: /^cmd:(.*)$/ do |message, cmd|
     message.reply.text("cmd: #{cmd}")
   end
@@ -13,16 +13,16 @@ RSpec.describe WechatAccountsController, type: :controller do
   end
 
   before(:each) do
-    allow(WechatConfig).to receive(:get_all_configs).with(ENV['RAILS_ENV']).and_return({
-        :account_1 => {
-            appid: 'appid_1', secret: 'secret_1',
-            token: 'token_1', access_token: 'tmp/access_token_1', jsapi_ticket: 'tmp/jsapi_ticket_1',
-        },
-        :account_2 => {
-            appid: 'appid_2', secret: 'secret_2',
-            token: 'token_2', access_token: 'tmp/access_token_2', jsapi_ticket: 'tmp/jsapi_ticket_2',
-        },
-    })
+    allow(WechatConfig).to receive(:get_all_configs).with(ENV['RAILS_ENV']).and_return(
+      account_1: {
+        appid: 'appid_1', secret: 'secret_1',
+        token: 'token_1', access_token: 'tmp/access_token_1', jsapi_ticket: 'tmp/jsapi_ticket_1'
+      },
+      account_2: {
+        appid: 'appid_2', secret: 'secret_2',
+        token: 'token_2', access_token: 'tmp/access_token_2', jsapi_ticket: 'tmp/jsapi_ticket_2'
+      }
+    )
     Wechat.reload_config!
   end
 
@@ -46,10 +46,10 @@ RSpec.describe WechatAccountsController, type: :controller do
 
   let(:text_message) do
     message_base = {
-        ToUserName: 'toUser',
-        FromUserName: 'fromUser',
-        CreateTime: '1348831860',
-        MsgId: '1234567890123456'
+      ToUserName: 'toUser',
+      FromUserName: 'fromUser',
+      CreateTime: '1348831860',
+      MsgId: '1234567890123456'
     }
     message_base.merge(MsgType: 'text', Content: 'text message')
   end
@@ -79,9 +79,9 @@ RSpec.describe WechatAccountsController, type: :controller do
     end
 
     it 'raises error on unspecified account' do
-      expect{
+      expect do
         post :create, params: signature_params_1.merge(xml: text_message, account: 'invalid_account')
-      }.to raise_error
+      end.to raise_error
     end
 
     it 'responds to message' do
