@@ -24,8 +24,8 @@ module Wechat
       post 'wxopen/template/add', JSON.generate(id: id, keyword_id_list: keyword_id_list)
     end
 
-    def list_message_template(offset = 0, count = 20)
-      post 'template/list', JSON.generate(offset: offset, count: count)
+    def list_message_template(offset: 0, count: 20)
+      post 'wxopen/template/list', JSON.generate(offset: offset, count: count)
     end
 
     def del_message_template(template_id)

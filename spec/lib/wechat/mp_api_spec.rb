@@ -94,4 +94,23 @@ RSpec.describe Wechat::MpApi do
       expect(subject.add_message_template('AT0002', [3, 4, 5])).to eq response_result
     end
   end
+
+  describe '#list_message_template' do
+    specify 'will post wxopen/template/list with access_token, and offset, count as params' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok',
+        list: [{ template_id: 'wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc',
+                 title: '购买成功通知',
+                 content: "购买地点{{keyword1.DATA}}\n购买时间{{keyword2.DATA}}\n物品名称{{keyword3.DATA}}\n",
+                 example: "购买地点：TIT造舰厂\n购买时间：2016年6月6日\n物品名称：咖啡\n" }]
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('wxopen/template/list', { offset: 0, count: 1 }.to_json,
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.list_message_template(count: 1)).to eq response_result
+    end
+  end
 end
