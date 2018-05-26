@@ -703,4 +703,19 @@ RSpec.describe Wechat::Api do
       expect(subject.list_message_template).to eq response_result
     end
   end
+
+  describe '#del_message_template' do
+    specify 'will post template/del_private_template with access_token, and template_id as params' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok'
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('template/del_private_template', { template_id: 'Dyvp3-Ff0cnail_CDSzk1fIc6-9lOkxsQE7exTJbwUE' }.to_json,
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.del_message_template('Dyvp3-Ff0cnail_CDSzk1fIc6-9lOkxsQE7exTJbwUE')).to eq response_result
+    end
+  end
 end
