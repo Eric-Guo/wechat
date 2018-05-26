@@ -682,4 +682,25 @@ RSpec.describe Wechat::Api do
       expect(subject.web_userinfo('web_access_token', 'openid')).to eq(user_info)
     end
   end
+
+  describe '#list_message_template' do
+    specify 'will post template/get_all_private_template with access_token as params' do
+      response_result = {
+        template_list: [{
+          template_id: 'iPk5sOIt5X_flOVKn5GrTFpncEYTojx6ddbt8WYoV5s',
+          title: '领取奖金提醒',
+          primary_industry: 'IT科技',
+          deputy_industry: '互联网|电子商务',
+          content: "{ {result.DATA} }\n\n领奖金额:{ {withdrawMoney.DATA} }\n领奖  时间:{ {withdrawTime.DATA} }\n银行信息:{ {cardInfo.DATA} }\n到账时间:  { {arrivedTime.DATA} }\n{ {remark.DATA} }",
+          example: "您已提交领奖申请\n\n领奖金额：xxxx元\n领奖时间：2013-10-10 12:22:22\n银行信息：xx银行(尾号xxxx)\n到账时间：预计xxxxxxx\n\n预计将于xxxx到达您的银行卡"
+        }]
+      }
+
+      expect(subject.client).to receive(:get)
+        .with('template/get_all_private_template',
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.list_message_template).to eq response_result
+    end
+  end
 end
