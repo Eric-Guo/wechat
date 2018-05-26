@@ -12,8 +12,8 @@ module Wechat
       post 'message/wxopen/template/send', message.to_json, content_type: :json
     end
 
-    def list_template_library(offset = 0, count = 20)
-      post 'template/library/list', JSON.generate(offset: offset, count: count)
+    def list_template_library(offset: 0, count: 20)
+      post 'wxopen/template/library/list', JSON.generate(offset: offset, count: count)
     end
 
     def list_template_library_words(word_id)
