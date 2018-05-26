@@ -128,4 +128,20 @@ RSpec.describe Wechat::MpApi do
       expect(subject.del_message_template('wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc')).to eq response_result
     end
   end
+
+  describe '#jscode2session' do
+    specify 'will get jscode2session with appid, secret js_code and grant_type' do
+      response_result = {
+        openid: 'OPENID',
+        session_key: 'SESSIONKEY',
+        unionid: 'UNIONID' # if mini program belongs to open platform
+      }
+
+      expect(subject.client).to receive(:get)
+        .with('jscode2session', params: { appid: 'appid', secret: 'secret', js_code: 'code', grant_type: 'authorization_code' },
+                                base: Wechat::Api::OAUTH2_BASE).and_return(response_result)
+
+      expect(subject.jscode2session('code')).to eq response_result
+    end
+  end
 end

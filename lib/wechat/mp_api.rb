@@ -32,7 +32,7 @@ module Wechat
       post 'wxopen/template/del', JSON.generate(template_id: template_id)
     end
 
-    def login(code)
+    def jscode2session(code)
       params = {
         appid: access_token.appid,
         secret: access_token.secret,
