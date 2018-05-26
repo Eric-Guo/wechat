@@ -704,6 +704,22 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#add_message_template' do
+    specify 'will post template/api_add_template with access_token, and template_id_short in body' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok',
+        template_id: 'Doclyl5uP7Aciu-qZ7mJNPtWkbkYnWBWVja26EGbNyk'
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('template/api_add_template', { template_id_short: 'TM00015' }.to_json,
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.add_message_template('TM00015')).to eq response_result
+    end
+  end
+
   describe '#del_message_template' do
     specify 'will post template/del_private_template with access_token, and template_id as params' do
       response_result = {
