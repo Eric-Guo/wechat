@@ -1,8 +1,11 @@
 # Changelog
 
-## v0.9.1
-* Support wechat mini program apis
-* Support signature check
+## v0.10.0 (released at 5/31/2018)
+
+* Support multi wechat account at wechat_responder. by @tuliren #223
+* Support wechat mini program apis & signature check. by @oiahoon #225
+* Support sent template message with miniprogram. by @falm #228
+* Fix request_content could be nil. by @paicha #229
 
 ## v0.9.0 (released at 4/15/2018)
 
