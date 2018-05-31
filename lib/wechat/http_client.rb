@@ -56,15 +56,11 @@ module Wechat
         # 42001: access_token timeout
         # 40014: invalid access_token
         # 40001, invalid credential, access_token is invalid or not latest hint
-        # 48001, api unauthorized hint, for qrcode creation # 71
-        when 42001, 40014, 40001, 48001
+        # 48001, api unauthorized hint, should not handle here # GH-230
+        when 42001, 40014, 40001
           raise AccessTokenExpiredError
-        # 40029, invalid code for mp
-        # when 40029
-        #   raise InvalidCodeError
+        # 40029, invalid code for mp # GH-225
         # 43004, require subscribe hint # GH-214
-        # when 43004
-        #   Rails.logger.info "wechat gem template_message_send failure, errcode 43004, errmsg: #{data['errmsg']}"
         else
           raise ResponseError.new(data['errcode'], data['errmsg'])
         end
