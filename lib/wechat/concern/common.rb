@@ -151,7 +151,7 @@ module Wechat
       end
 
       def custom_message_send(message)
-        post 'message/custom/send', message.to_json, content_type: :json
+        post 'message/custom/send', message.is_a?(Wechat::Message) ? message.to_json : JSON.generate(message), content_type: :json
       end
 
       def customservice_getonlinekflist
