@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10.1 (released at 7/1/2018)
+
+* Allow custom_message_send using Hash as message, previous only allow Wechat::Message. by @zuoliang0 and @fogisland #234
+
 ## v0.10.0 (released at 5/31/2018)
 
 * Support multi wechat account at wechat_responder. by @tuliren #223
