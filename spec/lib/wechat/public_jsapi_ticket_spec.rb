@@ -1,28 +1,21 @@
 require 'spec_helper'
 
-RSpec.describe Wechat::JsapiTicket do
-  let(:ticket_content) do
-    {
-      errcode: 0,
-      errmsg: 'ok',
-      ticket: 'bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA',
-      expires_in: 7200
-    }
-  end
+RSpec.describe Wechat::Ticket::PublicJsapiTicket do
   let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket_file') }
+  let(:ticket) { 'bxLdikRXVbTPdHSM05e5u5sUoXNKd8' }
   let(:client) { double(:client) }
   let(:access_token) { double(:access_token) }
   let(:token_content) { { access_token: '12345', expires_in: 7200 } }
 
   subject do
-    Wechat::JsapiTicket.new(client, access_token, jsapi_ticket_file)
+    Wechat::Ticket::PublicJsapiTicket.new(client, access_token, jsapi_ticket_file)
   end
 
   before :each do
     allow(client).to receive(:get)
       .with('ticket/getticket',
             params: { type: 'jsapi', access_token: token_content[:access_token] })
-      .and_return(ticket_content)
+      .and_return(errcode: 0, errmsg: 'ok', ticket: ticket, expires_in: 7200)
 
     allow(access_token).to receive(:token).and_return(token_content[:access_token])
   end
@@ -33,17 +26,18 @@ RSpec.describe Wechat::JsapiTicket do
 
   describe '#ticket' do
     specify 'read from file if jsapi_ticket_file is not initialized' do
-      File.open(jsapi_ticket_file, 'w') { |f| f.write(ticket_content.to_json) }
-      expect(subject.ticket).to eq ticket_content[:ticket]
+      File.open(jsapi_ticket_file, 'w') { |f| f.write({ ticket: ticket, expires_in: 7200 }.to_json) }
+      expect(subject.ticket).to eq ticket
     end
   end
 
   describe '#refresh' do
-    specify 'will set jsapi_ticket_data' do
-      expect(subject.refresh).to eq ticket_content
-      expect(subject.jsapi_ticket_data).to eq ticket_content
+    specify 'will set ticket' do
+      expect(subject.refresh).to eq ticket
+      expect(subject.ticket).to eq ticket
     end
   end
+
   describe '#signature' do
     specify 'will get signature' do
       url = 'http://www.baidu.com?q=ming'

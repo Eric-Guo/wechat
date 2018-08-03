@@ -5,9 +5,11 @@ default: &default
 # Or if using public account, only need above two line
 #  appid: "my_appid"
 #  secret: "my_secret"
-  token:    "token"
+  token:    "my_token"
   access_token: "C:/Users/[username]/wechat_access_token"
-  encoding_aes_key:  "encoding_aes_key"
+  encrypt_mode: false # if true must fill encoding_aes_key
+  encoding_aes_key:  "my_encoding_aes_key"
+  jsapi_ticket: "C:/Users/[user_name]/wechat_jsapi_ticket"
 
 production:
   corpid:     <%%= ENV['WECHAT_CORPID'] %>
@@ -17,11 +19,54 @@ production:
 #  appid:      <%= ENV['WECHAT_APPID'] %>
 #  secret:     <%= ENV['WECHAT_APP_SECRET'] %>
   token:      <%%= ENV['WECHAT_TOKEN'] %>
+  timeout:    30,
+  skip_verify_ssl: true
   access_token:  <%%= ENV['WECHAT_ACCESS_TOKEN'] %>
+  encrypt_mode: false # if true must fill encoding_aes_key
   encoding_aes_key:  <%%= ENV['WECHAT_ENCODING_AES_KEY'] %>
+  jsapi_ticket: <%%= ENV['WECHAT_JSAPI_TICKET'] %>
+  oauth2_cookie_duration: <%%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %> # seconds
 
 development:
   <<: *default
+  trusted_domain_fullname: "http://your_dev.proxy.qqbrowser.cc"
 
 test:
   <<: *default
+
+# Multiple Accounts
+#
+# wx2_development:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#  access_token: "tmp/wechat_access_token2"
+#  jsapi_ticket: "tmp/wechat_jsapi_ticket2"
+#
+# wx2_test:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#
+# wx2_production:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#
+# wx3_development:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#  access_token: "tmp/wechat_access_token3"
+#  jsapi_ticket: "tmp/wechat_jsapi_ticket3"
+#
+# wx3_test:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#
+# wx3_production:
+#  <<: *default
+#  appid: "my_appid"
+#  secret: "my_secret"
+#

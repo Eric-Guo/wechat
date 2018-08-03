@@ -1,0 +1,3 @@
+Run `wechat menu_create config\wechat_menu.yml` to uploading the default menu.
+Run `rails g wechat:menu --conditional` to generate one example of conditional menu.
+Run `wechat menu_addconditional config\wechat_menu_conditional.yml` to uploading the conditional menu.

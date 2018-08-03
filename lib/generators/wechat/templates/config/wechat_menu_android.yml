@@ -1,0 +1,15 @@
+button:
+ -
+  type: "view"
+  name: "Testing Android"
+  url:  "http://xxxxx.proxy.qqbrowser.cc"
+
+# More match rule see http://mp.weixin.qq.com/wiki/0/c48ccd12b69ae023159b4bfaa7c39c20.html
+matchrule:
+#  group_id: 2
+#  sex: 1
+#  country: 中国
+#  province: 上海
+#  city: 杨浦
+  client_platform_type: 1
+#  language: zh_CN

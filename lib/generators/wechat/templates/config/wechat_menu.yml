@@ -1,0 +1,6 @@
+# More option see https://github.com/Eric-Guo/wechat#menu-create
+button:
+ -
+  type: "view"
+  name: "Testing"
+  url:  "http://xxxxx.proxy.qqbrowser.cc"

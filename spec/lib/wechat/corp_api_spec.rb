@@ -1,10 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe Wechat::CorpApi do
-  let(:toke_file) { Rails.root.join('tmp/access_token') }
+  let(:token_file) { Rails.root.join('tmp/access_token') }
+  let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket') }
 
   subject do
-    Wechat::CorpApi.new('corpid', 'corpsecret', toke_file, '1', false)
+    Wechat::CorpApi.new('corpid', 'corpsecret', token_file, '1', 20, false, jsapi_ticket_file)
   end
 
   before :each do
@@ -68,6 +69,28 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#getuserinfo' do
+    specify 'will get user/getuserinfo with access_token and code' do
+      code = 'code'
+      getuserinfo_result = { UserId: 'USERID', DeviceId: 'DEVICEID' }
+      expect(subject.client).to receive(:get)
+        .with('user/getuserinfo', params: { code: code, access_token: 'access_token' }).and_return(getuserinfo_result)
+      expect(subject.getuserinfo(code)).to eq getuserinfo_result
+    end
+  end
+
+  describe '#convert_to_openid' do
+    specify 'will get invite/send with access_token and json userid' do
+      userid = 'userid'
+      agentid = '1'
+      convert_to_openid_request = { userid: userid, agentid: agentid }
+      convert_to_openid_result = { errcode: 0, errmsg: 'ok', openid: 'oDOGms-6yCnGrRovBj2yHij5JL6E', appid: 'wxf874e15f78cc84a7' }
+      expect(subject.client).to receive(:post)
+        .with('user/convert_to_openid', convert_to_openid_request.to_json, params: { access_token: 'access_token' }).and_return(convert_to_openid_result)
+      expect(subject.convert_to_openid(userid)).to eq convert_to_openid_result
+    end
+  end
+
   describe '#invite_user' do
     specify 'will get invite/send with access_token and json userid' do
       userid = 'userid'
@@ -89,6 +112,21 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#user_create' do
+    specify 'will create user with access_token and payload position' do
+      userid = 'userid'
+      create_user_request = { userid: userid,
+                              name: '张三',
+                              department: [1, 2],
+                              mobile: '13901234567',
+                              position: '产品经理' }
+      create_user_result = { errcode: 0, errmsg: 'created' }
+      expect(subject.client).to receive(:post)
+        .with('user/create', create_user_request.to_json, params: { access_token: 'access_token' }).and_return(create_user_result)
+      expect(subject.user_create(userid: userid, name: '张三', department: [1, 2], mobile: '13901234567', position: '产品经理')).to eq create_user_result
+    end
+  end
+
   describe '#user_delete' do
     specify 'will get user/delete with access_token and userid' do
       userid = 'userid'
@@ -99,14 +137,24 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
-  describe '#batch_job_result' do
+  describe '#user_batchdelete' do
     specify 'will get user/delete with access_token and userid' do
-      result = { errcode: 0, errmsg: 'ok', status: 1,
+      batchdelete_request = { useridlist: %w(6749 6110) }
+      user_delete_result = { errcode: 0, errmsg: 'deleted' }
+      expect(subject.client).to receive(:post)
+        .with('user/batchdelete', batchdelete_request.to_json, params: { access_token: 'access_token' }).and_return(user_delete_result)
+      expect(subject.user_batchdelete(%w(6749 6110))).to eq user_delete_result
+    end
+  end
+
+  describe '#batch_job_result' do
+    specify 'will get batch/getresult with access_token and userid' do
+      batch_result = { errcode: 0, errmsg: 'ok', status: 1,
                        type: 'replace_user', total: 3, percentage: 33, remaintime: 1,
                        result: [{}, {}] }
       expect(subject.client).to receive(:get)
-        .with('batch/getresult', params: { jobid: 'jobid', access_token: 'access_token' }).and_return(result)
-      expect(subject.batch_job_result('jobid')).to eq result
+        .with('batch/getresult', params: { jobid: 'jobid', access_token: 'access_token' }).and_return(batch_result)
+      expect(subject.batch_job_result('jobid')).to eq batch_result
     end
   end
 
@@ -192,12 +240,13 @@ RSpec.describe Wechat::CorpApi do
 
   describe '#user_simplelist' do
     specify 'will get user/simplelist with access_token and departmentid' do
-      departmentid = 'departmentid'
+      department_id = 'department_id'
       simplelist_result = { errcode: 0, errmsg: 'ok',
                             userlist: [{ userid: 'zhangsan', name: '李四', department: [1, 2] }] }
       expect(subject.client).to receive(:get)
-        .with('user/simplelist', params: { departmentid: departmentid, fetch_child: 0, status: 0, access_token: 'access_token' }).and_return(simplelist_result)
-      expect(subject.user_simplelist(departmentid)).to eq simplelist_result
+        .with('user/simplelist', params: { department_id: department_id, fetch_child: 0, status: 0, access_token: 'access_token' })
+        .and_return(simplelist_result)
+      expect(subject.user_simplelist(department_id)).to eq simplelist_result
     end
   end
 
@@ -216,7 +265,7 @@ RSpec.describe Wechat::CorpApi do
                                          status: 1,
                                          extattr: { attrs: [{ name: '爱好', value: '旅游' }, { name: '卡号', value: '1234567234' }] } }] }
       expect(subject.client).to receive(:get)
-        .with('user/list', params: { departmentid: 1, fetch_child: 0, status: 0, access_token: 'access_token' }).and_return(user_list_result)
+        .with('user/list', params: { department_id: 1, fetch_child: 0, status: 0, access_token: 'access_token' }).and_return(user_list_result)
       expect(subject.user_list(1)).to eq user_list_result
     end
   end
@@ -345,11 +394,22 @@ RSpec.describe Wechat::CorpApi do
 
   describe '#media_create' do
     specify 'will post media/upload with access_token, type and media payload at file based api endpoint' do
-      file = 'file'
-      expect(subject.client).to receive(:post)
-        .with('media/upload', { upload: { media: file } },
+      file = 'README.md'
+      expect(subject.client).to receive(:post_file)
+        .with('media/upload', file,
               params: { type: 'image', access_token: 'access_token' }).and_return(true)
       expect(subject.media_create('image', file)).to be true
+    end
+  end
+
+  describe '#media_uploadimg' do
+    specify 'will post media/uploadimg with access_token and media payload at file based api endpoint' do
+      image_file = 'picture.png'
+      media_result = { url: 'http://shp.qpic.cn/mmocbiz/xxxxxxxxxxxxx/' }
+      expect(subject.client).to receive(:post_file)
+        .with('media/uploadimg', image_file,
+              params: { access_token: 'access_token' }).and_return(media_result)
+      expect(subject.media_uploadimg(image_file)).to eq(media_result)
     end
   end
 
@@ -392,9 +452,9 @@ RSpec.describe Wechat::CorpApi do
 
   describe '#material_add' do
     specify 'will post material/add_material with access_token, type and media payload at file based api endpoint' do
-      file = 'file'
-      expect(subject.client).to receive(:post)
-        .with('material/add_material', { upload: { media: file } },
+      file = 'README.md'
+      expect(subject.client).to receive(:post_file)
+        .with('material/add_material', file,
               params: { type: 'image', access_token: 'access_token', agentid: '1' }).and_return(true)
       expect(subject.material_add('image', file)).to be true
     end
@@ -413,7 +473,7 @@ RSpec.describe Wechat::CorpApi do
   describe '#message_send' do
     specify 'will post message with access_token, and json payload' do
       payload = {
-        touser: 'openid',
+        touser: 'userid',
         msgtype: 'text',
         agentid: '1',
         text: { content: 'message content' }
@@ -423,7 +483,25 @@ RSpec.describe Wechat::CorpApi do
         .with('message/send', payload.to_json,
               content_type: :json, params: { access_token: 'access_token' }).and_return(true)
 
-      expect(subject.message_send 'openid', 'message content').to be true
+      expect(subject.message_send 'userid', 'message content').to be true
     end
   end
+
+  describe '#custom_message_send' do
+    specify 'will post message/send with access_token, and json payload' do
+      payload = {
+          touser: 'openid',
+          msgtype: 'text',
+          agentid: '1',
+          text: { content: 'message content' }
+      }
+
+      expect(subject.client).to receive(:post)
+                                    .with('message/send', JSON.generate(payload),
+                                          params: { access_token: 'access_token' }, content_type: :json).and_return(true)
+
+      expect(subject.custom_message_send Wechat::Message.to('openid').text('message content')).to be true
+    end
+  end
+
 end

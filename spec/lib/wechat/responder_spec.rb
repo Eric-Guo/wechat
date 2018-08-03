@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class WechatController < ApplicationController
+class WechatController < ActionController::Base
   wechat_responder
 end
 
@@ -38,7 +38,7 @@ RSpec.describe WechatController, type: :controller do
     controller do
       wechat_responder appid: 'controller_appid', secret: 'controller_secret', token: 'controller_token',
                        access_token: 'controller_access_token',
-                       agentid: 1, encoding_aes_key: 'encoding_aes_key'
+                       agentid: 1, encoding_aes_key: 'encoding_aes_key', trusted_domain_fullname: 'http://your_dev.proxy.qqbrowser.cc'
     end
     specify 'will set controller wechat api and token' do
       access_token = controller.class.wechat.access_token
@@ -49,28 +49,29 @@ RSpec.describe WechatController, type: :controller do
       expect(controller.class.agentid).to eq(1)
       expect(controller.class.encrypt_mode).to eq(false)
       expect(controller.class.encoding_aes_key).to eq('encoding_aes_key')
+      expect(controller.class.trusted_domain_fullname).to eq('http://your_dev.proxy.qqbrowser.cc')
     end
   end
 
   describe 'Verify signature' do
     specify 'on show action' do
-      get :show, signature_params.merge(signature: 'invalid_signature')
+      get :show, params: signature_params.merge(signature: 'invalid_signature')
       expect(response.code).to eq('403')
     end
 
     specify 'on create action' do
-      post :create, signature_params.merge(signature: 'invalid_signature')
+      post :create, params: signature_params.merge(signature: 'invalid_signature')
       expect(response.code).to eq('403')
     end
   end
 
   specify "echo 'echostr' param when show" do
-    get :show, signature_params.merge(echostr: 'hello')
+    get :show, params: signature_params.merge(echostr: 'hello')
     expect(response.body).to eq('hello')
   end
 
   describe 'responders' do
-    specify 'responders only accept :text, :image, :voice, :video, :location, :link, :event, :fallback message type' do
+    specify 'responders only accept :text, :image, :voice, :video, :shortvideo, :location, :link, :event, :fallback message type' do
       [:text, :image, :voice, :video, :location, :link, :event, :fallback].each do |message_type|
         controller.class.on message_type, respond: 'response'
       end
@@ -94,6 +95,7 @@ RSpec.describe WechatController, type: :controller do
       on :text,  with: /^cmd:(.*)$/, respond: 'regex matched'
       on :text,  respond: 'text content'
       on :event, with: 'subscribe', respond: 'subscribe event'
+      on :click, with: 'EVENTKEY', respond: 'EVENTKEY clicked'
       on :image, respond: 'image content'
     end
 
@@ -126,12 +128,33 @@ RSpec.describe WechatController, type: :controller do
         controller.class.responder_for(MsgType: 'event', Event: 'subscribe', &b)
       end.to yield_with_args({ respond: 'subscribe event', with: 'subscribe' }, 'subscribe')
     end
+
+    specify "find 'click' responder if event request matches click" do
+      expect do |b|
+        controller.class.responder_for(MsgType: 'event', Event: 'click', EventKey: 'EVENTKEY', &b)
+      end.to yield_with_args({ respond: 'EVENTKEY clicked', with: 'EVENTKEY' }, 'EVENTKEY')
+    end
   end
 
   specify 'will respond empty if no responder for the message type' do
-    post :create, signature_params.merge(xml: text_message)
+    post :create, params: signature_params.merge(xml: text_message)
     expect(response.code).to eq('200')
     expect(response.body.strip).to be_empty
+  end
+
+  describe 'respond_to wechat helper' do
+    controller do
+      wechat_responder
+      on :text do |_message, _content|
+        wechat
+      end
+    end
+
+    specify 'will return normal' do
+      expect do
+        post :create, params: signature_params.merge(xml: text_message)
+      end.not_to raise_error
+    end
   end
 
   describe 'respond_to wechat_url helper' do
@@ -144,7 +167,7 @@ RSpec.describe WechatController, type: :controller do
 
     specify 'will return normal' do
       expect do
-        post :create, signature_params.merge(xml: text_message)
+        post :create, params: signature_params.merge(xml: text_message)
       end.not_to raise_error
     end
   end
@@ -156,7 +179,7 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'will respond to any message' do
-      post :create, signature_params.merge(xml: text_message)
+      post :create, params: signature_params.merge(xml: text_message)
       expect(xml_to_hash(response)[:Content]).to eq('fallback responder')
     end
   end
@@ -170,7 +193,7 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'will change MsgType to transfer_customer_service' do
-      post :create, signature_params.merge(xml: text_message)
+      post :create, params: signature_params.merge(xml: text_message)
       expect(xml_to_hash(response)[:MsgType]).to eq 'transfer_customer_service'
     end
   end
@@ -184,7 +207,7 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'will change MsgType to transfer_customer_service' do
-      post :create, signature_params.merge(xml: text_message)
+      post :create, params: signature_params.merge(xml: text_message)
       expect(xml_to_hash(response)[:MsgType]).to eq 'transfer_customer_service'
     end
   end
@@ -192,6 +215,8 @@ RSpec.describe WechatController, type: :controller do
   describe '#create use cases' do
     controller do
       wechat_responder
+      on :fallback, respond: 'fallback message'
+
       on :text, respond: 'text message' do |message, _content|
         message.replay.text('should not be here')
       end
@@ -200,24 +225,52 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("text: #{content}")
       end
 
+      on :text, with: 'help' do |message,|
+        message.reply.text('help requested')
+      end
+
       on :text, with: /^cmd:(.*)$/ do |message, cmd|
         message.reply.text("cmd: #{cmd}")
+      end
+
+      on :text, with: 'session count' do |message|
+        message.session.count = message.session.count + 1
+        message.reply.text message.session.count
+      end
+
+      on :text, with: 'session hash_store count' do |message|
+        message.session.hash_store[:count] = message.session.hash_store.fetch(:count, 0) + 1
+        message.reply.text message.session.hash_store[:count]
       end
 
       on :event, with: 'subscribe' do |message, event|
         message.reply.text("event: #{event}")
       end
 
-      on :event, with: 'unsubscribe' do |message, event|
-        message.reply.text("event: #{event}")
+      on :event, with: 'unsubscribe' do |message|
+        message.reply.success
       end
 
-      on :event, with: 'qrscene_xxxxxx' do |request, ticket|
+      on :scan, with: 'qrscene_xxxxxx' do |request, ticket|
         request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
       end
 
-      on :event, with: 'scene_id' do |request, ticket|
+      on :scan, with: 'scene_id' do |request, ticket|
         request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
+      end
+
+      on :event, with: 'scan' do |request|
+        if request[:EventKey].present?
+          request.reply.text "event scan got EventKey #{request[:EventKey]} Ticket #{request[:Ticket]}"
+        end
+      end
+
+      on :location do |message|
+        message.reply.text("Latitude: #{message[:Latitude]} Longitude: #{message[:Longitude]}")
+      end
+
+      on :label_location do |message|
+        message.reply.text("Label: #{message[:Label]} Location_X: #{message[:Location_X]} Location_Y: #{message[:Location_Y]} Scale: #{message[:Scale]}")
       end
 
       on :image do |message|
@@ -232,8 +285,8 @@ RSpec.describe WechatController, type: :controller do
         message.reply.text("video: #{message[:MediaId]}")
       end
 
-      on :location do |message|
-        message.reply.text("location: #{message[:Label]}")
+      on :shortvideo do |message|
+        message.reply.text("shortvideo: #{message[:MediaId]}")
       end
 
       on :link do |message|
@@ -242,7 +295,7 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'response with respond field' do
-      post :create, signature_params.merge(xml: text_message.merge(Content: 'message'))
+      post :create, params: signature_params.merge(xml: text_message.merge(Content: 'message'))
       result = xml_to_hash(response)
       expect(result[:ToUserName]).to eq('fromUser')
       expect(result[:FromUserName]).to eq('toUser')
@@ -250,67 +303,209 @@ RSpec.describe WechatController, type: :controller do
     end
 
     specify 'response text with text match' do
-      post :create, signature_params.merge(xml: text_message.merge(Content: 'command'))
+      post :create, params: signature_params.merge(xml: text_message.merge(Content: 'command'))
       expect(xml_to_hash(response)[:Content]).to eq('text: command')
     end
 
+    specify 'response text with help and session check' do
+      WechatSession.all.delete_all
+      post :create, params: signature_params.merge(xml: text_message.merge(Content: 'help'))
+      expect(xml_to_hash(response)[:Content]).to eq('help requested')
+      expect(WechatSession.first.openid).to eq 'fromUser'
+    end
+
     specify 'response text with regex matched' do
-      post :create, signature_params.merge(xml: text_message.merge(Content: 'cmd:reload'))
+      post :create, params: signature_params.merge(xml: text_message.merge(Content: 'cmd:reload'))
       expect(xml_to_hash(response)[:Content]).to eq('cmd: reload')
     end
 
+    specify 'response text with session count with no session record' do
+      WechatSession.all.delete_all
+      post :create, params: signature_params.merge(xml: text_message.update(Content: 'session count'))
+      expect(xml_to_hash(response)[:Content]).to eq('1')
+      expect(WechatSession.first.openid).to eq 'fromUser'
+    end
+
+    specify 'response text with session count with existing session record' do
+      WechatSession.all.delete_all
+      WechatSession.create! openid: text_message[:FromUserName], count: 2
+      post :create, params: signature_params.merge(xml: text_message.update(Content: 'session count'))
+      expect(xml_to_hash(response)[:Content]).to eq('3')
+      expect(WechatSession.first.openid).to eq 'fromUser'
+    end
+
+    specify 'response text with session hash_store count with no session record' do
+      WechatSession.all.delete_all
+      post :create, params: signature_params.merge(xml: text_message.update(Content: 'session hash_store count'))
+      expect(xml_to_hash(response)[:Content]).to eq('1')
+      expect(WechatSession.first.openid).to eq 'fromUser'
+    end
+
+    specify 'response text with session hash_store count with existing session record' do
+      WechatSession.all.delete_all
+      ws = WechatSession.new openid: text_message[:FromUserName]
+      ws.hash_store = { count: 2 }
+      ws.save!
+      post :create, params: signature_params.merge(xml: text_message.update(Content: 'session hash_store count'))
+      expect(xml_to_hash(response)[:Content]).to eq('3')
+      expect(WechatSession.first.openid).to eq 'fromUser'
+    end
+
     specify 'response subscribe event with matched event' do
-      event_message = message_base.merge(MsgType: 'event', Event: 'subscribe')
-      post :create, signature_params.merge(xml: event_message)
+      WechatSession.all.delete_all
+      event_message = message_base.merge(MsgType: 'event', Event: 'subscribe', EventKey: 'qrscene_not_exist')
+      post :create, params: signature_params.merge(xml: event_message)
       expect(xml_to_hash(response)[:Content]).to eq('event: subscribe')
+      expect(WechatSession.first.openid).to eq 'fromUser'
     end
 
     specify 'response unsubscribe event with matched event' do
       event_message = message_base.merge(MsgType: 'event', Event: 'unsubscribe')
-      post :create, signature_params.merge(xml: event_message)
-      expect(xml_to_hash(response)[:Content]).to eq('event: unsubscribe')
+      post :create, params: signature_params.merge(xml: event_message)
+      expect(response.code).to eq('200')
+      expect(response.body).to eq('success')
     end
 
     specify 'response subscribe scan event with matched event' do
       event_message = message_base.merge(MsgType: 'event', Event: 'subscribe', EventKey: 'qrscene_xxxxxx')
-      post :create, signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
+      post :create, params: signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
       expect(xml_to_hash(response)[:Content]).to eq 'Unsubscribe user fromUser Ticket TICKET'
     end
 
     specify 'response scan event with matched event' do
-      event_message = message_base.merge(MsgType: 'event', Event: 'scan', EventKey: 'scene_id')
-      post :create, signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
+      event_message = message_base.merge(MsgType: 'event', Event: 'SCAN', EventKey: 'scene_id')
+      post :create, params: signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
       expect(xml_to_hash(response)[:Content]).to eq 'Subscribe user fromUser Ticket TICKET'
+    end
+
+    specify 'response scan event with by_passed scene_id' do
+      event_message = message_base.merge(MsgType: 'event', Event: 'SCAN', EventKey: 'scene_id_by_pass_scan_process')
+      post :create, params: signature_params.merge(xml: event_message.merge(Ticket: 'TICKET'))
+      expect(xml_to_hash(response)[:Content]).to eq 'event scan got EventKey scene_id_by_pass_scan_process Ticket TICKET'
+    end
+
+    specify 'response location' do
+      message = message_base.merge(MsgType: 'event', Event: 'LOCATION', Latitude: 23.137466, Longitude: 113.352425, Precision: 119.385040)
+      post :create, params: signature_params.merge(xml: message)
+      expect(xml_to_hash(response)[:Content]).to eq('Latitude: 23.137466 Longitude: 113.352425')
+    end
+
+    specify 'response label_location' do
+      message = message_base.merge(MsgType: 'location', Location_X: 23.134521, Location_Y: 113.358803, Scale: 20, Label: '位置信息')
+      post :create, params: signature_params.merge(xml: message)
+      expect(xml_to_hash(response)[:Content]).to eq('Label: 位置信息 Location_X: 23.134521 Location_Y: 113.358803 Scale: 20')
     end
 
     specify 'response image' do
       image_message = message_base.merge(MsgType: 'image', MediaId: 'image_media_id', PicUrl: 'pic_url')
-      post :create, signature_params.merge(xml: image_message)
+      post :create, params: signature_params.merge(xml: image_message)
       expect(xml_to_hash(response)[:Content]).to eq('image: pic_url')
     end
 
     specify 'response voice' do
       message = message_base.merge(MsgType: 'voice', MediaId: 'voice_media_id', Format: 'format')
-      post :create, signature_params.merge(xml: message)
+      post :create, params: signature_params.merge(xml: message)
       expect(xml_to_hash(response)[:Content]).to eq('voice: voice_media_id')
     end
 
     specify 'response video' do
-      message = message_base.merge(MsgType: 'video', MediaId: 'video_media_id', ThumbMediaId: 'thumb_media_id')
-      post :create, signature_params.merge(xml: message)
+      message = message_base.merge(MsgType: 'video', MediaId: 'video_media_id', ThumbMediaId: 'thumb_video_media_id')
+      post :create, params: signature_params.merge(xml: message)
       expect(xml_to_hash(response)[:Content]).to eq('video: video_media_id')
     end
 
-    specify 'response location' do
-      message = message_base.merge(MsgType: 'location', Location_X: 'location_x', Location_Y: 'location_y', Scale: 'scale', Label: 'label')
-      post :create, signature_params.merge(xml: message)
-      expect(xml_to_hash(response)[:Content]).to eq('location: label')
+    specify 'response shortvideo' do
+      message = message_base.merge(MsgType: 'shortvideo', MediaId: 'shortvideo_media_id', ThumbMediaId: 'thumb_shortvideo_media_id')
+      post :create, params: signature_params.merge(xml: message)
+      expect(xml_to_hash(response)[:Content]).to eq('shortvideo: shortvideo_media_id')
     end
 
     specify 'response link' do
       message = message_base.merge(MsgType: 'link', Url: 'link_url', Title: 'title', Description: 'description')
-      post :create, signature_params.merge(xml: message)
+      post :create, params: signature_params.merge(xml: message)
       expect(xml_to_hash(response)[:Content]).to eq('link: link_url')
+    end
+  end
+
+  describe 'oauth2_page' do
+    controller do
+      wechat_api
+      def oauth2_page
+        wechat_oauth2 do |openid|
+          render plain: openid
+        end
+      end
+    end
+
+    before(:each) do
+      routes.draw { get 'oauth2_page', to: 'wechat#oauth2_page' }
+      allow(controller.wechat.jsapi_ticket).to receive(:oauth2_state) {'oauth2_state'}
+    end
+
+    it 'will redirect_to tencent page at first visit' do
+      get :oauth2_page
+      expect(response).to redirect_to(controller.wechat_oauth2)
+    end
+
+    it 'will record cookites when tecent oauth2 success' do
+      oauth2_result = { 'openid' => 'openid' }
+      expect(controller.wechat).to receive(:web_access_token)
+        .with('code_id').and_return(oauth2_result)
+      get :oauth2_page, params: { code: 'code_id', state: 'oauth2_state' }
+      expect(response.body).to eq 'openid'
+      expect(cookies.signed_or_encrypted[:we_openid]).to eq 'openid'
+    end
+
+    it 'will render page with proper cookies' do
+      cookies.signed_or_encrypted[:we_openid] = 'openid'
+      get :oauth2_page
+      expect(response.body).to eq 'openid'
+    end
+  end
+
+  describe 'oauth2_page with account' do
+    before(:all) do
+      Wechat::ApiLoader.class_eval { @configs = nil }
+      ENV['WECHAT_CONF_FILE'] = File.join(Dir.getwd, 'spec/dummy/config/dummy_wechat.yml')
+    end
+
+    after(:all) do
+      Wechat::ApiLoader.class_eval { @configs = nil }
+      ENV['WECHAT_CONF_FILE'] = nil
+    end
+
+    controller do
+      wechat_api
+      def oauth2_page
+        wechat_oauth2('snsapi_base', nil, :wx2) do |openid|
+          render plain: openid
+        end
+      end
+    end
+
+    before(:each) do
+      routes.draw { get 'oauth2_page', to: 'wechat#oauth2_page' }
+      allow(controller.wechat(:wx2).jsapi_ticket).to receive(:oauth2_state) {'oauth2_state'}
+    end
+
+    it 'will redirect_to tencent page at first visit' do
+      get :oauth2_page
+      expect(response).to redirect_to(controller.wechat_oauth2('snsapi_base', nil, :wx2))
+    end
+
+    it 'will record cookites when tecent oauth2 success' do
+      oauth2_result = { 'openid' => 'openid' }
+      expect(controller.wechat(:wx2)).to receive(:web_access_token)
+        .with('code_id').and_return(oauth2_result)
+      get :oauth2_page, params: { code: 'code_id', state: 'oauth2_state' }
+      expect(response.body).to eq 'openid'
+      expect(cookies.signed_or_encrypted[:we_openid]).to eq 'openid'
+    end
+
+    it 'will render page with proper cookies' do
+      cookies.signed_or_encrypted[:we_openid] = 'openid'
+      get :oauth2_page
+      expect(response.body).to eq 'openid'
     end
   end
 end

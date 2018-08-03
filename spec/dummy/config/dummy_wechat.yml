@@ -1,0 +1,29 @@
+default: &default
+  appid: "my_appid"
+  secret: "my_secret"
+  token:    "my_token"
+  access_token: "C:/Users/[username]/wechat_access_token"
+  encrypt_mode: false # if true must fill encoding_aes_key
+  encoding_aes_key:  "my_encoding_aes_key"
+  jsapi_ticket: "C:/Users/[user_name]/wechat_jsapi_ticket"
+
+development:
+  <<: *default
+  trusted_domain_fullname: "http://your_dev.proxy.qqbrowser.cc"
+
+test:
+  <<: *default
+
+# Multiple Accounts
+#
+wx2_development:
+ <<: *default
+ appid: "my_appid2"
+ secret: "my_secret2"
+ access_token: "tmp/wechat_access_token2"
+ jsapi_ticket: "tmp/wechat_jsapi_ticket2"
+
+wx2_test:
+ <<: *default
+ appid: "my_appid2"
+ secret: "my_secret2"

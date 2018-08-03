@@ -14,10 +14,35 @@ RSpec.describe Wechat::Cipher do
     expect(result).to eq 'abcd'
   end
 
-  it '#encrypt & #decrypt' do
+  it '#encrypt & #decrypt short' do
     key = SecureRandom.base64(32)
     plain_text = 'hello world'
-    encrypt_text = subject.new.instance_eval { encrypt(plain_text, key) }
+    encrypt_text = subject.new.instance_eval { encrypt(encode_padding(plain_text), key) }
+    decrypt_text = subject.new.instance_eval { decrypt(encrypt_text, key) }
+
+    expect(decrypt_text).to eq plain_text
+  end
+
+  it '#encrypt & #decrypt long' do
+    key = SecureRandom.base64(32)
+    plain_text = <<SHAKESPEARE
+Shall I compare thee to a summer's day?
+Thou art more lovely and more temperate:
+Rough winds do shake the darling buds of May,
+And summer's lease hath all too short a date:
+Sometime too hot the eye of heaven shines,
+And often is his gold complexion dimm'd;
+And every fair from fair sometime declines,
+By chance, or nature's changing course, untrimm'd;
+But thy eternal summer shall not fade
+Nor lose possession of that fair thou ow'st;
+Nor shall Death brag thou wander'st in his shade,
+When in eternal lines to time thou grow'st;
+So long as men can breathe or eyes can see,
+So long lives this, and this gives life to thee.
+SHAKESPEARE
+
+    encrypt_text = subject.new.instance_eval { encrypt(encode_padding(plain_text), key) }
     decrypt_text = subject.new.instance_eval { decrypt(encrypt_text, key) }
 
     expect(decrypt_text).to eq plain_text

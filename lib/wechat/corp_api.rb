@@ -1,26 +1,19 @@
 require 'wechat/api_base'
-require 'wechat/client'
-require 'wechat/access_token'
+require 'wechat/http_client'
+require 'wechat/token/corp_access_token'
+require 'wechat/ticket/corp_jsapi_ticket'
 
 module Wechat
-  class CorpAccessToken < AccessToken
-    def refresh
-      data = client.get('gettoken', params: { corpid: appid, corpsecret: secret })
-      data.merge!(created_at: Time.now.to_i)
-      File.write(token_file, data.to_json) if valid_token(data)
-      @token_data = data
-    end
-  end
-
   class CorpApi < ApiBase
     attr_reader :agentid
 
-    API_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
+    API_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'.freeze
 
-    def initialize(appid, secret, token_file, agentid, skip_verify_ssl)
-      @client = Client.new(API_BASE, skip_verify_ssl)
-      @access_token = CorpAccessToken.new(@client, appid, secret, token_file)
+    def initialize(appid, secret, token_file, agentid, timeout, skip_verify_ssl, jsapi_ticket_file)
+      @client = HttpClient.new(API_BASE, timeout, skip_verify_ssl)
+      @access_token = Token::CorpAccessToken.new(@client, appid, secret, token_file)
       @agentid = agentid
+      @jsapi_ticket = Ticket::CorpJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
     end
 
     def agent_list
@@ -35,6 +28,14 @@ module Wechat
       get 'user/get', params: { userid: userid }
     end
 
+    def getuserinfo(code)
+      get 'user/getuserinfo', params: { code: code }
+    end
+
+    def convert_to_openid(userid)
+      post 'user/convert_to_openid', JSON.generate(userid: userid, agentid: agentid)
+    end
+
     def invite_user(userid)
       post 'invite/send', JSON.generate(userid: userid)
     end
@@ -43,8 +44,16 @@ module Wechat
       get 'user/authsucc', params: { userid: userid }
     end
 
+    def user_create(user)
+      post 'user/create', JSON.generate(user)
+    end
+
     def user_delete(userid)
       get 'user/delete', params: { userid: userid }
+    end
+
+    def user_batchdelete(useridlist)
+      post 'user/batchdelete', JSON.generate(useridlist: useridlist)
     end
 
     def batch_job_result(jobid)
@@ -79,12 +88,12 @@ module Wechat
       get 'department/list', params: { id: departmentid }
     end
 
-    def user_simplelist(departmentid, fetch_child = 0, status = 0)
-      get 'user/simplelist', params: { departmentid: departmentid, fetch_child: fetch_child, status: status }
+    def user_simplelist(department_id, fetch_child = 0, status = 0)
+      get 'user/simplelist', params: { department_id: department_id, fetch_child: fetch_child, status: status }
     end
 
-    def user_list(departmentid, fetch_child = 0, status = 0)
-      get 'user/list', params: { departmentid: departmentid, fetch_child: fetch_child, status: status }
+    def user_list(department_id, fetch_child = 0, status = 0)
+      get 'user/list', params: { department_id: department_id, fetch_child: fetch_child, status: status }
     end
 
     def tag_create(tagname, tagid = nil)
@@ -128,10 +137,6 @@ module Wechat
       post 'menu/create', JSON.generate(menu), params: { agentid: agentid }
     end
 
-    def media(media_id)
-      get 'media/get', params: { media_id: media_id }, as: :file
-    end
-
     def material_count
       get 'material/get_count', params: { agentid: agentid }
     end
@@ -140,24 +145,24 @@ module Wechat
       post 'material/batchget', JSON.generate(type: type, agentid: agentid, offset: offset, count: count)
     end
 
-    def media_create(type, file)
-      post 'media/upload', { upload: { media: file } }, params: { type: type }
-    end
-
     def material(media_id)
       get 'material/get', params: { media_id: media_id, agentid: agentid }, as: :file
     end
 
     def material_add(type, file)
-      post 'material/add_material', { upload: { media: file } }, params: { type: type, agentid: agentid }
+      post_file 'material/add_material', file, params: { type: type, agentid: agentid }
     end
 
     def material_delete(media_id)
       get 'material/del', params: { media_id: media_id, agentid: agentid }
     end
 
-    def message_send(openid, message)
-      post 'message/send', Message.to(openid).text(message).agent_id(agentid).to_json, content_type: :json
+    def message_send(userid, message)
+      post 'message/send', Message.to(userid).text(message).agent_id(agentid).to_json, content_type: :json
+    end
+
+    def custom_message_send(message)
+      post 'message/send', message.is_a?(Wechat::Message) ? message.agent_id(agentid).to_json : JSON.generate(message.merge(agent_id: agentid)), content_type: :json
     end
   end
 end
