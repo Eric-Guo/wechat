@@ -493,9 +493,11 @@ button:
     name: "预订午餐"
     key:  "BOOK_LUNCH"
    -
-    type: "click"
-    name: "预订晚餐"
-    key:  "BOOK_DINNER"
+    type: "miniprogram"
+    name: "小程序示例"
+    url:  "http://ericguo.com/"
+    appid: "wx1234567890"
+    pagepath: "pages/index"
  -
   name: "查询"
   sub_button:
