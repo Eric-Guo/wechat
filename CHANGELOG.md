@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10.2 (released at 8/27/2018)
+
+* Fix incompatible with Rails 5.2.1 by @chloerei #239
+
 ## v0.10.1 (released at 7/1/2018)
 
 * Allow custom_message_send using Hash as message, previous only allow Wechat::Message. by @zuoliang0 and @fogisland #234
