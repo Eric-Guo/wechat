@@ -22,6 +22,7 @@ module Wechat
                  else
                    controller.request.original_url
                  end
+      page_url = page_url.split('#').first if is_ios? 
       js_hash = api.jsapi_ticket.signature(page_url)
 
       config_js = <<-WECHAT_CONFIG_JS
@@ -35,6 +36,12 @@ wx.config({
 });
 WECHAT_CONFIG_JS
       javascript_tag config_js, type: 'application/javascript'
+    end
+
+    private
+
+    def is_ios?
+      controller.request.user_agent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
     end
   end
 end
