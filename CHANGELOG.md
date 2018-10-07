@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10.3 (released at 10/07/2018)
+
+* Fix new share problem in iOS by @killernova #242
+
 ## v0.10.2 (released at 8/27/2018)
 
 * Fix incompatible with Rails 5.2.1 by @chloerei #239
