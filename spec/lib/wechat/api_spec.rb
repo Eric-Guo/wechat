@@ -734,4 +734,19 @@ RSpec.describe Wechat::Api do
       expect(subject.del_message_template('Dyvp3-Ff0cnail_CDSzk1fIc6-9lOkxsQE7exTJbwUE')).to eq response_result
     end
   end
+
+  describe '#clear_quota' do
+    specify 'will post clear_quota with access_token, and appid as params' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok'
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('clear_quota', { appid: Wechat.config[:appid] }.to_json,
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.clear_quota).to eq response_result
+    end
+  end
 end
