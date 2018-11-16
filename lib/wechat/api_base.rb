@@ -32,6 +32,10 @@ module Wechat
       post 'media/uploadnews', mpnews_message.to_json
     end
 
+    def clear_quota(appid=Wechat.config[:appid])
+      post 'clear_quota', JSON.generate(appid: appid)
+    end
+
     protected
 
     def get(path, headers = {})
