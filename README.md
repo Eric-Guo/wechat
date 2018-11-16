@@ -217,7 +217,7 @@ For wechat mini program, can specified by the item `type`:
     appid: "my_appid"
     secret: "my_secret"
     # `mp` is short for **mini program**
-    type: 'mp' 
+    type: 'mp'
 ```
 
 #### Database wechat account configuration
@@ -412,6 +412,7 @@ Wechat Public Account commands:
   wechat user_update_remark [OPEN_ID, REMARK]                   # 设置备注名
   wechat users                                                  # 关注者列表
   wechat wxacode_download [WXA_CODE_PIC_PATH, PATH, WIDTH]      # 下载小程序码
+  wechat clear_quota                                            # 接口调用次数清零
 ```
 
 #### Enterprise account command line

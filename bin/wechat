@@ -515,6 +515,11 @@ class App < Thor
   def tag(tagid)
     puts wechat_api.tag tagid
   end
+
+  desc 'clear_quota', '接口调用次数清零'
+  def clear_quota
+    puts wechat_api.clear_quota
+  end
 end
 
 App.start
