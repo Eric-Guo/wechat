@@ -119,6 +119,14 @@ RSpec.describe Wechat::Message do
       end
     end
 
+    describe '#textcard' do
+      specify 'will update MsgType and TextCard field and return self' do
+        expect(message.textcard('title', 'content', 'URL', '更多')).to eq(message)
+        expect(message[:MsgType]).to eq 'textcard'
+        expect(message[:TextCard]).to eq ({btntxt: '更多', description: 'content', title: 'title', url: 'URL'})
+      end
+    end
+
     describe '#transfer_customer_service' do
       specify 'will update MsgType and return self' do
         expect(message.transfer_customer_service).to eq(message)

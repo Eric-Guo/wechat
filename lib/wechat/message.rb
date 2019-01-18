@@ -104,6 +104,15 @@ module Wechat
       update(MsgType: 'text', Content: content)
     end
 
+    def textcard(title, description, url, btntxt)
+      update(MsgType: 'textcard', TextCard: {
+        title: title,
+        description: description,
+        url: url,
+        btntxt: btntxt
+      })
+    end
+
     def transfer_customer_service(kf_account = nil)
       if kf_account
         update(MsgType: 'transfer_customer_service', TransInfo: { KfAccount: kf_account })
@@ -187,6 +196,7 @@ module Wechat
     end
 
     TO_JSON_KEY_MAP = {
+      'TextCard'         => 'textcard',
       'ToUserName'       => 'touser',
       'ToWxName'         => 'towxname',
       'MediaId'          => 'media_id',
@@ -198,7 +208,7 @@ module Wechat
       'ShowCoverPic'     => 'show_cover_pic'
     }.freeze
 
-    TO_JSON_ALLOWED = %w[touser msgtype content image voice video file
+    TO_JSON_ALLOWED = %w[touser msgtype content image voice video file textcard
                          music news articles template agentid filter
                          send_ignore_reprint mpnews towxname].freeze
 
