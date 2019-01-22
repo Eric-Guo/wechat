@@ -516,6 +516,16 @@ class App < Thor
     puts wechat_api.tag tagid
   end
 
+  desc 'getusersummary [BEGIN_DATE, END_DATE]', '获取用户增减数据'
+  def getusersummary(begin_date, end_date)
+    puts wechat_api.getusersummary(begin_date, end_date)
+  end
+
+  desc 'getusercumulate [BEGIN_DATE, END_DATE]', '获取累计用户数据'
+  def getusercumulate(begin_date, end_date)
+    puts wechat_api.getusercumulate(begin_date, end_date)
+  end
+
   desc 'clear_quota', '接口调用次数清零'
   def clear_quota
     puts wechat_api.clear_quota

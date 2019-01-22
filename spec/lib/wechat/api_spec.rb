@@ -623,6 +623,38 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#getusersummary' do
+    usersummary_result = { list: [
+      { ref_date: '2014-12-07',
+        user_source: 0,
+        new_user: 0,
+        cancel_user: 0 }
+    ] }
+
+    specify 'will post getusersummary with begin_date, end_date and access_token' do
+      getusersummary_req = { begin_date: '2014-12-07', end_date: '2014-12-08' }
+      expect(subject.client).to receive(:post)
+        .with('getusersummary', JSON.generate(getusersummary_req),
+              params: { access_token: 'access_token' }, base: Wechat::Api::DATACUBE_BASE).and_return(usersummary_result)
+      expect(subject.getusersummary('2014-12-07', '2014-12-08')).to eq usersummary_result
+    end
+  end
+
+  describe '#getusercumulate' do
+    usercumulate_result = { list: [
+      { ref_date: '2014-12-07',
+        cumulate_user: 1217056 }
+    ] }
+
+    specify 'will post getusercumulate with begin_date, end_date and access_token' do
+      getusercumulate_req = { begin_date: '2014-12-07', end_date: '2014-12-08' }
+      expect(subject.client).to receive(:post)
+        .with('getusercumulate', JSON.generate(getusercumulate_req),
+              params: { access_token: 'access_token' }, base: Wechat::Api::DATACUBE_BASE).and_return(usercumulate_result)
+      expect(subject.getusercumulate('2014-12-07', '2014-12-08')).to eq usercumulate_result
+    end
+  end
+
   describe '#web_access_token' do
     specify 'will get access_token, refresh_token and openid with authorization_code' do
       oauth_result = { access_token: 'ACCESS_TOKEN',
