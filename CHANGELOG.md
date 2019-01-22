@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.11.0 (released at 01/22/2019)
+
+* Support Ruby 2.6.0 official
+* Bump http gem to 4.0
+* New clear quota API by @3014zhangshuo #244
+* Wechat::Message support textcard by @hophacker #249
+* New getusersummary and getusercumulate API #247
+
 ## v0.10.3 (released at 10/07/2018)
 
 * Fix new share problem in iOS by @killernova #242
