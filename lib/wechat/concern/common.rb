@@ -4,6 +4,7 @@ module Wechat
       WXA_BASE    = 'https://api.weixin.qq.com/wxa/'.freeze
       API_BASE    = 'https://api.weixin.qq.com/cgi-bin/'.freeze
       OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
+      DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'.freeze
 
       def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file)
         @client = HttpClient.new(API_BASE, timeout, skip_verify_ssl)
@@ -184,6 +185,14 @@ module Wechat
 
       def tag(tagid, next_openid = '')
         post 'user/tag/get', JSON.generate(tagid: tagid, next_openid: next_openid)
+      end
+
+      def getusersummary(begin_date, end_date)
+        post 'getusersummary', JSON.generate(begin_date: begin_date, end_date: end_date), base: DATACUBE_BASE
+      end
+
+      def getusercumulate(begin_date, end_date)
+        post 'getusercumulate', JSON.generate(begin_date: begin_date, end_date: end_date), base: DATACUBE_BASE
       end
 
       def web_access_token(code)
