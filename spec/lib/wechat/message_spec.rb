@@ -125,6 +125,20 @@ RSpec.describe Wechat::Message do
         expect(message[:MsgType]).to eq 'textcard'
         expect(message[:TextCard]).to eq ({btntxt: '更多', description: 'content', title: 'title', url: 'URL'})
       end
+
+      specify 'btntxt can be omited' do
+        expect(message.textcard('title', 'content', 'URL')).to eq(message)
+        expect(message[:MsgType]).to eq 'textcard'
+        expect(message[:TextCard]).to eq ({description: 'content', title: 'title', url: 'URL'})
+      end
+    end
+
+    describe '#markdown' do
+      specify 'will update MsgType and Markdown field and return self' do
+        expect(message.markdown('[这是一个链接](http://work.weixin.qq.com/api/doc)')).to eq(message)
+        expect(message[:MsgType]).to eq 'markdown'
+        expect(message[:Markdown]).to eq ({content: '[这是一个链接](http://work.weixin.qq.com/api/doc)'})
+      end
     end
 
     describe '#transfer_customer_service' do

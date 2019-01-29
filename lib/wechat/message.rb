@@ -104,12 +104,19 @@ module Wechat
       update(MsgType: 'text', Content: content)
     end
 
-    def textcard(title, description, url, btntxt)
-      update(MsgType: 'textcard', TextCard: {
+    def textcard(title, description, url, btntxt = nil)
+      data = {
         title: title,
         description: description,
-        url: url,
-        btntxt: btntxt
+        url: url
+      }
+      data[:btntxt] = btntxt if btntxt.present?
+      update(MsgType: 'textcard', TextCard: data)
+    end
+
+    def markdown(content)
+      update(MsgType: 'markdown', Markdown: {
+        content: content
       })
     end
 
@@ -197,6 +204,7 @@ module Wechat
 
     TO_JSON_KEY_MAP = {
       'TextCard'         => 'textcard',
+      'Markdown'         => 'markdown',
       'ToUserName'       => 'touser',
       'ToWxName'         => 'towxname',
       'MediaId'          => 'media_id',
@@ -208,7 +216,7 @@ module Wechat
       'ShowCoverPic'     => 'show_cover_pic'
     }.freeze
 
-    TO_JSON_ALLOWED = %w[touser msgtype content image voice video file textcard
+    TO_JSON_ALLOWED = %w[touser msgtype content image voice video file textcard markdown
                          music news articles template agentid filter
                          send_ignore_reprint mpnews towxname].freeze
 
