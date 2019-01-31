@@ -5,28 +5,28 @@ WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.or
 
 [中文文档 Chinese document](/README-CN.md)
 
-[Wechat](http://www.wechat.com/) is a free messaging and calling app developed by [Tencent](http://tencent.com/en-us/index.shtml), after linking billion people, Wechat had become [an application platform](https://uxdesign.cc/wechat-the-invincible-app-a-key-to-business-success-in-china-8e9a920deb26?source=wechat_gem).
+[Wechat](http://www.wechat.com/) is a Chinese multi-purpose messaging, social media and mobile payment app developed by Tencent. It was first released in 2011, and by 2018 it was one of the world's largest standalone mobile apps by monthly active users, with over 1 billion monthly active users (902 million daily active users). (According to [wiki](https://en.wikipedia.org/wiki/WeChat))
 
-WeChat gem tries to help Rails developer to integrate [enterprise account](https://qy.weixin.qq.com) / [public account](https://mp.weixin.qq.com/) easily. Features below are ready and there is no need to write adapter code for talking to wechat server directly.
+WeChat gem tries to help Rails developers to integrate [enterprise account](https://qy.weixin.qq.com) / [public account](https://mp.weixin.qq.com/) easily. Features below are ready and there is no need to write adapter code for talking to wechat server directly.
 
 - [Sending message](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF) API（Can access via console or in rails）
-- [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（You must run on rails server to receiving message）
+- [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（You must run rails server to receive messages）
 - [Wechat JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config signature
 - OAuth 2.0 authentication
 - Record session when receiving message from user (Optional)
 
 
-`wechat` command shares the same API in console, so you can interactive with wechat server quickly, without starting up web environment/code.
+`wechat` command shares the same API in console, so you can interact with wechat server quickly without starting up web environment/code.
 
-A responder DSL can be used in Rails controller, giving an event based interface to handle messages sent by end user from wechat server.
+A responder DSL can be used in Rails controller, which gives an event based interface to handle messages sent by end users.
 
-Wechat provides OAuth2.0 authentication method `wechat_oauth2`, possibly the easiest way, for the users who prefer using devise style authorization gems, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) can be a good option.
+If Wechat OAuth 2.0 is required by your app, [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) is recommended in order to apply [devise authentication](https://github.com/plataformatec/devise).
 
-There is official [weui](https://github.com/weui/weui), corresponding Rails gem called [weui-rails](https://github.com/Eric-Guo/weui-rails) is available, if you prefer following the same UI design as wechat.
+If tencent's [weui](https://github.com/weui/weui) UI style is adoped in your project, gem [weui-rails](https://github.com/Eric-Guo/weui-rails) is available for you.
 
-For web page only wechat application, please use [`wechat_api`](#wechat_api---rails-controller-wechat-api), which only contains web feature compare with traditional message type [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl).
+For web page only wechat application, please use [`wechat_api`](#wechat_api---rails-controller-wechat-api), which only contains web features, compared with traditional message type [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl).
 
-There is a more complete [wechat-starter](https://github.com/goofansu/wechat-starter) demo available, which even includes the payment SDK feature.
+There is a more complete [wechat-starter](https://github.com/goofansu/wechat-starter) demo available, which futher includes the payment SDK feature.
 
 ## Installation
 
@@ -54,7 +54,7 @@ Run the generator:
 rails generate wechat:install
 ```
 
-`rails g wechat:install` will generated the initial `wechat.yml` configuration file, including an sample wechat controller and corresponding routes.
+`rails g wechat:install` will generate the initial `wechat.yml` configuration file, including an sample wechat controller and corresponding routes.
 
 Enable session record:
 
@@ -63,7 +63,7 @@ rails g wechat:session
 rake db:migrate
 ```
 
-Enabling session will generate two files in Rails folder, you can add more columns to *wechat_session* table and add declaration to link to users table, it's also possible to store data directly in **hash_store**. if you are using PostgreSQL, using [hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)/json maybe better, but the best way is still to add a dedicate column to record the data, the Rails way.
+Enabling session will generate two files in Rails folder, you can add more columns to *wechat_session* table and add declaration to link to users table, it's also possible to store data directly in **hash_store**. If you are using PostgreSQL, using [hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)/json maybe better, but the best way is to add a dedicated column to record the data (the Rails way).
 
 Using Redis to store wechat token and ticket:
 
@@ -71,7 +71,8 @@ Using Redis to store wechat token and ticket:
 rails g wechat:redis_store
 ```
 
-Redis store supports Rails application running in multi-server, no need to enable it if your Rails application is running on one server only, the wechat command won't read the token/ticket stored in Redis.
+
+Redis storage supports Rails application running in multiple servers. It is recommended to use default file storage if there is only one single server. Besides that, `wechat` command won't read token/ticket stored in Redis.
 
 Enable database wechat configurations:
 
@@ -94,7 +95,7 @@ How to setup appid/corpid and secret see below section.
 
 #### Configure for command line
 
-To use `wechat` command solely, you need to create configuration file `~/.wechat.yml` and include content below  for public account. The access_token will be written to a file.
+To use standalone `wechat` command, you need to create configuration file `~/.wechat.yml` and include content below  for public account. The `access_token` will be written to file `/var/tmp/wechat_access_token`.
 
 ```
 appid: "my_appid"
