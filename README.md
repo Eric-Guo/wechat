@@ -7,10 +7,10 @@ WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.or
 
 [Wechat](http://www.wechat.com/) is a Chinese multi-purpose messaging, social media and mobile payment app developed by Tencent. It was first released in 2011, and by 2018 it was one of the world's largest standalone mobile apps by monthly active users, with over 1 billion monthly active users (902 million daily active users). (According to [wiki](https://en.wikipedia.org/wiki/WeChat))
 
-WeChat gem tries to help Rails developers to integrate [enterprise account](https://qy.weixin.qq.com) / [public account](https://mp.weixin.qq.com/) easily. Features below are ready and there is no need to write adapter code for talking to wechat server directly.
+WeChat gem helps Rails developers integrate [WeChat Official Accounts Platform](https://mp.weixin.qq.com/) and [Wechat Enterprise](https://qy.weixin.qq.com) easily, including features:
 
-- [Sending message](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF) API（Can access via console or in rails）
-- [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（You must run rails server to receive messages）
+- [Sending message](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF) API（can be both accessed via console or rails server）
+- [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（rails server is required to be running）
 - [Wechat JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config signature
 - OAuth 2.0 authentication
 - Record session when receiving message from user (Optional)
