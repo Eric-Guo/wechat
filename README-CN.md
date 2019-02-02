@@ -107,7 +107,7 @@ access_token: "C:/Users/[user_name]/wechat_access_token"
 #### Rails 全局配置
 Rails应用程序中，需要将配置文件放在`config/wechat.yml`，可以为不同environment创建不同的配置。
 
-公众号配置示例：
+微信公众平台配置示例：
 
 ```
 default: &default
@@ -133,7 +133,7 @@ test:
   <<: *default
 ```
 
-公众号可选安全模式（加密模式），通过添加如下配置可开启加密模式。
+微信公众平台可选安全模式（加密模式），通过添加如下配置可开启加密模式。
 
 ```
 default: &default
@@ -141,7 +141,7 @@ default: &default
   encoding_aes_key:  "my_encoding_aes_key"
 ```
 
-企业号配置下必须使用加密模式，其中token和encoding_aes_key可以从企业号管理界面的应用中心->某个应用->模式选择，选择回调模式后获得。
+企业微信配置下必须使用加密模式，其中token和encoding_aes_key可以从企业号管理界面的应用中心->某个应用->模式选择，选择回调模式后获得。
 
 ```
 default: &default
@@ -191,6 +191,25 @@ test:
  #  appid: "my_appid"
  #  secret: "my_secret"
 ```
+
+支持多微信公众平台或企业微信账号
+
+使用方法
+1.配置文件可增加多个微信公众平台(企业微信)配置，用法类似 Rails 中 database.yml 多数据库配置的处理
+development, test, production 段是默认配置
+[account_env] 是额外微信公众平台(企业微信)配置，如
+wx007_development, wx007_test, wx007_production 增加了 wx007 这个微信公众平台(企业微信)的相关配置。
+
+2.wechat_responder 声明
+wechat_responder account: :wx007
+
+3.wechat api 使用
+Wechat.api(:wx007) 表示使用 wx007 这个微信公众平台(企业微信)的 api
+Wechat.api 和 Wechat.api(:default) 表示默认的 api
+
+4.wechat 命令行使用
+增加可选参数 -a, [--account=ACCOUNT]
+如 wechat users -a wx007 表示列举 wx007 这个微信公众平台(企业微信)的粉丝列表
 
 进一步的多账号支持参见[PR 150](https://github.com/Eric-Guo/wechat/pull/150)。
 
@@ -298,7 +317,7 @@ class CartController < ActionController::Base
 end
 ```
 
-企业号可使用如下代码取得企业用户的相关信息。
+企业微信可使用如下代码取得企业用户的相关信息。
 
 ```ruby
 class WechatsController < ActionController::Base
@@ -326,9 +345,9 @@ wechat gems 内部不会检查权限。但因公众号类型不同，和微信�
 
 ## 使用命令行
 
-根据企业号和公众号配置不同，wechat提供了的命令行命令。
+根据企业微信和微信公众平台配置不同，wechat提供了的命令行命令。
 
-#### 公众号命令行
+#### 微信公众平台命令行
 
 ```
 $ wechat
@@ -385,11 +404,11 @@ Wechat Public Account commands:
   wechat wxacode_download [WXA_CODE_PIC_PATH, PATH, WIDTH]      # 下载小程序码
 ```
 
-#### 企业号命令行
+#### 企业微信命令行
 ```
 $ wechat
 Wechat Enterprise Account commands:
-  wechat agent [AGENT_ID]                                       # 获取企业号应用详情
+  wechat agent [AGENT_ID]                                       # 获取企业微信应用详情
   wechat agent_list                                             # 获取应用概况列表
   wechat batch_job_result [JOB_ID]                              # 获取异步任务结果
   wechat batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]          # 全量覆盖部门
@@ -595,7 +614,7 @@ wechat.template_message_send Wechat::Message.to(openid).template(template['templ
 
 ## wechat_api - Rails Controller Wechat API
 
-虽然用户可以随时通过`Wechat.api`在任意代码中访问wechat的API功能，但是更推荐的做法是仅在controller中，通过引入`wechat_api`，使用`wechat`调用API功能，不仅因为这样是支持多个微信公众号的必然要求，而且也避免了在模型层内过多引入微信相关代码。
+虽然用户可以随时通过`Wechat.api`在任意代码中访问wechat的API功能，但是更推荐的做法是仅在controller中，通过引入`wechat_api`，使用`wechat`调用API功能，不仅因为这样是支持多个微信公众平台账号的必然要求，而且也避免了在模型层内过多引入微信相关代码。
 
 ```ruby
 class WechatReportsController < ApplicationController
@@ -650,12 +669,12 @@ class WechatsController < ActionController::Base
     request.reply.text "User #{request[:FromUserName]} subscribe now"
   end
 
-  # 公众号收到未关注用户扫描qrscene_xxxxxx二维码时。注意此次扫描事件将不再引发上条的用户加关注事件
+  # 公众平台收到未关注用户扫描qrscene_xxxxxx二维码时。注意此次扫描事件将不再引发上条的用户加关注事件
   on :scan, with: 'qrscene_xxxxxx' do |request, ticket|
     request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
-  # 公众号收到已关注用户扫描创建二维码的scene_id事件时
+  # 公众平台收到已关注用户扫描创建二维码的scene_id事件时
   on :scan, with: 'scene_id' do |request, ticket|
     request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
@@ -667,12 +686,12 @@ class WechatsController < ActionController::Base
     end
   end
 
-  # 企业号收到EventKey 为二维码扫描结果事件时
+  # 企业微信收到EventKey 为二维码扫描结果事件时
   on :scan, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
     request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
   end
 
-  # 企业号收到EventKey 为CODE 39码扫描结果事件时
+  # 企业微信收到EventKey 为CODE 39码扫描结果事件时
   on :scan, with: 'BINDING_BARCODE' do |message, scan_result|
     if scan_result.start_with? 'CODE_39,'
       message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
@@ -812,6 +831,6 @@ end
 
 ## 已知问题
 
-* 企业号接受菜单消息时，Wechat腾讯服务器无法解析部分域名，请使用IP绑定回调URL，用户的普通消息目前不受影响。
-* 企业号全量覆盖成员使用的csv通讯录格式，直接将下载的模板导入[是不工作的](http://qydev.weixin.qq.com/qa/index.php?qa=13978)，必须使用Excel打开，然后另存为csv格式才会变成合法格式。
+* 企业微信接受菜单消息时，Wechat腾讯服务器无法解析部分域名，请使用IP绑定回调URL，用户的普通消息目前不受影响。
+* 企业微信全量覆盖成员使用的csv通讯录格式，直接将下载的模板导入[是不工作的](http://qydev.weixin.qq.com/qa/index.php?qa=13978)，必须使用Excel打开，然后另存为csv格式才会变成合法格式。
 * 如果使用nginx+unicron部署方案，并且使用了https，必须设置`trusted_domain_fullname`为https，否则会导致JS-SDK签名失效。
