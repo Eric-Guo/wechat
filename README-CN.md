@@ -192,24 +192,18 @@ test:
  #  secret: "my_secret"
 ```
 
-支持多微信公众平台或企业微信账号
+支持 微信公众平台/企业微信 多账号的注意点(例如，增加账号`wx2`):
 
-使用方法
-1.配置文件可增加多个微信公众平台(企业微信)配置，用法类似 Rails 中 database.yml 多数据库配置的处理
-development, test, production 段是默认配置
-[account_env] 是额外微信公众平台(企业微信)配置，如
-wx007_development, wx007_test, wx007_production 增加了 wx007 这个微信公众平台(企业微信)的相关配置。
+* 配置文件可增加多个微信公众平台(企业微信)配置，用法类似Rails中`config/database.yml`多数据库配置的处理。`development`, `test`, `production`是默认账号的配置段，要想增加账号`wx2`，你需要增加配置段`wx2_development`, `wx2_test`, `wx2_production`。
 
-2.wechat_responder 声明
-wechat_responder account: :wx007
+* 声明账号`wx2`的`wechat_responder`:
+  ```ruby
+  wechat_responder account: :wx2
+  ```
 
-3.wechat api 使用
-Wechat.api(:wx007) 表示使用 wx007 这个微信公众平台(企业微信)的 api
-Wechat.api 和 Wechat.api(:default) 表示默认的 api
+* `Wechat.api(:wx2)` 表示使用账号`wx2`的Wechat api，而`Wechat.api`或`Wechat.api(:default)`则表示默认账号的wechat api。
 
-4.wechat 命令行使用
-增加可选参数 -a, [--account=ACCOUNT]
-如 wechat users -a wx007 表示列举 wx007 这个微信公众平台(企业微信)的粉丝列表
+* 在wechat命令行中，通过增加可选参数`-a, [--account=ACCOUNT]`来表示使用其他账号，例如`wechat users -a wx2`表示列举`wx2`这个账号的粉丝列表
 
 进一步的多账号支持参见[PR 150](https://github.com/Eric-Guo/wechat/pull/150)。
 

@@ -206,18 +206,21 @@ test:
  #  secret: "my_secret"
 ```
 
-Support multiple accounts
+Notes about supporting multiple accounts of `WeChat Official Accounts Platform` / `WeChat Enterprise` (for example, adding account `wx2`):
 
-Instructions
-1.The configuration file can be added to multiple WeChat Official Accounts Platform or WeChat Enterprise configuration, the usage is similar to the database.yml multi-database configuration in Rails. Development, test, production segment is the default configuration [account_env] is the additional WeChat Official Accounts Platform or WeChat Enterprise configuration, For example, wx007_development, wx007_test, wx007_production added the configuration of wx007, the WeChat public platform (Enterprise WeChat).
+* Configuration for multiple accounts is similar to multi-database configuration in `config/database.yml`,
+   where `development`, `test`, `production` segments are the default configuration, one needs to add `wx2_development`, `wx2_test`, `wx2_production` in order to add additional account named `wx2`.
 
-2.wechat_responder declaration wechat_responder account: :wx007
+* Declaration of additional `wechat_responder`:
+  ```ruby
+  wechat_responder account: :wx2
+  ```
 
-3.Wechat api uses Wechat.api(:wx007) to use wx007, the WeChat Official Accounts Platform or WeChat Enterprise api Wechat.api and Wechat.api(:default) to represent the default api.
+* Use `Wechat.api` or `Wechat.api(:default)` to represent the default wechat api. Use `Wechat.api(:wx2)` to call for wechat api of account `wx2`.
 
-4.Wechat command line use to add optional parameters -a, [--account=ACCOUNT] such as wechat users -a wx007 to list wx007 This WeChat Official Accounts Platform fan list
+* When using `Wechat command line`, one can switch to another wechat account by adding optional parameters `-a ACCOUNT [--account=ACCOUNT]`.
 
-For multiple accounts details reference [PR 150](https://github.com/Eric-Guo/wechat/pull/150)
+For details about supporting multiple accounts, please check [PR 150](https://github.com/Eric-Guo/wechat/pull/150)
 
 For wechat mini program, can specified by the item `type`:
 
