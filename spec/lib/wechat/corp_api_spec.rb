@@ -48,6 +48,34 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#checkin', now: true do
+    specify 'will post checkin/getcheckindata with access_token and json useridlist' do
+      useridlist = ['userid']
+      now = Time.now
+      starttime = now.beginning_of_day
+      endtime = now.end_of_day
+      checkin_request = { useridlist: useridlist, opencheckindatatype: 3, starttime: starttime.to_i, endtime: endtime.to_i }
+      checkin_result = {errcode: 0,
+                          errmsg: "ok",
+                          checkindata: [{
+                            userid: "userid",
+                            groupname: "打卡测试",
+                            checkin_type: "上班打卡",
+                            exception_type: "",
+                            checkin_time: now.to_i,
+                            location_title: "某公司",
+                            location_detail: "某公司",
+                            wifiname: "a_wifi",
+                            notes: "",
+                            wifimac: "02:00:00:00:00:00",
+                            mediaids: []
+                                        }]}
+      expect(subject.client).to receive(:post)
+                                  .with('checkin/getcheckindata', checkin_request.to_json, params: { access_token: 'access_token' }).and_return(checkin_result)
+      expect(subject.checkin(useridlist, starttime, endtime)).to eq checkin_result
+    end
+  end
+
   describe '#user' do
     specify 'will get user/get with access_token and userid' do
       userid = 'userid'
