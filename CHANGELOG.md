@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.11.1 (released at 03/01/2019)
+
+* Let Message support markdown, text included; allow textcard btntxt to be omitted by @hophacker #251
+* Enterprise account add checkin api by @hophacker #254
+* Suggest use secret to differentiate different acces_tokens and tickets in Enterprise account by @hophacker #255
+
+
 ## v0.11.0 (released at 01/22/2019)
 
 * Support Ruby 2.6.0 official
