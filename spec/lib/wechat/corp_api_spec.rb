@@ -54,7 +54,7 @@ RSpec.describe Wechat::CorpApi do
       now = Time.now
       starttime = now.beginning_of_day
       endtime = now.end_of_day
-      checkin_request = { useridlist: useridlist, opencheckindatatype: 3, starttime: starttime.to_i, endtime: endtime.to_i }
+      checkin_request = { opencheckindatatype: 3, starttime: starttime.to_i, endtime: endtime.to_i, useridlist: useridlist }
       checkin_result = { errcode: 0, errmsg: 'ok',
                          checkindata: [{ userid: 'userid',
                                          groupname: '打卡测试',
