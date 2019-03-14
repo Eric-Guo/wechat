@@ -15,6 +15,10 @@ module Wechat
         end
       end
 
+      def to_party(party)
+        new(ToPartyName: party, CreateTime: Time.now.to_i)
+      end
+
       def to_mass(tag_id: nil, send_ignore_reprint: 0)
         if tag_id
           new(filter: { is_to_all: false, tag_id: tag_id }, send_ignore_reprint: send_ignore_reprint)
@@ -206,6 +210,7 @@ module Wechat
       'TextCard'         => 'textcard',
       'Markdown'         => 'markdown',
       'ToUserName'       => 'touser',
+      'ToPartyName'     => 'toparty',
       'ToWxName'         => 'towxname',
       'MediaId'          => 'media_id',
       'MpNews'           => 'mpnews',
@@ -216,7 +221,7 @@ module Wechat
       'ShowCoverPic'     => 'show_cover_pic'
     }.freeze
 
-    TO_JSON_ALLOWED = %w[touser msgtype content image voice video file textcard markdown
+    TO_JSON_ALLOWED = %w[touser toparty msgtype content image voice video file textcard markdown
                          music news articles template agentid filter
                          send_ignore_reprint mpnews towxname].freeze
 

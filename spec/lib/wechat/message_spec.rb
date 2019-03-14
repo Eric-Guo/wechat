@@ -39,6 +39,16 @@ RSpec.describe Wechat::Message do
     end
   end
 
+  describe 'to_party' do
+    let(:message) { Wechat::Message.from_hash(text_request) }
+    specify 'will create a message sent to a party' do
+      reply = Wechat::Message.to_party(2)
+      expect(reply).to be_a(Wechat::Message)
+      expect(reply.message_hash).to include(ToPartyName: 2)
+      expect(reply.message_hash[:CreateTime]).to be_a(Integer)
+    end
+  end
+
   describe 'to_mass' do
     let(:message) { Wechat::Message.from_hash(text_request) }
     specify 'will create base message' do
