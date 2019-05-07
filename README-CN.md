@@ -460,6 +460,8 @@ Wechat Enterprise Account commands:
   wechat user_update_remark [OPEN_ID, REMARK]                   # 设置备注名
 ```
 
+注意：replaceparty 全量覆盖部门只支持单个根节点作为部门，不支持平行多根节点。
+
 ### 使用场景
 以下是几种典型场景的使用方法
 

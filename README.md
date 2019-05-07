@@ -492,6 +492,8 @@ Wechat Enterprise Account commands:
   wechat user_update_remark [OPEN_ID, REMARK]                   # 设置备注名
 ```
 
+Note: `replaceparty` full departments uploads only supports a single root node as a department and does not support parallel multiple root nodes.
+
 ### Command line usage demo (partially)
 
 ##### Fetch all users open id
