@@ -380,7 +380,7 @@ Wechat Public Account commands:
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]            # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID_OR_STR, EXPIRE_SECONDS]  # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]             # 通过ticket下载二维码
-  wechat short_url [LONG_URL]                                   # 长链接转短链接
+  wechat shorturl [LONG_URL]                                   # 长链接转短链接
   wechat tag [TAGID]                                            # 获取标签下粉丝列表
   wechat tag_add_user [TAG_ID, OPEN_IDS]                        # 批量为用户打标签
   wechat tag_create [TAGNAME, TAG_ID]                           # 创建标签

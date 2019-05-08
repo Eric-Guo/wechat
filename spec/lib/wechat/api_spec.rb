@@ -201,9 +201,9 @@ RSpec.describe Wechat::Api do
 
   describe '#shorturl' do
     shorturl_result = { errcode: 0, errmsg: 'ok',
-                        short_url: 'http://w.url.cn/s/AvCo6Ih' }
+                        shorturl: 'http://w.url.cn/s/AvCo6Ih' }
 
-    specify 'will post short_url with access_token and long_url' do
+    specify 'will post shorturl with access_token and long_url' do
       long_url = 'http://wap.koudaitong.com/v2/showcase/goods?alias=128wi9shh&spm=h56083&redirect_count=1'
       shorturl_req = { action: 'long2short', long_url: long_url }
       expect(subject.client).to receive(:post)

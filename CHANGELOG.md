@@ -144,7 +144,7 @@
 
 * Fix when access_token failed lead ticket can not refresh problem.
 * Default duration should be 1 hours instead of 0 seconds for wechat_oauth2.
-* New short_url allowing convert from long URL to short.
+* New shorturl allowing convert from long URL to short.
 
 ## v0.7.13 (released at 5/14/2016)
 
