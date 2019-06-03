@@ -101,6 +101,10 @@ module Wechat
         post 'getwxacode', JSON.generate(path: path, width: width), base: WXA_BASE
       end
 
+      def wxa_get_wxacode_unlimit(scene, page = nil, width = 430)
+        post 'getwxacodeunlimit', JSON.generate(scene: scene, page: page, width: width), base: WXA_BASE
+      end
+
       def wxa_create_qrcode(path, width = 430)
         post 'wxaapp/createwxaqrcode', JSON.generate(path: path, width: width)
       end
