@@ -137,9 +137,10 @@ module Wechat
     end
 
     private_class_method def self.class_exists?(class_name)
-      return Module.const_get(class_name).present?
+      klass = Module.const_get(class_name)
+      klass.is_a?(Class)
     rescue NameError
-      return false
+      false
     end
   end
 end
