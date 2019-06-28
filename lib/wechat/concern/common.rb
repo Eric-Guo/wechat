@@ -1,13 +1,8 @@
 module Wechat
   module Concern
     module Common
-      WXA_BASE    = 'https://api.weixin.qq.com/wxa/'.freeze
-      API_BASE    = 'https://api.weixin.qq.com/cgi-bin/'.freeze
-      OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
-      DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'.freeze
-
       def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file)
-        @client = HttpClient.new(API_BASE, timeout, skip_verify_ssl)
+        @client = HttpClient.new(Wechat::Api::API_BASE, timeout, skip_verify_ssl)
         @access_token = Token::PublicAccessToken.new(@client, appid, secret, token_file)
         @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
       end
@@ -98,11 +93,11 @@ module Wechat
       end
 
       def wxa_get_wxacode(path, width = 430)
-        post 'getwxacode', JSON.generate(path: path, width: width), base: WXA_BASE
+        post 'getwxacode', JSON.generate(path: path, width: width), base: Wechat::Api::WXA_BASE
       end
 
       def wxa_get_wxacode_unlimit(scene, page = nil, width = 430)
-        post 'getwxacodeunlimit', JSON.generate(scene: scene, page: page, width: width), base: WXA_BASE
+        post 'getwxacodeunlimit', JSON.generate(scene: scene, page: page, width: width), base: Wechat::Api::WXA_BASE
       end
 
       def wxa_create_qrcode(path, width = 430)
@@ -192,11 +187,11 @@ module Wechat
       end
 
       def getusersummary(begin_date, end_date)
-        post 'getusersummary', JSON.generate(begin_date: begin_date, end_date: end_date), base: DATACUBE_BASE
+        post 'getusersummary', JSON.generate(begin_date: begin_date, end_date: end_date), base: Wechat::Api::DATACUBE_BASE
       end
 
       def getusercumulate(begin_date, end_date)
-        post 'getusercumulate', JSON.generate(begin_date: begin_date, end_date: end_date), base: DATACUBE_BASE
+        post 'getusercumulate', JSON.generate(begin_date: begin_date, end_date: end_date), base: Wechat::Api::DATACUBE_BASE
       end
 
       def web_access_token(code)
@@ -206,11 +201,11 @@ module Wechat
           code: code,
           grant_type: 'authorization_code'
         }
-        client.get 'oauth2/access_token', params: params, base: OAUTH2_BASE
+        client.get 'oauth2/access_token', params: params, base: Wechat::Api::OAUTH2_BASE
       end
 
       def web_auth_access_token(web_access_token, openid)
-        client.get 'auth', params: { access_token: web_access_token, openid: openid }, base: OAUTH2_BASE
+        client.get 'auth', params: { access_token: web_access_token, openid: openid }, base: Wechat::Api::OAUTH2_BASE
       end
 
       def web_refresh_access_token(user_refresh_token)
@@ -219,11 +214,11 @@ module Wechat
           grant_type: 'refresh_token',
           refresh_token: user_refresh_token
         }
-        client.get 'oauth2/refresh_token', params: params, base: OAUTH2_BASE
+        client.get 'oauth2/refresh_token', params: params, base: Wechat::Api::OAUTH2_BASE
       end
 
       def web_userinfo(web_access_token, openid, lang = 'zh_CN')
-        client.get 'userinfo', params: { access_token: web_access_token, openid: openid, lang: lang }, base: OAUTH2_BASE
+        client.get 'userinfo', params: { access_token: web_access_token, openid: openid, lang: lang }, base: Wechat::Api::OAUTH2_BASE
       end
     end
   end

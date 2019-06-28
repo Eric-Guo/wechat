@@ -535,6 +535,11 @@ class App < Thor
   def addvoicetorecofortext(voice_id)
     puts wechat_api.addvoicetorecofortext(voice_id)
   end
+
+  desc 'queryrecoresultfortext [VOICE_ID]', 'AI开放接口-获取语音识别结果'
+  def queryrecoresultfortext(voice_id)
+    puts wechat_api.queryrecoresultfortext(voice_id)
+  end
 end
 
 App.start

@@ -2,7 +2,11 @@ module Wechat
   class ApiBase
     attr_reader :access_token, :client, :jsapi_ticket
 
+    API_BASE    = 'https://api.weixin.qq.com/cgi-bin/'.freeze
     MP_BASE = 'https://mp.weixin.qq.com/cgi-bin/'.freeze
+    WXA_BASE    = 'https://api.weixin.qq.com/wxa/'.freeze
+    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
+    DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'.freeze
 
     def callbackip
       get 'getcallbackip'
@@ -37,7 +41,11 @@ module Wechat
     end
 
     def addvoicetorecofortext(voice_id, file_format = '', lang = 'zh_CN')
-      post 'media/voice/addvoicetorecofortext', nil, params: { format: file_format, voice_id: voice_id, lang: lang }
+      post 'media/voice/addvoicetorecofortext', nil, params: { format: file_format, voice_id: voice_id, lang: lang }, base: API_BASE
+    end
+
+    def queryrecoresultfortext(voice_id, lang = 'zh_CN')
+      post 'media/voice/queryrecoresultfortext', nil, params: { voice_id: voice_id, lang: lang }, base: API_BASE
     end
 
     protected

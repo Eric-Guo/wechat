@@ -382,6 +382,7 @@ Wechat Public Account commands:
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]            # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID_OR_STR, EXPIRE_SECONDS]  # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]             # 通过ticket下载二维码
+  wechat queryrecoresultfortext [VOICE_ID]                      # AI开放接口-获取语音识别结果
   wechat shorturl [LONG_URL]                                    # 长链接转短链接
   wechat tag [TAGID]                                            # 获取标签下粉丝列表
   wechat tag_add_user [TAG_ID, OPEN_IDS]                        # 批量为用户打标签
@@ -426,7 +427,6 @@ Wechat Enterprise Account commands:
   wechat department_update [DEPARTMENT_ID, NAME]           # 更新部门
   wechat getusercumulate [BEGIN_DATE, END_DATE]            # 获取累计用户数据
   wechat getusersummary [BEGIN_DATE, END_DATE]             # 获取用户增减数据
-  wechat help [COMMAND]                                    # Describe available commands or one specific command
   wechat invite_user [USER_ID]                             # 邀请成员关注
   wechat material [MEDIA_ID, PATH]                         # 永久媒体下载
   wechat material_add [MEDIA_TYPE, PATH]                   # 永久媒体上传
@@ -445,6 +445,7 @@ Wechat Enterprise Account commands:
   wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
+  wechat queryrecoresultfortext [VOICE_ID]                 # AI开放接口-获取语音识别结果
   wechat tag [TAG_ID]                                      # 获取标签成员
   wechat tag_add_department [TAG_ID, PARTY_IDS]            # 增加标签部门
   wechat tag_add_user [TAG_ID, USER_IDS]                   # 增加标签成员
