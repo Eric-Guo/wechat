@@ -7,6 +7,7 @@ module Wechat
     WXA_BASE    = 'https://api.weixin.qq.com/wxa/'.freeze
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
     DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'.freeze
+    QYAPI_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'.freeze
 
     def callbackip
       get 'getcallbackip'

@@ -14,7 +14,7 @@ RSpec.describe Wechat::CorpApi do
 
   describe '#API_BASE' do
     specify 'will get correct API_BASE' do
-      expect(subject.client.base).to eq Wechat::CorpApi::API_BASE
+      expect(subject.client.base).to eq Wechat::Api::QYAPI_BASE
     end
   end
 
