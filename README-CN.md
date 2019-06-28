@@ -346,7 +346,9 @@ wechat gems 内部不会检查权限。但因公众号类型不同，和微信�
 ```
 $ wechat
 Wechat Public Account commands:
+  wechat addvoicetorecofortext [VOICE_ID]                       # AI开放接口-提交语音
   wechat callbackip                                             # 获取微信服务器IP地址
+  wechat clear_quota                                            # 接口调用次数清零
   wechat custom_image [OPENID, IMAGE_PATH]                      # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]       # 发送音乐客服消息
   wechat custom_news [OPENID, NEWS_YAML_PATH]                   # 发送图文客服消息
@@ -380,7 +382,7 @@ Wechat Public Account commands:
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]            # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID_OR_STR, EXPIRE_SECONDS]  # 请求临时二维码
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]             # 通过ticket下载二维码
-  wechat shorturl [LONG_URL]                                   # 长链接转短链接
+  wechat shorturl [LONG_URL]                                    # 长链接转短链接
   wechat tag [TAGID]                                            # 获取标签下粉丝列表
   wechat tag_add_user [TAG_ID, OPEN_IDS]                        # 批量为用户打标签
   wechat tag_create [TAGNAME, TAG_ID]                           # 创建标签
@@ -402,62 +404,66 @@ Wechat Public Account commands:
 ```
 $ wechat
 Wechat Enterprise Account commands:
-  wechat agent [AGENT_ID]                                       # 获取企业微信应用详情
-  wechat agent_list                                             # 获取应用概况列表
-  wechat batch_job_result [JOB_ID]                              # 获取异步任务结果
-  wechat batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]          # 全量覆盖部门
-  wechat batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]            # 全量覆盖成员
-  wechat batch_syncuser [SYNC_USER_CSV_MEDIA_ID]                # 增量更新成员
-  wechat callbackip                                             # 获取微信服务器IP地址
-  wechat convert_to_openid [USER_ID]                            # userid转换成openid
-  wechat custom_image [OPENID, IMAGE_PATH]                      # 发送图片客服消息
-  wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]       # 发送音乐客服消息
-  wechat custom_news [OPENID, NEWS_YAML_PATH]                   # 发送图文客服消息
-  wechat custom_text [OPENID, TEXT_MESSAGE]                     # 发送文字客服消息
-  wechat custom_video [OPENID, VIDEO_PATH]                      # 发送视频客服消息
-  wechat custom_voice [OPENID, VOICE_PATH]                      # 发送语音客服消息
-  wechat department [DEPARTMENT_ID]                             # 获取部门列表
-  wechat department_create [NAME, PARENT_ID]                    # 创建部门
-  wechat department_delete [DEPARTMENT_ID]                      # 删除部门
-  wechat department_update [DEPARTMENT_ID, NAME]                # 更新部门
-  wechat getusercumulate [BEGIN_DATE, END_DATE]                 # 获取累计用户数据
-  wechat getusersummary [BEGIN_DATE, END_DATE]                  # 获取用户增减数据
-  wechat invite_user [USER_ID]                                  # 邀请成员关注
-  wechat material [MEDIA_ID, PATH]                              # 永久媒体下载
-  wechat material_add [MEDIA_TYPE, PATH]                        # 永久媒体上传
-  wechat material_count                                         # 获取永久素材总数
-  wechat material_delete [MEDIA_ID]                             # 删除永久素材
-  wechat material_list [TYPE, OFFSET, COUNT]                    # 获取永久素材列表
-  wechat media [MEDIA_ID, PATH]                                 # 媒体下载
-  wechat media_create [MEDIA_TYPE, PATH]                        # 媒体上传
-  wechat media_uploadimg [IMAGE_PATH]                           # 上传图文消息内的图片
-  wechat menu                                                   # 当前菜单
-  wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]       # 创建个性化菜单
-  wechat menu_create [MENU_YAML_PATH]                           # 创建菜单
-  wechat menu_delconditional [MENU_ID]                          # 删除个性化菜单
-  wechat menu_delete                                            # 删除菜单
-  wechat menu_trymatch [USER_ID]                                # 测试个性化菜单匹配结果
-  wechat message_send [OPENID, TEXT_MESSAGE]                    # 发送文字消息
-  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]             # 通过ticket下载二维码
-  wechat tag [TAG_ID]                                           # 获取标签成员
-  wechat tag_add_department [TAG_ID, PARTY_IDS]                 # 增加标签部门
-  wechat tag_add_user [TAG_ID, USER_IDS]                        # 增加标签成员
-  wechat tag_create [TAGNAME, TAG_ID]                           # 创建标签
-  wechat tag_del_department [TAG_ID, PARTY_IDS]                 # 删除标签部门
-  wechat tag_del_user [TAG_ID, USER_IDS]                        # 删除标签成员
-  wechat tag_delete [TAG_ID]                                    # 删除标签
-  wechat tag_update [TAG_ID, TAGNAME]                           # 更新标签名字
-  wechat tags                                                   # 获取所有标签
-  wechat template_message [OPENID, TEMPLATE_YAML_PATH]          # 模板消息接口
-  wechat upload_replaceparty [BATCH_PARTY_CSV_PATH]             # 上传文件方式全量覆盖部门
-  wechat upload_replaceuser [BATCH_USER_CSV_PATH]               # 上传文件方式全量覆盖成员
-  wechat user [OPEN_ID]                                         # 获取用户基本信息
-  wechat user_batchdelete [USER_ID_LIST]                        # 批量删除成员
+  wechat addvoicetorecofortext [VOICE_ID]                  # AI开放接口-提交语音
+  wechat agent [AGENT_ID]                                  # 获取企业号应用详情
+  wechat agent_list                                        # 获取应用概况列表
+  wechat batch_job_result [JOB_ID]                         # 获取异步任务结果
+  wechat batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]     # 全量覆盖部门
+  wechat batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]       # 全量覆盖成员
+  wechat batch_syncuser [SYNC_USER_CSV_MEDIA_ID]           # 增量更新成员
+  wechat callbackip                                        # 获取微信服务器IP地址
+  wechat clear_quota                                       # 接口调用次数清零
+  wechat convert_to_openid [USER_ID]                       # userid转换成openid
+  wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
+  wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
+  wechat custom_news [OPENID, NEWS_YAML_PATH]              # 发送图文客服消息
+  wechat custom_text [OPENID, TEXT_MESSAGE]                # 发送文字客服消息
+  wechat custom_video [OPENID, VIDEO_PATH]                 # 发送视频客服消息
+  wechat custom_voice [OPENID, VOICE_PATH]                 # 发送语音客服消息
+  wechat department [DEPARTMENT_ID]                        # 获取部门列表
+  wechat department_create [NAME, PARENT_ID]               # 创建部门
+  wechat department_delete [DEPARTMENT_ID]                 # 删除部门
+  wechat department_update [DEPARTMENT_ID, NAME]           # 更新部门
+  wechat getusercumulate [BEGIN_DATE, END_DATE]            # 获取累计用户数据
+  wechat getusersummary [BEGIN_DATE, END_DATE]             # 获取用户增减数据
+  wechat help [COMMAND]                                    # Describe available commands or one specific command
+  wechat invite_user [USER_ID]                             # 邀请成员关注
+  wechat material [MEDIA_ID, PATH]                         # 永久媒体下载
+  wechat material_add [MEDIA_TYPE, PATH]                   # 永久媒体上传
+  wechat material_count                                    # 获取永久素材总数
+  wechat material_delete [MEDIA_ID]                        # 删除永久素材
+  wechat material_list [TYPE, OFFSET, COUNT]               # 获取永久素材列表
+  wechat media [MEDIA_ID, PATH]                            # 媒体下载
+  wechat media_create [MEDIA_TYPE, PATH]                   # 媒体上传
+  wechat media_hq [MEDIA_ID, PATH]                         # 高清音频媒体下载
+  wechat media_uploadimg [IMAGE_PATH]                      # 上传图文消息内的图片
+  wechat menu                                              # 当前菜单
+  wechat menu_addconditional [CONDITIONAL_MENU_YAML_PATH]  # 创建个性化菜单
+  wechat menu_create [MENU_YAML_PATH]                      # 创建菜单
+  wechat menu_delconditional [MENU_ID]                     # 删除个性化菜单
+  wechat menu_delete                                       # 删除菜单
+  wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
+  wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
+  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
+  wechat tag [TAG_ID]                                      # 获取标签成员
+  wechat tag_add_department [TAG_ID, PARTY_IDS]            # 增加标签部门
+  wechat tag_add_user [TAG_ID, USER_IDS]                   # 增加标签成员
+  wechat tag_create [TAGNAME, TAG_ID]                      # 创建标签
+  wechat tag_del_department [TAG_ID, PARTY_IDS]            # 删除标签部门
+  wechat tag_del_user [TAG_ID, USER_IDS]                   # 删除标签成员
+  wechat tag_delete [TAG_ID]                               # 删除标签
+  wechat tag_update [TAG_ID, TAGNAME]                      # 更新标签名字
+  wechat tags                                              # 获取所有标签
+  wechat template_message [OPENID, TEMPLATE_YAML_PATH]     # 模板消息接口
+  wechat upload_replaceparty [BATCH_PARTY_CSV_PATH]        # 上传文件方式全量覆盖部门
+  wechat upload_replaceuser [BATCH_USER_CSV_PATH]          # 上传文件方式全量覆盖成员
+  wechat user [OPEN_ID]                                    # 获取用户基本信息
+  wechat user_batchdelete [USER_ID_LIST]                   # 批量删除成员
   wechat user_create [USER_ID, NAME]                       # 创建成员
-  wechat user_delete [USER_ID]                                  # 删除成员
-  wechat user_list [DEPARTMENT_ID]                              # 获取部门成员详情
-  wechat user_simplelist [DEPARTMENT_ID]                        # 获取部门成员
-  wechat user_update_remark [OPEN_ID, REMARK]                   # 设置备注名
+  wechat user_delete [USER_ID]                             # 删除成员
+  wechat user_list [DEPARTMENT_ID]                         # 获取部门成员详情
+  wechat user_simplelist [DEPARTMENT_ID]                   # 获取部门成员
+  wechat user_update_remark [OPEN_ID, REMARK]              # 设置备注名
 ```
 
 注意：replaceparty 全量覆盖部门只支持单个根节点作为部门，不支持平行多根节点。

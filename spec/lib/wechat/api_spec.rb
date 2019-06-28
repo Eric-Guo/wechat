@@ -796,4 +796,19 @@ RSpec.describe Wechat::Api do
       expect(subject.clear_quota).to eq response_result
     end
   end
+
+  describe '#addvoicetorecofortext' do
+    specify 'will post media/voice/addvoicetorecofortext with access_token, format, voice_id and lang as params.' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok'
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('media/voice/addvoicetorecofortext', nil,
+          params: { access_token: 'access_token', format: '', voice_id: 'xxxxxx', lang: 'zh_CN' })
+        .and_return(response_result)
+      expect(subject.addvoicetorecofortext('xxxxxx')).to eq response_result
+    end
+  end
 end
