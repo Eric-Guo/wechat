@@ -41,14 +41,6 @@ module Wechat
       post 'clear_quota', JSON.generate(appid: Wechat.config[:appid])
     end
 
-    def addvoicetorecofortext(voice_id, file_format = '', lang = 'zh_CN')
-      post 'media/voice/addvoicetorecofortext', nil, params: { format: file_format, voice_id: voice_id, lang: lang }, base: API_BASE
-    end
-
-    def queryrecoresultfortext(voice_id, lang = 'zh_CN')
-      post 'media/voice/queryrecoresultfortext', nil, params: { voice_id: voice_id, lang: lang }, base: API_BASE
-    end
-
     protected
 
     def get(path, headers = {})

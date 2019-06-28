@@ -806,7 +806,7 @@ RSpec.describe Wechat::Api do
 
       expect(subject.client).to receive(:post)
         .with('media/voice/addvoicetorecofortext', nil,
-          params: { access_token: 'access_token', format: '', voice_id: 'xxxxxx', lang: 'zh_CN' }, base: Wechat::Api::API_BASE)
+          params: { access_token: 'access_token', format: '', voice_id: 'xxxxxx', lang: 'zh_CN' })
         .and_return(response_result)
       expect(subject.addvoicetorecofortext('xxxxxx')).to eq response_result
     end
@@ -818,7 +818,7 @@ RSpec.describe Wechat::Api do
 
       expect(subject.client).to receive(:post)
         .with('media/voice/queryrecoresultfortext', nil,
-          params: { access_token: 'access_token', voice_id: 'xxxxxx', lang: 'zh_CN' }, base: Wechat::Api::API_BASE)
+          params: { access_token: 'access_token', voice_id: 'xxxxxx', lang: 'zh_CN' })
         .and_return(response_result)
       expect(subject.queryrecoresultfortext('xxxxxx')).to eq response_result
     end

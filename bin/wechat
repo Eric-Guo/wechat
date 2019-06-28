@@ -305,6 +305,16 @@ class App < Thor
     def customservice_getonlinekflist
       puts wechat_api.customservice_getonlinekflist
     end
+
+    desc 'addvoicetorecofortext [VOICE_ID]', 'AI开放接口-提交语音'
+    def addvoicetorecofortext(voice_id)
+      puts wechat_api.addvoicetorecofortext(voice_id)
+    end
+
+    desc 'queryrecoresultfortext [VOICE_ID]', 'AI开放接口-获取语音识别结果'
+    def queryrecoresultfortext(voice_id)
+      puts wechat_api.queryrecoresultfortext(voice_id)
+    end
   end
 
   desc 'user [OPEN_ID]', '获取用户基本信息'
@@ -529,16 +539,6 @@ class App < Thor
   desc 'clear_quota', '接口调用次数清零'
   def clear_quota
     puts wechat_api.clear_quota
-  end
-
-  desc 'addvoicetorecofortext [VOICE_ID]', 'AI开放接口-提交语音'
-  def addvoicetorecofortext(voice_id)
-    puts wechat_api.addvoicetorecofortext(voice_id)
-  end
-
-  desc 'queryrecoresultfortext [VOICE_ID]', 'AI开放接口-获取语音识别结果'
-  def queryrecoresultfortext(voice_id)
-    puts wechat_api.queryrecoresultfortext(voice_id)
   end
 end
 

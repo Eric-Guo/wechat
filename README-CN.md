@@ -405,7 +405,6 @@ Wechat Public Account commands:
 ```
 $ wechat
 Wechat Enterprise Account commands:
-  wechat addvoicetorecofortext [VOICE_ID]                  # AI开放接口-提交语音
   wechat agent [AGENT_ID]                                  # 获取企业号应用详情
   wechat agent_list                                        # 获取应用概况列表
   wechat batch_job_result [JOB_ID]                         # 获取异步任务结果
@@ -445,7 +444,6 @@ Wechat Enterprise Account commands:
   wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
   wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
-  wechat queryrecoresultfortext [VOICE_ID]                 # AI开放接口-获取语音识别结果
   wechat tag [TAG_ID]                                      # 获取标签成员
   wechat tag_add_department [TAG_ID, PARTY_IDS]            # 增加标签部门
   wechat tag_add_user [TAG_ID, USER_IDS]                   # 增加标签成员

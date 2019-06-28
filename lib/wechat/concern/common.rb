@@ -194,6 +194,14 @@ module Wechat
         post 'getusercumulate', JSON.generate(begin_date: begin_date, end_date: end_date), base: Wechat::Api::DATACUBE_BASE
       end
 
+      def addvoicetorecofortext(voice_id, file_format = '', lang = 'zh_CN')
+        post 'media/voice/addvoicetorecofortext', nil, params: { format: file_format, voice_id: voice_id, lang: lang }
+      end
+
+      def queryrecoresultfortext(voice_id, lang = 'zh_CN')
+        post 'media/voice/queryrecoresultfortext', nil, params: { voice_id: voice_id, lang: lang }
+      end
+
       def web_access_token(code)
         params = {
           appid: access_token.appid,
