@@ -663,6 +663,16 @@ end
 
 Using `Wechat.api` to access the wechat api function at any place.
 
+Below is an example via `rails console` to call AI Voice Recognition API：
+
+```bash
+# Audio file with ID3 version 2.4.0, contains:MPEG ADTS, layer III, v2,  40 kbps, 16 kHz, Monaural
+test_voice_file='test_voice.mp3'
+Wechat.api.addvoicetorecofortext('test_voice_id', File.open(test_voice_file))
+Wechat.api.queryrecoresultfortext 'test_voice_id'
+```
+
+
 ## Checking the signature
 Using `Wechat.decrypt(encrypted_data,session_key, iv)` to decode the data. via. [Signature Checking](https://developers.weixin.qq.com/miniprogram/dev/api/signature.html)
 
@@ -750,7 +760,13 @@ class WechatsController < ActionController::Base
 
   # When user sends a voice
   on :voice do |request|
-    request.reply.voice(request[:MediaId]) # Echo the sent voice to user
+    # Echo the sent voice to user
+    # request.reply.voice(request[:MediaId])
+
+    voice_id = request[:MediaId]
+    # It's only avaiable for Service Account and enable it in dashboard.
+    recognition = request[:Recognition]
+    request.reply.text "#{voice_id} #{recognition}"
   end
 
   # When user sends a video

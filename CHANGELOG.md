@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.11.3 (released at 07/02/2019)
+
+* New addvoicetorecofortext and queryrecoresultfortext support.
+* improve existing class detect by @3014zhangshuo #261
+* new wxa_get_wxacode_unlimit API for miniapp by @paicha #260
+
 ## v0.11.2 (released at 05/08/2019)
 
 * bugfix short_url to shorturl in wechat console tool by @yuanxinyu #259

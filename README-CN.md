@@ -725,7 +725,13 @@ class WechatsController < ActionController::Base
 
   # 处理语音信息
   on :voice do |request|
-    request.reply.voice(request[:MediaId]) #直接语音音返回给用户
+    # 直接语音音返回给用户
+    # request.reply.voice(request[:MediaId])
+
+    voice_id = request[:MediaId]
+    # 开通语音识别后，用户每次发送语音给服务号时，微信会在推送的语音消息XML数据包中，增加一个Recognition字段
+    recognition = request[:Recognition]
+    request.reply.text "#{voice_id} #{recognition}"
   end
 
   # 处理视频信息
