@@ -632,6 +632,13 @@ end
 
 可以通过`Wechat.api`在任意地方使用wechat api的功能。
 
+下面以通过`rails console`调用微信AI开放接口的语音识别为例：
+
+```bash
+test_voice_file='test_voice.mp3'
+res = Wechat.api.addvoicetorecofortext('test_voice_id', File.open(test_voice_file))
+```
+
 ## wechat_responder - Rails Responder Controller DSL
 
 为了在Rails app中响应用户的消息，开发者需要创建一个wechat responder controller. 首先在router中定义

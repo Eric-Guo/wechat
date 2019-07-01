@@ -799,13 +799,13 @@ RSpec.describe Wechat::Api do
 
   describe '#addvoicetorecofortext' do
     specify 'will post media/voice/addvoicetorecofortext, file in body with access_token, format, voice_id and lang as params.' do
-      file = 'README.md'
+      file = File.open('README.md')
       response_result = {
         errcode: 0,
         errmsg: 'ok'
       }
 
-      expect(subject.client).to receive(:post_file)
+      expect(subject.client).to receive(:post)
         .with('media/voice/addvoicetorecofortext', file,
           params: { access_token: 'access_token', format: '', voice_id: 'xxxxxx', lang: 'zh_CN' })
         .and_return(response_result)
