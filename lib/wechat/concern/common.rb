@@ -194,8 +194,8 @@ module Wechat
         post 'getusercumulate', JSON.generate(begin_date: begin_date, end_date: end_date), base: Wechat::Api::DATACUBE_BASE
       end
 
-      def addvoicetorecofortext(voice_id, file, file_format = '', lang = 'zh_CN')
-        post 'media/voice/addvoicetorecofortext', file, params: { format: file_format, voice_id: voice_id, lang: lang }
+      def addvoicetorecofortext(voice_id, file, file_format = 'mp3', lang = 'zh_CN')
+        post_file 'media/voice/addvoicetorecofortext', file, params: { format: file_format, voice_id: voice_id, lang: lang }
       end
 
       def queryrecoresultfortext(voice_id, lang = 'zh_CN')

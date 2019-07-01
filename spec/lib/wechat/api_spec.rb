@@ -805,9 +805,9 @@ RSpec.describe Wechat::Api do
         errmsg: 'ok'
       }
 
-      expect(subject.client).to receive(:post)
+      expect(subject.client).to receive(:post_file)
         .with('media/voice/addvoicetorecofortext', file,
-          params: { access_token: 'access_token', format: '', voice_id: 'xxxxxx', lang: 'zh_CN' })
+          params: { access_token: 'access_token', format: 'mp3', voice_id: 'xxxxxx', lang: 'zh_CN' })
         .and_return(response_result)
       expect(subject.addvoicetorecofortext('xxxxxx', file)).to eq response_result
     end

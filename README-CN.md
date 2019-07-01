@@ -635,8 +635,10 @@ end
 下面以通过`rails console`调用微信AI开放接口的语音识别为例：
 
 ```bash
+# Audio file with ID3 version 2.4.0, contains:MPEG ADTS, layer III, v2,  40 kbps, 16 kHz, Monaural
 test_voice_file='test_voice.mp3'
-res = Wechat.api.addvoicetorecofortext('test_voice_id', File.open(test_voice_file))
+Wechat.api.addvoicetorecofortext('test_voice_id', File.open(test_voice_file))
+Wechat.api.queryrecoresultfortext 'test_voice_id'
 ```
 
 ## wechat_responder - Rails Responder Controller DSL
