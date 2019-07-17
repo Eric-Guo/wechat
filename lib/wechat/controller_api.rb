@@ -55,7 +55,7 @@ module Wechat
         cookies.signed_or_encrypted[:we_access_token] = { value: access_info['access_token'], expires: self.class.oauth2_cookie_duration.from_now }
         yield access_info['openid'], access_info
       else
-        redirect_to generate_oauth2_url(oauth2_params), allow_other_host: true
+        (Rails::VERSION::MAJOR >= 6) ? (redirect_to generate_oauth2_url(oauth2_params), allow_other_host: true) : (redirect_to generate_oauth2_url(oauth2_params))
       end
     end
 
@@ -70,7 +70,7 @@ module Wechat
         cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: self.class.oauth2_cookie_duration.from_now }
         yield userinfo['UserId'], userinfo
       else
-        redirect_to generate_oauth2_url(oauth2_params), allow_other_host: true
+        (Rails::VERSION::MAJOR >= 6) ? (redirect_to generate_oauth2_url(oauth2_params), allow_other_host: true) : (redirect_to generate_oauth2_url(oauth2_params))
       end
     end
 
