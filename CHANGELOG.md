@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11.4 (released at 08/15/2019)
+
+* rails 6 redirect_to use allow_other_host: true by @Chen-George-Zhen #263
+
 ## v0.11.3 (released at 07/02/2019)
 
 * New addvoicetorecofortext and queryrecoresultfortext support.
