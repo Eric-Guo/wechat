@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Wechat
   module Cipher
     BLOCK_SIZE = 32
-    CIPHER = 'AES-256-CBC'.freeze
+    CIPHER = 'AES-256-CBC'
 
     def encrypt(plain, encoding_aes_key)
       cipher = OpenSSL::Cipher.new(CIPHER)

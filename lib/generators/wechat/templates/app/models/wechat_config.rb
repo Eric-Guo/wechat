@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Used by wechat gems, do not rename WechatConfig to other name,
 # Feel free to inherit from other class like ActiveModel::Model
 class WechatConfig < ActiveRecord::Base
@@ -10,17 +12,16 @@ class WechatConfig < ActiveRecord::Base
 
   validate :app_config_is_valid
 
-  ATTRIBUTES_TO_REMOVE = %w(environment account created_at updated_at enabled)
+  ATTRIBUTES_TO_REMOVE = %w[environment account created_at updated_at enabled].freeze
 
   def self.get_all_configs(environment)
-    WechatConfig.where(environment: environment, enabled: true).inject({}) do |hash, config|
+    WechatConfig.where(environment: environment, enabled: true).each_with_object({}) do |config, hash|
       hash[config.account] = config.build_config_hash
-      hash
     end
   end
 
   def build_config_hash
-    self.as_json(except: ATTRIBUTES_TO_REMOVE)
+    as_json(except: ATTRIBUTES_TO_REMOVE)
   end
 
   private
@@ -28,17 +29,11 @@ class WechatConfig < ActiveRecord::Base
   def app_config_is_valid
     if self[:appid].present?
       # public account
-      if self[:secret].blank?
-        errors.add(:secret, 'cannot be nil when appid is set')
-      end
+      errors.add(:secret, 'cannot be nil when appid is set') if self[:secret].blank?
     elsif self[:corpid].present?
       # corp account
-      if self[:corpsecret].blank?
-        errors.add(:corpsecret, 'cannot be nil when corpid is set')
-      end
-      if self[:agentid].blank?
-        errors.add(:agentid, 'cannot be nil when corpid is set')
-      end
+      errors.add(:corpsecret, 'cannot be nil when corpid is set') if self[:corpsecret].blank?
+      errors.add(:agentid, 'cannot be nil when corpid is set') if self[:agentid].blank?
     else
       errors[:base] << 'Either appid or corpid must be set'
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActionController
   module WechatResponder
     def wechat_api(opts = {})
@@ -36,11 +38,11 @@ module ActionController
       self.trusted_domain_fullname = opts[:trusted_domain_fullname] || cfg.trusted_domain_fullname
       self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || cfg.oauth2_cookie_duration.to_i.seconds
       self.timeout = opts[:timeout] || cfg.timeout
-      if opts.key?(:skip_verify_ssl)
-        self.skip_verify_ssl = opts[:skip_verify_ssl]
-      else
-        self.skip_verify_ssl = cfg.skip_verify_ssl
-      end
+      self.skip_verify_ssl = if opts.key?(:skip_verify_ssl)
+                               opts[:skip_verify_ssl]
+                             else
+                               cfg.skip_verify_ssl
+                             end
 
       return Wechat.api if account == :default && opts.empty?
 

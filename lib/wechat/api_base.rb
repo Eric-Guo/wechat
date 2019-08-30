@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 module Wechat
   class ApiBase
     attr_reader :access_token, :client, :jsapi_ticket
 
-    API_BASE    = 'https://api.weixin.qq.com/cgi-bin/'.freeze
-    MP_BASE = 'https://mp.weixin.qq.com/cgi-bin/'.freeze
-    WXA_BASE    = 'https://api.weixin.qq.com/wxa/'.freeze
-    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'.freeze
-    DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'.freeze
-    QYAPI_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'.freeze
+    API_BASE = 'https://api.weixin.qq.com/cgi-bin/'
+    MP_BASE = 'https://mp.weixin.qq.com/cgi-bin/'
+    WXA_BASE    = 'https://api.weixin.qq.com/wxa/'
+    OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'
+    DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'
+    QYAPI_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
 
     def callbackip
       get 'getcallbackip'

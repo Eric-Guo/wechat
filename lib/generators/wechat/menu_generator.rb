@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Wechat
   module Generators
     class MenuGenerator < Rails::Generators::Base
       desc 'Generate wechat menu'
-      source_root File.expand_path('../templates', __FILE__)
+      source_root File.expand_path('templates', __dir__)
       class_option :conditional, desc: 'Generate conditional menu', type: :boolean, default: false
 
       def copy_menu

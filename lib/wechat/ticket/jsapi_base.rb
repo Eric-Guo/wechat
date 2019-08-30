@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest/sha1'
 require 'securerandom'
 
@@ -63,8 +65,8 @@ module Wechat
       end
 
       def write_ticket_to_store(ticket_hash)
-        ticket_hash['got_ticket_at'.freeze] = Time.now.to_i
-        ticket_hash['ticket_expires_in'.freeze] = ticket_hash.delete('expires_in')
+        ticket_hash['got_ticket_at'] = Time.now.to_i
+        ticket_hash['ticket_expires_in'] = ticket_hash.delete('expires_in')
         write_ticket(ticket_hash)
       end
 

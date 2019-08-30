@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'English'
 require 'wechat/signature'
 
@@ -19,12 +21,12 @@ module Wechat
           skip_before_action :verify_authenticity_token, raise: false
         end
 
-        before_action :config_account, only: [:show, :create]
-        before_action :verify_signature, only: [:show, :create]
+        before_action :config_account, only: %i[show create]
+        before_action :verify_signature, only: %i[show create]
       else
         skip_before_filter :verify_authenticity_token
-        before_filter :config_account, only: [:show, :create]
-        before_filter :verify_signature, only: [:show, :create]
+        before_filter :config_account, only: %i[show create]
+        before_filter :verify_signature, only: %i[show create]
       end
     end
 
@@ -32,12 +34,14 @@ module Wechat
       attr_accessor :account_from_request
 
       def on(message_type, with: nil, respond: nil, &block)
-        raise 'Unknow message type' unless [:text, :image, :voice, :video, :shortvideo, :link, :event, :click, :view, :scan, :batch_job, :location, :label_location, :fallback].include?(message_type)
+        raise 'Unknow message type' unless %i[text image voice video shortvideo link event click view scan batch_job location label_location fallback].include?(message_type)
+
         config = respond.nil? ? {} : { respond: respond }
         config[:proc] = block if block_given?
 
         if with.present?
-          raise 'Only text, event, click, view, scan and batch_job can having :with parameters' unless [:text, :event, :click, :view, :scan, :batch_job].include?(message_type)
+          raise 'Only text, event, click, view, scan and batch_job can having :with parameters' unless %i[text event click view scan batch_job].include?(message_type)
+
           config[:with] = with
           if message_type == :scan
             if with.is_a?(String)
@@ -47,7 +51,7 @@ module Wechat
             end
           end
         else
-          raise 'Message type click, view, scan and batch_job must specify :with parameters' if [:click, :view, :scan, :batch_job].include?(message_type)
+          raise 'Message type click, view, scan and batch_job must specify :with parameters' if %i[click view scan batch_job].include?(message_type)
         end
 
         case message_type
@@ -110,17 +114,17 @@ module Wechat
         when :text
           yield(* match_responders(responders, message[:Content]))
         when :event
-          if 'click' == message[:Event] && !user_defined_click_responders(message[:EventKey]).empty?
+          if message[:Event] == 'click' && !user_defined_click_responders(message[:EventKey]).empty?
             yield(* user_defined_click_responders(message[:EventKey]), message[:EventKey])
-          elsif 'view' == message[:Event] && !user_defined_view_responders(message[:EventKey]).empty?
+          elsif message[:Event] == 'view' && !user_defined_view_responders(message[:EventKey]).empty?
             yield(* user_defined_view_responders(message[:EventKey]), message[:EventKey])
-          elsif 'click' == message[:Event]
+          elsif message[:Event] == 'click'
             yield(* match_responders(responders, message[:EventKey]))
-          elsif known_scan_key_lists.include?(message[:EventKey]) && %w(scan subscribe scancode_push scancode_waitmsg).freeze.include?(message[:Event])
+          elsif known_scan_key_lists.include?(message[:EventKey]) && %w[scan subscribe scancode_push scancode_waitmsg].freeze.include?(message[:Event])
             yield(* known_scan_with_match_responders(user_defined_scan_responders, message))
-          elsif 'batch_job_result' == message[:Event]
+          elsif message[:Event] == 'batch_job_result'
             yield(* user_defined_batch_job_responders(message[:BatchJob][:JobType]), message[:BatchJob])
-          elsif 'location' == message[:Event]
+          elsif message[:Event] == 'location'
             yield(* user_defined_location_responders, message)
           else
             yield(* match_responders(responders, message[:Event]))
@@ -154,9 +158,9 @@ module Wechat
 
       def known_scan_with_match_responders(responders, message)
         matched = responders.each_with_object({}) do |responder, memo|
-          if %w(scan subscribe).freeze.include?(message[:Event]) && message[:EventKey] == responder[:with]
+          if %w[scan subscribe].freeze.include?(message[:Event]) && message[:EventKey] == responder[:with]
             memo[:scaned] ||= [responder, message[:Ticket]]
-          elsif %w(scancode_push scancode_waitmsg).freeze.include?(message[:Event]) && message[:EventKey] == responder[:with]
+          elsif %w[scancode_push scancode_waitmsg].freeze.include?(message[:Event]) && message[:EventKey] == responder[:with]
             memo[:scaned] ||= [responder, message[:ScanCodeInfo][:ScanResult], message[:ScanCodeInfo][:ScanType]]
           end
         end
@@ -249,11 +253,11 @@ module Wechat
       if Rails::VERSION::MAJOR >= 5
         data_hash = data_hash.to_unsafe_hash if data_hash.instance_of?(ActionController::Parameters)
         HashWithIndifferentAccess.new(data_hash).tap do |msg|
-          msg[:Event].downcase! if msg[:Event]
+          msg[:Event]&.downcase!
         end
       else
         HashWithIndifferentAccess.new_from_hash_copying_default(data_hash).tap do |msg|
-          msg[:Event].downcase! if msg[:Event]
+          msg[:Event]&.downcase!
         end
       end
     end
@@ -263,10 +267,10 @@ module Wechat
         responder ||= self.class.user_defined_responders(:fallback).first
 
         next if responder.nil?
-        case
-        when responder[:respond]
+
+        if responder[:respond]
           request.reply.text responder[:respond]
-        when responder[:proc]
+        elsif responder[:proc]
           define_singleton_method :process, responder[:proc]
           number_of_block_parameter = responder[:proc].arity
           send(:process, *args.unshift(request).take(number_of_block_parameter))
@@ -293,8 +297,7 @@ module Wechat
       { Encrypt: encrypt,
         MsgSignature: msg_sign,
         TimeStamp: timestamp,
-        Nonce: nonce
-      }.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
+        Nonce: nonce }.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
     end
 
     def request_encrypt_content

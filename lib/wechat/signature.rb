@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wechat
   module Signature
     def self.hexdigest(token, timestamp, nonce, msg_encrypt)
