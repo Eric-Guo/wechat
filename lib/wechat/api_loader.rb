@@ -72,11 +72,11 @@ module Wechat
 
     private_class_method def self.config_from_file
       if defined?(::Rails)
-        config_file = ENV['WECHAT_CONF_FILE'] || Rails.root.join('config/wechat.yml')
+        config_file = ENV['WECHAT_CONF_FILE'] || Rails.root.join('config', 'wechat.yml')
         resolve_config_file(config_file, Rails.env.to_s)
       else
-        rails_config_file = ENV['WECHAT_CONF_FILE'] || File.join(Dir.getwd, 'config/wechat.yml')
-        application_config_file = File.join(Dir.getwd, 'config/application.yml')
+        rails_config_file = ENV['WECHAT_CONF_FILE'] || File.join(Dir.getwd, 'config', 'wechat.yml')
+        application_config_file = File.join(Dir.getwd, 'config', 'application.yml')
         home_config_file = File.join(Dir.home, '.wechat.yml')
         if File.exist?(rails_config_file)
           rails_env = ENV['RAILS_ENV'] || 'development'
