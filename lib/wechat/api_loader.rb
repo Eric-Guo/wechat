@@ -75,7 +75,7 @@ module Wechat
     private_class_method def self.config_from_file
       if defined?(::Rails)
         config_file = ENV['WECHAT_CONF_FILE'] || Rails.root.join('config/wechat.yml')
-        return resovle_config_file(config_file, Rails.env.to_s)
+        return resolve_config_file(config_file, Rails.env.to_s)
       else
         rails_config_file = ENV['WECHAT_CONF_FILE'] || File.join(Dir.getwd, 'config/wechat.yml')
         application_config_file = File.join(Dir.getwd, 'config/application.yml')
@@ -86,19 +86,19 @@ module Wechat
             require 'figaro'
             Figaro::Application.new(path: application_config_file, environment: rails_env).load
           end
-          config = resovle_config_file(rails_config_file, rails_env)
+          config = resolve_config_file(rails_config_file, rails_env)
           if config.present? && (default = config[:default])  && (default['appid'] || default['corpid'])
             puts "Using rails project #{ENV['WECHAT_CONF_FILE'] || "config/wechat.yml"} #{rails_env} setting..."
             return config
           end
         end
         if File.exist?(home_config_file)
-          return resovle_config_file(home_config_file, nil)
+          return resolve_config_file(home_config_file, nil)
         end
       end
     end
 
-    private_class_method def self.resovle_config_file(config_file, env)
+    private_class_method def self.resolve_config_file(config_file, env)
       if File.exist?(config_file)
         raw_data = YAML.load(ERB.new(File.read(config_file)).result)
         configs = {}
