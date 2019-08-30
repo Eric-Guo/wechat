@@ -53,7 +53,7 @@ module Wechat
     def encode_padding(data)
       length = data.bytes.length
       amount_to_pad = BLOCK_SIZE - (length % BLOCK_SIZE)
-      amount_to_pad = BLOCK_SIZE if amount_to_pad == 0
+      amount_to_pad = BLOCK_SIZE if amount_to_pad.zero?
       padding = ([amount_to_pad].pack('c') * amount_to_pad)
       data + padding
     end

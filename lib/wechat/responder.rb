@@ -44,14 +44,12 @@ module Wechat
 
           config[:with] = with
           if message_type == :scan
-            if with.is_a?(String)
-              self.known_scan_key_lists = with
-            else
-              raise 'on :scan only support string in parameter with, detail see https://github.com/Eric-Guo/wechat/issues/84'
-            end
+            raise 'on :scan only support string in parameter with, detail see https://github.com/Eric-Guo/wechat/issues/84' unless with.is_a?(String)
+
+            self.known_scan_key_lists = with
           end
-        else
-          raise 'Message type click, view, scan and batch_job must specify :with parameters' if %i[click view scan batch_job].include?(message_type)
+        elsif %i[click view scan batch_job].include?(message_type)
+          raise 'Message type click, view, scan and batch_job must specify :with parameters'
         end
 
         case message_type
@@ -90,15 +88,15 @@ module Wechat
       end
 
       def user_defined_scan_responders
-        @scan_responders ||= []
+        @user_defined_scan_responders ||= []
       end
 
       def user_defined_location_responders
-        @location_responders ||= []
+        @user_defined_location_responders ||= []
       end
 
       def user_defined_label_location_responders
-        @label_location_responders ||= []
+        @user_defined_label_location_responders ||= []
       end
 
       def user_defined_responders(type)
@@ -149,8 +147,8 @@ module Wechat
 
           if condition.is_a? Regexp
             memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
-          else
-            memo[:scoped] ||= [responder, value] if value == condition
+          elsif value == condition
+            memo[:scoped] ||= [responder, value]
           end
         end
         matched[:scoped] || matched[:general]
@@ -185,12 +183,10 @@ module Wechat
         else
           render text: echostr
         end
+      elsif Rails::VERSION::MAJOR >= 4
+        render plain: params[:echostr]
       else
-        if Rails::VERSION::MAJOR >= 4
-          render plain: params[:echostr]
-        else
-          render text: params[:echostr]
-        end
+        render text: params[:echostr]
       end
     end
 

@@ -22,10 +22,10 @@ module Wechat
       if account
         config = Wechat.config(account)
         appid = config.corpid || config.appid
-        is_crop_account = !!config.corpid
+        is_crop_account = config.corpid.present?
       else
         appid = self.class.corpid || self.class.appid
-        is_crop_account = !!self.class.corpid
+        is_crop_account = self.class.corpid.present?
       end
 
       raise 'Can not get corpid or appid, so please configure it first to using wechat_oauth2' if appid.blank?
@@ -82,7 +82,7 @@ module Wechat
                       Wechat.config(account).trusted_domain_fullname
                     else
                       self.class.trusted_domain_fullname
-      end
+                    end
       page_url = domain_name ? "#{domain_name}#{request.original_fullpath}" : request.original_url
       safe_query = request.query_parameters.reject { |k, _| %w[code state access_token].include? k }.to_query
       page_url.sub(request.query_string, safe_query)

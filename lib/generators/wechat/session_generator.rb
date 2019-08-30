@@ -22,11 +22,15 @@ module Wechat
         template 'app/models/wechat_session.rb'
       end
 
-      private
+      class << self
+        private
 
-      def self.next_migration_number(dirname)
-        ::ActiveRecord::Generators::Base.next_migration_number(dirname)
+        def next_migration_number(dirname)
+          ::ActiveRecord::Generators::Base.next_migration_number(dirname)
+        end
       end
+
+      private
 
       def migration_version
         "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]" if Rails.version >= '5.0.0'

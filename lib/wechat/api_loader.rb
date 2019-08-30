@@ -37,11 +37,9 @@ module Wechat
 
       configs.symbolize_keys!
       configs.each do |key, cfg|
-        if cfg.is_a?(Hash)
-          cfg.symbolize_keys!
-        else
-          raise "wrong wechat configuration format for #{key}"
-        end
+        raise "wrong wechat configuration format for #{key}" unless cfg.is_a?(Hash)
+
+        cfg.symbolize_keys!
       end
 
       if defined?(::Rails)
@@ -97,26 +95,27 @@ module Wechat
     end
 
     private_class_method def self.resolve_config_file(config_file, env)
-      if File.exist?(config_file)
-        # rubocop:disable Security/YAMLLoad
-        raw_data = YAML.load(ERB.new(File.read(config_file)).result)
-        # rubocop:enable Security/YAMLLoad
-        configs = {}
-        if env
-          # Process multiple accounts when env is given
-          raw_data.each do |key, value|
-            if key == env
-              configs[:default] = value
-            elsif m = /(.*?)_#{env}$/.match(key)
-              configs[m[1].to_sym] = value
-            end
+      return unless File.exist?(config_file)
+
+      # rubocop:disable Security/YAMLLoad
+      raw_data = YAML.load(ERB.new(File.read(config_file)).result)
+      # rubocop:enable Security/YAMLLoad
+      configs = {}
+      if env
+        # Process multiple accounts when env is given
+        raw_data.each do |key, value|
+          if key == env
+            configs[:default] = value
+          else
+            m = /(.*?)_#{env}$/.match(key)
+            configs[m[1].to_sym] = value if m
           end
-        else
-          # Treat is as one account when env is omitted
-          configs[:default] = raw_data
         end
-        configs
+      else
+        # Treat is as one account when env is omitted
+        configs[:default] = raw_data
       end
+      configs
     end
 
     private_class_method def self.config_from_environment

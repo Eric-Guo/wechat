@@ -74,7 +74,7 @@ module Wechat
       end
     end
 
-    def parse_response(response, as)
+    def parse_response(response, as_type)
       content_type = response.headers[:content_type]
       parse_as = {
         %r{^application\/json} => :json,
@@ -83,7 +83,7 @@ module Wechat
         %r{^voice\/.*} => :file,
         %r{^text\/html} => :xml,
         %r{^text\/plain} => :probably_json
-      }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || as || :text
+      }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || as_type || :text
 
       # try to parse response as json, fallback to user-specified format or text if failed
       if parse_as == :probably_json
@@ -92,11 +92,9 @@ module Wechat
         rescue StandardError
           nil
         end
-        if data
-          return yield(:json, data)
-        else
-          parse_as = as || :text
-        end
+        return yield(:json, data) if data
+
+        parse_as = as_type || :text
       end
 
       case parse_as
