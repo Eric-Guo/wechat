@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wechat
   module ControllerApi
     extend ActiveSupport::Concern
@@ -20,10 +22,10 @@ module Wechat
       if account
         config = Wechat.config(account)
         appid = config.corpid || config.appid
-        is_crop_account = !!config.corpid
+        is_crop_account = config.corpid.present?
       else
         appid = self.class.corpid || self.class.appid
-        is_crop_account = !!self.class.corpid
+        is_crop_account = self.class.corpid.present?
       end
 
       raise 'Can not get corpid or appid, so please configure it first to using wechat_oauth2' if appid.blank?
@@ -37,6 +39,7 @@ module Wechat
       }
 
       return generate_oauth2_url(oauth2_params) unless block_given?
+
       is_crop_account ? wechat_corp_oauth2(oauth2_params, account, &block) : wechat_public_oauth2(oauth2_params, account, &block)
     end
 
@@ -47,7 +50,7 @@ module Wechat
       unionid = cookies.signed_or_encrypted[:we_unionid]
       we_token = cookies.signed_or_encrypted[:we_access_token]
       if openid.present?
-        yield openid, { 'openid' => openid, 'unionid' => unionid, 'access_token' => we_token}
+        yield openid, { 'openid' => openid, 'unionid' => unionid, 'access_token' => we_token }
       elsif params[:code].present? && params[:state] == oauth2_params[:state]
         access_info = wechat(account).web_access_token(params[:code])
         cookies.signed_or_encrypted[:we_openid] = { value: access_info['openid'], expires: self.class.oauth2_cookie_duration.from_now }
@@ -55,7 +58,7 @@ module Wechat
         cookies.signed_or_encrypted[:we_access_token] = { value: access_info['access_token'], expires: self.class.oauth2_cookie_duration.from_now }
         yield access_info['openid'], access_info
       else
-        (Rails::VERSION::MAJOR >= 6) ? (redirect_to generate_oauth2_url(oauth2_params), allow_other_host: true) : (redirect_to generate_oauth2_url(oauth2_params))
+        Rails::VERSION::MAJOR >= 6 ? (redirect_to generate_oauth2_url(oauth2_params), allow_other_host: true) : (redirect_to generate_oauth2_url(oauth2_params))
       end
     end
 
@@ -70,18 +73,18 @@ module Wechat
         cookies.signed_or_encrypted[:we_deviceid] = { value: userinfo['DeviceId'], expires: self.class.oauth2_cookie_duration.from_now }
         yield userinfo['UserId'], userinfo
       else
-        (Rails::VERSION::MAJOR >= 6) ? (redirect_to generate_oauth2_url(oauth2_params), allow_other_host: true) : (redirect_to generate_oauth2_url(oauth2_params))
+        Rails::VERSION::MAJOR >= 6 ? (redirect_to generate_oauth2_url(oauth2_params), allow_other_host: true) : (redirect_to generate_oauth2_url(oauth2_params))
       end
     end
 
     def generate_redirect_uri(account = nil)
       domain_name = if account
-        Wechat.config(account).trusted_domain_fullname
-      else
-        self.class.trusted_domain_fullname
-      end
+                      Wechat.config(account).trusted_domain_fullname
+                    else
+                      self.class.trusted_domain_fullname
+                    end
       page_url = domain_name ? "#{domain_name}#{request.original_fullpath}" : request.original_url
-      safe_query = request.query_parameters.reject { |k, _| %w(code state access_token).include? k }.to_query
+      safe_query = request.query_parameters.reject { |k, _| %w[code state access_token].include? k }.to_query
       page_url.sub(request.query_string, safe_query)
     end
 

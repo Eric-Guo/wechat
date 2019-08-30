@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Used by wechat gems, do not rename WechatSession to other name,
 # Feel free to inherit from other class like ActiveModel::Model
 class WechatSession < ActiveRecord::Base

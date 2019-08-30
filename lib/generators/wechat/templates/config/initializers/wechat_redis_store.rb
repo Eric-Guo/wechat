@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wechat
   def self.redis
     # You can reuse existing redis connection and remove this method if require
@@ -17,7 +19,7 @@ module Wechat
       private
 
       def redis_key
-        "my_app_wechat_token_#{self.secret}"
+        "my_app_wechat_token_#{secret}"
       end
     end
   end
@@ -25,7 +27,7 @@ module Wechat
   module Ticket
     class JsapiBase
       def read_ticket
-        JSON.parse(Wechat.redis.get(redis_key))  || {}
+        JSON.parse(Wechat.redis.get(redis_key)) || {}
       end
 
       def write_ticket(ticket_hash)
@@ -35,7 +37,7 @@ module Wechat
       private
 
       def redis_key
-        "my_app_wechat_ticket_#{self.access_token.secret}"
+        "my_app_wechat_ticket_#{access_token.secret}"
       end
     end
   end

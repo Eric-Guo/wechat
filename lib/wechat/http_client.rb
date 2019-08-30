@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'http'
 
 module Wechat
@@ -35,10 +37,10 @@ module Wechat
         params = header.delete(:params)
         form_file = file.is_a?(HTTP::FormData::File) ? file : HTTP::FormData::File.new(file)
         httprb.headers(header)
-          .post(url, params: params,
-                     form: { media: form_file,
-                             hack: 'X' }, # Existing here for http-form_data 1.0.1 handle single param improperly
-                     ssl_context: ssl_context)
+              .post(url, params: params,
+                         form: { media: form_file,
+                                 hack: 'X' }, # Existing here for http-form_data 1.0.1 handle single param improperly
+                         ssl_context: ssl_context)
       end
     end
 
@@ -51,6 +53,7 @@ module Wechat
       response = yield("#{url_base}#{path}", header)
 
       raise "Request not OK, response status #{response.status}" if response.status != 200
+
       parse_response(response, as || :json) do |parse_as, data|
         break data unless parse_as == :json && data['errcode'].present?
 
@@ -71,25 +74,27 @@ module Wechat
       end
     end
 
-    def parse_response(response, as)
+    def parse_response(response, as_type)
       content_type = response.headers[:content_type]
       parse_as = {
         %r{^application\/json} => :json,
-        %r{^image\/.*}         => :file,
-        %r{^audio\/.*}         => :file,
-        %r{^voice\/.*}         => :file,
-        %r{^text\/html}        => :xml,
-        %r{^text\/plain}       => :probably_json
-      }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || as || :text
+        %r{^image\/.*} => :file,
+        %r{^audio\/.*} => :file,
+        %r{^voice\/.*} => :file,
+        %r{^text\/html} => :xml,
+        %r{^text\/plain} => :probably_json
+      }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || as_type || :text
 
       # try to parse response as json, fallback to user-specified format or text if failed
       if parse_as == :probably_json
-        data = JSON.parse response.body.to_s.gsub(/[\u0000-\u001f]+/, '') rescue nil
-        if data
-          return yield(:json, data)
-        else
-          parse_as = as || :text
+        begin
+          data = JSON.parse response.body.to_s.gsub(/[\u0000-\u001f]+/, '')
+        rescue StandardError
+          nil
         end
+        return yield(:json, data) if data
+
+        parse_as = as_type || :text
       end
 
       case parse_as

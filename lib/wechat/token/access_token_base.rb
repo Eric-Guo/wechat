@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wechat
   module Token
     class AccessTokenBase
@@ -32,8 +34,8 @@ module Wechat
       def write_token_to_store(token_hash)
         raise InvalidCredentialError unless token_hash.is_a?(Hash) && token_hash['access_token']
 
-        token_hash['got_token_at'.freeze] = Time.now.to_i
-        token_hash['token_expires_in'.freeze] = token_hash.delete('expires_in')
+        token_hash['got_token_at'] = Time.now.to_i
+        token_hash['token_expires_in'] = token_hash.delete('expires_in')
         write_token(token_hash)
       end
 

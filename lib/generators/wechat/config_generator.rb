@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails/generators/active_record'
 
 module Wechat
@@ -6,13 +8,13 @@ module Wechat
       include ::Rails::Generators::Migration
 
       desc 'Generate wechat configs in database'
-      source_root File.expand_path('../templates', __FILE__)
+      source_root File.expand_path('templates', __dir__)
 
       def copy_wechat_config_migration
         migration_template(
-            'db/config_migration.rb.erb',
-            'db/migrate/create_wechat_configs.rb',
-            {migration_version: migration_version}
+          'db/config_migration.rb.erb',
+          'db/migrate/create_wechat_configs.rb',
+          migration_version: migration_version
         )
       end
 
@@ -20,16 +22,18 @@ module Wechat
         template 'app/models/wechat_config.rb'
       end
 
-      private
+      class << self
+        private
 
-      def self.next_migration_number(dirname)
-        ::ActiveRecord::Generators::Base.next_migration_number(dirname)
+        def next_migration_number(dirname)
+          ::ActiveRecord::Generators::Base.next_migration_number(dirname)
+        end
       end
 
+      private
+
       def migration_version
-        if Rails.version >= '5.0.0'
-          "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
-        end
+        "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]" if Rails.version >= '5.0.0'
       end
     end
   end

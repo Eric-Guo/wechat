@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wechat
   class Message
     class << self
@@ -70,6 +72,7 @@ module Wechat
 
     def session
       return nil unless Wechat.config.have_session_class
+
       @message_hash[:WechatSession] ||= WechatSession.find_or_initialize_session(underscore_hash_keys(message_hash))
     end
 
@@ -120,8 +123,8 @@ module Wechat
 
     def markdown(content)
       update(MsgType: 'markdown', Markdown: {
-        content: content
-      })
+               content: content
+             })
     end
 
     def transfer_customer_service(kf_account = nil)
@@ -207,25 +210,25 @@ module Wechat
     end
 
     TO_JSON_KEY_MAP = {
-      'TextCard'         => 'textcard',
-      'Markdown'         => 'markdown',
-      'ToUserName'       => 'touser',
-      'ToPartyName'     => 'toparty',
-      'ToWxName'         => 'towxname',
-      'MediaId'          => 'media_id',
-      'MpNews'           => 'mpnews',
-      'ThumbMediaId'     => 'thumb_media_id',
-      'TemplateId'       => 'template_id',
-      'FormId'           => 'form_id',
+      'TextCard' => 'textcard',
+      'Markdown' => 'markdown',
+      'ToUserName' => 'touser',
+      'ToPartyName' => 'toparty',
+      'ToWxName' => 'towxname',
+      'MediaId' => 'media_id',
+      'MpNews' => 'mpnews',
+      'ThumbMediaId' => 'thumb_media_id',
+      'TemplateId' => 'template_id',
+      'FormId' => 'form_id',
       'ContentSourceUrl' => 'content_source_url',
-      'ShowCoverPic'     => 'show_cover_pic'
+      'ShowCoverPic' => 'show_cover_pic'
     }.freeze
 
     TO_JSON_ALLOWED = %w[touser toparty msgtype content image voice video file textcard markdown
                          music news articles template agentid filter
                          send_ignore_reprint mpnews towxname].freeze
 
-    def to_json
+    def to_json(*_args)
       keep_camel_case_key = message_hash[:MsgType] == 'template'
       json_hash = deep_recursive(message_hash) do |key, value|
         key = key.to_s

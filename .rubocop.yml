@@ -1,20 +1,47 @@
 AllCops:
+  Include:
+  - 'lib/**/*.rb'
+  Exclude:
+  - 'bin/**/*'
+  - 'vendor/**/*'
+  - 'spec/**/*.rb'
+  - 'lib/generators/wechat/templates/app/controllers/wechats_controller.rb'
+  DisplayCopNames: true
+  StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
 
 Documentation:
   Enabled: false
 
 Metrics/LineLength:
-  Max: 150
+  Max: 180
 
 Metrics/AbcSize:
   Max: 63
 
 Metrics/ClassLength:
-  Max: 150
+  Max: 250
+
+Metrics/ModuleLength:
+  Max: 180
 
 Metrics/MethodLength:
-  Max: 15
+  Max: 40
+
+Metrics/ParameterLists:
+  Max: 8
 
 Style/NumericLiterals:
   MinDigits: 7
+
+Metrics/PerceivedComplexity:
+  Max: 25
+
+Metrics/CyclomaticComplexity:
+  Max: 20
+
+Style/AsciiComments:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Max: 4

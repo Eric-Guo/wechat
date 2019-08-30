@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'wechat/api_base'
 require 'wechat/http_client'
 require 'wechat/token/public_access_token'

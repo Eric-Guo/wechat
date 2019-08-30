@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'base64'
 require 'openssl/cipher'
 require 'wechat/api_loader'
@@ -36,15 +38,15 @@ module Wechat
     ApiLoader.reload_config!
   end
 
-  def self.decrypt(encrypted_data, session_key, iv)
+  def self.decrypt(encrypted_data, session_key, ivector)
     cipher = OpenSSL::Cipher.new('AES-128-CBC')
     cipher.decrypt
 
     cipher.key     = Base64.decode64(session_key)
-    cipher.iv      = Base64.decode64(iv)
+    cipher.iv      = Base64.decode64(ivector)
     decrypted_data = Base64.decode64(encrypted_data)
     JSON.parse(cipher.update(decrypted_data) + cipher.final)
-  rescue Exception => e
+  rescue StandardError => e
     { 'errcode': 41003, 'errmsg': e.message }
   end
 end

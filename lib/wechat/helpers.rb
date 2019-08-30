@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wechat
   module Helpers
     def wechat_config_js(config_options = {})
@@ -22,25 +24,25 @@ module Wechat
                  else
                    controller.request.original_url
                  end
-      page_url = page_url.split('#').first if is_ios? 
+      page_url = page_url.split('#').first if ios?
       js_hash = api.jsapi_ticket.signature(page_url)
 
-      config_js = <<-WECHAT_CONFIG_JS
-wx.config({
-  debug: #{config_options[:debug]},
-  appId: "#{app_id}",
-  timestamp: "#{js_hash[:timestamp]}",
-  nonceStr: "#{js_hash[:noncestr]}",
-  signature: "#{js_hash[:signature]}",
-  jsApiList: ['#{config_options[:api].join("','")}']
-});
-WECHAT_CONFIG_JS
+      config_js = <<~WECHAT_CONFIG_JS
+        wx.config({
+          debug: #{config_options[:debug]},
+          appId: "#{app_id}",
+          timestamp: "#{js_hash[:timestamp]}",
+          nonceStr: "#{js_hash[:noncestr]}",
+          signature: "#{js_hash[:signature]}",
+          jsApiList: ['#{config_options[:api].join("','")}']
+        });
+      WECHAT_CONFIG_JS
       javascript_tag config_js, type: 'application/javascript'
     end
 
     private
 
-    def is_ios?
+    def ios?
       controller.request.user_agent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
     end
   end
