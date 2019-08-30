@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11.5 (released at 08/30/2019)
+
+* Add rubocop check in CI by @hophacker #267
+* Support Rails 6 and Windows at #266
+
 ## v0.11.4 (released at 08/15/2019)
 
 * rails 6 redirect_to use allow_other_host: true by @Chen-George-Zhen #263
