@@ -3,6 +3,7 @@ AllCops:
   - 'lib/**/*.rb'
   Exclude:
   - 'bin/**/*'
+  - 'vendor/**/*'
   - 'spec/**/*.rb'
   - 'lib/generators/wechat/templates/app/controllers/wechats_controller.rb'
   DisplayCopNames: true

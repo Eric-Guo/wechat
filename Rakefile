@@ -22,8 +22,13 @@ RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
+require 'rubocop/rake_task'
 require File.join('bundler', 'gem_tasks')
 require File.join('rspec', 'core', 'rake_task')
 RSpec::Core::RakeTask.new(:spec)
+RuboCop::RakeTask.new(:rubocop)
 
-task default: :spec
+task :default do
+  Rake::Task[:spec].invoke
+  Rake::Task[:rubocop].invoke
+end
