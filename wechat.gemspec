@@ -24,5 +24,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'thor'
   s.add_development_dependency 'rails', '>= 5.1'
   s.add_development_dependency 'rspec-rails', '~> 3.6'
-  s.add_development_dependency 'sqlite3', '~> 1.3.13'
+  s.add_development_dependency 'sqlite3', '~> 1.4'
 end
