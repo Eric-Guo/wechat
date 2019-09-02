@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11.6 (released at 09/02/2019)
+
+* Fix private method `next_migration_number` introduced at #267, by @zpdsky #270
+* Give more clear warning about missing Rails in console. by @emtfe #268
+
 ## v0.11.5 (released at 08/30/2019)
 
 * Add rubocop check in CI by @hophacker #267
