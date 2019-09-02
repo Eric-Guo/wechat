@@ -97,9 +97,13 @@ module Wechat
     private_class_method def self.resolve_config_file(config_file, env)
       return unless File.exist?(config_file)
 
-      # rubocop:disable Security/YAMLLoad
-      raw_data = YAML.load(ERB.new(File.read(config_file)).result)
-      # rubocop:enable Security/YAMLLoad
+      begin
+        # rubocop:disable Security/YAMLLoad
+        raw_data = YAML.load(ERB.new(File.read(config_file)).result)
+        # rubocop:enable Security/YAMLLoad
+      rescue NameError
+        puts "WARNING: If using 'Rails.application.credentials.wechat_secret!' in wechat.yml, you need run in 'rails c' and access via 'Wechat.api' or gem 'figaro' instead."
+      end
       configs = {}
       if env
         # Process multiple accounts when env is given
