@@ -23,8 +23,6 @@ module Wechat
       end
 
       class << self
-        private
-
         def next_migration_number(dirname)
           ::ActiveRecord::Generators::Base.next_migration_number(dirname)
         end
