@@ -34,6 +34,10 @@ module Wechat
       post 'wxopen/template/del', JSON.generate(template_id: template_id)
     end
 
+    def subscribe_message_send(message)
+      post 'message/subscribe/send', message.to_json
+    end
+
     def jscode2session(code)
       params = {
         appid: access_token.appid,

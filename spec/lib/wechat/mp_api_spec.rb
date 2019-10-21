@@ -129,6 +129,28 @@ RSpec.describe Wechat::MpApi do
     end
   end
 
+  describe '#subscribe_message_send' do
+    specify 'will post message/subscribe/send with access_token, and json payload' do
+      payload = { touser: 'OPENID',
+                  template_id: 'TEMPLATE_ID',
+                  page: 'index',
+                  data: {
+                    number01: { value: "339208499" },
+                    date01: { value: "2015年01月05日" },
+                    thing01: { value: "粤海喜来登酒店" },
+                    thing02: { value: "广州市天河区天河路208号" }
+                  }
+                }
+      response_result = { errcode: 0, errmsg: 'ok' }
+
+      expect(subject.client).to receive(:post)
+        .with('message/subscribe/send', payload.to_json,
+              params: { access_token: 'access_token' }).and_return(response_result)
+
+      expect(subject.subscribe_message_send(payload)).to eq response_result
+    end
+  end
+
   describe '#jscode2session' do
     specify 'will get jscode2session with appid, secret js_code and grant_type' do
       response_result = {
