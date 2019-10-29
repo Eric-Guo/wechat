@@ -33,7 +33,7 @@ module Wechat
     # app_id or corp_id
     def pack(content, app_id)
       random = SecureRandom.hex(8)
-      text = content.force_encoding('ASCII-8BIT')
+      text = content.dup.force_encoding('ASCII-8BIT')
       msg_len = [text.length].pack('N')
 
       encode_padding("#{random}#{msg_len}#{text}#{app_id}")
