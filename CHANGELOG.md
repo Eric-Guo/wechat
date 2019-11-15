@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11.7 (released at 11/15/2019)
+
+* ADD: Wechat::MpApi.subscribe_message_send. by @paicha #271
+* FIX: FrozenError: can't modify frozen String. by @paicha #272
+
 ## v0.11.6 (released at 09/02/2019)
 
 * Fix private method `next_migration_number` introduced at #267, by @zpdsky #270
