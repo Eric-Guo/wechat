@@ -824,4 +824,16 @@ RSpec.describe Wechat::Api do
       expect(subject.queryrecoresultfortext('xxxxxx')).to eq response_result
     end
   end
+
+  describe '#translatecontent' do
+    specify 'will post media/voice/translatecontent with access_token, lfrom and lto as params and content in body' do
+      response_result = { from_content: "xxxxxxxx", to_content: "xxxxxxxx" }
+
+      expect(subject.client).to receive(:post)
+        .with('media/voice/translatecontent', 'xxxxxxxx',
+          params: { access_token: 'access_token', lfrom: 'zh_CN', lto: 'en_US' })
+        .and_return(response_result)
+      expect(subject.translatecontent('xxxxxxxx')).to eq response_result
+    end
+  end
 end

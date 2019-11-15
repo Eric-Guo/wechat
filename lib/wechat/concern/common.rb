@@ -204,6 +204,10 @@ module Wechat
         post 'media/voice/queryrecoresultfortext', nil, params: { voice_id: voice_id, lang: lang }
       end
 
+      def translatecontent(from_content, lfrom = 'zh_CN', lto = 'en_US')
+        post 'media/voice/translatecontent', from_content, params: { lfrom: lfrom, lto: lto }
+      end
+
       def web_access_token(code)
         params = {
           appid: access_token.appid,

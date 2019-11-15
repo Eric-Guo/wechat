@@ -4,6 +4,7 @@
 
 * ADD: Wechat::MpApi.subscribe_message_send. by @paicha #271
 * FIX: FrozenError: can't modify frozen String. by @paicha #272
+* New translatecontent support.
 
 ## v0.11.6 (released at 09/02/2019)
 

@@ -423,6 +423,7 @@ Wechat Public Account commands:
   wechat tag_update [TAG_ID, TAGNAME]                           # 更新标签名字
   wechat tags                                                   # 获取所有标签
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]          # 模板消息接口
+  wechat translatecontent [CONTENT]                             # AI开放接口-微信翻译
   wechat user [OPEN_ID]                                         # 获取用户基本信息
   wechat user_batchget [OPEN_ID_LIST]                           # 批量获取用户基本信息
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]               # 移动用户分组

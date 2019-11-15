@@ -315,6 +315,11 @@ class App < Thor
     def queryrecoresultfortext(voice_id)
       puts wechat_api.queryrecoresultfortext(voice_id)
     end
+
+    desc 'translatecontent [CONTENT]', 'AI开放接口-微信翻译'
+    def translatecontent(content)
+      puts wechat_api.translatecontent(content)
+    end
   end
 
   desc 'user [OPEN_ID]', '获取用户基本信息'
