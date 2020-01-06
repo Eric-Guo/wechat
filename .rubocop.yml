@@ -10,10 +10,10 @@ AllCops:
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
 
-Documentation:
+Style/Documentation:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 180
 
 Metrics/AbcSize:
