@@ -529,6 +529,25 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#news_message_send' do
+    specify 'will post message/send with access_token, and json payload' do
+      payload = {
+          touser: 'userid',
+          msgtype: 'news',
+          agentid: '1',
+          news: { articles: [
+            { title: 'title', description: 'description', picurl: 'pic_url', url: 'link_url' }
+          ] }
+      }
+
+      expect(subject.client).to receive(:post)
+                                    .with('message/send', JSON.generate(payload),
+                                          params: { access_token: 'access_token' }, content_type: :json).and_return(true)
+
+      expect(subject.news_message_send('userid','title','description','link_url','pic_url')).to be true
+    end
+  end
+
   describe '#custom_message_send' do
     specify 'will post message/send with access_token, and json payload' do
       payload = {
