@@ -440,13 +440,29 @@ RSpec.describe Wechat::CorpApi do
   end
 
   describe '#material' do
-    specify 'will get material/get with access_token, media_id and agentid at file based api endpoint as file' do
-      material_result = 'material_result'
+    specify 'will post material/get_material with access_token, agentid and media_id as payload at file based api endpoint as file' do
+      material_result = 'material_tmp_file'
 
-      expect(subject.client).to receive(:get)
-        .with('material/get', params: { access_token: 'access_token', media_id: 'media_id', agentid: '1' },
+      allow(ActiveSupport::Deprecation).to receive(:warn)
+
+      expect(subject.client).to receive(:post)
+        .with('material/get_material', { media_id: 'media_id' }.to_json, params: { access_token: 'access_token', agentid: '1' },
                               as: :file).and_return(material_result)
       expect(subject.material('media_id')).to eq(material_result)
+
+      expect(ActiveSupport::Deprecation).to have_received(:warn)
+        .with('material is deprecated. use get_material instead.')
+    end
+  end
+
+  describe '#get_material' do
+    specify 'will post material/get_material with access_token, agentid and media_id as payload at file based api endpoint as file' do
+      material_result = 'material_tmp_file'
+
+      expect(subject.client).to receive(:post)
+        .with('material/get_material', { media_id: 'media_id' }.to_json, params: { access_token: 'access_token', agentid: '1' },
+                              as: :file).and_return(material_result)
+      expect(subject.get_material('media_id')).to eq(material_result)
     end
   end
 

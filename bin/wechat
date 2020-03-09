@@ -389,9 +389,9 @@ class App < Thor
     puts wechat_api.media_uploadimg(image_path)
   end
 
-  desc 'material [MEDIA_ID, PATH]', '永久媒体下载'
-  def material(media_id, path)
-    tmp_file = wechat_api.material(media_id)
+  desc 'material_get [MEDIA_ID, PATH]', '永久媒体下载'
+  def material_get(media_id, path)
+    tmp_file = wechat_api.get_material(media_id)
     FileUtils.mv(tmp_file.path, path)
     puts 'File downloaded'
   end

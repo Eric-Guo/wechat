@@ -360,7 +360,7 @@ Wechat Public Account commands:
   wechat group_delete [GROUP_ID]                                # 删除分组
   wechat group_update [GROUP_ID, NEW_GROUP_NAME]                # 修改分组名
   wechat groups                                                 # 查询所有分组
-  wechat material [MEDIA_ID, PATH]                              # 永久媒体下载
+  wechat material_get [MEDIA_ID, PATH]                              # 永久媒体下载
   wechat material_add [MEDIA_TYPE, PATH]                        # 永久媒体上传
   wechat material_count                                         # 获取永久素材总数
   wechat material_delete [MEDIA_ID]                             # 删除永久素材
