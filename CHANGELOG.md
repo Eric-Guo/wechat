@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11.8 (released at 03/09/2019)
+
+* ADD: Wechat::CorpApi.news_message_send
+* FIX: Wechat API Change material/get_material. reported by @0000sir #275
+
 ## v0.11.7 (released at 11/15/2019)
 
 * ADD: Wechat::MpApi.subscribe_message_send. by @paicha #271
