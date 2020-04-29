@@ -41,7 +41,7 @@ module Wechat
 
     def unpack(msg)
       msg = decode_padding(msg)
-      msg_len = msg[16, 4].reverse.unpack('V')[0]
+      msg_len = msg[16, 4].reverse.unpack1('V')
       content = msg[20, msg_len]
       app_id = msg[(20 + msg_len)..-1]
 
