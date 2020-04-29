@@ -8,7 +8,7 @@ AllCops:
   - 'lib/generators/wechat/templates/app/controllers/wechats_controller.rb'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 
 Style/Documentation:
   Enabled: false
