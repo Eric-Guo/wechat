@@ -1,6 +1,10 @@
 # Changelog
 
-## v0.11.8 (released at 03/09/2019)
+## v0.11.9 (released at 04/29/2020)
+
+* CHG: upgrade ssl_version to 1.2 by @paicha #276
+
+## v0.11.8 (released at 03/09/2020)
 
 * ADD: Wechat::CorpApi.news_message_send
 * FIX: Wechat API Change material/get_material. reported by @0000sir #275
