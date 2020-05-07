@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.licenses    = ['MIT']
   s.summary     = 'DSL for wechat message handling and API'
   s.description = 'API, command and message handling for WeChat in Rails'
-  s.required_ruby_version = '~> 2.3'
+  s.required_ruby_version = '~> 2.4'
 
   s.files = Dir['{bin,lib}/**/*'] + %w[LICENSE README.md README-CN.md CHANGELOG.md]
   s.executables << 'wechat'
@@ -24,6 +24,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'thor'
   s.add_development_dependency 'rubocop', '~> 0.74'
   s.add_development_dependency 'rails', '>= 5.1'
-  s.add_development_dependency 'rspec-rails', '~> 3.6'
+  s.add_development_dependency 'rspec-rails', '~> 4.0'
   s.add_development_dependency 'sqlite3', '~> 1.4'
 end
