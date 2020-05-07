@@ -223,12 +223,12 @@ RSpec.describe Wechat::Message do
         expect(message[:Articles][1].key?(:Url)).to eq false
       end
 
-      specify 'when no block is given, whill take the items argument as an array articals hash' do
+      specify 'when no block is given, whill take the items argument as an array articles hash' do
         message.news(items)
       end
 
       specify 'will update MesageType, ArticleCount, Articles field and return self' do
-        message.news(items) { |articals, item| articals.item item }
+        message.news(items) { |articles, item| articles.item(**item) }
       end
     end
 
@@ -253,12 +253,12 @@ RSpec.describe Wechat::Message do
         expect(message[:Articles][1].key?(:ShowCoverPic)).to eq true
       end
 
-      specify 'when no block is given, whill take the items argument as an array articals hash' do
+      specify 'when no block is given, whill take the items argument as an array articles hash' do
         message.mpnews(items)
       end
 
       specify 'will update MesageType, ArticleCount, Articles field and return self' do
-        message.mpnews(items) { |articals, item| articals.item item }
+        message.mpnews(items) { |articles, item| articles.item(**item) }
       end
     end
 
