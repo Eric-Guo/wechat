@@ -3,7 +3,7 @@ WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.or
 
 [![Join the chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-WeChat gem帮助开发者方便地在Rails环境中集成[微信公众平台](https://mp.weixin.qq.com/)和[企业微信](https://qy.weixin.qq.com)，包括功能：
+WeChat gem帮助开发者方便地在Rails环境中集成[微信公众平台](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html)、[企业微信](https://work.weixin.qq.com/api/doc)和[小程序](https://developers.weixin.qq.com/miniprogram/dev/framework/)，包括功能：
 
 - 微信公众平台/企业微信[发送消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF)API（命令行和Web环境都可以使用）
 - [接收消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（必须运行Web服务器）
@@ -399,6 +399,7 @@ Wechat Public Account commands:
   wechat user_group [OPEN_ID]                                   # 查询用户所在分组
   wechat user_update_remark [OPEN_ID, REMARK]                   # 设置备注名
   wechat users                                                  # 关注者列表
+  wechat wxa_msg_sec_check [CONTENT]                            # 检查一段文本是否含有违法违规内容。
   wechat wxacode_download [WXA_CODE_PIC_PATH, PATH, WIDTH]      # 下载小程序码
 ```
 

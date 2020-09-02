@@ -7,7 +7,7 @@ WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.or
 
 [Wechat](http://www.wechat.com/) is a Chinese multi-purpose messaging, social media and mobile payment app developed by Tencent. It was first released in 2011, and by 2018 it was one of the world's largest standalone mobile apps by monthly active users, with over 1 billion monthly active users (902 million daily active users). (According to [wiki](https://en.wikipedia.org/wiki/WeChat))
 
-WeChat gem helps Rails developers integrate [WeChat Official Accounts Platform](https://mp.weixin.qq.com/) and [Wechat Enterprise](https://qy.weixin.qq.com) easily, including features:
+WeChat gem helps Rails developers integrate [WeChat Official Accounts Platform](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html) or [Wechat mini program](https://developers.weixin.qq.com/miniprogram/dev/framework/) easily, including features:
 
 - [Sending message](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF) API（can be both accessed via console or rails server）
 - [Receiving message](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（rails server is required to be running）
@@ -430,6 +430,7 @@ Wechat Public Account commands:
   wechat user_group [OPEN_ID]                                   # 查询用户所在分组
   wechat user_update_remark [OPEN_ID, REMARK]                   # 设置备注名
   wechat users                                                  # 关注者列表
+  wechat wxa_msg_sec_check [CONTENT]                            # 检查一段文本是否含有违法违规内容。
   wechat wxacode_download [WXA_CODE_PIC_PATH, PATH, WIDTH]      # 下载小程序码
   wechat clear_quota                                            # 接口调用次数清零
 ```
