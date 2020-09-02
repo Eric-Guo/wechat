@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11.10 (released at 09/02/2020)
+
+* ADD: Wechat::MpApi.wxa_msg_sec_check.
+
 ## v0.11.9 (released at 04/29/2020)
 
 * CHG: upgrade ssl_version to 1.2 by @paicha #276
