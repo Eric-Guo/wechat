@@ -6,7 +6,7 @@ module Wechat
 
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'
     MP_BASE = 'https://mp.weixin.qq.com/cgi-bin/'
-    WXA_BASE    = 'https://api.weixin.qq.com/wxa/'
+    WXA_BASE = 'https://api.weixin.qq.com/wxa/'
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'
     DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'
     QYAPI_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'

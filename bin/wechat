@@ -225,6 +225,11 @@ class App < Thor
       puts 'WXA Code File downloaded'
     end
 
+    desc 'wxa_msg_sec_check [CONTENT]', '检查一段文本是否含有违法违规内容。'
+    def wxa_msg_sec_check(content)
+      puts wechat_api.wxa_msg_sec_check(content)
+    end
+
     desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'
     def media_uploadnews(mpnews_yaml_path)
       mpnew = YAML.load(File.read(mpnews_yaml_path))

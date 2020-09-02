@@ -326,6 +326,18 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#wxa_msg_sec_check' do
+    msg_sec_check_result = { errcode: 87014, errmsg: 'risky content' }
+
+    specify 'will post wxa_msg_sec_check with risky content' do
+      risky_content = '特3456书yuuo莞6543李zxcz蒜7782法fgnv级'
+      expect(subject.client).to receive(:post)
+        .with('msg_sec_check', JSON.generate(content: risky_content),
+              params: { access_token: 'access_token' }, base: Wechat::Api::WXA_BASE).and_return(msg_sec_check_result)
+      expect(subject.wxa_msg_sec_check(risky_content)).to eq msg_sec_check_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token' do
       menu_result = 'menu_result'

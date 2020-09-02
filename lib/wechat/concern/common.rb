@@ -106,6 +106,10 @@ module Wechat
         post 'wxaapp/createwxaqrcode', JSON.generate(path: path, width: width)
       end
 
+      def wxa_msg_sec_check(content)
+        post 'msg_sec_check', JSON.generate(content: content), base: Wechat::Api::WXA_BASE
+      end
+
       def menu
         get 'menu/get'
       end
