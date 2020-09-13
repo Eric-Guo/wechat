@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11.11 (released at 09/13/2020)
+
+* FIX: fix_load_controller_wechat not support MP type, by @Msms-NJ #281
+
 ## v0.11.10 (released at 09/02/2020)
 
 * ADD: Wechat::MpApi.wxa_msg_sec_check.
