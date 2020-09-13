@@ -145,9 +145,10 @@ module Wechat
             next
           end
 
-          if condition.is_a? Regexp
+          case condition
+          when Regexp
             memo[:scoped] ||= [responder] + $LAST_MATCH_INFO.captures if value =~ condition
-          elsif value == condition
+          when value
             memo[:scoped] ||= [responder, value]
           end
         end

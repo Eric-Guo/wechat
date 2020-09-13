@@ -6,6 +6,7 @@ AllCops:
   - 'vendor/**/*'
   - 'spec/**/*.rb'
   - 'lib/generators/wechat/templates/app/controllers/wechats_controller.rb'
+  NewCops: enable
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.4
@@ -17,7 +18,7 @@ Layout/LineLength:
   Max: 180
 
 Metrics/AbcSize:
-  Max: 63
+  Max: 68
 
 Metrics/ClassLength:
   Max: 250
@@ -38,7 +39,7 @@ Metrics/PerceivedComplexity:
   Max: 25
 
 Metrics/CyclomaticComplexity:
-  Max: 20
+  Max: 22
 
 Style/AsciiComments:
   Enabled: false

@@ -10,7 +10,7 @@ module Wechat
       cipher.encrypt
 
       cipher.padding = 0
-      key_data = Base64.decode64(encoding_aes_key + '=')
+      key_data = Base64.decode64("#{encoding_aes_key}=")
       cipher.key = key_data
       cipher.iv = [key_data].pack('H*')
 
@@ -22,7 +22,7 @@ module Wechat
       cipher.decrypt
 
       cipher.padding = 0
-      key_data = Base64.decode64(encoding_aes_key + '=')
+      key_data = Base64.decode64("#{encoding_aes_key}=")
       cipher.key = key_data
       cipher.iv = [key_data].pack('H*')
 
