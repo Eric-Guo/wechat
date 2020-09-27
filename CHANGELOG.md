@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.0 (not released)
+
+* Set default branch to *main*.
+
 ## v0.11.11 (released at 09/13/2020)
 
 * FIX: fix_load_controller_wechat not support MP type, by @Msms-NJ #281
