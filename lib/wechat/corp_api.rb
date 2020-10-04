@@ -4,18 +4,18 @@ require 'wechat/api_base'
 require 'wechat/http_client'
 require 'wechat/token/corp_access_token'
 require 'wechat/ticket/corp_jsapi_ticket'
-require 'wechat/qcloud/token'
 
 module Wechat
   class CorpApi < ApiBase
     attr_reader :agentid
 
-    def initialize(appid, secret, token_file, agentid, timeout, skip_verify_ssl, jsapi_ticket_file, qcloud_token_file, qcloud_token_lifespan)
+    def initialize(appid, secret, token_file, agentid, timeout, skip_verify_ssl, jsapi_ticket_file)
       super()
       @client = HttpClient.new(QYAPI_BASE, timeout, skip_verify_ssl)
       @access_token = Token::CorpAccessToken.new(@client, appid, secret, token_file)
       @agentid = agentid
       @jsapi_ticket = Ticket::CorpJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
+      @qcloud = nil
     end
 
     def agent_list

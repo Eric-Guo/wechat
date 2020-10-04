@@ -54,13 +54,15 @@ module ActionController
       if corpid.present?
         corpsecret = opts[:corpsecret] || cfg.corpsecret
         Wechat::CorpApi.new(corpid, corpsecret, access_token, \
-                            agentid, timeout, skip_verify_ssl, jsapi_ticket, qcloud_token, qcloud_token_lifespan)
+                            agentid, timeout, skip_verify_ssl, jsapi_ticket)
       else
         type = opts[:type] || cfg.type
         secret = opts[:secret] || cfg.secret
-        wechat_api_class = (type && type.to_sym == :mp ? Wechat::MpApi : Wechat::Api)
-        wechat_api_class.new(appid, secret, access_token, \
-                             timeout, skip_verify_ssl, jsapi_ticket, qcloud_token, qcloud_token_lifespan)
+        if type && type.to_sym == :mp
+          Wechat::MpApi.new(appid, secret, access_token, timeout, skip_verify_ssl, jsapi_ticket, qcloud_token, qcloud_token_lifespan)
+        else
+          Wechat::Api.new(appid, secret, access_token, timeout, skip_verify_ssl, jsapi_ticket)
+        end
       end
     end
   end

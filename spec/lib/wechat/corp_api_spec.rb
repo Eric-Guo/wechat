@@ -3,10 +3,9 @@ require 'spec_helper'
 RSpec.describe Wechat::CorpApi do
   let(:token_file) { Rails.root.join('tmp/access_token') }
   let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket') }
-  let(:qcloud_token_file) { Rails.root.join('tmp/qcloud_token') }
 
   subject do
-    Wechat::CorpApi.new('corpid', 'corpsecret', token_file, '1', 20, false, jsapi_ticket_file, qcloud_token_file, 7200)
+    Wechat::CorpApi.new('corpid', 'corpsecret', token_file, '1', 20, false, jsapi_ticket_file)
   end
 
   before :each do

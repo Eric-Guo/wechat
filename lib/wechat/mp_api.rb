@@ -9,6 +9,14 @@ require 'wechat/concern/common'
 
 module Wechat
   class MpApi < ApiBase
+    def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file, qcloud_token_file, qcloud_token_lifespan)
+      super()
+      @client = HttpClient.new(Wechat::Api::API_BASE, timeout, skip_verify_ssl)
+      @access_token = Token::PublicAccessToken.new(@client, appid, secret, token_file)
+      @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
+      @qcloud = Qcloud::Token.new(@client, @access_token, qcloud_token_file, qcloud_token_lifespan)
+    end
+
     include Concern::Common
 
     def template_message_send(message)

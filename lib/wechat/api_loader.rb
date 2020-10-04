@@ -12,10 +12,13 @@ module Wechat
       type = options[:type] || c.type
       qcloud_token_lifespan = options[:qcloud_token_lifespan] || c.qcloud_token_lifespan
       if c.appid && c.secret && token_file.present?
-        wx_class = type == 'mp' ? Wechat::MpApi : Wechat::Api
-        wx_class.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_token_file, qcloud_token_lifespan)
+        if type == 'mp'
+          Wechat::MpApi.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_token_file, qcloud_token_lifespan)
+        else
+          Wechat::Api.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
+        end
       elsif c.corpid && c.corpsecret && token_file.present?
-        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_token_file, qcloud_token_lifespan)
+        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.timeout, c.skip_verify_ssl, js_token_file)
       else
         raise 'Need create ~/.wechat.yml with wechat appid and secret or running at rails root folder so wechat can read config/wechat.yml'
       end
