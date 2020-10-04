@@ -30,7 +30,7 @@ Metrics/MethodLength:
   Max: 40
 
 Metrics/ParameterLists:
-  Max: 8
+  Max: 11
 
 Style/NumericLiterals:
   MinDigits: 7
