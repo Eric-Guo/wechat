@@ -4,6 +4,7 @@ require 'wechat/api_base'
 require 'wechat/http_client'
 require 'wechat/token/public_access_token'
 require 'wechat/ticket/public_jsapi_ticket'
+require 'wechat/qcloud/token'
 require 'wechat/concern/common'
 
 module Wechat

@@ -8,12 +8,14 @@ module Wechat
 
       token_file = options[:token_file] || c.access_token.presence || '/var/tmp/wechat_access_token'
       js_token_file = options[:js_token_file] || c.jsapi_ticket.presence || '/var/tmp/wechat_jsapi_ticket'
+      qcloud_token_file = options[:qcloud_token_file] || c.qcloud_token_file.presence || '/var/tmp/qcloud_access_token'
       type = options[:type] || c.type
+      qcloud_token_lifespan = options[:qcloud_token_lifespan] || c.qcloud_token_lifespan
       if c.appid && c.secret && token_file.present?
         wx_class = type == 'mp' ? Wechat::MpApi : Wechat::Api
-        wx_class.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
+        wx_class.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_token_file, qcloud_token_lifespan)
       elsif c.corpid && c.corpsecret && token_file.present?
-        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.timeout, c.skip_verify_ssl, js_token_file)
+        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_token_file, qcloud_token_lifespan)
       else
         raise 'Need create ~/.wechat.yml with wechat appid and secret or running at rails root folder so wechat can read config/wechat.yml'
       end
@@ -46,11 +48,13 @@ module Wechat
         configs.each do |_, cfg|
           cfg[:access_token] ||= Rails.root.try(:join, 'tmp/access_token').try(:to_path)
           cfg[:jsapi_ticket] ||= Rails.root.try(:join, 'tmp/jsapi_ticket').try(:to_path)
+          cfg[:qcloud_token] ||= Rails.root.try(:join, 'tmp/qcloud_token').try(:to_path)
         end
       end
 
       configs.each do |_, cfg|
         cfg[:timeout] ||= 20
+        cfg[:qcloud_token_lifespan] ||= 7200
         cfg[:have_session_class] = class_exists?('WechatSession')
         cfg[:oauth2_cookie_duration] ||= 1.hour
       end
@@ -135,6 +139,8 @@ module Wechat
                 skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
                 encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
                 jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'],
+                qcloud_token_file: ENV['WECHAT_QCLOUD_TOKEN'],
+                qcloud_token_lifespan: ENV['WECHAT_QCLOUD_TOKEN_LIFESPAN'],
                 trusted_domain_fullname: ENV['WECHAT_TRUSTED_DOMAIN_FULLNAME'] }
       { default: value }
     end

@@ -2,13 +2,14 @@
 
 module Wechat
   class ApiBase
-    attr_reader :access_token, :client, :jsapi_ticket
+    attr_reader :access_token, :client, :jsapi_ticket, :qcloud
 
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'
     MP_BASE = 'https://mp.weixin.qq.com/cgi-bin/'
     WXA_BASE = 'https://api.weixin.qq.com/wxa/'
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'
     DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'
+    TCB_BASE = 'https://api.weixin.qq.com/tcb/'
     QYAPI_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
 
     def callbackip

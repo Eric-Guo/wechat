@@ -38,6 +38,7 @@ module ActionController
       self.trusted_domain_fullname = opts[:trusted_domain_fullname] || cfg.trusted_domain_fullname
       self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || cfg.oauth2_cookie_duration.to_i.seconds
       self.timeout = opts[:timeout] || cfg.timeout
+      self.qcloud_token_lifespan = opts[:qcloud_token_lifespan] || cfg.qcloud_token_lifespan
       self.skip_verify_ssl = if opts.key?(:skip_verify_ssl)
                                opts[:skip_verify_ssl]
                              else
@@ -48,17 +49,18 @@ module ActionController
 
       access_token = opts[:access_token] || cfg.access_token
       jsapi_ticket = opts[:jsapi_ticket] || cfg.jsapi_ticket
+      qcloud_token = opts[:qcloud_token] || cfg.qcloud_token
 
       if corpid.present?
         corpsecret = opts[:corpsecret] || cfg.corpsecret
         Wechat::CorpApi.new(corpid, corpsecret, access_token, \
-                            agentid, timeout, skip_verify_ssl, jsapi_ticket)
+                            agentid, timeout, skip_verify_ssl, jsapi_ticket, qcloud_token, qcloud_token_lifespan)
       else
         type = opts[:type] || cfg.type
         secret = opts[:secret] || cfg.secret
         wechat_api_class = (type && type.to_sym == :mp ? Wechat::MpApi : Wechat::Api)
         wechat_api_class.new(appid, secret, access_token, \
-                             timeout, skip_verify_ssl, jsapi_ticket)
+                             timeout, skip_verify_ssl, jsapi_ticket, qcloud_token, qcloud_token_lifespan)
       end
     end
   end
