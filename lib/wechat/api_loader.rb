@@ -8,12 +8,14 @@ module Wechat
 
       token_file = options[:token_file] || c.access_token.presence || '/var/tmp/wechat_access_token'
       js_token_file = options[:js_token_file] || c.jsapi_ticket.presence || '/var/tmp/wechat_jsapi_ticket'
-      qcloud_token_file = options[:qcloud_token_file] || c.qcloud_token_file.presence || '/var/tmp/qcloud_access_token'
       type = options[:type] || c.type
-      qcloud_token_lifespan = options[:qcloud_token_lifespan] || c.qcloud_token_lifespan
+
       if c.appid && c.secret && token_file.present?
         if type == 'mp'
-          Wechat::MpApi.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_token_file, qcloud_token_lifespan)
+          qcloud_env = options[:qcloud_env] || c.qcloud_env
+          qcloud_token_file = options[:qcloud_token_file] || c.qcloud_token_file.presence || '/var/tmp/qcloud_access_token'
+          qcloud_token_lifespan = options[:qcloud_token_lifespan] || c.qcloud_token_lifespan
+          Wechat::MpApi.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_env, qcloud_token_file, qcloud_token_lifespan)
         else
           Wechat::Api.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
         end
@@ -142,6 +144,7 @@ module Wechat
                 skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
                 encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
                 jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'],
+                qcloud_env: ENV['WECHAT_QCLOUD_ENV'],
                 qcloud_token_file: ENV['WECHAT_QCLOUD_TOKEN'],
                 qcloud_token_lifespan: ENV['WECHAT_QCLOUD_TOKEN_LIFESPAN'],
                 trusted_domain_fullname: ENV['WECHAT_TRUSTED_DOMAIN_FULLNAME'] }

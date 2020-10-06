@@ -3,11 +3,12 @@
 module Wechat
   module Qcloud
     class Token
-      attr_reader :client, :access_token, :qcloud_token_file, :qcloud_token_lifespan, :qcloud_token, :qcloud_token_expired_time
+      attr_reader :client, :access_token, :qcloud_env, :qcloud_token_file, :qcloud_token_lifespan, :qcloud_token, :qcloud_token_expired_time
 
-      def initialize(client, access_token, qcloud_token_file, lifespan)
+      def initialize(client, access_token, qcloud_env, qcloud_token_file, lifespan)
         @client = client
         @access_token = access_token
+        @qcloud_env = qcloud_env
         @qcloud_token_file = qcloud_token_file
         @qcloud_token_lifespan = lifespan
         @random_generator = Random.new
