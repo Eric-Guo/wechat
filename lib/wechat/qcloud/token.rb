@@ -2,6 +2,11 @@
 
 module Wechat
   module Qcloud
+    FILE_TYPE_JSON = 1
+    FILE_TYPE_CSV = 2
+    CONFLICT_MODE_INSERT = 1
+    CONFLICT_MODE_UPSERT = 2
+
     class Token
       attr_reader :client, :access_token, :qcloud_env, :qcloud_token_file, :qcloud_token_lifespan, :qcloud_token, :qcloud_token_expired_time
 
