@@ -49,7 +49,7 @@ module Wechat
       def qdb_collection_delete(collection_name)
         collection_delete_params_hash = { env: qcloud.qcloud_env,
                                           collection_name: collection_name }
-        post 'databasecollectionadd', JSON.generate(collection_delete_params_hash), base: Wechat::Api::TCB_BASE
+        post 'databasecollectiondelete', JSON.generate(collection_delete_params_hash), base: Wechat::Api::TCB_BASE
       end
 
       def qdb_collections(limit: 10, offset: 0)
@@ -68,7 +68,7 @@ module Wechat
       end
 
       def qdb_update(update_query)
-        post 'databasedelete', JSON.generate(env: qcloud.qcloud_env, query: update_query), base: Wechat::Api::TCB_BASE
+        post 'databaseupdate', JSON.generate(env: qcloud.qcloud_env, query: update_query), base: Wechat::Api::TCB_BASE
       end
 
       def qdb_query(query)
@@ -81,6 +81,34 @@ module Wechat
 
       def qdb_count(count_query)
         post 'databasecount', JSON.generate(env: qcloud.qcloud_env, query: count_query), base: Wechat::Api::TCB_BASE
+      end
+
+      def tcb_delete_files(fileid_list)
+        post 'batchdeletefile', JSON.generate(env: qcloud.qcloud_env, fileid_list: fileid_list), base: Wechat::Api::TCB_BASE
+      end
+
+      def tcb_download_files(file_list)
+        post 'batchdownloadfile', JSON.generate(env: qcloud.qcloud_env, file_list: file_list), base: Wechat::Api::TCB_BASE
+      end
+
+      def tcb_preflight_upload_file(q_path)
+        post 'uploadfile', JSON.generate(env: qcloud.qcloud_env, path: q_path), base: Wechat::Api::TCB_BASE
+      end
+
+      def tcb_do_upload_file(q_path, upload_url, signature, x_cos_security_token, x_cos_meta_fileid, file)
+        form_file = file.is_a?(HTTP::FormData::File) ? file : HTTP::FormData::File.new(file)
+        form_data = HTTP::FormData.create({ key: q_path,
+                                            Signature: signature,
+                                            "x-cos-security-token": x_cos_security_token,
+                                            'x-cos-meta-fileid': x_cos_meta_fileid,
+                                            file: form_file })
+        client.httprb.post(upload_url, form: form_data, ssl_context: client.ssl_context)
+      end
+
+      def tcb_upload_file(q_path, file)
+        res = tcb_preflight_upload_file(q_path)
+        tcb_do_upload_file(q_path, res['url'], res['authorization'], res['token'], res['cos_file_id'], file)
+        res
       end
     end
   end
