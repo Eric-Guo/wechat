@@ -12,7 +12,7 @@ module Wechat
   class MpApi < ApiBase
     def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file, qcloud_env, qcloud_token_file, qcloud_token_lifespan)
       super()
-      @client = HttpClient.new(Wechat::Api::API_BASE, timeout, skip_verify_ssl)
+      @client = HttpClient.new(Wechat::Api::WXA_API_BASE, timeout, skip_verify_ssl)
       @access_token = Token::PublicAccessToken.new(@client, appid, secret, token_file)
       @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
       @qcloud = Qcloud::Token.new(@client, @access_token, qcloud_env, qcloud_token_file, qcloud_token_lifespan)
@@ -21,31 +21,31 @@ module Wechat
     include Concern::Common
     include Concern::Qcloud
 
-    def template_message_send(message)
-      post 'message/wxopen/template/send', message.to_json, content_type: :json
+    def add_subscribe_message_template(template_id, keyword_id_list, scene_description = '')
+      post 'newtmpl/addtemplate', JSON.generate(tid: template_id, kidList: keyword_id_list, sceneDesc: scene_description)
     end
 
-    def list_template_library(offset: 0, count: 20)
-      post 'wxopen/template/library/list', JSON.generate(offset: offset, count: count)
+    def delete_subscribe_message_template(template_id)
+      post 'newtmpl/deltemplate', JSON.generate(priTmplId: template_id)
     end
 
-    def list_template_library_keywords(id)
-      post 'wxopen/template/library/get', JSON.generate(id: id)
+    def get_subscribe_message_category
+      get 'newtmpl/getcategory'
     end
 
-    def add_message_template(id, keyword_id_list)
-      post 'wxopen/template/add', JSON.generate(id: id, keyword_id_list: keyword_id_list)
+    def get_public_template_keywords(template_id)
+      get 'newtmpl/getpubtemplatekeywords', params: { tid: template_id }
     end
 
-    def list_message_template(offset: 0, count: 20)
-      post 'wxopen/template/list', JSON.generate(offset: offset, count: count)
+    def get_public_template_title_list(ids, offset: 0, count: 20)
+      get 'newtmpl/getpubtemplatetitles', params: { ids: ids, start: offset, limit: count }
     end
 
-    def del_message_template(template_id)
-      post 'wxopen/template/del', JSON.generate(template_id: template_id)
+    def get_template_list
+      get 'newtmpl/gettemplate'
     end
 
-    def subscribe_message_send(message)
+    def send_subscribe_message(message)
       post 'message/subscribe/send', message.to_json
     end
 

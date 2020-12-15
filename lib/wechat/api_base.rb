@@ -5,6 +5,7 @@ module Wechat
     attr_reader :access_token, :client, :jsapi_ticket, :qcloud
 
     API_BASE = 'https://api.weixin.qq.com/cgi-bin/'
+    WXA_API_BASE = 'https://api.weixin.qq.com/wxaapi/'
     MP_BASE = 'https://mp.weixin.qq.com/cgi-bin/'
     WXA_BASE = 'https://api.weixin.qq.com/wxa/'
     OAUTH2_BASE = 'https://api.weixin.qq.com/sns/'
