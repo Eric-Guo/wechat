@@ -21,14 +21,42 @@ module Wechat
     include Concern::Common
     include Concern::Qcloud
 
+    def template_message_send(message)
+      post 'message/wxopen/template/send', message.to_json, content_type: :json
+    end
+
+    def list_template_library(offset: 0, count: 20)
+      post 'wxopen/template/library/list', JSON.generate(offset: offset, count: count)
+    end
+
+    def list_template_library_keywords(id)
+      post 'wxopen/template/library/get', JSON.generate(id: id)
+    end
+
+    def add_message_template(id, keyword_id_list)
+      post 'wxopen/template/add', JSON.generate(id: id, keyword_id_list: keyword_id_list)
+    end
+
+    def list_message_template(offset: 0, count: 20)
+      post 'wxopen/template/list', JSON.generate(offset: offset, count: count)
+    end
+
+    def del_message_template(template_id)
+      post 'wxopen/template/del', JSON.generate(template_id: template_id)
+    end
+
     def add_subscribe_message_template(template_id, keyword_id_list, scene_description = '')
       post 'newtmpl/addtemplate',
            JSON.generate(tid: template_id, kidList: keyword_id_list, sceneDesc: scene_description),
-           base: Wechat::Api::WXA_API_BASE
+           base: Wechat::Api::WXA_API_BASE,
+           content_type: :json
     end
 
     def delete_subscribe_message_template(template_id)
-      post 'newtmpl/deltemplate', JSON.generate(priTmplId: template_id), base: Wechat::Api::WXA_API_BASE
+      post 'newtmpl/deltemplate',
+           JSON.generate(priTmplId: template_id),
+           base: Wechat::Api::WXA_API_BASE,
+           content_type: :json
     end
 
     def get_subscribe_message_category

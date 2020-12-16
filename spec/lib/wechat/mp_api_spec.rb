@@ -148,7 +148,38 @@ RSpec.describe Wechat::MpApi do
         .with('message/subscribe/send', payload.to_json,
               params: { access_token: 'access_token' }).and_return(response_result)
 
-      expect(subject.subscribe_message_send(payload)).to eq response_result
+      expect(subject.send_subscribe_message(payload)).to eq response_result
+    end
+  end
+
+  describe '#add_subscribe_message_template' do
+    specify 'will post newtmpl/addtemplate with access_token, and tid and kidList as params' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok',
+        priTmplId: 'wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc'
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('newtmpl/addtemplate', { tid: 'AT0002', kidList: [3, 4, 5],  sceneDesc: ''}.to_json,
+              params: { access_token: 'access_token' }, base: Wechat::Api::WXA_API_BASE, content_type: :json).and_return(response_result)
+
+      expect(subject.add_subscribe_message_template('AT0002', [3, 4, 5])).to eq response_result
+    end
+  end
+
+  describe '#delete_subscribe_message_template' do
+    specify 'will post newtmpl/deltemplate with access_token, and tid and kidList as params' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok'
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('newtmpl/deltemplate', { priTmplId: 'AT0002' }.to_json,
+              params: { access_token: 'access_token' }, base: Wechat::Api::WXA_API_BASE, content_type: :json).and_return(response_result)
+
+      expect(subject.delete_subscribe_message_template('AT0002')).to eq response_result
     end
   end
 
