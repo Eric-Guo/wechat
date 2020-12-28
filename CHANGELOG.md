@@ -1,7 +1,11 @@
 # Changelog
 
-## v0.12.0 (not released)
+## v0.12.0 (released at 28/12/2020)
 
+* Support Ruby 3.0.
+* Qcloud_token support.
+* CRUD of tencent cloud DB for miniapp
+* TCB storage API support.
 * Set default branch to *main*.
 
 ## v0.11.11 (released at 09/13/2020)
