@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'English'
+require 'rexml/document'
 require 'wechat/signature'
 
 module Wechat
