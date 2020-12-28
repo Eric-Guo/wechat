@@ -41,14 +41,14 @@ module Wechat
 
     class NewsArticleBuilder < ArticleBuilder
       def item(title: 'title', description: nil, pic_url: nil, url: nil)
-        items << { Title: title, Description: description, PicUrl: pic_url, Url: url }.reject { |_k, v| v.nil? }
+        items << { Title: title, Description: description, PicUrl: pic_url, Url: url }.compact
       end
     end
 
     class MpNewsArticleBuilder < ArticleBuilder
       def item(thumb_media_id:, title:, content:, author: nil, content_source_url: nil, digest: nil, show_cover_pic: '0')
         items << { Thumb_Media_ID: thumb_media_id, Author: author, Title: title, ContentSourceUrl: content_source_url,
-                   Content: content, Digest: digest, ShowCoverPic: show_cover_pic }.reject { |_k, v| v.nil? }
+                   Content: content, Digest: digest, ShowCoverPic: show_cover_pic }.compact
       end
     end
 
@@ -169,7 +169,7 @@ module Wechat
         items = article.items
       else
         items = collection.collect do |item|
-          camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url).reject { |_k, v| v.nil? })
+          camelize_hash_keys(item.symbolize_keys.slice(:title, :description, :pic_url, :url).compact)
         end
       end
 
@@ -184,7 +184,7 @@ module Wechat
         items = article.items
       else
         items = collection.collect do |item|
-          camelize_hash_keys(item.symbolize_keys.slice(:thumb_media_id, :title, :content, :author, :content_source_url, :digest, :show_cover_pic).reject { |_k, v| v.nil? })
+          camelize_hash_keys(item.symbolize_keys.slice(:thumb_media_id, :title, :content, :author, :content_source_url, :digest, :show_cover_pic).compact)
         end
       end
 

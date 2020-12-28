@@ -92,7 +92,7 @@ module Wechat
     end
 
     def department_update(departmentid, name = nil, parentid = nil, order = nil)
-      post 'department/update', JSON.generate({ id: departmentid, name: name, parentid: parentid, order: order }.reject { |_k, v| v.nil? })
+      post 'department/update', JSON.generate({ id: departmentid, name: name, parentid: parentid, order: order }.compact)
     end
 
     def department(departmentid = 1)
