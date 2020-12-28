@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.12.0 (released at 28/12/2020)
+## v0.12.1 (released at 28/12/2020)
 
 * Support Ruby 3.0.
 * Qcloud_token support.
