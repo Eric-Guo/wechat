@@ -262,7 +262,7 @@ module Wechat
 
     def run_responder(request)
       self.class.responder_for(request) do |responder, *args|
-        responder ||= self.class.user_defined_responders(:fallback).first
+        responder = self.class.user_defined_responders(:fallback).first
 
         next if responder.nil?
 
