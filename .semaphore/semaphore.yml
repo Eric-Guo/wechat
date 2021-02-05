@@ -1,0 +1,22 @@
+---
+version: v1.0
+name: wechat gems
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Test
+    task:
+      env_vars:
+        - name: RAILS_ENV
+          value: test
+      jobs:
+        - name: Run test
+          commands:
+            - checkout
+            - sem-version ruby 2.6.5
+            - cache restore
+            - bundle install --path vendor/bundle
+            - cache store
+            - bundle exec rspec
