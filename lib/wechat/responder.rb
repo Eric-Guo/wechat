@@ -2,7 +2,6 @@
 
 require 'English'
 require 'rexml/document'
-require 'wechat/signature'
 
 module Wechat
   module Responder
