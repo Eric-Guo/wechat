@@ -7,7 +7,6 @@ require 'thor'
 require 'wechat'
 require 'json'
 require 'active_support' # To support Rails 4.2.1, see #17936
-require 'active_support/dependencies/autoload'
 require 'active_support/core_ext'
 require 'active_support/json'
 require 'fileutils'
