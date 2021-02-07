@@ -50,7 +50,7 @@ module Wechat
     decrypted_data = Base64.decode64(encrypted_data)
     JSON.parse(cipher.update(decrypted_data) + cipher.final)
   rescue StandardError => e
-    { 'errcode': 41003, 'errmsg': e.message }
+    { errcode: 41003, errmsg: e.message }
   end
 end
 
