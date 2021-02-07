@@ -10,24 +10,9 @@ module Wechat
     include Cipher
 
     included do
-      # Rails 5 remove before_filter and skip_before_filter
-      if respond_to?(:skip_before_action)
-        if respond_to?(:verify_authenticity_token)
-          skip_before_action :verify_authenticity_token
-        else
-          # Rails 5 API mode won't define verify_authenticity_token
-          # https://github.com/rails/rails/blob/v5.0.0.beta3/actionpack/lib/abstract_controller/callbacks.rb#L66
-          # https://github.com/rails/rails/blob/v5.0.0.beta3/activesupport/lib/active_support/callbacks.rb#L640
-          skip_before_action :verify_authenticity_token, raise: false
-        end
-
-        before_action :config_account, only: %i[show create]
-        before_action :verify_signature, only: %i[show create]
-      else
-        skip_before_filter :verify_authenticity_token
-        before_filter :config_account, only: %i[show create]
-        before_filter :verify_signature, only: %i[show create]
-      end
+      skip_before_action :verify_authenticity_token, raise: false
+      before_action :config_account, only: %i[show create]
+      before_action :verify_signature, only: %i[show create]
     end
 
     module ClassMethods
@@ -179,15 +164,9 @@ module Wechat
     def show
       if @we_corpid.present?
         echostr, _corp_id = unpack(decrypt(Base64.decode64(params[:echostr]), @we_encoding_aes_key))
-        if Rails::VERSION::MAJOR >= 4
-          render plain: echostr
-        else
-          render text: echostr
-        end
-      elsif Rails::VERSION::MAJOR >= 4
-        render plain: params[:echostr]
+        render plain: echostr
       else
-        render text: params[:echostr]
+        render plain: params[:echostr]
       end
     end
 
@@ -196,11 +175,7 @@ module Wechat
       response_msg = run_responder(request_msg)
 
       if response_msg.respond_to? :to_xml
-        if Rails::VERSION::MAJOR >= 4
-          render plain: process_response(response_msg)
-        else
-          render text: process_response(response_msg)
-        end
+        render plain: process_response(response_msg)
       else
         head :ok, content_type: 'text/html'
       end
@@ -247,15 +222,9 @@ module Wechat
       end
 
       data_hash = data.fetch('xml', {})
-      if Rails::VERSION::MAJOR >= 5
-        data_hash = data_hash.to_unsafe_hash if data_hash.instance_of?(ActionController::Parameters)
-        HashWithIndifferentAccess.new(data_hash).tap do |msg|
-          msg[:Event]&.downcase!
-        end
-      else
-        HashWithIndifferentAccess.new_from_hash_copying_default(data_hash).tap do |msg|
-          msg[:Event]&.downcase!
-        end
+      data_hash = data_hash.to_unsafe_hash if data_hash.instance_of?(ActionController::Parameters)
+      HashWithIndifferentAccess.new(data_hash).tap do |msg|
+        msg[:Event]&.downcase!
       end
     end
 
