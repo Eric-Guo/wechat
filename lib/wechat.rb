@@ -49,3 +49,4 @@ module Wechat
 end
 
 ActionView::Base.include Wechat::Helpers if defined? ActionView::Base
+require 'action_controller/wechat_responder' # To make wechat_api and wechat_responder available
