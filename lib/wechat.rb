@@ -50,3 +50,20 @@ end
 
 ActionView::Base.include Wechat::Helpers if defined? ActionView::Base
 require 'action_controller/wechat_responder' # To make wechat_api and wechat_responder available
+
+module ActionController
+  if defined? Base
+    ActiveSupport.on_load(:action_controller_base) do
+      class << Base
+        include WechatResponder
+      end
+    end
+  end
+  if defined? API
+    ActiveSupport.on_load(:action_controller_api) do
+      class << API
+        include WechatResponder
+      end
+    end
+  end
+end
