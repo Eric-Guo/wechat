@@ -27,12 +27,16 @@ WeChat gem帮助开发者方便地在Rails环境中集成[微信公众平台](ht
 
 ```
 gem install "wechat"
+# 如果使用 Ruby 版本小于 2.6
+# gem install wechat -v 0.12.2
 ```
 
 或者添加下面这行到 `Gemfile`:
 
 ```
 gem 'wechat'
+# 如果使用 Rails 版本小于 6
+# gem 'wechat', '~> 0.12.2'
 ```
 
 运行下面这行代码来安装:

@@ -34,12 +34,16 @@ Use `gem install`
 
 ```
 gem install "wechat"
+# If your ruby version < 2.6
+# gem install wechat -v 0.12.2
 ```
 
 Or add it to your app's `Gemfile`:
 
 ```
 gem 'wechat'
+# If your rails version < 6.0
+# gem 'wechat', '~> 0.12.2'
 ```
 
 Run the following command to install it:
