@@ -12,6 +12,7 @@ require 'rspec/rails'
 
 Dir[File.join(File.dirname(__FILE__), '../spec/support/**/*.rb')].sort.each { |f| require f }
 Dir[File.join(File.dirname(__FILE__), '../lib/generators/wechat/templates/app/models/*.rb')].each { |f| require f }
+Dir[File.join(File.dirname(__FILE__), '../lib/action_controller/*.rb')].sort.each { |f| require f }
 
 ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 ActiveRecord::Migration.verbose = false

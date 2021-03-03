@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'wechat/ticket/jsapi_base'
-
 module Wechat
   module Ticket
     class PublicJsapiTicket < JsapiBase

@@ -1,20 +1,14 @@
 # frozen_string_literal: true
 
+require 'zeitwerk'
+loader = Zeitwerk::Loader.for_gem
+loader.ignore("#{__dir__}/generators/**/*.rb")
+loader.setup
+
 require 'base64'
 require 'openssl/cipher'
-require 'wechat/api_loader'
-require 'wechat/api'
-require 'wechat/mp_api'
-require 'wechat/corp_api'
-require 'wechat/helpers'
-require 'action_controller/wechat_responder'
 
 module Wechat
-  autoload :Message, 'wechat/message'
-  autoload :Responder, 'wechat/responder'
-  autoload :Cipher, 'wechat/cipher'
-  autoload :ControllerApi, 'wechat/controller_api'
-
   class AccessTokenExpiredError < StandardError; end
 
   class InvalidCredentialError < StandardError; end
@@ -55,3 +49,21 @@ module Wechat
 end
 
 ActionView::Base.include Wechat::Helpers if defined? ActionView::Base
+require 'action_controller/wechat_responder' # To make wechat_api and wechat_responder available
+
+module ActionController
+  if defined? Base
+    ActiveSupport.on_load(:action_controller_base) do
+      class << Base
+        include WechatResponder
+      end
+    end
+  end
+  if defined? API
+    ActiveSupport.on_load(:action_controller_api) do
+      class << API
+        include WechatResponder
+      end
+    end
+  end
+end
