@@ -187,6 +187,11 @@ class App < Thor
       puts wechat_api.convert_to_openid(userid)
     end
 
+    desc 'convert_to_userid [OPENID]', 'openid转换成userid'
+    def convert_to_userid(openid)
+      puts wechat_api.convert_to_userid(openid)
+    end
+
     desc 'agent_list', '获取应用概况列表'
     def agent_list
       r = wechat_api.agent_list

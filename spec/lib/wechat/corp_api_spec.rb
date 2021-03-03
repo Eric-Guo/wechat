@@ -117,6 +117,17 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#convert_to_userid' do
+    specify 'will get invite/send with access_token and json openid' do
+      openid = 'openid'
+      convert_to_userid_request = { openid: openid }
+      convert_to_userid_result = { errcode: 0, errmsg: 'ok', openid: 'oDOGms-6yCnGrRovBj2yHij5JL6E', appid: 'wxf874e15f78cc84a7' }
+      expect(subject.client).to receive(:post)
+        .with('user/convert_to_userid', convert_to_userid_request.to_json, params: { access_token: 'access_token' }).and_return(convert_to_userid_result)
+      expect(subject.convert_to_userid(openid)).to eq convert_to_userid_result
+    end
+  end
+
   describe '#invite_user' do
     specify 'will get invite/send with access_token and json userid' do
       userid = 'userid'

@@ -416,6 +416,7 @@ Wechat Enterprise Account commands:
   wechat callbackip                                        # 获取微信服务器IP地址
   wechat clear_quota                                       # 接口调用次数清零
   wechat convert_to_openid [USER_ID]                       # userid转换成openid
+  wechat convert_to_userid [OPENID]                        # openid转换成userid
   wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
   wechat custom_news [OPENID, NEWS_YAML_PATH]              # 发送图文客服消息

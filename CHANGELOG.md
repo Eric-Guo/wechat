@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.2 (released at 3/3/2021)
+
+* New convert_to_userid API
+
 ## v0.12.1 (released at 28/12/2020)
 
 * Support Ruby 3.0.
