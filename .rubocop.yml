@@ -18,7 +18,7 @@ Layout/LineLength:
   Max: 180
 
 Metrics/AbcSize:
-  Max: 68
+  Max: 71
 
 Metrics/ClassLength:
   Max: 250
@@ -30,7 +30,7 @@ Metrics/MethodLength:
   Max: 40
 
 Metrics/ParameterLists:
-  Max: 11
+  Max: 12
 
 Style/NumericLiterals:
   MinDigits: 7
@@ -39,7 +39,7 @@ Metrics/PerceivedComplexity:
   Max: 25
 
 Metrics/CyclomaticComplexity:
-  Max: 22
+  Max: 23
 
 Style/AsciiComments:
   Enabled: false
