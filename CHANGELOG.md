@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.3 (released at 3/15/2021)
+
+* Fix MpApi initialize bug, by @hardywu #296
+
 ## v0.12.2 (released at 3/3/2021)
 
 * New convert_to_userid API
