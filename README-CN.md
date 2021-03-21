@@ -3,23 +3,23 @@ WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.or
 
 [![Join the chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-WeChat gem帮助开发者方便地在Rails环境中集成[微信公众平台](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html)、[企业微信](https://work.weixin.qq.com/api/doc)和[小程序](https://developers.weixin.qq.com/miniprogram/dev/framework/)，包括功能：
+WeChat Gem 帮助开发者方便地在 Rails 环境中集成[微信公众平台](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html)、[企业微信](https://work.weixin.qq.com/api/doc)和[小程序](https://developers.weixin.qq.com/miniprogram/dev/framework/)，包括功能：
 
-- 微信公众平台/企业微信[发送消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF)API（命令行和Web环境都可以使用）
-- [接收消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（必须运行Web服务器）
-- [微信JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config接口注入权限验证
-- OAuth 2.0认证机制
-- 接收消息会话(session)记录机制（可选）
+- 微信公众平台/企业微信[发送消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF) API（命令行和 Web 环境都可以使用）
+- [接收消息](http://qydev.weixin.qq.com/wiki/index.php?title=%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E4%B8%8E%E4%BA%8B%E4%BB%B6)（必须运行 Web 服务器）
+- [微信JS-SDK](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%BE%AE%E4%BF%A1JS%E6%8E%A5%E5%8F%A3) config 接口注入权限验证
+- OAuth 2.0 认证机制
+- 接收消息会话 ( Session ) 记录机制（可选）
 
-命令行工具`wechat`可以调用各种无需web环境的API。同时也提供了Rails Controller的responder DSL, 可以帮助开发者方便地在Rails应用中集成微信的消息处理，包括主动推送的和被动响应的消息。
+命令行工具 `wechat` 可以调用各种无需 Web 环境的 API，同时也提供了 Rails Controller 的 Responder DSL 。可以帮助开发者方便地在Rails 应用中集成微信的消息处理，包括主动推送的和被动响应的消息。
 
-如果您的App还需要集成微信OAuth2.0, 除了简便的`wechat_oauth2`指令，也可以考虑[omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2), 以便和devise集成，提供完整的用户认证。
+如果您的 App 还需要集成微信 OAuth2.0 除了简便的 `wechat_oauth2` 指令，也可以考虑 [omniauth-wechat-oauth2](https://github.com/skinnyworm/omniauth-wechat-oauth2) 以便和 [devise](https://github.com/heartcombo/devise) 集成提供完整的用户认证。
 
-如果您对如何制作微信网页UI没有灵感，可以参考官方的[weui](https://github.com/weui/weui)，针对Rails的Gem是[weui-rails](https://github.com/Eric-Guo/weui-rails)。
+如果您对如何制作微信网页 UI 没有灵感，可以参考官方的 [weui](https://github.com/weui/weui) 。针对 Rails 的 Gem 是 [weui-rails](https://github.com/Eric-Guo/weui-rails)。
 
-主页型应用请使用[`wechat_api`](#wechat_api---rails-controller-wechat-api)，传统消息型应用请使用[`wechat_responder`](#wechat_responder---rails-responder-controller-dsl)。
+主页型应用请使用 [`wechat_api`](#wechat_api---rails-controller-wechat-api)，传统消息型应用请使用 [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl)。
 
-如果您想从一个稍微完整一些的示例开始微信开发，可以参考[wechat-starter](https://github.com/goofansu/wechat-starter)，这个示例甚至包括了微信支付的内容。
+如果您想从一个稍微完整一些的示例开始微信开发，可以参考 [wechat-starter](https://github.com/goofansu/wechat-starter)，这个示例甚至包括了微信支付的内容。
 
 ## 安装
 
@@ -51,24 +51,24 @@ bundle install
 rails generate wechat:install
 ```
 
-运行`rails g wechat:install`后会自动生成wechat.yml配置，还有wechat controller及相关路由配置到当前Rails项目。
+运行 `rails g wechat:install` 后会自动生成 wechat.yml 配置，还有 wechats_controller 及相关路由配置到当前 Rails 项目。
 
-启用session会话记录:
+启用 Session 会话记录:
 
 ```console
 rails g wechat:session
 rake db:migrate
 ```
 
-运行后会自动启用回调消息会话(session)记录，wechat gem会在Rails项目中生成两个文件，用户可以在*wechat_session*表中添加更多字段或者声明一些关联关系。使用已有的**hash_store**直接保存也是可以的，但对于PostgreSQL用户，使用[hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore)或者json格式可能更佳，当然，最佳方案仍然是添加新字段记录数据。
+运行后会自动启用回调消息会话 (Session) 记录，`wechat` Gem 会在 Rails 项目中生成两个文件，用户可以在 *wechat_session* 表中添加更多字段或者声明一些关联关系。使用已有的 **hash_store** 直接保存也是可以的，但对于 PostgreSQL 用户，使用 [hstore](http://guides.rubyonrails.org/active_record_postgresql.html#hstore) 或者 json 格式可能更佳，当然最佳方案仍然是添加新字段记录数据。
 
-启用Redis存贮token和ticket:
+启用 Redis 存贮 Token 和 Ticket:
 
 ```console
 rails g wechat:redis_store
 ```
 
-Redis存贮相比默认的文件存贮，可以允许Rails应用运行在多台服务器中，如果只有一台服务器，仍然推荐使用默认的文件存贮，另外命令行不会读取Redis存贮的Token或者Ticket。
+Redis 存贮相比默认的文件存贮，可以允许 Rails 应用运行在多台服务器中。如果只有一台服务器，仍然推荐使用默认的文件存贮，另外命令行不会读取 Redis 存贮的 Token 或者 Ticket。
 
 启用数据库配置微信账户:
 
@@ -77,7 +77,7 @@ rails g wechat:config
 rake db:migrate
 ```
 
-运行后会在数据库中创建 `wechat_configs` 表，用来记录不同微信账户的配置。
+运行后会在数据库中创建  `wechat_configs`  表用来记录不同微信账户的配置。
 
 ## 配置
 
@@ -85,13 +85,13 @@ rake db:migrate
 
 请先确保在服务器上配置成功，再到微信官网提交链接。否则微信会提示错误。
 
-默认通过`rails g wechat:install`生成的URL是： `http://your-server.com/wechat`
+默认通过 `rails g wechat:install` 生成的 URL 是： `http://your-server.com/wechat`
 
-appid/corpid，以及secret的配置请阅读下一节
+appid/corpid 以及 secret 的配置请阅读下一节
 
 #### 命令行程序的配置
 
-要使用命令行程序，需要在home目录中创建一个`~/.wechat.yml`，包含以下内容。其中`access_token`是存放access_token的文件位置。
+要使用命令行程序，需要在 home 目录中创建一个 `~/.wechat.yml`，包含以下内容。其中 `access_token` 是存放 access_token 的文件位置。
 
 ```
 appid: "my_appid"
@@ -99,17 +99,17 @@ secret: "my_secret"
 access_token: "/var/tmp/wechat_access_token"
 ```
 
-Windows或者使用企业号，需要存放在`C:/Users/[user_name]/`下，其中corpid和corpsecret可以从企业号管理界面的设置->权限管理，通过新建任意一个管理组后获取。
+Windows 或者使用企业号需要存放在 `C:/Users/[user_name]/` 下，其中 corpid 和 corpsecret 可以从企业号管理界面的设置 -> 权限管理，通过新建任意一个管理组后获取。
 
 ```
 corpid: "my_appid"
 corpsecret: "my_secret"
-agentid: 1 # 企业应用的id，整型。可在应用的设置页面查看
+agentid: 1 # 企业应用的 id 整型可在应用的设置页面查看
 access_token: "C:/Users/[user_name]/wechat_access_token"
 ```
 
 #### Rails 全局配置
-Rails应用程序中，需要将配置文件放在`config/wechat.yml`，可以为不同environment创建不同的配置。
+Rails 应用程序中，需要将配置文件放在 `config/wechat.yml`，可以为不同 environment 创建不同的配置。
 
 微信公众平台配置示例：
 
@@ -145,7 +145,7 @@ default: &default
   encoding_aes_key:  "my_encoding_aes_key"
 ```
 
-企业微信配置下必须使用加密模式，其中token和encoding_aes_key可以从企业号管理界面的应用中心->某个应用->模式选择，选择回调模式后获得。
+企业微信配置下必须使用加密模式，其中 token 和 encoding_aes_key 可以从企业号管理界面的应用中心 -> 某个应用 -> 模式选择，选择回调模式后获得。
 
 ```
 default: &default
@@ -196,31 +196,31 @@ test:
  #  secret: "my_secret"
 ```
 
-支持 微信公众平台/企业微信 多账号的注意点(例如，增加账号`wx2`):
+支持微信公众平台 / 企业微信多账号的注意点 ( 例如: 增加账号 `wx2` ):
 
-* 配置文件可增加多个微信公众平台(企业微信)配置，用法类似Rails中`config/database.yml`多数据库配置的处理。`development`, `test`, `production`是默认账号的配置段，要想增加账号`wx2`，你需要增加配置段`wx2_development`, `wx2_test`, `wx2_production`。
+* 配置文件可增加多个微信公众平台 ( 企业微信 ) 配置，用法类似 Rails 中 `config/database.yml` 多数据库配置的处理。 `development`,  `test`,  `production` 是默认账号的配置段，要想增加账号 `wx2`，你需要增加配置段 `wx2_development`,  `wx2_test`,  `wx2_production`。
 
-* 声明账号`wx2`的`wechat_responder`:
+* 声明账号 `wx2 `的 `wechat_responder`:
   ```ruby
   wechat_responder account: :wx2
   ```
 
-* `Wechat.api(:wx2)` 表示使用账号`wx2`的Wechat api，而`Wechat.api`或`Wechat.api(:default)`则表示默认账号的wechat api。
+* `Wechat.api(:wx2)`  表示使用账号 `wx2` 的 Wechat api，而 `Wechat.api` 或 `Wechat.api(:default)` 则表示默认账号的 wechat api。
 
-* 在wechat命令行中，通过增加可选参数`-a, [--account=ACCOUNT]`来表示使用其他账号，例如`wechat users -a wx2`表示列举`wx2`这个账号的粉丝列表
+* 在 wechat 命令行中，通过增加可选参数 `-a, [--account=ACCOUNT]` 来表示使用其他账号，例如 `wechat users -a wx2` 表示列举 `wx2` 这个账号的粉丝列表
 
-进一步的多账号支持参见[PR 150](https://github.com/Eric-Guo/wechat/pull/150)。
+进一步的多账号支持参见 [PR 150](https://github.com/Eric-Guo/wechat/pull/150)。
 
 #### 数据库微信账户配置
 启用数据库微信配置之后，会生成如下数据表：
 
 属性 | 类型 |  备注
 ---- | ---- | ----
-environment | 字串 | 必填。配置对应的运行环境，一般有：`production`、`development`、`test`。比如 `production` 配置仅在生产环境有效。默认为 `development`。
-account | 字串 | 必填。自定义的微信账户名称。同一 `environment` 下，账户名称不允许重复。
-enabled | 布尔 | 必填。配置是否生效。默认 `true`。
-appid | 字串 | 公众号 id。此字段和 `corpid` 两者必填其一。
-secret | 字串 | 公众号相关配置。当公众号 `appid` 存在时必填。
+environment | 字串 | 必填。配置对应的运行环境，一般有：`production`、`development`、`test`。比如  `production`  配置仅在生产环境有效。默认为  `development`。 
+account | 字串 | 必填。自定义的微信账户名称。同一  `environment`  下，账户名称不允许重复。 
+enabled | 布尔 | 必填。配置是否生效。默认  `true`。 
+appid | 字串 | 公众号 id , 此字段和  `corpid`  两者必填其一。 
+secret | 字串 | 公众号相关配置。当公众号  `appid`  存在时必填。 
 corpid | 字串 | 企业号 id。此字段和 `appid` 两者必填其一。
 corpsecret | 字串 | 企业号相关配置。当企业号 `corpid` 存在时必填。
 agentid | 整数 | 企业号相关配置。当企业号 `corpid` 存在时必填。
@@ -229,7 +229,7 @@ encoding_aes_key | 字串 | 当 `encrypt_mode` 为 `true` 时必填。
 token | 字串 | 必填。
 access_token | 字串 | 必填。存储 `access token` 文件的路径。
 jsapi_ticket | 字串 | 必填。存储 `jsapi ticket` 文件的路径。
-skip_verify_ssl | 布尔
+skip_verify_ssl | 布尔|
 timeout | 整数 | 默认值是 20。
 trusted_domain_fullname | 字串 |
 
@@ -237,21 +237,21 @@ trusted_domain_fullname | 字串 |
 
 ##### 配置优先级
 
-注意在Rails项目根目录下运行`wechat`命令行工具会优先使用`config/wechat.yml`中的`default`配置，如果失败则使用`~\.wechat.yml`中的配置，以便于在生产环境下管理多个微信账号应用。
+注意在Rails项目根目录下运行 `wechat` 命令行工具会优先使用 `config/wechat.yml `中的 `default`配置，如果失败则使用 `~\.wechat.yml` 中的配置，以便于在生产环境下管理多个微信账号应用。
 
-如果启用数据库账户配置，数据库中的账户信息在读入 `wechat.yml` 或环境变量之后被载入。当存在同名账户时，数据库中的配置会覆盖前两者。
+如果启用数据库账户配置，数据库中的账户信息在读入  `wechat.yml`  或环境变量之后被载入。当存在同名账户时，数据库中的配置会覆盖前两者。
 
 ##### 配置微信服务器超时
 
-微信服务器有时请求会花很长时间，如果不配置，默认为20秒，可视情况配置。
+微信服务器有时请求会花很长时间，如果不配置默认为 20 秒，可视情况配置。
 
 ##### 配置跳过SSL认证
 
-Wechat服务器有报道曾出现[RestClient::SSLCertificateNotVerified](http://qydev.weixin.qq.com/qa/index.php?qa=11037)错误，此时可以选择关闭SSL验证。`skip_verify_ssl: true`
+Wechat 服务器有报道曾出现 [RestClient::SSLCertificateNotVerified](http://qydev.weixin.qq.com/qa/index.php?qa=11037) 错误，此时可以选择关闭SSL验证。`skip_verify_ssl: true`
 
-#### 为每个Responder配置不同的appid和secret
+#### 为每个 Responder 配置不同的 appid 和 secret
 
-有些情况下，单个Rails应用可能需要处理来自多个微信公众号的消息，您可以通过在`wechat_responder`和`wechat_api`后配置多个相关参数来支持多账号。
+有些情况下，单个 Rails 应用可能需要处理来自多个微信公众号的消息，您可以通过在 `wechat_responder` 和 `wechat_api` 后配置多个相关参数来支持多账号。
 
 ```ruby
 class WechatFirstController < ActionController::Base
@@ -276,9 +276,9 @@ end
 
 #### JS-SDK 支持
 
-通过JS-SDK可以在HTML网页中控制微信客户端的行为，但必须先注入配置信息，wechat gems提供了帮助方法`wechat_config_js`使这个过程更简单：
+通过 JS-SDK 可以在 HTML 网页中控制微信客户端的行为，但必须先注入配置信息. Wechat gem 提供了帮助方法 `wechat_config_js` 使这个过程更简单：
 
-注意wechat_config_js指令依赖于[`wechat_api`](#wechat_api---rails-controller-wechat-api) 或 [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl) ，需要先在controller里面添加。
+注意 wechat_config_js 指令依赖于 [`wechat_api`](#wechat_api---rails-controller-wechat-api)  或  [`wechat_responder`](#wechat_responder---rails-responder-controller-dsl) ，需要先在 controller 里面添加。
 
 ```erb
 <body>
@@ -292,9 +292,9 @@ end
 </body>
 ```
 
-在开发模式下，由于程序往往通过微信调试工具的服务器端调试工具反向代理被访问，此时需要配置`trusted_domain_fullname`以便wechat gem可以使用正确的域名做JS-SDK的权限签名。
+在开发模式下，由于程序往往通过微信调试工具的服务器端调试工具反向代理被访问，此时需要配置 `trusted_domain_fullname` 以便wechat gem 可以使用正确的域名做 JS-SDK 的权限签名。
 
-#### OAuth2.0验证接口支持
+#### OAuth2.0 验证接口支持
 
 公众号可使用如下代码取得关注用户的相关信息。
 
@@ -307,7 +307,7 @@ class CartController < ActionController::Base
       @articles = @current_user.articles
     end
 
-    # 指定 account_name，可以使用任意微信账户
+    # 指定 account_name 可以使用任意微信账户
     # wechat_oauth2('snsapi_base', nil, account_name) do |openid|
     #  ...
     # end
@@ -331,27 +331,27 @@ class WechatsController < ActionController::Base
 end
 ```
 
-`wechat_oauth2`封装了OAuth2.0验证接口和cookie处理逻辑，用户仅需提供业务代码块即可。userid指的是微信企业成员UserID，openid是关注该公众号的用户openid。
+`wechat_oauth2 `封装了 OAuth2.0 验证接口和 Cookies 处理逻辑，用户仅需提供业务代码块即可。userid 指的是微信企业成员 userid，openid 是关注该公众号的用户 openid。
 
 注意:
 * 如果使用 `wechat_responder`, 请不要在 Controller 里定义 `show` 和 `create` 方法, 否则会报错。
-* 如果遇到“redirect_uri参数错误”的错误信息，请登录服务号管理后台，查看“开发者中心/网页服务/网页授权获取用户基本信息”的授权回调页面域名已正确配置。
+* 如果遇到“ redirect_uri 参数错误”的错误信息，请登录服务号管理后台，查看“开发者中心/网页服务/网页授权获取用户基本信息”的授权回调页面域名已正确配置。
 
 ## 关于接口权限
 
-wechat gems 内部不会检查权限。但因公众号类型不同，和微信服务器端通讯时，可能会被拒绝，详细权限控制可参考[官方文档](https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433401084)。
+Wechat Gem 内部不会检查权限, 但因公众号类型不同和微信服务器端通讯时，可能会被拒绝详细权限控制可参考[官方文档](https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433401084)。
 
 ## 使用命令行
 
-根据企业微信和微信公众平台配置不同，wechat提供了的命令行命令。
+根据企业微信和微信公众平台配置不同 Wechat 提供了的命令行命令。
 
 #### 微信公众平台命令行
 
 ```
 $ wechat
 Wechat Public Account commands:
-  wechat addvoicetorecofortext [VOICE_ID]                       # AI开放接口-提交语音
-  wechat callbackip                                             # 获取微信服务器IP地址
+  wechat addvoicetorecofortext [VOICE_ID]                       # AI 开放接口 - 提交语音
+  wechat callbackip                                             # 获取微信服务器 iP 地址
   wechat clear_quota                                            # 接口调用次数清零
   wechat custom_image [OPENID, IMAGE_PATH]                      # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]       # 发送音乐客服消息
@@ -364,7 +364,7 @@ Wechat Public Account commands:
   wechat group_delete [GROUP_ID]                                # 删除分组
   wechat group_update [GROUP_ID, NEW_GROUP_NAME]                # 修改分组名
   wechat groups                                                 # 查询所有分组
-  wechat material_get [MEDIA_ID, PATH]                              # 永久媒体下载
+  wechat material_get [MEDIA_ID, PATH]                          # 永久媒体下载
   wechat material_add [MEDIA_TYPE, PATH]                        # 永久媒体上传
   wechat material_count                                         # 获取永久素材总数
   wechat material_delete [MEDIA_ID]                             # 删除永久素材
@@ -385,7 +385,7 @@ Wechat Public Account commands:
   wechat message_mass_preview [WX_NAME, MPNEWS_MEDIA_ID]        # 预览图文消息素材
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]            # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID_OR_STR, EXPIRE_SECONDS]  # 请求临时二维码
-  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]             # 通过ticket下载二维码
+  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]             # 通过 ticket 下载二维码
   wechat queryrecoresultfortext [VOICE_ID]                      # AI开放接口-获取语音识别结果
   wechat shorturl [LONG_URL]                                    # 长链接转短链接
   wechat tag [TAGID]                                            # 获取标签下粉丝列表
@@ -417,10 +417,10 @@ Wechat Enterprise Account commands:
   wechat batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]     # 全量覆盖部门
   wechat batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]       # 全量覆盖成员
   wechat batch_syncuser [SYNC_USER_CSV_MEDIA_ID]           # 增量更新成员
-  wechat callbackip                                        # 获取微信服务器IP地址
+  wechat callbackip                                        # 获取微信服务器 iP 地址
   wechat clear_quota                                       # 接口调用次数清零
-  wechat convert_to_openid [USER_ID]                       # userid转换成openid
-  wechat convert_to_userid [OPENID]                        # openid转换成userid
+  wechat convert_to_openid [USER_ID]                       # userid 转换成 openid
+  wechat convert_to_userid [OPENID]                        # openid 转换成 userid
   wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
   wechat custom_news [OPENID, NEWS_YAML_PATH]              # 发送图文客服消息
@@ -477,7 +477,7 @@ Wechat Enterprise Account commands:
 ### 使用场景
 以下是几种典型场景的使用方法
 
-#####获取所有用户的OPENID
+##### 获取所有用户的 openid
 
 ```
 $ wechat users
@@ -486,7 +486,7 @@ $ wechat users
 
 ```
 
-#####获取用户的信息
+##### 获取用户的信息
 
 ```
 $ wechat user "oCfEht9***********"
@@ -506,7 +506,7 @@ $ wechat menu
 ##### 创建菜单
 
 
-通过运行`rails g wechat:menu`可以生成一个定义菜单内容的yaml文件,菜单可以包含下列内容：
+通过运行`rails g wechat:menu`可以生成一个定义菜单内容的 yaml 文件菜单可以包含下列内容：
 
 ```
 button:
@@ -550,17 +550,17 @@ button:
 $ wechat menu_create menu.yaml
 ```
 
-需确保设置，权限管理中有对此应用的管理权限，否则会报[60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E)错。
+需确保设置，权限管理中有对此应用的管理权限，否则会报 [60011](http://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E) 错。
 
 ##### 发送客服图文消息
-需定义一个图文消息内容的yaml文件，比如
+需定义一个图文消息内容的 yaml 文件，比如
 articles.yaml
 
 ```
 articles:
  -
   title: "习近平在布鲁日欧洲学院演讲"
-  description: "新华网比利时布鲁日4月1日电 国家主席习近平1日在比利时布鲁日欧洲学院发表重要演讲"
+  description: "新华网比利时布鲁日 4 月 1 日电 国家主席习近平 1 日在比利时布鲁日欧洲学院发表重要演讲"
   url: "http://news.sina.com.cn/c/2014-04-01/232629843387.shtml"
   pic_url: "http://i3.sinaimg.cn/dy/c/2014-04-01/1396366518_bYays1.jpg"
 ```
@@ -573,7 +573,7 @@ $ wechat custom_news oCfEht9oM*********** articles.yml
 ```
 
 ##### 发送模板消息
-需定义一个模板消息内容的yaml文件，比如
+需定义一个模板消息内容的 yaml 文件，比如
 template.yml
 
 ```
@@ -589,10 +589,10 @@ template:
       value: "XX活动"
       color: "#CCCCCC"
     keynote2:
-      value: "2014年9月16日"
+      value: "2014 年 9 月 16 日"
       color: "#CCCCCC"
     keynote3:
-      value: "上海徐家汇xxx城"
+      value: "上海徐家汇 xxx 城"
       color: "#CCCCCC"
     remark:
       value: "欢迎再次使用。"
@@ -613,7 +613,7 @@ template = YAML.load(File.read(template_yaml_path))
 Wechat.api.template_message_send Wechat::Message.to(openid).template(template['template'])
 ```
 
-若在Controller中使用wechat_api或者wechat_responder，可以使用wechat：
+若在 Controller 中使用 wechat_api 或者 wechat_responder，可以使用 wechat：
 
 ```ruby
 template = YAML.load(File.read(template_yaml_path))
@@ -622,7 +622,7 @@ wechat.template_message_send Wechat::Message.to(openid).template(template['templ
 
 ## wechat_api - Rails Controller Wechat API
 
-虽然用户可以随时通过`Wechat.api`在任意代码中访问wechat的API功能，但是更推荐的做法是仅在controller中，通过引入`wechat_api`，使用`wechat`调用API功能，不仅因为这样是支持多个微信公众平台账号的必然要求，而且也避免了在模型层内过多引入微信相关代码。
+虽然用户可以随时通过 `Wechat.api` 在任意代码中访问 Wechat 的 API 功能，但是更推荐的做法是仅在 Controller 中，通过引入 `wechat_api`，使用 `wechat` 调用 API 功能，不仅因为这样是支持多个微信公众平台账号的必然要求，而且也避免了在模型层内过多引入微信相关代码。
 
 ```ruby
 class WechatReportsController < ApplicationController
@@ -635,11 +635,11 @@ class WechatReportsController < ApplicationController
 end
 ```
 
-## 在ActiveJob/Rake tasks中调用有wechat api
+## 在 ActiveJob/Rake tasks 中调用有 wechat api
 
-可以通过`Wechat.api`在任意地方使用wechat api的功能。
+可以通过 `Wechat.api` 在任意地方使用 Wechat Api 的功能。
 
-下面以通过`rails console`调用微信AI开放接口的语音识别为例：
+下面以通过 `rails console` 调用微信 Ai 开放接口的语音识别为例：
 
 ```bash
 # Audio file with ID3 version 2.4.0, contains:MPEG ADTS, layer III, v2,  40 kbps, 16 kHz, Monaural
@@ -650,24 +650,24 @@ Wechat.api.queryrecoresultfortext 'test_voice_id'
 
 ## wechat_responder - Rails Responder Controller DSL
 
-为了在Rails app中响应用户的消息，开发者需要创建一个wechat responder controller. 首先在router中定义
+为了在 Rails App 中响应用户的消息，开发者需要创建一个 wechat responder Controller 首先在 Router 中定义
 
 ```ruby
   resource :wechat, only:[:show, :create]
 ```
 
-然后创建Controller class, 例如
+然后创建 Controller Class 例如
 
 ```ruby
 class WechatsController < ActionController::Base
   wechat_responder
 
-  # 默认文字信息responder
+  # 默认文字信息 responder
   on :text do |request, content|
     request.reply.text "echo: #{content}" #Just echo
   end
 
-  # 当请求的文字信息内容为'help'时, 使用这个responder处理
+  # 当请求的文字信息内容为 'help' 时, 使用这个 responder 处理
   on :text, with: 'help' do |request|
     request.reply.text 'help content' #回复帮助信息
   end
@@ -686,29 +686,29 @@ class WechatsController < ActionController::Base
     request.reply.text "User #{request[:FromUserName]} subscribe now"
   end
 
-  # 公众平台收到未关注用户扫描qrscene_xxxxxx二维码时。注意此次扫描事件将不再引发上条的用户加关注事件
+  # 公众平台收到未关注用户扫描 qrscene_xxxxxx 二维码时。注意此次扫描事件将不再引发上条的用户加关注事件
   on :scan, with: 'qrscene_xxxxxx' do |request, ticket|
     request.reply.text "Unsubscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
-  # 公众平台收到已关注用户扫描创建二维码的scene_id事件时
+  # 公众平台收到已关注用户扫描创建二维码的 scene_id 事件时
   on :scan, with: 'scene_id' do |request, ticket|
     request.reply.text "Subscribe user #{request[:FromUserName]} Ticket #{ticket}"
   end
 
-  # 当没有任何on :scan事件处理已关注用户扫描的scene_id时
+  # 当没有任何 on :scan 事件处理已关注用户扫描的 scene_id 时
   on :event, with: 'scan' do |request|
     if request[:EventKey].present?
       request.reply.text "event scan got EventKey #{request[:EventKey]} Ticket #{request[:Ticket]}"
     end
   end
 
-  # 企业微信收到EventKey 为二维码扫描结果事件时
+  # 企业微信收到 EventKey 为二维码扫描结果事件时
   on :scan, with: 'BINDING_QR_CODE' do |request, scan_result, scan_type|
     request.reply.text "User #{request[:FromUserName]} ScanResult #{scan_result} ScanType #{scan_type}"
   end
 
-  # 企业微信收到EventKey 为CODE 39码扫描结果事件时
+  # 企业微信收到 EventKey 为 CODE 39 码扫描结果事件时
   on :scan, with: 'BINDING_BARCODE' do |message, scan_result|
     if scan_result.start_with? 'CODE_39,'
       message.reply.text "User: #{message[:FromUserName]} scan barcode, result is #{scan_result.split(',')[1]}"
@@ -736,14 +736,14 @@ class WechatsController < ActionController::Base
     # request.reply.voice(request[:MediaId])
 
     voice_id = request[:MediaId]
-    # 开通语音识别后，用户每次发送语音给服务号时，微信会在推送的语音消息XML数据包中，增加一个Recognition字段
+    # 开通语音识别后，用户每次发送语音给服务号时，微信会在推送的语音消息XML数据包中，增加一个 Recognition 字段
     recognition = request[:Recognition]
     request.reply.text "#{voice_id} #{recognition}"
   end
 
   # 处理视频信息
   on :video do |request|
-    nickname = wechat.user(request[:FromUserName])['nickname'] #调用 api 获得发送者的nickname
+    nickname = wechat.user(request[:FromUserName])['nickname'] #调用 api 获得发送者的 nickname
     request.reply.video(request[:MediaId], title: '回声', description: "#{nickname}发来的视频请求") #直接视频返回给用户
   end
 
@@ -793,12 +793,12 @@ class WechatsController < ActionController::Base
     request.reply.success # request is XML result hash.
   end
 
-  # 当无任何responder处理用户信息时,使用这个responder处理
+  # 当无任何 responder 处理用户信息时,使用这个 responder 处理
   on :fallback, respond: 'fallback message'
 end
 ```
 
-在controller中使用`wechat_responder`引入Responder DSL, 之后可以用
+在 controller 中使用 `wechat_responder` 引入 Responder DSL, 之后可以用
 
 ```
 on <message_type> do |message|
@@ -808,18 +808,18 @@ end
 
 来响应用户信息。
 
-目前支持的message_type有如下几种
+目前支持的 message_type 有如下几种
 
-- :text 响应文字消息,可以用`:with`参数来匹配文本内容 `on(:text, with:'help'){|message, content| ...}`
+- :text 响应文字消息,可以用 `:with` 参数来匹配文本内容  `on(:text, with:'help'){|message, content| ...}`
 - :image 响应图片消息
 - :voice 响应语音消息
 - :shortvideo 响应短视频消息
 - :video 响应视频消息
 - :label_location 响应地理位置消息
 - :link 响应链接消息
-- :event 响应事件消息, 可以用`:with`参数来匹配事件类型，同文字消息类似，支持正则表达式匹配
-- :click 虚拟响应事件消息, 微信传入:event，但gem内部会单独处理
-- :view 虚拟响应事件消息, 微信传入:event，但gem内部会单独处理
+- :event 响应事件消息, 可以用 `:with` 参数来匹配事件类型，同文字消息类似，支持正则表达式匹配
+- :click 虚拟响应事件消息, 微信传入:event，但 gem 内部会单独处理
+- :view 虚拟响应事件消息, 微信传入:event，但 gem 内部会单独处理
 - :scan  虚拟响应事件消息
 - :batch_job  虚拟响应事件消息
 - :location 虚拟响应上报地理位置事件消息
@@ -836,13 +836,13 @@ class WechatsController < ActionController::Base
 end
 ```
 
-注意设置了[多客服消息转发](http://dkf.qq.com/)后，不能再添加`默认文字信息responder`，否则文字消息将得不到转发。
+注意设置了[多客服消息转发](http://dkf.qq.com/)后，不能再添加默认文字信息 `responder`，否则文字消息将得不到转发。
 
 ### 通知
 
 现支持以下通知：
 
-* `wechat.responder.after_create` data 包含 request<Wechat::Message> 和 response<Wechat::Message>
+* `wechat.responder.after_create` data 包含 request <Wechat::Message> 和 response<Wechat::Message>
 
 使用示例：
 
@@ -854,6 +854,6 @@ end
 
 ## 已知问题
 
-* 企业微信接受菜单消息时，Wechat腾讯服务器无法解析部分域名，请使用IP绑定回调URL，用户的普通消息目前不受影响。
-* 企业微信全量覆盖成员使用的csv通讯录格式，直接将下载的模板导入[是不工作的](http://qydev.weixin.qq.com/qa/index.php?qa=13978)，必须使用Excel打开，然后另存为csv格式才会变成合法格式。
-* 如果使用nginx+unicron部署方案，并且使用了https，必须设置`trusted_domain_fullname`为https，否则会导致JS-SDK签名失效。
+* 企业微信接受菜单消息时，Wechat 腾讯服务器无法解析部分域名，请使用 iP 绑定回调 URL，用户的普通消息目前不受影响。
+* 企业微信全量覆盖成员使用的 CSV 通讯录格式，直接将下载的模板导入[是不工作的](http://qydev.weixin.qq.com/qa/index.php?qa=13978)，必须使用 Excel 打开，然后另存为 CSV 格式才会变成合法格式。
+* 如果使用 Nginx + Unicron 部署方案，并且使用了 Https，必须设置 `trusted_domain_fullname` 为 Https，否则会导致 JS-SDK 签名失效。
