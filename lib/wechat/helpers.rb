@@ -34,8 +34,8 @@ module Wechat
           timestamp: "#{js_hash[:timestamp]}",
           nonceStr: "#{js_hash[:noncestr]}",
           signature: "#{js_hash[:signature]}",
-          jsApiList: ['#{config_options[:api].join("','")}'],
-          openTagList: ['#{config_options[:open_tags].join("','")}']
+          jsApiList: ['#{config_options[:api]&.join("','")}'],
+          openTagList: ['#{config_options[:open_tags]&.join("','")}']
         });
       WECHAT_CONFIG_JS
       javascript_tag config_js, type: 'application/javascript'
