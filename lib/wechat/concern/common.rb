@@ -152,6 +152,10 @@ module Wechat
         post_file 'material/add_material', file, params: { type: type }
       end
 
+      def material_add_news(mpnews_message)
+        post 'material/add_news', mpnews_message.to_json
+      end
+
       def material_delete(media_id)
         post 'material/del_material', JSON.generate(media_id: media_id)
       end

@@ -366,6 +366,7 @@ Wechat Public Account commands:
   wechat groups                                                 # 查询所有分组
   wechat material_get [MEDIA_ID, PATH]                          # 永久媒体下载
   wechat material_add [MEDIA_TYPE, PATH]                        # 永久媒体上传
+  wechat material_add_news [MPNEWS_YAML_PATH]                   # 永久图文素材上传
   wechat material_count                                         # 获取永久素材总数
   wechat material_delete [MEDIA_ID]                             # 删除永久素材
   wechat material_list [TYPE, OFFSET, COUNT]                    # 获取永久素材列表
