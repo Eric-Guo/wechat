@@ -411,6 +411,12 @@ class App < Thor
     puts wechat_api.material_add(type, path)
   end
 
+  desc 'material_add_news [MPNEWS_YAML_PATH]', '永久图文素材上传'
+  def material_add_news(mpnews_yaml_path)
+    new = YAML.load(File.read(mpnews_yaml_path))
+    puts wechat_api.material_add_news(Wechat::Message.new(MsgType: 'mpnews').mpnews(new['articles']))
+  end
+
   desc 'material_delete [MEDIA_ID]', '删除永久素材'
   def material_delete(media_id)
     puts wechat_api.material_delete(media_id)

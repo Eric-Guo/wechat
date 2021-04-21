@@ -520,6 +520,46 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#material_add_news' do
+    let(:items) do
+      [
+        { thumb_media_id: 'qI6_Ze_6PtV7svjolgs-rN6stStuHIjs9_DidOHaj0Q-mwvBelOXCFZiq2OsIU-p',
+          author: 'xxx', title: 'Happy Day', content_source_url: 'www.qq.com',
+          content: 'content', digest: 'digest', show_cover_pic: 1 },
+        { thumb_media_id: 'qI6_Ze_6PtV7svjolgs-rN6stStuHIjs9_DidOHaj0Q-mwvBelOXCFZiq2OsIU-p',
+          author: 'xxx', title: 'Happy Day', content_source_url: 'www.qq.com',
+          content: 'content', digest: 'digest', show_cover_pic: 0 }
+      ]
+    end
+    specify 'will post material/media_add_news with access_token and mpnews in json' do
+      mpnews = {
+        articles: [
+          {
+            thumb_media_id: 'qI6_Ze_6PtV7svjolgs-rN6stStuHIjs9_DidOHaj0Q-mwvBelOXCFZiq2OsIU-p',
+            title: 'Happy Day',
+            content: 'content',
+            author: 'xxx',
+            content_source_url: 'www.qq.com',
+            digest: 'digest',
+            show_cover_pic: 1
+          },
+          {
+            thumb_media_id: 'qI6_Ze_6PtV7svjolgs-rN6stStuHIjs9_DidOHaj0Q-mwvBelOXCFZiq2OsIU-p',
+            title: 'Happy Day',
+            content: 'content',
+            author: 'xxx',
+            content_source_url: 'www.qq.com',
+            digest: 'digest',
+            show_cover_pic: 0
+          }
+        ]
+      }
+      result = { type: 'news', media_id: 'CsEf3ldqkAYJAU6EJeIkStVDSvffUJ54vqbThMgplD-VJXXof6ctX5fI6-aYyUiQ', created_at: 1391857799 }
+      expect(subject.client).to receive(:post).with('material/add_news', mpnews.to_json, params: { access_token: 'access_token' }).and_return(result)
+      expect(subject.material_add_news(Wechat::Message.new(MsgType: 'mpnews').mpnews(items))).to eq(result)
+    end
+  end
+
   describe '#material_delete' do
     specify 'will post material/del_material with access_token and media_id in payload' do
       media_id = 'media_id'
