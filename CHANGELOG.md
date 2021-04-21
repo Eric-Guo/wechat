@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.4 (released at 4/21/2021)
+
+* New material_add_news API, by @zlei1 #300
+* Support open_tag, by @xiajian2019 #299
+
 ## v0.12.3 (released at 3/15/2021)
 
 * Fix MpApi initialize bug, by @hardywu #296
