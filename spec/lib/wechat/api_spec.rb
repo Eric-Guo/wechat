@@ -520,6 +520,16 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#material_add_video' do
+    specify 'will post material/add_material with access_token, type, description and media payload at file based api endpoint' do
+      file = 'README.md'
+      expect(subject.client).to receive(:post_file)
+        .with('material/add_material', file,
+              params: { type: 'video', access_token: 'access_token', description: "{\"title\":\"VIDEO_TITLE\",\"introduction\":\"INTRODUCTION\"}" }).and_return(true)
+      expect(subject.material_add('video', file, {title: 'VIDEO_TITLE', introduction: 'INTRODUCTION'})).to be true
+    end
+  end
+
   describe '#material_add_news' do
     let(:items) do
       [

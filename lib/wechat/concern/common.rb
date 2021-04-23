@@ -148,8 +148,11 @@ module Wechat
         post 'material/batchget_material', JSON.generate(type: type, offset: offset, count: count)
       end
 
-      def material_add(type, file)
-        post_file 'material/add_material', file, params: { type: type }
+      def material_add(type, file, opts = {})
+        params = { type: type }
+        params.merge!(description: opts.slice(:title, :introduction).to_json) if type == 'video'
+
+        post_file 'material/add_material', file, params: params
       end
 
       def material_add_news(mpnews_message)
