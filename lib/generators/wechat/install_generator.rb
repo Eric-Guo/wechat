@@ -12,6 +12,7 @@ module Wechat
 
       def add_wechat_route
         route 'resource :wechat, only: [:show, :create]'
+        route "post '/open/wechat_authorize_callback', to: 'open_wechats/authorize'"
       end
 
       def copy_wechat_controller
