@@ -6,6 +6,7 @@ require 'wechat/api_loader'
 require 'wechat/api'
 require 'wechat/mp_api'
 require 'wechat/corp_api'
+require 'wechat/component_api'
 require 'wechat/helpers'
 require 'action_controller/wechat_responder'
 

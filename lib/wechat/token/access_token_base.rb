@@ -3,13 +3,14 @@
 module Wechat
   module Token
     class AccessTokenBase
-      attr_reader :client, :appid, :secret, :token_file, :access_token, :token_life_in_seconds, :got_token_at
+      attr_reader :client, :appid, :secret, :token_file, :ticket_file, :access_token, :token_life_in_seconds, :got_token_at
 
-      def initialize(client, appid, secret, token_file)
+      def initialize(client, appid, secret, token_file, ticket_file = nil)
         @appid = appid
         @secret = secret
         @client = client
         @token_file = token_file
+        @ticket_file = ticket_file
         @random_generator = Random.new
       end
 

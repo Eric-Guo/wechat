@@ -109,11 +109,11 @@ module Wechat
       end
 
       def responder_for(message)
-        message_type = message[:MsgType].to_sym
-        responders = user_defined_responders(message_type)
-        info_type = message[:InfoType].to_sym
+        message_type = message[:MsgType]&.to_sym
+        info_type = message[:InfoType]&.to_sym
+        responders = user_defined_responders(message_type || info_type)
         if info_type == :component_verify_ticket
-          yield(* match_responders(responders, message[:Content]))
+          yield(* responders)
         end
         case message_type
         when :text

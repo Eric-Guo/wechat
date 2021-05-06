@@ -29,6 +29,15 @@ RSpec.describe WechatController, type: :controller do
 
   let(:text_message) { message_base.merge(MsgType: 'text', Content: 'text message') }
 
+  let(:component_verify_ticket_base) do
+    {
+      AppId: 'some_appid',
+      CreateTime: '1348831860',
+      InfoType: 'component_verify_ticket',
+      ComponentVerifyTicket: 'some_verify_ticket'
+    }
+  end
+
   specify 'config responder using global config' do
     expect(controller.class.wechat).to eq(Wechat.api)
     expect(controller.class.token).to eq(Wechat.config.token)
@@ -97,6 +106,7 @@ RSpec.describe WechatController, type: :controller do
       on :event, with: 'subscribe', respond: 'subscribe event'
       on :click, with: 'EVENTKEY', respond: 'EVENTKEY clicked'
       on :image, respond: 'image content'
+      on :event, with: 'open_authorize', respond: 'open authorize event'
     end
 
     specify 'find first responder for matched type' do
@@ -133,6 +143,12 @@ RSpec.describe WechatController, type: :controller do
       expect do |b|
         controller.class.responder_for(MsgType: 'event', Event: 'click', EventKey: 'EVENTKEY', &b)
       end.to yield_with_args({ respond: 'EVENTKEY clicked', with: 'EVENTKEY' }, 'EVENTKEY')
+    end
+
+    specify "find 'open authorize event' responder if event request matches open_authorize" do
+      expect do |b|
+        controller.class.responder_for(InfoType: 'component_verify_ticket', &b)
+      end.to yield_with_args({ respond: 'open authorize event', with: 'open_authorize' }, 'open_authorize')
     end
   end
 

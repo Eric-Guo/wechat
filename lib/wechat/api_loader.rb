@@ -10,7 +10,11 @@ module Wechat
       js_token_file = options[:js_token_file] || c.jsapi_ticket.presence || '/var/tmp/wechat_jsapi_ticket'
       type = options[:type] || c.type
 
-      if c.appid && c.secret && token_file.present?
+      if type == 'component' && c.component_appid && c.component_secret
+        component_token_file = options[:component_token_file] || c.component_access_token.presence || '/var/tmp/wechat_component_access_token'
+        component_verify_ticket_file = options[:component_ticket_file] || c.component_verify_ticket.presence || '/var/tmp/wechat_component_verify_ticket'
+        Wechat::ComponentApi.new(c.component_appid, c.component_secret, component_token_file, component_verify_ticket_file,  c.timeout, c.skip_verify_ssl)
+      elsif c.appid && c.secret && token_file.present?
         if type == 'mp'
           qcloud_env = options[:qcloud_env] || c.qcloud_env
           qcloud_token_file = options[:qcloud_token_file] || c.qcloud_token_file.presence || '/var/tmp/qcloud_access_token'

@@ -12,7 +12,7 @@ module Wechat
     DATACUBE_BASE = 'https://api.weixin.qq.com/datacube/'
     TCB_BASE = 'https://api.weixin.qq.com/tcb/'
     QYAPI_BASE = 'https://qyapi.weixin.qq.com/cgi-bin/'
-    OPENAPI_BASE = 'https://api.weixin.qq.com/cgi-bin/'
+    COMPONENT_API_BASE = 'https://api.weixin.qq.com/cgi-bin/component/'
 
     def callbackip
       get 'getcallbackip'

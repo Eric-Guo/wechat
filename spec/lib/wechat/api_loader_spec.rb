@@ -58,6 +58,10 @@ RSpec.describe Wechat::ApiLoader do
 
       expect(Wechat.config(:wx2).appid).to eq 'my_appid2'
       expect(Wechat.config(:wx2).secret).to eq 'my_secret2'
+
+      expect(Wechat.config(:component).component_appid).to eq 'component_appid'
+      expect(Wechat.config(:component).encoding_aes_key).to eq 'component_encoding_aes_key'
+      expect(Wechat.config(:component).component_verify_ticket).to eq "C:/Users/[username]/component_verify_ticket"
     end
 
     it 'should create api for account' do
@@ -66,6 +70,11 @@ RSpec.describe Wechat::ApiLoader do
 
       new_api = Wechat::ApiLoader.with account: :wx2, token: 'new_token2'
       expect(new_api.access_token.appid).to eq 'my_appid2'
+    end
+
+    it 'should create component api for component account' do
+      component_api = Wechat::ApiLoader.with account: :component
+      expect(component_api.access_token.appid).to eq 'component_appid'
     end
   end
 
@@ -111,7 +120,7 @@ RSpec.describe Wechat::ApiLoader do
         })
 
         Wechat.config
-        expect(Wechat::ApiLoader.instance_variable_get(:@configs).keys).to match_array [:default, :wx2, :test_account_1, :test_account_2]
+        expect(Wechat::ApiLoader.instance_variable_get(:@configs).keys).to match_array [:default, :wx2, :component, :test_account_1, :test_account_2]
         expect(Wechat.config(:default).appid).to eq 'my_appid'
         expect(Wechat.config(:wx2).appid).to eq 'my_appid2'
         expect(Wechat.config(:test_account_1).appid).to eq 'test_app_1'
@@ -124,7 +133,7 @@ RSpec.describe Wechat::ApiLoader do
         })
 
         Wechat.config
-        expect(Wechat::ApiLoader.instance_variable_get(:@configs).keys).to match_array [:default, :wx2]
+        expect(Wechat::ApiLoader.instance_variable_get(:@configs).keys).to match_array [:default, :wx2, :component]
         expect(Wechat.config(:wx2).appid).to eq 'overridden_wx2_app_id'
       end
     end

@@ -27,3 +27,13 @@ wx2_test:
  <<: *default
  appid: "my_appid2"
  secret: "my_secret2"
+
+component_test:
+ <<: *default
+ component_appid: "component_appid"
+ component_secret: "component_secret"
+ component_verify_ticket: "C:/Users/[username]/component_verify_ticket"
+ component_access_token: "C:/Users/[username]/component_access_token"
+ encrypt_mode: true
+ encoding_aes_key: "component_encoding_aes_key"
+ type: 'component'

@@ -56,7 +56,6 @@ module Wechat
 
       parse_response(response, as || :json) do |parse_as, data|
         break data unless parse_as == :json && data['errcode'].present?
-
         case data['errcode']
         when 0 # for request didn't expect results
           data
