@@ -3,15 +3,16 @@
 module Wechat
   module Token
     class AccessTokenBase
-      attr_reader :client, :appid, :secret, :token_file, :ticket_file, :access_token, :token_life_in_seconds, :got_token_at
+      attr_reader :client, :appid, :secret, :token_file, :ticket_file, :access_token, :token_life_in_seconds, :got_token_at, :token_key
 
-      def initialize(client, appid, secret, token_file, ticket_file = nil)
+      def initialize(client, appid, secret, token_file, ticket_file = nil, token_key = 'access_token')
         @appid = appid
         @secret = secret
         @client = client
         @token_file = token_file
         @ticket_file = ticket_file
         @random_generator = Random.new
+        @token_key = token_key
       end
 
       def token
@@ -27,13 +28,13 @@ module Wechat
         td = read_token
         @token_life_in_seconds = td.fetch('token_expires_in').to_i
         @got_token_at = td.fetch('got_token_at').to_i
-        @access_token = td.fetch('access_token') # return access_token same time
+        @access_token = td.fetch(token_key) # return access_token same time
       rescue JSON::ParserError, Errno::ENOENT, KeyError, TypeError
         refresh
       end
 
       def write_token_to_store(token_hash)
-        raise InvalidCredentialError unless token_hash.is_a?(Hash) && token_hash['access_token']
+        raise InvalidCredentialError unless token_hash.is_a?(Hash) && token_hash[token_key]
 
         token_hash['got_token_at'] = Time.now.to_i
         token_hash['token_expires_in'] = token_hash.delete('expires_in')

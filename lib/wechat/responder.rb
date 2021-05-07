@@ -34,13 +34,13 @@ module Wechat
       attr_accessor :account_from_request
 
       def on(message_type, with: nil, respond: nil, &block)
-        raise 'Unknow message type' unless %i[text image voice video shortvideo link event click view scan batch_job location label_location fallback].include?(message_type)
+        raise 'Unknow message type' unless %i[text image voice video shortvideo link event click view scan batch_job location label_location fallback component].include?(message_type)
 
         config = respond.nil? ? {} : { respond: respond }
         config[:proc] = block if block_given?
 
         if with.present?
-          raise 'Only text, event, click, view, scan and batch_job can having :with parameters' unless %i[text event click view scan batch_job].include?(message_type)
+          raise 'Only text, event, click, view, scan, batch_job and component can having :with parameters' unless %i[text event click view scan batch_job component].include?(message_type)
 
           config[:with] = with
           if message_type == :scan
@@ -48,8 +48,8 @@ module Wechat
 
             self.known_scan_key_lists = with
           end
-        elsif %i[click view scan batch_job].include?(message_type)
-          raise 'Message type click, view, scan and batch_job must specify :with parameters'
+        elsif %i[click view scan batch_job component].include?(message_type)
+          raise 'Message type click, view, scan, batch_job and component must specify :with parameters'
         end
 
         case message_type
@@ -65,6 +65,8 @@ module Wechat
           user_defined_location_responders << config
         when :label_location
           user_defined_label_location_responders << config
+        when :component
+          user_defined_component_responders(with) << config
         else
           user_defined_responders(message_type) << config
         end
@@ -108,16 +110,22 @@ module Wechat
         @responders[type] ||= []
       end
 
+      def user_defined_component_responders(type)
+        @component_responders ||= {}
+        @component_responders[type] ||= []
+      end
+
       def responder_for(message)
         message_type = message[:MsgType]&.to_sym
-        info_type = message[:InfoType]&.to_sym
-        responders = user_defined_responders(message_type || info_type)
-        if info_type == :component_verify_ticket
-          yield(* responders)
+        if message[:InfoType].present?
+          message_type ||= :component
         end
+        responders = user_defined_responders(message_type)
         case message_type
         when :text
           yield(* match_responders(responders, message[:Content]))
+        when :component
+          yield(* user_defined_component_responders(message[:InfoType]), message[:InfoType])
         when :event
           if message[:Event] == 'click' && !user_defined_click_responders(message[:EventKey]).empty?
             yield(* user_defined_click_responders(message[:EventKey]), message[:EventKey])
@@ -212,7 +220,9 @@ module Wechat
         head :ok, content_type: 'text/html'
       end
 
-      response_msg.save_session if response_msg.is_a?(Wechat::Message) && Wechat.config.have_session_class
+      if response_msg.is_a?(Wechat::Message) && Wechat.config.have_session_class && request_msg[:InfoType].blank?
+        response_msg.save_session
+      end
 
       ActiveSupport::Notifications.instrument 'wechat.responder.after_create', request: request_msg, response: response_msg
     end

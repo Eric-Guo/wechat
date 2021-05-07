@@ -89,6 +89,7 @@ module Wechat
         resolve_config_file(config_file, Rails.env.to_s)
       else
         rails_config_file = ENV['WECHAT_CONF_FILE'] || File.join(Dir.getwd, 'config', 'wechat.yml')
+        puts rails_config_file
         application_config_file = File.join(Dir.getwd, 'config', 'application.yml')
         home_config_file = File.join(Dir.home, '.wechat.yml')
         if File.exist?(rails_config_file)

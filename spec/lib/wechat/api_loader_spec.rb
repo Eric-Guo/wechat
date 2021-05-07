@@ -61,7 +61,6 @@ RSpec.describe Wechat::ApiLoader do
 
       expect(Wechat.config(:component).component_appid).to eq 'component_appid'
       expect(Wechat.config(:component).encoding_aes_key).to eq 'component_encoding_aes_key'
-      expect(Wechat.config(:component).component_verify_ticket).to eq "C:/Users/[username]/component_verify_ticket"
     end
 
     it 'should create api for account' do

@@ -17,6 +17,10 @@ module Wechat
         verify_ticket
       end
 
+      def update(ticket_hash)
+        write_ticket_to_store(ticket_hash)
+      end
+
       protected
 
       def read_ticket_from_store
@@ -29,10 +33,9 @@ module Wechat
       end
 
       def write_ticket_to_store(ticket_hash)
-        raise InvalidCredentialError unless ticket_hash.is_a?(Hash) && ticket_hash['access_token']
-
+        raise InvalidCredentialError unless ticket_hash.is_a?(Hash) && ticket_hash['verify_ticket']
         ticket_hash['got_ticket_at'] = Time.now.to_i
-        ticket_hash['ticket_expires_in'] = ticket_hash.delete('expires_in')
+        ticket_hash['ticket_expires_in'] = 12.hours.to_i
         write_ticket(ticket_hash)
       end
 
@@ -41,7 +44,7 @@ module Wechat
       end
 
       def write_ticket(ticket_hash)
-        File.write(ticket_file, ticket_hash.to_json)
+        File.open(ticket_file, 'w') {|f| f.write(ticket_hash.to_json) }
       end
 
       def remain_life_seconds
