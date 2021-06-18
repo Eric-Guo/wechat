@@ -99,7 +99,7 @@ module Wechat
         form_file = file.is_a?(HTTP::FormData::File) ? file : HTTP::FormData::File.new(file)
         form_data = HTTP::FormData.create({ key: q_path,
                                             Signature: signature,
-                                            "x-cos-security-token": x_cos_security_token,
+                                            'x-cos-security-token': x_cos_security_token,
                                             'x-cos-meta-fileid': x_cos_meta_fileid,
                                             file: form_file })
         client.httprb.post(upload_url, form: form_data, ssl_context: client.ssl_context)
