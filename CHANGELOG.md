@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.13.3 (released at 6/18/2021)
+
+* material add video description by @zlei1 #301
+* Allow using http v5
+
 ## v0.13.2 (released at 4/21/2021)
 
 * New material_add_news API, by @zlei1 #300
