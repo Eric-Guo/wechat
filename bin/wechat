@@ -6,8 +6,6 @@ $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 require 'thor'
 require 'wechat'
 require 'json'
-require 'active_support/core_ext'
-require 'active_support/json'
 require 'fileutils'
 require 'yaml'
 require 'cgi'
