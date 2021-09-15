@@ -794,6 +794,18 @@ class WechatsController < ActionController::Base
     request.reply.success # request is XML result hash.
   end
 
+  # 客户同意进行聊天内容存档事件回调
+  on :change_external_contact do |request|
+    # https://open.work.weixin.qq.com/api/doc/90000/90135/92005
+    request.reply.success # request is XML result hash.
+  end
+
+  # 会话事件回调
+  on :msgaudit_notify do |request|
+    # https://open.work.weixin.qq.com/api/doc/90000/90135/95039
+    request.reply.success # request is XML result hash.
+  end
+
   # 当无任何 responder 处理用户信息时,使用这个 responder 处理
   on :fallback, respond: 'fallback message'
 end

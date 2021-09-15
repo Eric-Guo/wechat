@@ -188,5 +188,21 @@ module Wechat
     def custom_message_send(message)
       post 'message/send', message.is_a?(Wechat::Message) ? message.agent_id(agentid).to_json : JSON.generate(message.merge(agent_id: agentid)), content_type: :json
     end
+
+    def msgaudit_get_permit_user_list(type = nil)
+      post 'msgaudit/get_permit_user_list', JSON.generate(type: type)
+    end
+
+    def msgaudit_check_single_agree(info)
+      post 'msgaudit/get_permit_user_list', JSON.generate(info: info)
+    end
+
+    def msgaudit_check_room_agree(roomid)
+      post 'msgaudit/check_room_agree', JSON.generate(roomid: roomid)
+    end
+
+    def msgaudit_groupchat(roomid)
+      post 'msgaudit/groupchat/get', JSON.generate(roomid: roomid)
+    end
   end
 end

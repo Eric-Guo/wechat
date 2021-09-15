@@ -50,6 +50,10 @@ module Wechat
           user_defined_location_responders << config
         when :label_location
           user_defined_label_location_responders << config
+        when :change_external_contact
+          user_defined_change_external_contact_responders << config
+        when :msgaudit_notify
+          user_defined_msgaudit_notify_responders << config
         else
           user_defined_responders(message_type) << config
         end
@@ -84,6 +88,14 @@ module Wechat
         @user_defined_label_location_responders ||= []
       end
 
+      def user_defined_change_external_contact_responders
+        @user_defined_change_external_contact_responders ||= []
+      end
+
+      def user_defined_msgaudit_notify_responders
+        @user_defined_msgaudit_notify_responders ||= []
+      end
+
       def user_defined_responders(type)
         @responders ||= {}
         @responders[type] ||= []
@@ -109,6 +121,10 @@ module Wechat
             yield(* user_defined_batch_job_responders(message[:BatchJob][:JobType]), message[:BatchJob])
           elsif message[:Event] == 'location'
             yield(* user_defined_location_responders, message)
+          elsif message[:Event] == 'change_external_contact'
+            yield(* user_defined_change_external_contact_responders, message)
+          elsif message[:Event] == 'msgaudit_notify'
+            yield(* user_defined_msgaudit_notify_responders, message)
           else
             yield(* match_responders(responders, message[:Event]))
           end

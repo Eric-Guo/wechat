@@ -828,6 +828,18 @@ class WechatsController < ActionController::Base
     request.reply.success # request is XML result hash.
   end
 
+  # The customer agrees to call back the chat content archive event
+  on :change_external_contact do |request|
+    # https://open.work.weixin.qq.com/api/doc/90000/90135/92005
+    request.reply.success # request is XML result hash.
+  end
+
+  # Session event callback
+  on :msgaudit_notify do |request|
+    # https://open.work.weixin.qq.com/api/doc/90000/90135/95039
+    request.reply.success # request is XML result hash.
+  end
+
   # If no match above will fallback to below
   on :fallback, respond: 'fallback message'
 end
