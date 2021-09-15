@@ -1,20 +1,25 @@
 # Changelog
 
-## v0.13.3 (released at 6/18/2021)
+## v0.14.0 (released at 2021-09-15)
+
+* Add beta support for Conversation archive in WeCom, discuss at #303
+* Avoid using 1.hour in early loading to improve Rails 6+ compatibility.
+
+## v0.13.3 (released at 2021-06-18)
 
 * material add video description by @zlei1 #301
 * Allow using http v5
 
-## v0.13.2 (released at 4/21/2021)
+## v0.13.2 (released at 2021-04-21)
 
 * New material_add_news API, by @zlei1 #300
 * Support open_tag, by @xiajian2019 #299
 
-## v0.13.1 (released at 3/15/2021)
+## v0.13.1 (released at 2021-03-15)
 
 * Fix MpApi initialize bug, by @hardywu #296
 
-## v0.13.0 (released at 3/3/2021)
+## v0.13.0 (released at 2021-03-03)
 
 * Support zeitwerk only and Rails 6+ only.
 * Support Ruby 2.6+ only.
