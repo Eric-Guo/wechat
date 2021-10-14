@@ -60,7 +60,7 @@ module Wechat
       configs.each do |_, cfg|
         cfg[:timeout] ||= 20
         cfg[:qcloud_token_lifespan] ||= 7200
-        cfg[:have_session_class] = class_exists?('WechatSession')
+        cfg[:have_session_class] ||= class_exists?('WechatSession')
         cfg[:oauth2_cookie_duration] ||= 3600 # 1 hour
       end
 
