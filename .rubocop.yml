@@ -44,5 +44,8 @@ Metrics/CyclomaticComplexity:
 Style/AsciiComments:
   Enabled: false
 
+Style/OpenStructUse:
+  Enabled: false
+
 Metrics/BlockNesting:
   Max: 4
