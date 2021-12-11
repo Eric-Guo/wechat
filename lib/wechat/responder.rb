@@ -187,7 +187,7 @@ module Wechat
     end
 
     def create
-      request_msg = Wechat::Message.from_hash(post_xml)
+      request_msg = Wechat::Message.from_hash(post_body)
       response_msg = run_responder(request_msg)
 
       if response_msg.respond_to? :to_xml
@@ -227,6 +227,18 @@ module Wechat
                                                                                  params[:timestamp],
                                                                                  params[:nonce],
                                                                                  msg_encrypt)
+    end
+
+    def post_body
+      if request.content_type == "application/json"
+        data_hash = params
+        data_hash = data_hash.to_unsafe_hash if data_hash.instance_of?(ActionController::Parameters)
+        HashWithIndifferentAccess.new(data_hash).tap do |msg|
+          msg[:Event]&.downcase!
+        end
+      else
+        post_xml
+      end
     end
 
     def post_xml
