@@ -232,6 +232,12 @@ module Wechat
     def post_body
       if request.content_type == "application/json"
         data_hash = params
+
+        if @we_encrypt_mode && data['Encrypt'].present?
+          content, @we_app_id = unpack(decrypt(Base64.decode64(data['Encrypt']), @we_encoding_aes_key))
+          data_hash = content
+        end
+
         data_hash = data_hash.to_unsafe_hash if data_hash.instance_of?(ActionController::Parameters)
         HashWithIndifferentAccess.new(data_hash).tap do |msg|
           msg[:Event]&.downcase!
