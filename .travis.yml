@@ -8,9 +8,8 @@ env:
 sudo: false
 
 rvm:
-  - 2.6.8
-  - 2.7.4
-  - 3.0.2
+  - 2.7.5
+  - 3.0.3
 
 bundler_args: --jobs=3 --retry=3
 
