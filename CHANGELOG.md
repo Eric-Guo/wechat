@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.15.0 (released at 2021-12-15)
+
+* Add wechat message json format support, by @younthu #306
+* Support Rails 7 in this version.
+
 ## v0.14.0 (released at 2021-09-15)
 
 * Add beta support for Conversation archive in WeCom, discuss at #303
