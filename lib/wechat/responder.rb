@@ -230,7 +230,7 @@ module Wechat
     end
 
     def post_body
-      if request.media_type == "application/json"
+      if request.media_type == 'application/json'
         data_hash = params
 
         if @we_encrypt_mode && data['Encrypt'].present?
