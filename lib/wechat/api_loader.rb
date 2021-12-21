@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/core_ext/object/blank'
+
 module Wechat
   module ApiLoader
     def self.with(options)
@@ -42,11 +44,11 @@ module Wechat
       configs = config_from_file || config_from_environment
       configs.merge!(config_from_db)
 
-      configs.symbolize_keys!
+      configs.transform_keys! { |key| key.to_sym rescue key }
       configs.each do |key, cfg|
         raise "wrong wechat configuration format for #{key}" unless cfg.is_a?(Hash)
 
-        cfg.symbolize_keys!
+        cfg.transform_keys! { |key| key.to_sym rescue key }
       end
 
       if defined?(::Rails)
@@ -84,6 +86,7 @@ module Wechat
         config_file = ENV['WECHAT_CONF_FILE'] || Rails.root.join('config', 'wechat.yml')
         resolve_config_file(config_file, Rails.env.to_s)
       else
+        require 'erb'
         rails_config_file = ENV['WECHAT_CONF_FILE'] || File.join(Dir.getwd, 'config', 'wechat.yml')
         application_config_file = File.join(Dir.getwd, 'config', 'application.yml')
         home_config_file = File.join(Dir.home, '.wechat.yml')
