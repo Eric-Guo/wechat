@@ -232,7 +232,7 @@ class App < Thor
 
     desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'
     def media_uploadnews(mpnews_yaml_path)
-      mpnew = YAML.load(File.read(mpnews_yaml_path), aliases: true)
+      mpnew = Wechat::ApiLoader.load_yaml(File.read(mpnews_yaml_path))
       puts wechat_api.media_uploadnews(Wechat::Message.new(MsgType: 'uploadnews').mpnews(mpnew[:articles]))
     end
 
@@ -349,13 +349,13 @@ class App < Thor
 
   desc 'menu_create [MENU_YAML_PATH]', '创建菜单'
   def menu_create(menu_yaml_path)
-    menu = YAML.load(File.read(menu_yaml_path), aliases: true)
+    menu = Wechat::ApiLoader.load_yaml(File.read(menu_yaml_path))
     puts 'Menu created' if wechat_api.menu_create(menu)
   end
 
   desc 'menu_addconditional [CONDITIONAL_MENU_YAML_PATH]', '创建个性化菜单'
   def menu_addconditional(conditional_menu_yaml_path)
-    conditional_menu = YAML.load(File.read(conditional_menu_yaml_path), aliases: true)
+    conditional_menu = Wechat::ApiLoader.load_yaml(File.read(conditional_menu_yaml_path))
     add_result = wechat_api.menu_addconditional(conditional_menu)
     puts "Conditional menu created: #{add_result}" if add_result
   end
@@ -408,7 +408,7 @@ class App < Thor
 
   desc 'material_add_news [MPNEWS_YAML_PATH]', '永久图文素材上传'
   def material_add_news(mpnews_yaml_path)
-    new = YAML.load(File.read(mpnews_yaml_path), aliases: true)
+    new = Wechat::ApiLoader.load_yaml(File.read(mpnews_yaml_path))
     puts wechat_api.material_add_news(Wechat::Message.new(MsgType: 'mpnews').mpnews(new['articles']))
   end
 
@@ -479,13 +479,13 @@ class App < Thor
 
   desc 'custom_news [OPENID, NEWS_YAML_PATH]', '发送图文客服消息'
   def custom_news(openid, news_yaml_path)
-    articles = YAML.load(File.read(news_yaml_path), aliases: true)
+    articles = Wechat::ApiLoader.load_yaml(File.read(news_yaml_path))
     puts wechat_api.custom_message_send Wechat::Message.to(openid).news(articles['articles'])
   end
 
   desc 'template_message [OPENID, TEMPLATE_YAML_PATH]', '模板消息接口'
   def template_message(openid, template_yaml_path)
-    template = YAML.load(File.read(template_yaml_path), aliases: true)
+    template = Wechat::ApiLoader.load_yaml(File.read(template_yaml_path))
     puts wechat_api.template_message_send Wechat::Message.to(openid).template(template['template'])
   end
 

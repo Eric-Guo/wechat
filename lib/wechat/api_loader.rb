@@ -40,6 +40,10 @@ module Wechat
       @configs = loading_config!
     end
 
+    def self.load_yaml(result)
+      YAML.respond_to?(:unsafe_load) ? YAML.unsafe_load(result) : YAML.load(result)
+    end
+
     private_class_method def self.loading_config!
       configs = config_from_file || config_from_environment
       configs.merge!(config_from_db)
@@ -157,10 +161,6 @@ module Wechat
       klass.is_a?(Class)
     rescue NameError
       false
-    end
-
-    private_class_method def self.load_yaml(result)
-      YAML.respond_to?(:unsafe_load) ? YAML.unsafe_load(result) : YAML.load(result)
     end
   end
 end
