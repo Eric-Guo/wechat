@@ -110,9 +110,7 @@ module Wechat
       return unless File.exist?(config_file)
 
       begin
-        # rubocop:disable Security/YAMLLoad
-        raw_data = YAML.load(ERB.new(File.read(config_file)).result, aliases: true)
-        # rubocop:enable Security/YAMLLoad
+        raw_data = load_yaml(ERB.new(File.read(config_file)).result)
       rescue NameError
         puts "WARNING: If using 'Rails.application.credentials.wechat_secret!' in wechat.yml, you need run in 'rails c' and access via 'Wechat.api' or gem 'figaro' instead."
       end
@@ -159,6 +157,10 @@ module Wechat
       klass.is_a?(Class)
     rescue NameError
       false
+    end
+
+    private_class_method def self.load_yaml(result)
+      YAML.respond_to?(:unsafe_load) ? YAML.unsafe_load(result) : YAML.load(result)
     end
   end
 end
