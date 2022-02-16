@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15.1 (released at 2022-02-16)
+
+* fix "Psych::BadAlias (Unknown alias: default)" in ruby 3.1.0 #309, reported by @otorain
+
 ## v0.15.0 (released at 2021-12-21)
 
 * Add wechat message json format support, by @younthu #306
