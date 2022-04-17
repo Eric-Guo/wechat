@@ -402,7 +402,7 @@ RSpec.describe Wechat::Message do
                                                         data: {
                                                           first: { value: '恭喜你购买成功！' },
                                                           orderProductName: { value: '巧克力' },
-                                                          orderMoneySum: { value: '39.8元' },
+                                                          orderMoneySum: { value: '39.8 元' },
                                                           Remark: { value: '欢迎再次购买！' }
                                                         })
 
@@ -413,7 +413,7 @@ RSpec.describe Wechat::Message do
           data: {
             first: { value: '恭喜你购买成功！' },
             orderProductName: { value: '巧克力' },
-            orderMoneySum: { value: '39.8元' },
+            orderMoneySum: { value: '39.8 元' },
             Remark: { value: '欢迎再次购买！' }
           }
         }.to_json)
@@ -428,7 +428,7 @@ RSpec.describe Wechat::Message do
                                                         data: {
                                                             first: { value: '恭喜你购买成功！' },
                                                             orderProductName: { value: '巧克力' },
-                                                            orderMoneySum: { value: '39.8元' },
+                                                            orderMoneySum: { value: '39.8 元' },
                                                             Remark: { value: '欢迎再次购买！' }
                                                         })
 
@@ -442,7 +442,7 @@ RSpec.describe Wechat::Message do
                                        data: {
                                            first: { value: '恭喜你购买成功！' },
                                            orderProductName: { value: '巧克力' },
-                                           orderMoneySum: { value: '39.8元' },
+                                           orderMoneySum: { value: '39.8 元' },
                                            Remark: { value: '欢迎再次购买！' }
                                        }}.to_json)
       end
