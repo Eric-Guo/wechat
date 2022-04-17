@@ -23,7 +23,7 @@ RSpec.describe Wechat::CorpApi do
       agent_list_result = { errcode: 0, errmsg: 'ok',
                             agentlist: [{ agentid: '5', name: '企业小助手',
                                           square_logo_url: 'url', round_logo_url: 'url' },
-                                        { agentid: '8', name: 'HR小助手',
+                                        { agentid: '8', name: 'HR 小助手',
                                           square_logo_url: 'url', round_logo_url: 'url' }] }
       expect(subject.client).to receive(:get)
         .with('agent/list', params: { access_token: 'access_token' }).and_return(agent_list_result)

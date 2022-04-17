@@ -21,9 +21,9 @@ RSpec.describe Wechat::MpApi do
                   page: 'index',
                   form_id: 'FORMID',
                   data: { keyword1: { value: '339208499' },
-                          keyword2: { value: '2015年01月05日 12:30' },
+                          keyword2: { value: '2015 年 01 月 05 日 12:30' },
                           keyword3: { value: '粤海喜来登酒店' },
-                          keyword4: { value: '广州市天河区天河路208号' } },
+                          keyword4: { value: '广州市天河区天河路 208 号' } },
                   emphasis_keyword: 'keyword1.DATA' }
       response_result = { errcode: 0, errmsg: 'ok' }
 
@@ -66,8 +66,8 @@ RSpec.describe Wechat::MpApi do
         id: 'AT0002',
         title: '购买成功通知',
         keyword_list: [
-          { keyword_id: 3, name: '购买地点', example: 'TIT造舰厂' },
-          { keyword_id: 4, name: '购买时间', example: '2016年6月6日' },
+          { keyword_id: 3, name: '购买地点', example: 'TIT 造舰厂' },
+          { keyword_id: 4, name: '购买时间', example: '2016 年 6 月 6 日' },
           { keyword_id: 5, name: '物品名称', example: '咖啡' }
         ]
       }
@@ -104,7 +104,7 @@ RSpec.describe Wechat::MpApi do
         list: [{ template_id: 'wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc',
                  title: '购买成功通知',
                  content: "购买地点{{keyword1.DATA}}\n购买时间{{keyword2.DATA}}\n物品名称{{keyword3.DATA}}\n",
-                 example: "购买地点：TIT造舰厂\n购买时间：2016年6月6日\n物品名称：咖啡\n" }]
+                 example: "购买地点：TIT 造舰厂\n购买时间：2016 年 6 月 6 日\n物品名称：咖啡\n" }]
       }
 
       expect(subject.client).to receive(:post)
@@ -137,9 +137,9 @@ RSpec.describe Wechat::MpApi do
                   page: 'index',
                   data: {
                     number01: { value: "339208499" },
-                    date01: { value: "2015年01月05日" },
+                    date01: { value: "2015 年 01 月 05 日" },
                     thing01: { value: "粤海喜来登酒店" },
-                    thing02: { value: "广州市天河区天河路208号" }
+                    thing02: { value: "广州市天河区天河路 208 号" }
                   }
                 }
       response_result = { errcode: 0, errmsg: 'ok' }

@@ -381,8 +381,8 @@ Feel safe if you can not read Chinese in the comments, it's kept there in order 
 ```
 $ wechat
 Wechat Public Account commands:
-  wechat addvoicetorecofortext [VOICE_ID]                       # AI开放接口-提交语音
-  wechat callbackip                                             # 获取微信服务器IP地址
+  wechat addvoicetorecofortext [VOICE_ID]                       # AI 开放接口 - 提交语音
+  wechat callbackip                                             # 获取微信服务器 IP 地址
   wechat clear_quota                                            # 接口调用次数清零
   wechat custom_image [OPENID, IMAGE_PATH]                      # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]       # 发送音乐客服消息
@@ -417,8 +417,8 @@ Wechat Public Account commands:
   wechat message_mass_preview [WX_NAME, MPNEWS_MEDIA_ID]        # 预览图文消息素材
   wechat qrcode_create_limit_scene [SCENE_ID_OR_STR]            # 请求永久二维码
   wechat qrcode_create_scene [SCENE_ID_OR_STR, EXPIRE_SECONDS]  # 请求临时二维码
-  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]             # 通过ticket下载二维码
-  wechat queryrecoresultfortext [VOICE_ID]                      # AI开放接口-获取语音识别结果
+  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]             # 通过 ticket 下载二维码
+  wechat queryrecoresultfortext [VOICE_ID]                      # AI 开放接口 - 获取语音识别结果
   wechat shorturl [LONG_URL]                                    # 长链接转短链接
   wechat tag [TAGID]                                            # 获取标签下粉丝列表
   wechat tag_add_user [TAG_ID, OPEN_IDS]                        # 批量为用户打标签
@@ -428,7 +428,7 @@ Wechat Public Account commands:
   wechat tag_update [TAG_ID, TAGNAME]                           # 更新标签名字
   wechat tags                                                   # 获取所有标签
   wechat template_message [OPENID, TEMPLATE_YAML_PATH]          # 模板消息接口
-  wechat translatecontent [CONTENT]                             # AI开放接口-微信翻译
+  wechat translatecontent [CONTENT]                             # AI 开放接口 - 微信翻译
   wechat user [OPEN_ID]                                         # 获取用户基本信息
   wechat user_batchget [OPEN_ID_LIST]                           # 批量获取用户基本信息
   wechat user_change_group [OPEN_ID, TO_GROUP_ID]               # 移动用户分组
@@ -450,10 +450,10 @@ Wechat Enterprise Account commands:
   wechat batch_replaceparty [BATCH_PARTY_CSV_MEDIA_ID]     # 全量覆盖部门
   wechat batch_replaceuser [BATCH_USER_CSV_MEDIA_ID]       # 全量覆盖成员
   wechat batch_syncuser [SYNC_USER_CSV_MEDIA_ID]           # 增量更新成员
-  wechat callbackip                                        # 获取微信服务器IP地址
+  wechat callbackip                                        # 获取微信服务器 IP 地址
   wechat clear_quota                                       # 接口调用次数清零
-  wechat convert_to_openid [USER_ID]                       # userid转换成openid
-  wechat convert_to_userid [OPENID]                        # openid转换成userid
+  wechat convert_to_openid [USER_ID]                       # userid 转换成 openid
+  wechat convert_to_userid [OPENID]                        # openid 转换成 userid
   wechat custom_image [OPENID, IMAGE_PATH]                 # 发送图片客服消息
   wechat custom_music [OPENID, THUMBNAIL_PATH, MUSIC_URL]  # 发送音乐客服消息
   wechat custom_news [OPENID, NEWS_YAML_PATH]              # 发送图文客服消息
@@ -483,7 +483,7 @@ Wechat Enterprise Account commands:
   wechat menu_delete                                       # 删除菜单
   wechat menu_trymatch [USER_ID]                           # 测试个性化菜单匹配结果
   wechat message_send [OPENID, TEXT_MESSAGE]               # 发送文字消息
-  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过ticket下载二维码
+  wechat qrcode_download [TICKET, QR_CODE_PIC_PATH]        # 通过 ticket 下载二维码
   wechat tag [TAG_ID]                                      # 获取标签成员
   wechat tag_add_department [TAG_ID, PARTY_IDS]            # 增加标签部门
   wechat tag_add_user [TAG_ID, USER_IDS]                   # 增加标签成员
@@ -592,7 +592,7 @@ Sending custom_news should also be defined as a yaml file, like `articles.yml`
 articles:
  -
   title: "习近平在布鲁日欧洲学院演讲"
-  description: "新华网比利时布鲁日4月1日电 国家主席习近平1日在比利时布鲁日欧洲学院发表重要演讲"
+  description: "新华网比利时布鲁日 4 月 1 日电 国家主席习近平 1 日在比利时布鲁日欧洲学院发表重要演讲"
   url: "http://news.sina.com.cn/c/2014-04-01/232629843387.shtml"
   pic_url: "http://i3.sinaimg.cn/dy/c/2014-04-01/1396366518_bYays1.jpg"
 ```

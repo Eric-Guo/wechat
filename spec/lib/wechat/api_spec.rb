@@ -330,7 +330,7 @@ RSpec.describe Wechat::Api do
     msg_sec_check_result = { errcode: 87014, errmsg: 'risky content' }
 
     specify 'will post wxa_msg_sec_check with risky content' do
-      risky_content = '特3456书yuuo莞6543李zxcz蒜7782法fgnv级'
+      risky_content = '特 3456 书 yuuo 莞 6543 李 zxcz 蒜 7782 法 fgnv 级'
       expect(subject.client).to receive(:post)
         .with('msg_sec_check', JSON.generate(content: risky_content),
               params: { access_token: 'access_token' }, base: Wechat::Api::WXA_BASE).and_return(msg_sec_check_result)
@@ -606,8 +606,8 @@ RSpec.describe Wechat::Api do
                   topcolor: '#FF0000',
                   data: { first: { value: '恭喜你购买成功！', color: '#173177' },
                           keynote1: { value: '巧克力', color: '#173177' },
-                          keynote2: { value: '39.8元', color: '#173177' },
-                          keynote3: { value: '2014年9月16日', color: '#173177' },
+                          keynote2: { value: '39.8 元', color: '#173177' },
+                          keynote3: { value: '2014 年 9 月 16 日', color: '#173177' },
                           remark: { value: '欢迎再次购买！', color: '#173177' } } }
       response_result = { errcode: 0, errmsg: 'ok', msgid: 332 }
 
@@ -814,10 +814,10 @@ RSpec.describe Wechat::Api do
         template_list: [{
           template_id: 'iPk5sOIt5X_flOVKn5GrTFpncEYTojx6ddbt8WYoV5s',
           title: '领取奖金提醒',
-          primary_industry: 'IT科技',
-          deputy_industry: '互联网|电子商务',
+          primary_industry: 'IT 科技',
+          deputy_industry: '互联网 | 电子商务',
           content: "{ {result.DATA} }\n\n领奖金额:{ {withdrawMoney.DATA} }\n领奖  时间:{ {withdrawTime.DATA} }\n银行信息:{ {cardInfo.DATA} }\n到账时间:  { {arrivedTime.DATA} }\n{ {remark.DATA} }",
-          example: "您已提交领奖申请\n\n领奖金额：xxxx元\n领奖时间：2013-10-10 12:22:22\n银行信息：xx银行(尾号xxxx)\n到账时间：预计xxxxxxx\n\n预计将于xxxx到达您的银行卡"
+          example: "您已提交领奖申请\n\n领奖金额：xxxx 元\n领奖时间：2013-10-10 12:22:22\n银行信息：xx 银行 (尾号 xxxx)\n到账时间：预计 xxxxxxx\n\n预计将于 xxxx 到达您的银行卡"
         }]
       }
 
