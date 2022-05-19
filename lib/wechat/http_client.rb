@@ -13,6 +13,9 @@ module Wechat
                 else
                   HTTP.timeout(:global, write: timeout, connect: timeout, read: timeout)
                 end
+
+      @httprb = @httprb.via(ENV['WECHAT_PROXY_URL'], ENV['WECHAT_PROXY_PORT'].to_i, ENV['WECHAT_PROXY_USERNAME'], ENV['WECHAT_PROXY_PASSWORD']) if ENV['WECHAT_PROXY_URL']
+
       @ssl_context = OpenSSL::SSL::SSLContext.new
       @ssl_context.ssl_version = 'TLSv1_2'
       @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE if skip_verify_ssl
