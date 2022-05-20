@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.5 (released at 5/20/2021)
+
+* Add environment variable for configuring http proxy to ignore IP address changes everytime after app deployment, by @Awlter #312
+
 ## v0.12.4 (released at 4/21/2021)
 
 * New material_add_news API, by @zlei1 #300
