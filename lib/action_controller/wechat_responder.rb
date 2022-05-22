@@ -38,7 +38,6 @@ module ActionController
       self.trusted_domain_fullname = opts[:trusted_domain_fullname] || cfg.trusted_domain_fullname
       self.oauth2_cookie_duration = opts[:oauth2_cookie_duration] || cfg.oauth2_cookie_duration.to_i.seconds
       self.timeout = opts[:timeout] || cfg.timeout
-      self.qcloud_token_lifespan = opts[:qcloud_token_lifespan] || cfg.qcloud_token_lifespan
       self.skip_verify_ssl = opts.key?(:skip_verify_ssl) ? opts[:skip_verify_ssl] : cfg.skip_verify_ssl
 
       return Wechat.api if account == :default && opts.empty?
@@ -47,6 +46,7 @@ module ActionController
       jsapi_ticket = opts[:jsapi_ticket] || cfg.jsapi_ticket
       qcloud_env = opts[:qcloud_env] || cfg.qcloud_env
       qcloud_token = opts[:qcloud_token] || cfg.qcloud_token
+      qcloud_token_lifespan = opts[:qcloud_token_lifespan] || cfg.qcloud_token_lifespan
 
       api_type = opts[:type] || cfg.type
       secret = corpid.present? ? opts[:corpsecret] || cfg.corpsecret : opts[:secret] || cfg.secret
