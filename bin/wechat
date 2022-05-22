@@ -556,6 +556,10 @@ class App < Thor
   def clear_quota
     puts wechat_api.clear_quota
   end
+
+  def self.exit_on_failure?
+    true
+  end
 end
 
 App.start
