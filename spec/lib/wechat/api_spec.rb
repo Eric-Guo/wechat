@@ -5,7 +5,8 @@ RSpec.describe Wechat::Api do
   let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket') }
 
   subject do
-    Wechat::Api.new('appid', 'secret', token_file, 20, false, jsapi_ticket_file)
+    network_setting = Wechat::NetworkSetting.new(20, false)
+    Wechat::Api.new('appid', 'secret', token_file, network_setting, jsapi_ticket_file)
   end
 
   before :each do

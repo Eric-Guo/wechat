@@ -2,9 +2,9 @@
 
 module Wechat
   class MpApi < ApiBase
-    def initialize(appid, secret, token_file, timeout, skip_verify_ssl, jsapi_ticket_file, qcloud_setting)
+    def initialize(appid, secret, token_file, network_setting, jsapi_ticket_file, qcloud_setting)
       super()
-      @client = HttpClient.new(Wechat::Api::API_BASE, timeout, skip_verify_ssl)
+      @client = HttpClient.new(Wechat::Api::API_BASE, network_setting)
       @access_token = Token::PublicAccessToken.new(@client, appid, secret, token_file)
       @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
       @qcloud = Qcloud::Token.new(@client, @access_token, qcloud_setting)

@@ -4,9 +4,9 @@ module Wechat
   class CorpApi < ApiBase
     attr_reader :agentid
 
-    def initialize(appid, secret, token_file, agentid, timeout, skip_verify_ssl, jsapi_ticket_file)
+    def initialize(appid, secret, token_file, agentid, network_setting, jsapi_ticket_file)
       super()
-      @client = HttpClient.new(QYAPI_BASE, timeout, skip_verify_ssl)
+      @client = HttpClient.new(QYAPI_BASE, network_setting)
       @access_token = Token::CorpAccessToken.new(@client, appid, secret, token_file)
       @agentid = agentid
       @jsapi_ticket = Ticket::CorpJsapiTicket.new(@client, @access_token, jsapi_ticket_file)

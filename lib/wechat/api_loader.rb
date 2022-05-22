@@ -12,18 +12,19 @@ module Wechat
       js_token_file = options[:js_token_file] || c.jsapi_ticket.presence || '/var/tmp/wechat_jsapi_ticket'
       type = options[:type] || c.type
 
+      network_setting = Wechat::NetworkSetting.new(c.timeout, c.skip_verify_ssl)
       if c.appid && c.secret && token_file.present?
         if type == 'mp'
           qcloud_env = options[:qcloud_env] || c.qcloud_env
           qcloud_token_file = options[:qcloud_token_file] || c.qcloud_token_file.presence || '/var/tmp/qcloud_access_token'
           qcloud_token_lifespan = options[:qcloud_token_lifespan] || c.qcloud_token_lifespan
           qcloud_setting = Wechat::Qcloud::Setting.new(qcloud_env, qcloud_token_file, qcloud_token_lifespan)
-          Wechat::MpApi.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_setting)
+          Wechat::MpApi.new(c.appid, c.secret, token_file, network_setting, js_token_file, qcloud_setting)
         else
-          Wechat::Api.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
+          Wechat::Api.new(c.appid, c.secret, token_file, network_setting, js_token_file)
         end
       elsif c.corpid && c.corpsecret && token_file.present?
-        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, c.timeout, c.skip_verify_ssl, js_token_file)
+        Wechat::CorpApi.new(c.corpid, c.corpsecret, token_file, c.agentid, network_setting, js_token_file)
       else
         raise 'Need create ~/.wechat.yml with wechat appid and secret or running at rails root folder so wechat can read config/wechat.yml'
       end

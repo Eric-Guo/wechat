@@ -51,17 +51,18 @@ module ActionController
       api_type = opts[:type] || cfg.type
       secret = corpid.present? ? opts[:corpsecret] || cfg.corpsecret : opts[:secret] || cfg.secret
 
+      network_setting = Wechat::NetworkSetting.new(timeout, skip_verify_ssl)
       qcloud_setting = Wechat::Qcloud::Setting.new(qcloud_env, qcloud_token, qcloud_token_lifespan)
-      get_wechat_api(api_type, corpid, appid, secret, access_token, agentid, timeout, skip_verify_ssl, jsapi_ticket, qcloud_setting)
+      get_wechat_api(api_type, corpid, appid, secret, access_token, agentid, network_setting, jsapi_ticket, qcloud_setting)
     end
 
-    def get_wechat_api(api_type, corpid, appid, secret, access_token, agentid, timeout, skip_verify_ssl, jsapi_ticket, qcloud_setting)
+    def get_wechat_api(api_type, corpid, appid, secret, access_token, agentid, network_setting, jsapi_ticket, qcloud_setting)
       if api_type && api_type.to_sym == :mp
-        Wechat::MpApi.new(appid, secret, access_token, timeout, skip_verify_ssl, jsapi_ticket, qcloud_setting)
+        Wechat::MpApi.new(appid, secret, access_token, network_setting, jsapi_ticket, qcloud_setting)
       elsif corpid.present?
-        Wechat::CorpApi.new(corpid, secret, access_token, agentid, timeout, skip_verify_ssl, jsapi_ticket)
+        Wechat::CorpApi.new(corpid, secret, access_token, agentid, network_setting, jsapi_ticket)
       else
-        Wechat::Api.new(appid, secret, access_token, timeout, skip_verify_ssl, jsapi_ticket)
+        Wechat::Api.new(appid, secret, access_token, network_setting, jsapi_ticket)
       end
     end
   end
