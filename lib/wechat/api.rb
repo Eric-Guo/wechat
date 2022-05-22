@@ -11,6 +11,7 @@ module Wechat
     end
 
     include Concern::Common
+    include Concern::Draft
 
     def template_message_send(message)
       post 'message/template/send', message.to_json, content_type: :json
