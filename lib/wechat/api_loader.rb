@@ -17,7 +17,8 @@ module Wechat
           qcloud_env = options[:qcloud_env] || c.qcloud_env
           qcloud_token_file = options[:qcloud_token_file] || c.qcloud_token_file.presence || '/var/tmp/qcloud_access_token'
           qcloud_token_lifespan = options[:qcloud_token_lifespan] || c.qcloud_token_lifespan
-          Wechat::MpApi.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_env, qcloud_token_file, qcloud_token_lifespan)
+          qcloud_setting = Wechat::Qcloud::Setting.new(qcloud_env, qcloud_token_file, qcloud_token_lifespan)
+          Wechat::MpApi.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file, qcloud_setting)
         else
           Wechat::Api.new(c.appid, c.secret, token_file, c.timeout, c.skip_verify_ssl, js_token_file)
         end
