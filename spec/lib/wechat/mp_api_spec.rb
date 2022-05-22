@@ -6,7 +6,7 @@ RSpec.describe Wechat::MpApi do
   let(:qcloud_token_file) { Rails.root.join('tmp/qcloud_token') }
 
   subject do
-    network_setting = Wechat::NetworkSetting.new(20, false)
+    network_setting = Wechat::NetworkSetting.new(20, false, nil, nil, nil, nil)
     Wechat::MpApi.new('appid', 'secret', token_file, network_setting, jsapi_ticket_file, Wechat::Qcloud::Setting.new('dev', qcloud_token_file, 7200))
   end
 

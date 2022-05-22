@@ -12,7 +12,7 @@ module Wechat
       js_token_file = options[:js_token_file] || c.jsapi_ticket.presence || '/var/tmp/wechat_jsapi_ticket'
       type = options[:type] || c.type
 
-      network_setting = Wechat::NetworkSetting.new(c.timeout, c.skip_verify_ssl)
+      network_setting = Wechat::NetworkSetting.new(c.timeout, c.skip_verify_ssl, c.proxy_url, c.proxy_port, c.proxy_username, c.proxy_password)
       if c.appid && c.secret && token_file.present?
         if type == 'mp'
           qcloud_env = options[:qcloud_env] || c.qcloud_env
@@ -149,6 +149,10 @@ module Wechat
                 encrypt_mode: ENV['WECHAT_ENCRYPT_MODE'],
                 timeout: ENV['WECHAT_TIMEOUT'],
                 skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
+                proxy_url: ENV['WECHAT_PROXY_URL'],
+                proxy_port: ENV['WECHAT_PROXY_PORT'],
+                proxy_username: ENV['WECHAT_PROXY_USERNAME'],
+                proxy_password: ENV['WECHAT_PROXY_PASSWORD'],
                 encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
                 jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'],
                 qcloud_env: ENV['WECHAT_QCLOUD_ENV'],
