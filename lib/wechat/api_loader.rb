@@ -58,10 +58,10 @@ module Wechat
       configs.each do |key, cfg|
         raise "wrong wechat configuration format for #{key}" unless cfg.is_a?(Hash)
 
-        cfg.transform_keys! do |key|
-          key.to_sym
+        cfg.transform_keys! do |sub_key|
+          sub_key.to_sym
         rescue StandardError
-          key
+          sub_key
         end
       end
 
