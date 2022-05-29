@@ -61,6 +61,43 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#draft_get' do
+    specify 'will post draft/get with access_token and media_id as payload at file based api endpoint as file' do
+      news_item_result = {
+        news_item: [
+          {
+            title: 'TITLE',
+            author: 'AUTHOR',
+            digest: 'DIGEST',
+            content: 'CONTENT',
+            content_source_url: 'CONTENT_SOURCE_URL',
+            thumb_media_id: 'THUMB_MEDIA_ID',
+            show_cover_pic: 0,
+            need_open_comment: 0,
+            only_fans_can_comment: 0,
+            url: 'URL'
+          },
+          # 多图文消息应有多段 news_item 结构
+        ]
+      }
+
+      expect(subject.client).to receive(:post)
+        .with('draft/get', { media_id: 'media_id' }.to_json, params: { access_token: 'access_token' }).and_return(news_item_result)
+      expect(subject.draft_get('media_id')).to eq(news_item_result)
+    end
+  end
+
+  describe '#draft_delete' do
+    specify 'will post draft/delete with access_token and media_id in payload' do
+      draft_delete_result = { errcode: 12321, errmsg: 'ERRMSG' }
+      payload = { media_id: 'media_id' }
+      expect(subject.client).to receive(:post)
+        .with('draft/delete', payload.to_json,
+              params: { access_token: 'access_token' }).and_return(draft_delete_result)
+      expect(subject.draft_delete('media_id')).to eq draft_delete_result
+    end
+  end
+
   describe '#draft_count' do
     specify 'will get draft_count' do
       draft_count_result = { total_count: 1 }
