@@ -52,6 +52,14 @@ module Wechat
       end
     end
 
+    class DraftArticleBuilder < ArticleBuilder
+      def item(title:, content:, thumb_media_id:, author: nil, digest: nil, content_source_url: nil, need_open_comment: 0, only_fans_can_comment: 0)
+        items << { title: title, author: author, digest: digest, content: content,
+                   content_source_url: content_source_url, thumb_media_id: thumb_media_id,
+                   need_open_comment: need_open_comment, only_fans_can_comment: only_fans_can_comment }.compact
+      end
+    end
+
     attr_reader :message_hash
 
     def initialize(message_hash)
@@ -203,6 +211,18 @@ module Wechat
       update(MsgType: 'template', Template: template_fields)
     end
 
+    def draft_news(collection, &_block)
+      items = if block_given?
+                article = DraftArticleBuilder.new
+                collection.take(8).each_with_index { |item, index| yield(article, item, index) }
+                article.items
+              else
+                collection
+              end
+
+      update(MsgType: 'draft_news', Articles: items)
+    end
+
     def to_xml
       ws = message_hash.delete(:WechatSession)
       xml = message_hash.to_xml(root: 'xml', children: 'item', skip_instruct: true, skip_types: true)
@@ -244,6 +264,8 @@ module Wechat
         json_hash['news'] = { 'articles' => json_hash.delete('articles') }
       when 'mpnews'
         json_hash = { 'articles' => json_hash['articles'] }
+      when 'draft_news'
+        json_hash = json_hash['articles']
       when 'ref_mpnews'
         json_hash['msgtype'] = 'mpnews'
         json_hash.delete('articles')
