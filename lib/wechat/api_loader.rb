@@ -43,18 +43,26 @@ module Wechat
     end
 
     def self.load_yaml(result)
-      YAML.respond_to?(:unsafe_load) ? YAML.unsafe_load(result) : YAML.load(result)
+      YAML.respond_to?(:unsafe_load) ? YAML.unsafe_load(result) : YAML.safe_load(result)
     end
 
     private_class_method def self.loading_config!
       configs = config_from_file || config_from_environment
       configs.merge!(config_from_db)
 
-      configs.transform_keys! { |key| key.to_sym rescue key }
+      configs.transform_keys! do |key|
+        key.to_sym
+      rescue StandardError
+        key
+      end
       configs.each do |key, cfg|
         raise "wrong wechat configuration format for #{key}" unless cfg.is_a?(Hash)
 
-        cfg.transform_keys! { |key| key.to_sym rescue key }
+        cfg.transform_keys! do |key|
+          key.to_sym
+        rescue StandardError
+          key
+        end
       end
 
       if defined?(::Rails)
@@ -83,28 +91,28 @@ module Wechat
     private_class_method def self.config_from_db
       return {} unless class_exists?('WechatConfig')
 
-      environment = defined?(::Rails) ? Rails.env.to_s : ENV['RAILS_ENV'] || 'development'
+      environment = defined?(::Rails) ? Rails.env.to_s : ENV.fetch('RAILS_ENV', 'development')
       WechatConfig.get_all_configs(environment)
     end
 
     private_class_method def self.config_from_file
       if defined?(::Rails)
-        config_file = ENV['WECHAT_CONF_FILE'] || Rails.root.join('config', 'wechat.yml')
+        config_file = ENV.fetch('WECHAT_CONF_FILE') { Rails.root.join('config', 'wechat.yml') }
         resolve_config_file(config_file, Rails.env.to_s)
       else
         require 'erb'
-        rails_config_file = ENV['WECHAT_CONF_FILE'] || File.join(Dir.getwd, 'config', 'wechat.yml')
+        rails_config_file = ENV.fetch('WECHAT_CONF_FILE') { File.join(Dir.getwd, 'config', 'wechat.yml') }
         application_config_file = File.join(Dir.getwd, 'config', 'application.yml')
         home_config_file = File.join(Dir.home, '.wechat.yml')
         if File.exist?(rails_config_file)
-          rails_env = ENV['RAILS_ENV'] || 'development'
+          rails_env = ENV.fetch('RAILS_ENV', 'development')
           if File.exist?(application_config_file) && !defined?(::Figaro)
             require 'figaro'
             Figaro::Application.new(path: application_config_file, environment: rails_env).load
           end
           config = resolve_config_file(rails_config_file, rails_env)
           if config.present? && (default = config[:default]) && (default['appid'] || default['corpid'])
-            puts "Using rails project #{ENV['WECHAT_CONF_FILE'] || 'config/wechat.yml'} #{rails_env} setting..."
+            puts "Using rails project #{ENV.fetch('WECHAT_CONF_FILE', 'config/wechat.yml')} #{rails_env} setting..."
             return config
           end
         end
@@ -139,26 +147,26 @@ module Wechat
     end
 
     private_class_method def self.config_from_environment
-      value = { appid: ENV['WECHAT_APPID'],
-                secret: ENV['WECHAT_SECRET'],
-                corpid: ENV['WECHAT_CORPID'],
-                corpsecret: ENV['WECHAT_CORPSECRET'],
-                agentid: ENV['WECHAT_AGENTID'],
-                token: ENV['WECHAT_TOKEN'],
-                access_token: ENV['WECHAT_ACCESS_TOKEN'],
-                encrypt_mode: ENV['WECHAT_ENCRYPT_MODE'],
-                timeout: ENV['WECHAT_TIMEOUT'],
-                skip_verify_ssl: ENV['WECHAT_SKIP_VERIFY_SSL'],
-                proxy_url: ENV['WECHAT_PROXY_URL'],
-                proxy_port: ENV['WECHAT_PROXY_PORT'],
-                proxy_username: ENV['WECHAT_PROXY_USERNAME'],
-                proxy_password: ENV['WECHAT_PROXY_PASSWORD'],
-                encoding_aes_key: ENV['WECHAT_ENCODING_AES_KEY'],
-                jsapi_ticket: ENV['WECHAT_JSAPI_TICKET'],
-                qcloud_env: ENV['WECHAT_QCLOUD_ENV'],
-                qcloud_token_file: ENV['WECHAT_QCLOUD_TOKEN'],
-                qcloud_token_lifespan: ENV['WECHAT_QCLOUD_TOKEN_LIFESPAN'],
-                trusted_domain_fullname: ENV['WECHAT_TRUSTED_DOMAIN_FULLNAME'] }
+      value = { appid: ENV.fetch('WECHAT_APPID', nil),
+                secret: ENV.fetch('WECHAT_SECRET', nil),
+                corpid: ENV.fetch('WECHAT_CORPID', nil),
+                corpsecret: ENV.fetch('WECHAT_CORPSECRET', nil),
+                agentid: ENV.fetch('WECHAT_AGENTID', nil),
+                token: ENV.fetch('WECHAT_TOKEN', nil),
+                access_token: ENV.fetch('WECHAT_ACCESS_TOKEN', nil),
+                encrypt_mode: ENV.fetch('WECHAT_ENCRYPT_MODE', nil),
+                timeout: ENV.fetch('WECHAT_TIMEOUT', nil),
+                skip_verify_ssl: ENV.fetch('WECHAT_SKIP_VERIFY_SSL', nil),
+                proxy_url: ENV.fetch('WECHAT_PROXY_URL', nil),
+                proxy_port: ENV.fetch('WECHAT_PROXY_PORT', nil),
+                proxy_username: ENV.fetch('WECHAT_PROXY_USERNAME', nil),
+                proxy_password: ENV.fetch('WECHAT_PROXY_PASSWORD', nil),
+                encoding_aes_key: ENV.fetch('WECHAT_ENCODING_AES_KEY', nil),
+                jsapi_ticket: ENV.fetch('WECHAT_JSAPI_TICKET', nil),
+                qcloud_env: ENV.fetch('WECHAT_QCLOUD_ENV', nil),
+                qcloud_token_file: ENV.fetch('WECHAT_QCLOUD_TOKEN', nil),
+                qcloud_token_lifespan: ENV.fetch('WECHAT_QCLOUD_TOKEN_LIFESPAN', nil),
+                trusted_domain_fullname: ENV.fetch('WECHAT_TRUSTED_DOMAIN_FULLNAME', nil) }
       { default: value }
     end
 
