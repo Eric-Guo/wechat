@@ -18,7 +18,7 @@ Layout/LineLength:
   Max: 180
 
 Metrics/AbcSize:
-  Max: 71
+  Max: 85
 
 Metrics/ClassLength:
   Max: 250
@@ -36,10 +36,10 @@ Style/NumericLiterals:
   MinDigits: 7
 
 Metrics/PerceivedComplexity:
-  Max: 25
+  Max: 28
 
 Metrics/CyclomaticComplexity:
-  Max: 23
+  Max: 28
 
 Style/AsciiComments:
   Enabled: false
