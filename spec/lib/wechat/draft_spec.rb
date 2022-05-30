@@ -98,6 +98,31 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#draft_update' do
+    specify 'will post draft/update' do
+      draft_update_result = { errcode: 12322, errmsg: 'ERRMSG' }
+      to_update_article = {
+          title: 'TITLE',
+          author: 'AUTHOR',
+          digest: 'DIGEST',
+          content: 'CONTENT',
+          content_source_url: 'CONTENT_SOURCE_URL',
+          thumb_media_id: 'THUMB_MEDIA_ID',
+          need_open_comment: 0,
+          only_fans_can_comment: 0
+        }
+      payload = {
+        media_id: 'media_id',
+        index: 1,
+        articles: to_update_article
+      }
+      expect(subject.client).to receive(:post)
+        .with('draft/update', payload.to_json,
+              params: { access_token: 'access_token' }).and_return(draft_update_result)
+      expect(subject.draft_update('media_id', to_update_article, index: 1)).to eq draft_update_result
+    end
+  end
+
   describe '#draft_count' do
     specify 'will get draft_count' do
       draft_count_result = { total_count: 1 }
