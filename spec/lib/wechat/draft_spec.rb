@@ -159,4 +159,14 @@ RSpec.describe Wechat::Api do
       expect(subject.draft_batchget(0, 20)).to eq draft_batchget_result
     end
   end
+
+  describe '#draft_switch' do
+    specify 'will post draft/delete with access_token and media_id in payload' do
+      draft_switch_result = { errcode: 123, errmsg: "ERRMSG", is_open: 1 }
+      expect(subject.client).to receive(:post)
+        .with('draft/switch', nil,
+              params: { access_token: 'access_token', checkonly: 1 }).and_return(draft_switch_result)
+      expect(subject.draft_switch(checkonly: true)).to eq draft_switch_result
+    end
+  end
 end
