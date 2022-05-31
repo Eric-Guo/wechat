@@ -1,0 +1,23 @@
+---
+image: "ruby:3.1"
+
+variables:
+  RAILS_ENV: test
+
+before_script:
+  - |
+    ruby -v
+    which ruby
+    gem install bundler --no-document
+    bundle config mirror.https://rubygems.org https://gems.ruby-china.com
+    bundle config path vendor
+    bundle install --jobs $(nproc)  "${FLAGS[@]}"
+
+test:
+  stage: test
+  cache:
+    paths:
+      - vendor
+  script:
+    - bundle exec rspec
+    - bundle exec rubocop
