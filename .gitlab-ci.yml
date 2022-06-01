@@ -1,5 +1,5 @@
 ---
-image: "ruby:3.1"
+image: "ruby:2.7"
 
 variables:
   RAILS_ENV: test
@@ -8,6 +8,7 @@ before_script:
   - |
     ruby -v
     which ruby
+    gem --version
     gem install bundler --no-document
     bundle config mirror.https://rubygems.org https://gems.ruby-china.com
     bundle config path vendor
