@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.16.0 (released at 2022-06-06)
+
+* Support wechat draft. #305
+* Add environment variable for configuring http proxy to ignore IP address changes everytime after app deployment, by @Awlter #312
+* Soft drop support for Ruby 2.6, because EOL time 12 Apr 2022.
+
 ## v0.15.1 (released at 2022-02-16)
 
 * fix "Psych::BadAlias (Unknown alias: default)" in ruby 3.1.0 #309, reported by @otorain
