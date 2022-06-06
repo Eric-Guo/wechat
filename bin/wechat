@@ -247,9 +247,21 @@ class App < Thor
       puts wechat_api.draft_get(media_id)
     end
 
+    desc 'draft_delete [MEDIA_ID]', '删除草稿'
+    def draft_delete(media_id)
+      puts wechat_api.draft_delete(media_id)
+    end
+
     desc 'draft_count', '获取草稿总数'
     def draft_count
       puts wechat_api.draft_count
+    end
+
+    desc 'draft_batchget [OFFSET, COUNT]', '获取草稿列表'
+    method_option :no_content, aliases: '-no_content', desc: '不要返回 content 字段', default: true
+    def draft_batchget(offset, count)
+      api_opts = options.slice(:no_content)
+      wechat_api.draft_batchget(offset, count, no_content: api_opts[:no_content])
     end
 
     desc 'draft_switch', '检查草稿箱和发布功能开关状态'
