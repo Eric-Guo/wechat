@@ -33,7 +33,6 @@ module Wechat
     class ArticleBuilder
       attr_reader :items
 
-      delegate :count, to: :items
       def initialize
         @items = []
       end
