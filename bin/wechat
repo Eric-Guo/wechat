@@ -236,6 +236,17 @@ class App < Thor
       puts wechat_api.media_uploadnews(Wechat::Message.new(MsgType: 'uploadnews').mpnews(mpnew[:articles]))
     end
 
+    desc 'draft_add [ARTICLE_YAML_PATH]', '新建草稿'
+    def draft_add(article_yaml_path)
+      yml_hash = Wechat::ApiLoader.load_yaml(File.read(article_yaml_path))
+      puts wechat_api.draft_add(Wechat::Message.new(MsgType: 'draft_news').draft_news(yml_hash[:articles]))
+    end
+
+    desc 'draft_get [MEDIA_ID]', '获取草稿'
+    def draft_get(media_id)
+      puts wechat_api.draft_get(media_id)
+    end
+
     desc 'draft_count', '获取草稿总数'
     def draft_count
       puts wechat_api.draft_count
