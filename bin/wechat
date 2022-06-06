@@ -50,8 +50,8 @@ class App < Thor
     end
 
     desc 'department_update [DEPARTMENT_ID, NAME]', '更新部门'
-    method_option :parentid, aliases: '-p', desc: '父亲部门id。根部门id为1', default: nil
-    method_option :order, aliases: '-o', desc: '在父部门中的次序值。order值小的排序靠前。', default: nil
+    method_option :parentid, aliases: '-p', desc: '父亲部门id。根部门id为1', default: nil, check_default_type: false
+    method_option :order, aliases: '-o', desc: '在父部门中的次序值。order值小的排序靠前。', default: nil, check_default_type: false
     def department_update(departmentid, name)
       api_opts = options.slice(:parentid, :order)
       puts wechat_api.department_update(departmentid, name, api_opts[:parentid], api_opts[:order])
@@ -97,8 +97,8 @@ class App < Thor
     end
 
     desc 'user_simplelist [DEPARTMENT_ID]', '获取部门成员'
-    method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员', default: 1
-    method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加', default: 0
+    method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员', default: 1, check_default_type: false
+    method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加', default: 0, check_default_type: false
     def user_simplelist(departmentid = 1)
       api_opts = options.slice(:fetch_child, :status)
 
@@ -111,8 +111,8 @@ class App < Thor
     end
 
     desc 'user_list [DEPARTMENT_ID]', '获取部门成员详情'
-    method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员', default: 0
-    method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加', default: 0
+    method_option :fetch_child, aliases: '-c', desc: '是否递归获取子部门下面的成员', default: 0, check_default_type: false
+    method_option :status, aliases: '-s', desc: '0 获取全部成员，1 获取已关注成员列表，2 获取禁用成员列表，4 获取未关注成员列表。status可叠加', default: 0, check_default_type: false
     def user_list(departmentid = 1)
       api_opts = options.slice(:fetch_child, :status)
 
@@ -258,14 +258,14 @@ class App < Thor
     end
 
     desc 'draft_batchget [OFFSET, COUNT]', '获取草稿列表'
-    method_option :no_content, aliases: '-no_content', desc: '不要返回 content 字段', default: true
+    method_option :no_content, aliases: '-no_content', desc: '不要返回 content 字段', default: true, check_default_type: false
     def draft_batchget(offset, count)
       api_opts = options.slice(:no_content)
       wechat_api.draft_batchget(offset, count, no_content: api_opts[:no_content])
     end
 
     desc 'draft_switch', '检查草稿箱和发布功能开关状态'
-    method_option :enable_draft, aliases: '-enable_draft', desc: '立刻开启草稿箱和发布功能', default: false
+    method_option :enable_draft, aliases: '-enable_draft', desc: '立刻开启草稿箱和发布功能', default: false, check_default_type: false
     def draft_switch
       api_opts = options.slice(:enable_draft)
       puts wechat_api.draft_switch(checkonly: api_opts[:enable_draft] || false)
