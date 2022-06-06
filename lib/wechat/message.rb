@@ -202,7 +202,7 @@ module Wechat
       update(MsgType: 'template', Template: template_fields)
     end
 
-    def draft_news(collection, &_block)
+    def draft_news(collection)
       update(MsgType: 'draft_news', Articles: collection)
     end
 
