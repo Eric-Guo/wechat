@@ -236,6 +236,18 @@ class App < Thor
       puts wechat_api.media_uploadnews(Wechat::Message.new(MsgType: 'uploadnews').mpnews(mpnew[:articles]))
     end
 
+    desc 'draft_count', '获取草稿总数'
+    def draft_count
+      puts wechat_api.draft_count
+    end
+
+    desc 'draft_switch', '检查草稿箱和发布功能开关状态'
+    method_option :enable_draft, aliases: '-enable_draft', desc: '立刻开启草稿箱和发布功能', default: false
+    def draft_switch
+      api_opts = options.slice(:enable_draft)
+      puts wechat_api.draft_switch(checkonly: api_opts[:enable_draft] || false)
+    end
+
     desc 'message_mass_delete [MSG_ID]', '删除群发消息'
     def message_mass_delete(msg_id)
       puts wechat_api.message_mass_delete(msg_id)
