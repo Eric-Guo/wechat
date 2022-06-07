@@ -14,6 +14,9 @@ before_script:
     bundle config path vendor
     bundle install --jobs $(nproc)  "${FLAGS[@]}"
 
+stages:
+  - test
+
 test:
   stage: test
   cache:
