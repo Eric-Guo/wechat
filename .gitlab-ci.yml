@@ -5,14 +5,15 @@ variables:
   RAILS_ENV: test
 
 before_script:
-  - |
-    ruby -v
-    which ruby
-    gem --version
-    gem install bundler --no-document
-    bundle config mirror.https://rubygems.org https://gems.ruby-china.com
-    bundle config path vendor
-    bundle install --jobs $(nproc)  "${FLAGS[@]}"
+  - ruby -v
+  - which ruby
+  - gem --version
+  - gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
+  - gem sources -l
+  - gem install bundler --no-document
+  - bundle config mirror.https://rubygems.org https://gems.ruby-china.com
+  - bundle config path vendor
+  - bundle install --jobs $(nproc)  "${FLAGS[@]}"
 
 stages:
   - test
