@@ -2,6 +2,7 @@
 
 require 'zeitwerk'
 loader = Zeitwerk::Loader.for_gem
+loader.ignore("#{__dir__}/action_controller")
 loader.ignore("#{__dir__}/generators/**/*.rb")
 loader.setup
 
