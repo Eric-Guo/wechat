@@ -232,7 +232,8 @@ class App < Thor
 
     desc 'wxa_generate_urllink [PATH]', '获取小程序 URL Link'
     def wxa_generate_urllink(path)
-      puts wechat_api.wxa_generate_urllink(path)
+      body_hash = { path: path, expire_type: 0 }
+      puts wechat_api.wxa_generate_urllink(body_hash)
     end
 
     desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'

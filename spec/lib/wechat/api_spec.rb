@@ -343,11 +343,11 @@ RSpec.describe Wechat::Api do
     urllink_result = { errcode: 0, errmsg: 'ok', url: 'urllink' }
 
     specify 'will post wxa_generate_urllink with path and access_token' do
-      path = 'pages/index'
-      wxa_generate_urllink_req = { path: path, expire_type: 0 }
+      body_hash = { path: 'pages/index', expire_type: 0 }
+      wxa_generate_urllink_req = { path: 'pages/index', expire_type: 0 }
       expect(subject.client).to receive(:post)
         .with('generate_urllink', JSON.generate(wxa_generate_urllink_req), params: { access_token: 'access_token' }, base: Wechat::Api::WXA_BASE).and_return(urllink_result)
-      expect(subject.wxa_generate_urllink(path)).to eq urllink_result
+      expect(subject.wxa_generate_urllink(body_hash)).to eq urllink_result
     end
   end
 
