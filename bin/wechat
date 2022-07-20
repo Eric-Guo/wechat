@@ -230,6 +230,11 @@ class App < Thor
       puts wechat_api.wxa_msg_sec_check(content)
     end
 
+    desc 'wxa_generate_urllink [PATH]', '获取小程序 URL Link'
+    def wxa_generate_urllink(path)
+      puts wechat_api.wxa_generate_urllink(path)
+    end
+
     desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'
     def media_uploadnews(mpnews_yaml_path)
       mpnew = Wechat::ApiLoader.load_yaml(File.read(mpnews_yaml_path))
