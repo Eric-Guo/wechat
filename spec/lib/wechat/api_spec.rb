@@ -339,6 +339,18 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#wxa_generate_urllink' do
+    urllink_result = { errcode: 0, errmsg: 'ok', url: 'urllink' }
+
+    specify 'will post wxa_generate_urllink with path and access_token' do
+      path = 'pages/index'
+      wxa_generate_urllink_req = { path: path, expire_type: 0 }
+      expect(subject.client).to receive(:post)
+        .with('generate_urllink', JSON.generate(wxa_generate_urllink_req), params: { access_token: 'access_token' }, base: Wechat::Api::WXA_BASE).and_return(urllink_result)
+      expect(subject.wxa_generate_urllink(path)).to eq urllink_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token' do
       menu_result = 'menu_result'

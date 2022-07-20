@@ -104,6 +104,10 @@ module Wechat
         post 'msg_sec_check', JSON.generate(content: content), base: Wechat::Api::WXA_BASE
       end
 
+      def wxa_generate_urllink(path)
+        post 'generate_urllink', JSON.generate(path: path, expire_type: 0), base: Wechat::Api::WXA_BASE
+      end
+
       def menu
         get 'menu/get'
       end
