@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.16.1 (released at 2022-07-20)
+
+* Add api urllink.generate support. by @iuhoay #313
+* Fix WARNING: Zeitwerk defines the constant ActionController after the directory
+
 ## v0.16.0 (released at 2022-06-06)
 
 * Support wechat draft. #305
