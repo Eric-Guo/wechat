@@ -1,4 +1,5 @@
-default: &default
+---
+default_setting: &default_setting
   appid: "my_appid"
   secret: "my_secret"
   token:    "my_token"
@@ -8,22 +9,22 @@ default: &default
   jsapi_ticket: "C:/Users/[user_name]/wechat_jsapi_ticket"
 
 development:
-  <<: *default
+  <<: *default_setting
   trusted_domain_fullname: "http://your_dev.proxy.qqbrowser.cc"
 
 test:
-  <<: *default
+  <<: *default_setting
 
 # Multiple Accounts
 #
 wx2_development:
- <<: *default
+ <<: *default_setting
  appid: "my_appid2"
  secret: "my_secret2"
  access_token: "tmp/wechat_access_token2"
  jsapi_ticket: "tmp/wechat_jsapi_ticket2"
 
 wx2_test:
- <<: *default
+ <<: *default_setting
  appid: "my_appid2"
  secret: "my_secret2"

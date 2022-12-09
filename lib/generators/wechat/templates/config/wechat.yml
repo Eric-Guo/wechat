@@ -1,4 +1,5 @@
-default: &default
+---
+default_setting: &default_setting
   corpid: "corpid"
   corpsecret: "corpsecret"
   agentid:  1
@@ -28,45 +29,45 @@ production:
   oauth2_cookie_duration: <%%= ENV['WECHAT_OAUTH2_COOKIE_DURATION'] %> # seconds
 
 development:
-  <<: *default
+  <<: *default_setting
   trusted_domain_fullname: "http://your_dev.proxy.qqbrowser.cc"
 
 test:
-  <<: *default
+  <<: *default_setting
 
 # Multiple Accounts
 #
 # wx2_development:
-#  <<: *default
+#  <<: *default_setting
 #  appid: "my_appid"
 #  secret: "my_secret"
 #  access_token: "tmp/wechat_access_token2"
 #  jsapi_ticket: "tmp/wechat_jsapi_ticket2"
 #
 # wx2_test:
-#  <<: *default
+#  <<: *default_setting
 #  appid: "my_appid"
 #  secret: "my_secret"
 #
 # wx2_production:
-#  <<: *default
+#  <<: *default_setting
 #  appid: "my_appid"
 #  secret: "my_secret"
 #
 # wx3_development:
-#  <<: *default
+#  <<: *default_setting
 #  appid: "my_appid"
 #  secret: "my_secret"
 #  access_token: "tmp/wechat_access_token3"
 #  jsapi_ticket: "tmp/wechat_jsapi_ticket3"
 #
 # wx3_test:
-#  <<: *default
+#  <<: *default_setting
 #  appid: "my_appid"
 #  secret: "my_secret"
 #
 # wx3_production:
-#  <<: *default
+#  <<: *default_setting
 #  appid: "my_appid"
 #  secret: "my_secret"
 #
