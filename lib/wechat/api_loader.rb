@@ -43,7 +43,15 @@ module Wechat
     end
 
     def self.load_yaml(result)
-      YAML.respond_to?(:unsafe_load) ? YAML.unsafe_load(result) : YAML.safe_load(result)
+      if YAML.respond_to?(:unsafe_load)
+        YAML.unsafe_load(result)
+      else
+        begin
+          YAML.safe_load(result, aliases: true)
+        rescue ArgumentError
+          YAML.safe_load(result)
+        end
+      end
     end
 
     private_class_method def self.loading_config!
