@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activesupport', '>= 6.0'
   s.add_runtime_dependency 'http', '>= 1.0.4', '< 6'
   s.add_runtime_dependency 'nokogiri', '>=1.6.0'
-  s.add_runtime_dependency 'psych', '>=3.3.2'
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'rexml'
   s.add_runtime_dependency 'zeitwerk', '~> 2.4'
