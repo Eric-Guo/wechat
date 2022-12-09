@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.licenses    = ['MIT']
   s.summary     = 'DSL for wechat message handling and API'
   s.description = 'API, command and message handling for WeChat in Rails'
-  s.required_ruby_version = '>= 2.6'
+  s.required_ruby_version = '>= 2.7'
   s.required_rubygems_version = ">= 1.8.11"
 
   s.files = Dir['{bin,lib}/**/*'] + %w[LICENSE README.md README-CN.md CHANGELOG.md]
@@ -39,10 +39,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-rails', '~> 5.1'
   s.add_development_dependency 'rspec-mocks', '= 3.10.2'
   s.add_development_dependency 'sqlite3', '~> 1.4'
-
-  s.post_install_message = %Q(*****WECHAT BREAK CHANGE*****
-Including correct version of `psych` after upgrade wechat, if not sure, using v3.3.2.
-Ruby 3.1’s incompatible changes to its YAML module (Psych 4), detail see:
-https://www.ctrl.blog/entry/ruby-psych4.html
-*****************************)
 end
