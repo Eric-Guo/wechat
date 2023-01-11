@@ -89,6 +89,14 @@ rake db:migrate
 
 appid/corpid 以及 secret 的配置请阅读下一节
 
+#### 数据配置模式
+需要保证传入的 `record` 属性中包含 `access_token`, `token_expires_in`, `got_token_at`。
+```ruby
+def client
+  @client ||= Wechat::Api.new(app_id, app_secret, token_file, network_setting, jsapi_ticket_file, record)
+end
+```
+
 #### 命令行程序的配置
 
 要使用命令行程序，需要在 home 目录中创建一个 `~/.wechat.yml`，包含以下内容。其中 `access_token` 是存放 access_token 的文件位置。
