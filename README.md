@@ -97,6 +97,14 @@ URL address for wechat created by running `rails g wechat:install` is `http://yo
 
 How to setup appid/corpid and secret see below section.
 
+#### Configure wechat by record-based mode
+Make sure the `record` attributes include `access_token`, `token_expires_in`, `got_token_at`.
+```ruby
+def client
+  @client ||= Wechat::Api.new(app_id, app_secret, token_file, network_setting, jsapi_ticket_file, record)
+end
+```
+
 #### Configure for command line
 
 To use standalone `wechat` command, you need to create configuration file `~/.wechat.yml` and include content below  for public account. The `access_token` will be written to file `/var/tmp/wechat_access_token`.
