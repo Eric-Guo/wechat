@@ -2,10 +2,10 @@
 
 module Wechat
   class Api < ApiBase
-    def initialize(appid, secret, token_file, network_setting, jsapi_ticket_file)
+    def initialize(appid, secret, token_file, network_setting, jsapi_ticket_file, record = nil)
       super()
       @client = HttpClient.new(Wechat::Api::API_BASE, network_setting)
-      @access_token = Token::PublicAccessToken.new(@client, appid, secret, token_file)
+      @access_token = Token::PublicAccessToken.new(@client, appid, secret, token_file, record)
       @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
       @qcloud = nil
     end
