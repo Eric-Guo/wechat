@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Wechat
   module Token
     class AccessTokenBase
