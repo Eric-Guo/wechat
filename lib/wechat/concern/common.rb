@@ -109,6 +109,10 @@ module Wechat
         post 'generate_urllink', JSON.generate(body_hash), base: Wechat::Api::WXA_BASE
       end
 
+      def wxa_generate_shortlink(body_hash)
+        post 'genwxashortlink', JSON.generate(body_hash), base: Wechat::Api::WXA_BASE
+      end
+
       def menu
         get 'menu/get'
       end

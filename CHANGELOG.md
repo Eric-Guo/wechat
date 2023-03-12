@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.16.3 
+
+* Add api shortlink.generate support.
+
 ## v0.16.2 (released at 2022-12-09)
 
 * Drop support ruby 2.6 and allow ruby 3.2 will released psych v5.0.0. by @iuhoay #314
