@@ -351,6 +351,18 @@ RSpec.describe Wechat::Api do
     end
   end
 
+  describe '#wxa_generate_shortlink' do
+    shortlink_result = { errcode: 0, errmsg: 'ok', link: 'shortlink' }
+
+    specify 'will post wxa_generate_shortlink with url and access_token' do
+      body_hash = { page_url: 'pages/home/index' }
+      wxa_generate_shortlink_req = { page_url: 'pages/home/index' }
+      expect(subject.client).to receive(:post)
+        .with('genwxashortlink', JSON.generate(wxa_generate_shortlink_req), params: { access_token: 'access_token' }, base: Wechat::Api::WXA_BASE).and_return(shortlink_result)
+      expect(subject.wxa_generate_shortlink(body_hash)).to eq shortlink_result
+    end
+  end
+
   describe '#menu' do
     specify 'will get menu/get with access_token' do
       menu_result = 'menu_result'

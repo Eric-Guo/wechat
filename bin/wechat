@@ -236,6 +236,12 @@ class App < Thor
       puts wechat_api.wxa_generate_urllink(body_hash)
     end
 
+    desc 'wxa_generate_shortlink [PATH]', '获取小程序 Short Link'
+    def wxa_generate_shortlink(url, title = '', is_permanent = false)
+      body_hash = { page_url: url, page_title: title, is_permanent: is_permanent}
+      puts wechat_api.wxa_generate_shortlink(body_hash)
+    end
+
     desc 'media_uploadnews [MPNEWS_YAML_PATH]', '上传图文消息素材'
     def media_uploadnews(mpnews_yaml_path)
       mpnew = Wechat::ApiLoader.load_yaml(File.read(mpnews_yaml_path))
