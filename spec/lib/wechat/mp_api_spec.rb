@@ -30,7 +30,7 @@ RSpec.describe Wechat::MpApi do
 
       expect(subject.client).to receive(:post)
         .with('message/wxopen/template/send', payload.to_json,
-              params: { access_token: 'access_token' }, content_type: :json).and_return(response_result)
+              hash_including(params: { access_token: 'access_token' }, content_type: :json)).and_return(response_result)
 
       expect(subject.template_message_send(payload)).to eq response_result
     end
@@ -53,7 +53,7 @@ RSpec.describe Wechat::MpApi do
 
       expect(subject.client).to receive(:post)
         .with('wxopen/template/library/list', { offset: 0, count: 5 }.to_json,
-              params: { access_token: 'access_token' }).and_return(response_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(response_result)
 
       expect(subject.list_template_library(count: 5)).to eq response_result
     end
@@ -75,7 +75,7 @@ RSpec.describe Wechat::MpApi do
 
       expect(subject.client).to receive(:post)
         .with('wxopen/template/library/get', { id: 'AT0002' }.to_json,
-              params: { access_token: 'access_token' }).and_return(response_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(response_result)
 
       expect(subject.list_template_library_keywords('AT0002')).to eq response_result
     end
@@ -91,7 +91,7 @@ RSpec.describe Wechat::MpApi do
 
       expect(subject.client).to receive(:post)
         .with('wxopen/template/add', { id: 'AT0002', keyword_id_list: [3, 4, 5] }.to_json,
-              params: { access_token: 'access_token' }).and_return(response_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(response_result)
 
       expect(subject.add_message_template('AT0002', [3, 4, 5])).to eq response_result
     end
@@ -110,7 +110,7 @@ RSpec.describe Wechat::MpApi do
 
       expect(subject.client).to receive(:post)
         .with('wxopen/template/list', { offset: 0, count: 1 }.to_json,
-              params: { access_token: 'access_token' }).and_return(response_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(response_result)
 
       expect(subject.list_message_template(count: 1)).to eq response_result
     end
@@ -125,7 +125,7 @@ RSpec.describe Wechat::MpApi do
 
       expect(subject.client).to receive(:post)
         .with('wxopen/template/del', { template_id: 'wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc' }.to_json,
-              params: { access_token: 'access_token' }).and_return(response_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(response_result)
 
       expect(subject.del_message_template('wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc')).to eq response_result
     end
@@ -147,7 +147,7 @@ RSpec.describe Wechat::MpApi do
 
       expect(subject.client).to receive(:post)
         .with('message/subscribe/send', payload.to_json,
-              params: { access_token: 'access_token' }).and_return(response_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(response_result)
 
       expect(subject.subscribe_message_send(payload)).to eq response_result
     end
@@ -162,8 +162,8 @@ RSpec.describe Wechat::MpApi do
       }
 
       expect(subject.client).to receive(:get)
-        .with('jscode2session', params: { appid: 'appid', secret: 'secret', js_code: 'code', grant_type: 'authorization_code' },
-                                base: Wechat::Api::OAUTH2_BASE).and_return(response_result)
+        .with('jscode2session', hash_including(params: { appid: 'appid', secret: 'secret', js_code: 'code', grant_type: 'authorization_code' },
+                                base: Wechat::Api::OAUTH2_BASE)).and_return(response_result)
 
       expect(subject.jscode2session('code')).to eq response_result
     end

@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rubocop', '~> 1.9'
   s.add_development_dependency 'rails', '>= 7.0.0'
-  s.add_development_dependency 'rspec-rails', '~> 5.1'
-  s.add_development_dependency 'rspec-mocks', '= 3.10.2'
+  s.add_development_dependency 'rspec-rails', '~> 6.0'
+  s.add_development_dependency 'rspec-mocks', '~> 3.12'
   s.add_development_dependency 'sqlite3', '~> 1.5'
 end

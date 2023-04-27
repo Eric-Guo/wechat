@@ -56,7 +56,7 @@ RSpec.describe Wechat::Api do
         ]
       }
       result = { media_id: 'MEDIA_ID' }
-      expect(subject.client).to receive(:post).with('draft/add', draft_news.to_json, params: { access_token: 'access_token' }).and_return(result)
+      expect(subject.client).to receive(:post).with('draft/add', draft_news.to_json, hash_including(params: { access_token: 'access_token' })).and_return(result)
       expect(subject.draft_add(Wechat::Message.new(MsgType: 'draft_news').draft_news(items))).to eq(result)
     end
   end
@@ -82,7 +82,7 @@ RSpec.describe Wechat::Api do
       }
 
       expect(subject.client).to receive(:post)
-        .with('draft/get', { media_id: 'media_id' }.to_json, params: { access_token: 'access_token' }).and_return(news_item_result)
+        .with('draft/get', { media_id: 'media_id' }.to_json, hash_including(params: { access_token: 'access_token' })).and_return(news_item_result)
       expect(subject.draft_get('media_id')).to eq(news_item_result)
     end
   end
@@ -93,7 +93,7 @@ RSpec.describe Wechat::Api do
       payload = { media_id: 'media_id' }
       expect(subject.client).to receive(:post)
         .with('draft/delete', payload.to_json,
-              params: { access_token: 'access_token' }).and_return(draft_delete_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(draft_delete_result)
       expect(subject.draft_delete('media_id')).to eq draft_delete_result
     end
   end
@@ -118,7 +118,7 @@ RSpec.describe Wechat::Api do
       }
       expect(subject.client).to receive(:post)
         .with('draft/update', payload.to_json,
-              params: { access_token: 'access_token' }).and_return(draft_update_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(draft_update_result)
       expect(subject.draft_update('media_id', to_update_article, index: 1)).to eq draft_update_result
     end
   end
@@ -126,7 +126,7 @@ RSpec.describe Wechat::Api do
   describe '#draft_count' do
     specify 'will get draft_count' do
       draft_count_result = { total_count: 1 }
-      expect(subject.client).to receive(:get).with('draft/count', params: { access_token: 'access_token' }).and_return(draft_count_result)
+      expect(subject.client).to receive(:get).with('draft/count', hash_including(params: { access_token: 'access_token' })).and_return(draft_count_result)
       expect(subject.draft_count).to eq draft_count_result
     end
   end
@@ -155,7 +155,7 @@ RSpec.describe Wechat::Api do
                                 },
                                 update_time: 12345 }] }
       expect(subject.client).to receive(:post)
-        .with('draft/batchget', draft_batchget_request.to_json, params: { access_token: 'access_token' }).and_return(draft_batchget_result)
+        .with('draft/batchget', draft_batchget_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(draft_batchget_result)
       expect(subject.draft_batchget(0, 20)).to eq draft_batchget_result
     end
   end
@@ -165,7 +165,7 @@ RSpec.describe Wechat::Api do
       draft_switch_result = { errcode: 123, errmsg: "ERRMSG", is_open: 1 }
       expect(subject.client).to receive(:post)
         .with('draft/switch', nil,
-              params: { access_token: 'access_token', checkonly: 1 }).and_return(draft_switch_result)
+              hash_including(params: { access_token: 'access_token', checkonly: 1 })).and_return(draft_switch_result)
       expect(subject.draft_switch(checkonly: true)).to eq draft_switch_result
     end
   end

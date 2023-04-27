@@ -455,10 +455,10 @@ RSpec.describe Wechat::Message do
 
         message = Wechat::Message.to('toUser')
         expect(model_class).to receive(:new)
-          .with(to_user_name: 'toUser',
+          .with(hash_including(to_user_name: 'toUser',
                 msg_type: 'text',
                 content: 'text message',
-                create_time: message[:CreateTime]).and_return(model)
+                create_time: message[:CreateTime])).and_return(model)
         expect(model).to receive(:save!).and_return(true)
 
         expect(message.text('text message').save_to!(model_class)).to eq(message)

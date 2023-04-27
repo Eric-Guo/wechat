@@ -27,7 +27,7 @@ RSpec.describe Wechat::CorpApi do
                                         { agentid: '8', name: 'HR 小助手',
                                           square_logo_url: 'url', round_logo_url: 'url' }] }
       expect(subject.client).to receive(:get)
-        .with('agent/list', params: { access_token: 'access_token' }).and_return(agent_list_result)
+        .with('agent/list', hash_including(params: { access_token: 'access_token' })).and_return(agent_list_result)
       expect(subject.agent_list).to eq agent_list_result
     end
   end
@@ -44,7 +44,7 @@ RSpec.describe Wechat::CorpApi do
                        close: 0, redirect_domain: 'www.qq.com', report_location_flag: 0,
                        isreportuser: 0, isreportenter: 0 }
       expect(subject.client).to receive(:get)
-        .with('agent/get', params: { agentid: agentid, access_token: 'access_token' }).and_return(agent_result)
+        .with('agent/get', hash_including(params: { agentid: agentid, access_token: 'access_token' })).and_return(agent_result)
       expect(subject.agent(agentid)).to eq agent_result
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe Wechat::CorpApi do
                                          wifimac: '02:00:00:00:00:00',
                                          mediaids: [] }] }
       expect(subject.client).to receive(:post).with('checkin/getcheckindata',
-                                                    checkin_request.to_json, params: { access_token: 'access_token' })
+                                                    checkin_request.to_json, hash_including(params: { access_token: 'access_token' }))
                                               .and_return(checkin_result)
       expect(subject.checkin(useridlist, starttime, endtime)).to eq checkin_result
     end
@@ -91,7 +91,7 @@ RSpec.describe Wechat::CorpApi do
                       status: 1,
                       extattr: { attrs: [{ name: '爱好', value: '旅游' }, { name: '卡号', value: '1234567234' }] } }
       expect(subject.client).to receive(:get)
-        .with('user/get', params: { userid: userid, access_token: 'access_token' }).and_return(user_result)
+        .with('user/get', hash_including(params: { userid: userid, access_token: 'access_token' })).and_return(user_result)
       expect(subject.user(userid)).to eq user_result
     end
   end
@@ -101,7 +101,7 @@ RSpec.describe Wechat::CorpApi do
       code = 'code'
       getuserinfo_result = { UserId: 'USERID', DeviceId: 'DEVICEID' }
       expect(subject.client).to receive(:get)
-        .with('user/getuserinfo', params: { code: code, access_token: 'access_token' }).and_return(getuserinfo_result)
+        .with('user/getuserinfo', hash_including(params: { code: code, access_token: 'access_token' })).and_return(getuserinfo_result)
       expect(subject.getuserinfo(code)).to eq getuserinfo_result
     end
   end
@@ -113,7 +113,7 @@ RSpec.describe Wechat::CorpApi do
       convert_to_openid_request = { userid: userid, agentid: agentid }
       convert_to_openid_result = { errcode: 0, errmsg: 'ok', openid: 'oDOGms-6yCnGrRovBj2yHij5JL6E', appid: 'wxf874e15f78cc84a7' }
       expect(subject.client).to receive(:post)
-        .with('user/convert_to_openid', convert_to_openid_request.to_json, params: { access_token: 'access_token' }).and_return(convert_to_openid_result)
+        .with('user/convert_to_openid', convert_to_openid_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(convert_to_openid_result)
       expect(subject.convert_to_openid(userid)).to eq convert_to_openid_result
     end
   end
@@ -124,7 +124,7 @@ RSpec.describe Wechat::CorpApi do
       convert_to_userid_request = { openid: openid }
       convert_to_userid_result = { errcode: 0, errmsg: 'ok', openid: 'oDOGms-6yCnGrRovBj2yHij5JL6E', appid: 'wxf874e15f78cc84a7' }
       expect(subject.client).to receive(:post)
-        .with('user/convert_to_userid', convert_to_userid_request.to_json, params: { access_token: 'access_token' }).and_return(convert_to_userid_result)
+        .with('user/convert_to_userid', convert_to_userid_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(convert_to_userid_result)
       expect(subject.convert_to_userid(openid)).to eq convert_to_userid_result
     end
   end
@@ -135,7 +135,7 @@ RSpec.describe Wechat::CorpApi do
       invite_request = { userid: userid }
       invite_result = { errcode: 0, errmsg: 'ok', type: 1 }
       expect(subject.client).to receive(:post)
-        .with('invite/send', invite_request.to_json, params: { access_token: 'access_token' }).and_return(invite_result)
+        .with('invite/send', invite_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(invite_result)
       expect(subject.invite_user(userid)).to eq invite_result
     end
   end
@@ -145,7 +145,7 @@ RSpec.describe Wechat::CorpApi do
       userid = 'userid'
       user_auth_result = { errcode: 0, errmsg: 'ok' }
       expect(subject.client).to receive(:get)
-        .with('user/authsucc', params: { userid: userid, access_token: 'access_token' }).and_return(user_auth_result)
+        .with('user/authsucc', hash_including(params: { userid: userid, access_token: 'access_token' })).and_return(user_auth_result)
       expect(subject.user_auth_success(userid)).to eq user_auth_result
     end
   end
@@ -160,7 +160,7 @@ RSpec.describe Wechat::CorpApi do
                               position: '产品经理' }
       create_user_result = { errcode: 0, errmsg: 'created' }
       expect(subject.client).to receive(:post)
-        .with('user/create', create_user_request.to_json, params: { access_token: 'access_token' }).and_return(create_user_result)
+        .with('user/create', create_user_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(create_user_result)
       expect(subject.user_create(userid: userid, name: '张三', department: [1, 2], mobile: '13901234567', position: '产品经理')).to eq create_user_result
     end
   end
@@ -170,7 +170,7 @@ RSpec.describe Wechat::CorpApi do
       userid = 'userid'
       user_delete_result = { errcode: 0, errmsg: 'deleted' }
       expect(subject.client).to receive(:get)
-        .with('user/delete', params: { userid: userid, access_token: 'access_token' }).and_return(user_delete_result)
+        .with('user/delete', hash_including(params: { userid: userid, access_token: 'access_token' })).and_return(user_delete_result)
       expect(subject.user_delete(userid)).to eq user_delete_result
     end
   end
@@ -180,7 +180,7 @@ RSpec.describe Wechat::CorpApi do
       batchdelete_request = { useridlist: %w(6749 6110) }
       user_delete_result = { errcode: 0, errmsg: 'deleted' }
       expect(subject.client).to receive(:post)
-        .with('user/batchdelete', batchdelete_request.to_json, params: { access_token: 'access_token' }).and_return(user_delete_result)
+        .with('user/batchdelete', batchdelete_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(user_delete_result)
       expect(subject.user_batchdelete(%w(6749 6110))).to eq user_delete_result
     end
   end
@@ -191,7 +191,7 @@ RSpec.describe Wechat::CorpApi do
                        type: 'replace_user', total: 3, percentage: 33, remaintime: 1,
                        result: [{}, {}] }
       expect(subject.client).to receive(:get)
-        .with('batch/getresult', params: { jobid: 'jobid', access_token: 'access_token' }).and_return(batch_result)
+        .with('batch/getresult', hash_including(params: { jobid: 'jobid', access_token: 'access_token' })).and_return(batch_result)
       expect(subject.batch_job_result('jobid')).to eq batch_result
     end
   end
@@ -201,7 +201,7 @@ RSpec.describe Wechat::CorpApi do
       batch_replaceparty_request = { media_id: 'media_id' }
       batch_replaceparty_result = { errcode: 0, errmsg: 'ok', jobid: 'jobid' }
       expect(subject.client).to receive(:post)
-        .with('batch/replaceparty', batch_replaceparty_request.to_json, params: { access_token: 'access_token' }).and_return(batch_replaceparty_result)
+        .with('batch/replaceparty', batch_replaceparty_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(batch_replaceparty_result)
       expect(subject.batch_replaceparty('media_id')).to eq batch_replaceparty_result
     end
   end
@@ -211,7 +211,7 @@ RSpec.describe Wechat::CorpApi do
       batch_replaceuser_request = { media_id: 'media_id' }
       batch_replaceuser_result = { errcode: 0, errmsg: 'ok', jobid: 'jobid' }
       expect(subject.client).to receive(:post)
-        .with('batch/replaceuser', batch_replaceuser_request.to_json, params: { access_token: 'access_token' }).and_return(batch_replaceuser_result)
+        .with('batch/replaceuser', batch_replaceuser_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(batch_replaceuser_result)
       expect(subject.batch_replaceuser('media_id')).to eq batch_replaceuser_result
     end
   end
@@ -221,7 +221,7 @@ RSpec.describe Wechat::CorpApi do
       batch_syncuser_request = { media_id: 'media_id' }
       batch_syncuser_result = { errcode: 0, errmsg: 'ok', jobid: 'jobid' }
       expect(subject.client).to receive(:post)
-        .with('batch/syncuser', batch_syncuser_request.to_json, params: { access_token: 'access_token' }).and_return(batch_syncuser_result)
+        .with('batch/syncuser', batch_syncuser_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(batch_syncuser_result)
       expect(subject.batch_syncuser('media_id')).to eq batch_syncuser_result
     end
   end
@@ -231,7 +231,7 @@ RSpec.describe Wechat::CorpApi do
       department_create_request = { name: '广州研发中心', parentid: '1' }
       department_create_result = { errcode: 0, errmsg: 'created', id: 2 }
       expect(subject.client).to receive(:post)
-        .with('department/create', department_create_request.to_json, params: { access_token: 'access_token' }).and_return(department_create_result)
+        .with('department/create', department_create_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(department_create_result)
       expect(subject.department_create('广州研发中心', '1')).to eq department_create_result
     end
   end
@@ -241,7 +241,7 @@ RSpec.describe Wechat::CorpApi do
       departmentid = 'departmentid'
       department_delete_result = { errcode: 0, errmsg: 'deleted' }
       expect(subject.client).to receive(:get)
-        .with('department/delete', params: { access_token: 'access_token', id: departmentid }).and_return(department_delete_result)
+        .with('department/delete', hash_including(params: { access_token: 'access_token', id: departmentid })).and_return(department_delete_result)
       expect(subject.department_delete('departmentid')).to eq department_delete_result
     end
   end
@@ -252,7 +252,7 @@ RSpec.describe Wechat::CorpApi do
       department_update_request = { id: departmentid, name: '广研' }
       department_update_result = { errcode: 0, errmsg: 'updated' }
       expect(subject.client).to receive(:post)
-        .with('department/update', department_update_request.to_json, params: { access_token: 'access_token' }).and_return(department_update_result)
+        .with('department/update', department_update_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(department_update_result)
       expect(subject.department_update('departmentid', '广研')).to eq department_update_result
     end
   end
@@ -271,7 +271,7 @@ RSpec.describe Wechat::CorpApi do
                                 parentid: 2,
                                 order: 40 }] }
       expect(subject.client).to receive(:get)
-        .with('department/list', params: { id: departmentid, access_token: 'access_token' }).and_return(department_result)
+        .with('department/list', hash_including(params: { id: departmentid, access_token: 'access_token' })).and_return(department_result)
       expect(subject.department(departmentid)).to eq department_result
     end
   end
@@ -282,7 +282,7 @@ RSpec.describe Wechat::CorpApi do
       simplelist_result = { errcode: 0, errmsg: 'ok',
                             userlist: [{ userid: 'zhangsan', name: '李四', department: [1, 2] }] }
       expect(subject.client).to receive(:get)
-        .with('user/simplelist', params: { department_id: department_id, fetch_child: 0, status: 0, access_token: 'access_token' })
+        .with('user/simplelist', hash_including(params: { department_id: department_id, fetch_child: 0, status: 0, access_token: 'access_token' }))
         .and_return(simplelist_result)
       expect(subject.user_simplelist(department_id)).to eq simplelist_result
     end
@@ -303,7 +303,7 @@ RSpec.describe Wechat::CorpApi do
                                          status: 1,
                                          extattr: { attrs: [{ name: '爱好', value: '旅游' }, { name: '卡号', value: '1234567234' }] } }] }
       expect(subject.client).to receive(:get)
-        .with('user/list', params: { department_id: 1, fetch_child: 0, status: 0, access_token: 'access_token' }).and_return(user_list_result)
+        .with('user/list', hash_including(params: { department_id: 1, fetch_child: 0, status: 0, access_token: 'access_token' })).and_return(user_list_result)
       expect(subject.user_list(1)).to eq user_list_result
     end
   end
@@ -313,7 +313,7 @@ RSpec.describe Wechat::CorpApi do
       tag_create_request = { tagname: 'UI', tagid: 1 }
       tag_create_result = { errcode: 0, errmsg: 'created', tagid: 1 }
       expect(subject.client).to receive(:post)
-        .with('tag/create', tag_create_request.to_json, params: { access_token: 'access_token' }).and_return(tag_create_result)
+        .with('tag/create', tag_create_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(tag_create_result)
       expect(subject.tag_create('UI', 1)).to eq tag_create_result
     end
   end
@@ -323,7 +323,7 @@ RSpec.describe Wechat::CorpApi do
       tag_update_request = { tagid: 1, tagname: 'UI Design' }
       tag_update_result = { errcode: 0, errmsg: 'updated' }
       expect(subject.client).to receive(:post)
-        .with('tag/update', tag_update_request.to_json, params: { access_token: 'access_token' }).and_return(tag_update_result)
+        .with('tag/update', tag_update_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(tag_update_result)
       expect(subject.tag_update(1, 'UI Design')).to eq tag_update_result
     end
   end
@@ -332,7 +332,7 @@ RSpec.describe Wechat::CorpApi do
     specify 'will get tag/delete with access_token and tagid' do
       tag_delete_result = { errcode: 0, errmsg: 'deleted' }
       expect(subject.client).to receive(:get)
-        .with('tag/delete', params: { tagid: 1, access_token: 'access_token' }).and_return(tag_delete_result)
+        .with('tag/delete', hash_including(params: { tagid: 1, access_token: 'access_token' })).and_return(tag_delete_result)
       expect(subject.tag_delete(1)).to eq tag_delete_result
     end
   end
@@ -343,7 +343,7 @@ RSpec.describe Wechat::CorpApi do
                       taglist: [{ tagid: 1, tagname: 'a' },
                                 { tagid: 2, tagname: 'b' }] }
       expect(subject.client).to receive(:get)
-        .with('tag/list', params: { access_token: 'access_token' }).and_return(tags_result)
+        .with('tag/list', hash_including(params: { access_token: 'access_token' })).and_return(tags_result)
       expect(subject.tags).to eq tags_result
     end
   end
@@ -354,7 +354,7 @@ RSpec.describe Wechat::CorpApi do
                      userlist: [{ userid: 'zhangsan', name: '李四' }],
                      partylist: [2] }
       expect(subject.client).to receive(:get)
-        .with('tag/get', params: { tagid: 1, access_token: 'access_token' }).and_return(tag_result)
+        .with('tag/get', hash_including(params: { tagid: 1, access_token: 'access_token' })).and_return(tag_result)
       expect(subject.tag(1)).to eq tag_result
     end
   end
@@ -364,7 +364,7 @@ RSpec.describe Wechat::CorpApi do
       tag_add_user_request = { tagid: 1, userlist: %w(6749 6110), partylist: nil }
       tag_add_user_result = { errcode: 0, errmsg: 'ok' }
       expect(subject.client).to receive(:post)
-        .with('tag/addtagusers', tag_add_user_request.to_json, params: { access_token: 'access_token' }).and_return(tag_add_user_result)
+        .with('tag/addtagusers', tag_add_user_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(tag_add_user_result)
       expect(subject.tag_add_user(1, %w(6749 6110))).to eq tag_add_user_result
     end
 
@@ -372,7 +372,7 @@ RSpec.describe Wechat::CorpApi do
       tag_add_party_request = { tagid: 1, userlist: nil, partylist: [1, 2] }
       tag_add_party_result = { errcode: 0, errmsg: 'ok' }
       expect(subject.client).to receive(:post)
-        .with('tag/addtagusers', tag_add_party_request.to_json, params: { access_token: 'access_token' }).and_return(tag_add_party_result)
+        .with('tag/addtagusers', tag_add_party_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(tag_add_party_result)
       expect(subject.tag_add_user(1, nil, [1, 2])).to eq tag_add_party_result
     end
   end
@@ -382,7 +382,7 @@ RSpec.describe Wechat::CorpApi do
       tag_del_user_request = { tagid: 1, userlist: %w(6749 6110), partylist: nil }
       tag_del_user_result = { errcode: 0, errmsg: 'deleted' }
       expect(subject.client).to receive(:post)
-        .with('tag/deltagusers', tag_del_user_request.to_json, params: { access_token: 'access_token' }).and_return(tag_del_user_result)
+        .with('tag/deltagusers', tag_del_user_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(tag_del_user_result)
       expect(subject.tag_del_user(1, %w(6749 6110))).to eq tag_del_user_result
     end
 
@@ -390,7 +390,7 @@ RSpec.describe Wechat::CorpApi do
       tag_del_party_request = { tagid: 1, userlist: nil, partylist: [1, 2] }
       tag_del_party_result = { errcode: 0, errmsg: 'deleted' }
       expect(subject.client).to receive(:post)
-        .with('tag/deltagusers', tag_del_party_request.to_json, params: { access_token: 'access_token' }).and_return(tag_del_party_result)
+        .with('tag/deltagusers', tag_del_party_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(tag_del_party_result)
       expect(subject.tag_del_user(1, nil, [1, 2])).to eq tag_del_party_result
     end
   end
@@ -398,14 +398,14 @@ RSpec.describe Wechat::CorpApi do
   describe '#menu' do
     specify 'will get menu/get with access_token and agentid' do
       menu_result = 'menu_result'
-      expect(subject.client).to receive(:get).with('menu/get', params: { access_token: 'access_token', agentid: '1' }).and_return(menu_result)
+      expect(subject.client).to receive(:get).with('menu/get', hash_including(params: { access_token: 'access_token', agentid: '1' })).and_return(menu_result)
       expect(subject.menu).to eq(menu_result)
     end
   end
 
   describe '#menu_delete' do
     specify 'will get menu/delete with access_token and agentid' do
-      expect(subject.client).to receive(:get).with('menu/delete', params: { access_token: 'access_token', agentid: '1' }).and_return(true)
+      expect(subject.client).to receive(:get).with('menu/delete', hash_including(params: { access_token: 'access_token', agentid: '1' })).and_return(true)
       expect(subject.menu_delete).to be true
     end
   end
@@ -414,7 +414,7 @@ RSpec.describe Wechat::CorpApi do
     specify 'will post menu/create with access_token, agentid and json_data' do
       menu = { buttons: ['a_button'] }
       expect(subject.client).to receive(:post)
-        .with('menu/create', menu.to_json, params: { access_token: 'access_token', agentid: '1' }).and_return(true)
+        .with('menu/create', menu.to_json, hash_including(params: { access_token: 'access_token', agentid: '1' })).and_return(true)
       expect(subject.menu_create(menu)).to be true
     end
   end
@@ -424,8 +424,8 @@ RSpec.describe Wechat::CorpApi do
       media_result = 'media_result'
 
       expect(subject.client).to receive(:get)
-        .with('media/get', params: { access_token: 'access_token', media_id: 'media_id' },
-                           as: :file).and_return(media_result)
+        .with('media/get', hash_including(params: { access_token: 'access_token', media_id: 'media_id' },
+                           as: :file)).and_return(media_result)
       expect(subject.media('media_id')).to eq(media_result)
     end
   end
@@ -435,7 +435,7 @@ RSpec.describe Wechat::CorpApi do
       file = 'README.md'
       expect(subject.client).to receive(:post_file)
         .with('media/upload', file,
-              params: { type: 'image', access_token: 'access_token' }).and_return(true)
+              hash_including(params: { type: 'image', access_token: 'access_token' })).and_return(true)
       expect(subject.media_create('image', file)).to be true
     end
   end
@@ -446,7 +446,7 @@ RSpec.describe Wechat::CorpApi do
       media_result = { url: 'http://shp.qpic.cn/mmocbiz/xxxxxxxxxxxxx/' }
       expect(subject.client).to receive(:post_file)
         .with('media/uploadimg', image_file,
-              params: { access_token: 'access_token' }).and_return(media_result)
+              hash_including(params: { access_token: 'access_token' })).and_return(media_result)
       expect(subject.media_uploadimg(image_file)).to eq(media_result)
     end
   end
@@ -458,8 +458,8 @@ RSpec.describe Wechat::CorpApi do
       allow(ActiveSupport::Deprecation).to receive(:warn)
 
       expect(subject.client).to receive(:post)
-        .with('material/get_material', { media_id: 'media_id' }.to_json, params: { access_token: 'access_token', agentid: '1' },
-                              as: :file).and_return(material_result)
+        .with('material/get_material', { media_id: 'media_id' }.to_json, hash_including(params: { access_token: 'access_token', agentid: '1' },
+                              as: :file)).and_return(material_result)
       expect(subject.material('media_id')).to eq(material_result)
 
       expect(ActiveSupport::Deprecation).to have_received(:warn)
@@ -472,8 +472,8 @@ RSpec.describe Wechat::CorpApi do
       material_result = 'material_tmp_file'
 
       expect(subject.client).to receive(:post)
-        .with('material/get_material', { media_id: 'media_id' }.to_json, params: { access_token: 'access_token', agentid: '1' },
-                              as: :file).and_return(material_result)
+        .with('material/get_material', { media_id: 'media_id' }.to_json, hash_including(params: { access_token: 'access_token', agentid: '1' },
+                              as: :file)).and_return(material_result)
       expect(subject.get_material('media_id')).to eq(material_result)
     end
   end
@@ -488,7 +488,7 @@ RSpec.describe Wechat::CorpApi do
                                 file_count: 3,
                                 mpnews_count: 6 }
       expect(subject.client).to receive(:get)
-        .with('material/get_count', params: { access_token: 'access_token', agentid: '1' }).and_return(material_count_result)
+        .with('material/get_count', hash_including(params: { access_token: 'access_token', agentid: '1' })).and_return(material_count_result)
       expect(subject.material_count).to eq material_count_result
     end
   end
@@ -499,7 +499,7 @@ RSpec.describe Wechat::CorpApi do
       material_list_result = { total_count: 1, item_count: 1,
                                item: [{ media_id: 'media_id', name: 'name', update_time: 12345, url: 'url' }] }
       expect(subject.client).to receive(:post)
-        .with('material/batchget', material_list_request.to_json, params: { access_token: 'access_token' }).and_return(material_list_result)
+        .with('material/batchget', material_list_request.to_json, hash_including(params: { access_token: 'access_token' })).and_return(material_list_result)
       expect(subject.material_list('image', 0, 50)).to eq material_list_result
     end
   end
@@ -509,7 +509,7 @@ RSpec.describe Wechat::CorpApi do
       file = 'README.md'
       expect(subject.client).to receive(:post_file)
         .with('material/add_material', file,
-              params: { type: 'image', access_token: 'access_token', agentid: '1' }).and_return(true)
+              hash_including(params: { type: 'image', access_token: 'access_token', agentid: '1' })).and_return(true)
       expect(subject.material_add('image', file)).to be true
     end
   end
@@ -519,7 +519,7 @@ RSpec.describe Wechat::CorpApi do
       media_id = 'media_id'
       material_delete_result = { errcode: 0, errmsg: 'deleted' }
       expect(subject.client).to receive(:get)
-        .with('material/del', params: { media_id: media_id, access_token: 'access_token', agentid: '1' }).and_return(material_delete_result)
+        .with('material/del', hash_including(params: { media_id: media_id, access_token: 'access_token', agentid: '1' })).and_return(material_delete_result)
       expect(subject.material_delete(media_id)).to eq material_delete_result
     end
   end
@@ -535,7 +535,7 @@ RSpec.describe Wechat::CorpApi do
 
       expect(subject.client).to receive(:post)
         .with('message/send', payload.to_json,
-              content_type: :json, params: { access_token: 'access_token' }).and_return(true)
+              hash_including(content_type: :json, params: { access_token: 'access_token' })).and_return(true)
 
       expect(subject.message_send 'userid', 'message content').to be true
     end
@@ -554,7 +554,7 @@ RSpec.describe Wechat::CorpApi do
 
       expect(subject.client).to receive(:post)
                                     .with('message/send', JSON.generate(payload),
-                                          params: { access_token: 'access_token' }, content_type: :json).and_return(true)
+                                          hash_including(params: { access_token: 'access_token' }, content_type: :json)).and_return(true)
 
       expect(subject.news_message_send('userid','title','description','link_url','pic_url')).to be true
     end
@@ -571,7 +571,7 @@ RSpec.describe Wechat::CorpApi do
 
       expect(subject.client).to receive(:post)
                                     .with('message/send', JSON.generate(payload),
-                                          params: { access_token: 'access_token' }, content_type: :json).and_return(true)
+                                          hash_including(params: { access_token: 'access_token' }, content_type: :json)).and_return(true)
 
       expect(subject.custom_message_send Wechat::Message.to('openid').text('message content')).to be true
     end
