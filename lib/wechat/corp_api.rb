@@ -13,6 +13,11 @@ module Wechat
       @qcloud = nil
     end
 
+    def get_externalcontact(external_userid, cursor = nil)
+      # https://developer.work.weixin.qq.com/document/path/92114
+      get 'externalcontact/get', params: { external_userid: external_userid, cursor: cursor }
+    end
+
     def agent_list
       get 'agent/list'
     end

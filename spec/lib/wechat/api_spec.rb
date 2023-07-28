@@ -939,4 +939,29 @@ RSpec.describe Wechat::Api do
       expect(subject.translatecontent('xxxxxxxx')).to eq response_result
     end
   end
+
+  describe '#wxa_get_user_phone_number' do
+    specify 'will post code with access_token to get user phone number' do
+      response_result = {
+        errcode: 0,
+        errmsg: 'ok',
+        phone_info: {
+          phoneNumber: '',
+          purePhoneNumber: '',
+          countryCode: '',
+          watermark: {
+            timestamp: 0,
+            appid: ''
+          }
+        }
+      }
+      expect(subject.client).to receive(:post)
+        .with('business/getuserphonenumber', JSON.generate(code: 'xxxxxxxx'),
+              hash_including(params: { access_token: 'access_token', }, base: Wechat::Api::WXA_BASE))
+        .and_return(response_result)
+      expect(subject.wxa_get_user_phone_number('xxxxxxxx')).to eq response_result
+    end
+
+  end
+
 end

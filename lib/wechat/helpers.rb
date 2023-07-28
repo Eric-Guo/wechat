@@ -27,8 +27,11 @@ module Wechat
       page_url = page_url.split('#').first
       js_hash = api.jsapi_ticket.signature(page_url)
 
+      # Field `beta` please check https://developer.work.weixin.qq.com/document/path/90514#%E6%AD%A5%E9%AA%A4%E4%BA%8C%EF%BC%9A%E9%80%9A%E8%BF%87config%E6%8E%A5%E5%8F%A3%E6%B3%A8%E5%85%A5%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81%E9%85%8D%E7%BD%AE
+
       config_js = <<~WECHAT_CONFIG_JS
         wx.config({
+          beta: #{config_options[:beta]},
           debug: #{config_options[:debug]},
           appId: "#{app_id}",
           timestamp: "#{js_hash[:timestamp]}",

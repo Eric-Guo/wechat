@@ -577,4 +577,22 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#get_externalcontact' do
+    specify 'use get method and params external_userid and cursor to externalcontact data' do
+      externalcontact_data = {
+        errcode: 0,
+        errmsg: 'ok',
+        external_contact: {}
+      }
+
+      expect(subject.client).to receive(:get)
+                                  .with('externalcontact/get',
+                                        hash_including(params: { access_token: 'access_token',
+                                                                 external_userid: 'external_userid',
+                                                                 cursor: 'xxx',
+                                  })).and_return(externalcontact_data)
+      expect(subject.get_externalcontact('external_userid','xxx')).to eq externalcontact_data
+    end
+  end
+
 end
