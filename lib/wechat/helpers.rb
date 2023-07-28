@@ -31,8 +31,8 @@ module Wechat
 
       config_js = <<~WECHAT_CONFIG_JS
         wx.config({
-          beta: #{config_options[:beta]},
-          debug: #{config_options[:debug]},
+          beta: #{config_options[:beta] || false},
+          debug: #{config_options[:debug] || false},
           appId: "#{app_id}",
           timestamp: "#{js_hash[:timestamp]}",
           nonceStr: "#{js_hash[:noncestr]}",
