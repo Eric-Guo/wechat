@@ -1,10 +1,12 @@
 # Changelog
 
-## v0.17.0 (released at 2023-07-28)
+## v0.17.1 (released at 2023-07-28)
 
 * Add Record based token support. by @CoolDrinELiu #315
 * Add api shortlink.generate support. by @wikimo #316
 * Add new api & Compatible with WeCom. by @leepood #317
+
+## v0.17.0 yarked
 
 ## v0.16.2 (released at 2022-12-09)
 
