@@ -88,6 +88,11 @@ module Wechat
         post 'message/mass/get', JSON.generate(msg_id: msg_id)
       end
 
+      def wxa_get_user_phone_number(code)
+        # https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
+        post 'business/getuserphonenumber', JSON.generate(code: code), base: Wechat::Api::WXA_BASE
+      end
+
       def wxa_get_wxacode(path, width = 430)
         post 'getwxacode', JSON.generate(path: path, width: width), base: Wechat::Api::WXA_BASE
       end
