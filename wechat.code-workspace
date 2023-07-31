@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"search.useParentIgnoreFiles": true,
+		"files.exclude": {
+			"**/coverage": true,
+			"**/pkg": true
+		}
+	}
+}
