@@ -124,7 +124,7 @@ module Wechat
             return config
           end
         end
-        return resolve_config_file(home_config_file, nil) if File.exist?(home_config_file)
+        resolve_config_file(home_config_file, nil) if File.exist?(home_config_file)
       end
     end
 
