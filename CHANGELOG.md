@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.17.2 (released at 2023-12-30)
+
+* Fix no need the message type restrictions. by @leepood #319
+
 ## v0.17.1 (released at 2023-07-28)
 
 * Add Record based token support. by @CoolDrinELiu #315
