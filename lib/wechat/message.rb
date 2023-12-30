@@ -236,7 +236,7 @@ module Wechat
       keep_camel_case_key = message_hash[:MsgType] == 'template'
       json_hash = deep_recursive(message_hash) do |key, value|
         key = key.to_s
-        [(TO_JSON_KEY_MAP[key] || (keep_camel_case_key ? key : key.downcase)), value]
+        [TO_JSON_KEY_MAP[key] || (keep_camel_case_key ? key : key.downcase), value]
       end
       json_hash = json_hash.transform_keys(&:downcase).select { |k, _v| TO_JSON_ALLOWED.include? k }
 

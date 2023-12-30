@@ -19,7 +19,7 @@ module Wechat
 
     def initialize(errcode, errmsg)
       @error_code = errcode
-      super "#{errmsg}(#{error_code})"
+      super("#{errmsg}(#{error_code})")
     end
   end
 

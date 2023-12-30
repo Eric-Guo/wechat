@@ -74,14 +74,14 @@ module Wechat
       end
 
       if defined?(::Rails)
-        configs.each do |_, cfg|
+        configs.each_value do |cfg|
           cfg[:access_token] ||= Rails.root.try(:join, 'tmp/access_token').try(:to_path)
           cfg[:jsapi_ticket] ||= Rails.root.try(:join, 'tmp/jsapi_ticket').try(:to_path)
           cfg[:qcloud_token] ||= Rails.root.try(:join, 'tmp/qcloud_token').try(:to_path)
         end
       end
 
-      configs.each do |_, cfg|
+      configs.each_value do |cfg|
         cfg[:timeout] ||= 20
         cfg[:qcloud_token_lifespan] ||= 7200
         cfg[:have_session_class] ||= class_exists?('WechatSession')
