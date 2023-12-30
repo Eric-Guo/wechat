@@ -19,7 +19,7 @@ module Wechat
       attr_accessor :account_from_request
 
       def on(message_type, with: nil, respond: nil, &block)
-        raise 'Unknow message type' unless %i[text image voice video shortvideo link event click view scan batch_job location label_location fallback].include?(message_type)
+        #raise 'Unknow message type' unless %i[text image voice video shortvideo link event click view scan batch_job location label_location fallback].include?(message_type)
 
         config = respond.nil? ? {} : { respond: respond }
         config[:proc] = block if block_given?
