@@ -595,4 +595,20 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#follow_user_list' do
+    specify 'use this method to get a list of members configured with the Customer Contact feature.' do
+      follow_user_data = {
+        errcode: 0,
+        errmsg: "ok",
+        follow_user: []
+      }
+
+      expect(subject.client).to receive(:get)
+                                  .with('externalcontact/get_follow_user_list',
+                                        hash_including(params: { access_token: 'access_token' }))
+                                  .and_return(follow_user_data)
+      expect(subject.follow_user_list).to eq follow_user_data
+    end
+  end
+
 end

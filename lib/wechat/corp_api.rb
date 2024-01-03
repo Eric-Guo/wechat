@@ -18,6 +18,11 @@ module Wechat
       get 'externalcontact/get', params: { external_userid: external_userid, cursor: cursor }
     end
 
+    def follow_user_list
+      # https://developer.work.weixin.qq.com/document/path/92576
+      get 'externalcontact/get_follow_user_list'
+    end
+
     def agent_list
       get 'agent/list'
     end
