@@ -595,4 +595,40 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
+  describe '#follow_user_list' do
+    specify 'should get a list of members configured with the Customer Contact feature.' do
+      follow_user_data = {
+        errcode: 0,
+        errmsg: "ok",
+        follow_user: []
+      }
+
+      expect(subject.client).to receive(:get)
+                                  .with('externalcontact/get_follow_user_list',
+                                        hash_including(params: { access_token: 'access_token' }))
+                                  .and_return(follow_user_data)
+      expect(subject.follow_user_list).to eq follow_user_data
+    end
+  end
+
+  describe '#batch_get_by_user' do
+    specify "should get a list of external_contact user details" do
+
+      expected_data = {
+        errcode: 0,
+        errmsg: "ok",
+        external_contact_list: [],
+        next_cursor: "",
+      }
+
+      expect(subject.client).to receive(:post)
+                                  .with('externalcontact/batch/get_by_user',
+                                        JSON.generate({ userid_list: ['user_id'], cursor: '', limit: 100 }),
+                                        hash_including(params: { access_token: 'access_token' }))
+                                  .and_return(expected_data)
+      expect(subject.batch_get_by_user(['user_id'], cursor: '', limit: 100)).to eq expected_data
+    end
+
+  end
+
 end
