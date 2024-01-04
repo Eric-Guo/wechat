@@ -52,16 +52,15 @@ RSpec.describe Wechat::CorpApi do
   describe '#checkin', now: true do
     specify 'will post checkin/getcheckindata with access_token and json useridlist' do
       useridlist = ['userid']
-      now = Time.now
-      starttime = now.beginning_of_day
-      endtime = now.end_of_day
+      starttime = Time.now.beginning_of_day
+      endtime = Time.now.end_of_day
       checkin_request = { opencheckindatatype: 3, starttime: starttime.to_i, endtime: endtime.to_i, useridlist: useridlist }
       checkin_result = { errcode: 0, errmsg: 'ok',
                          checkindata: [{ userid: 'userid',
                                          groupname: '打卡测试',
                                          checkin_type: '上班打卡',
                                          exception_type: '',
-                                         checkin_time: now.to_i,
+                                         checkin_time: Time.now.to_i,
                                          location_title: '某公司',
                                          location_detail: '某公司',
                                          wifiname: 'a_wifi',

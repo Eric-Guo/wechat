@@ -25,7 +25,7 @@ module Wechat
 
     def batch_get_by_user(userid_list, cursor: nil, limit: nil)
       # https://developer.work.weixin.qq.com/document/path/93010
-      post 'externalcontact/batch/get_by_user', JSON.generate(userid_list:, cursor:, limit:)
+      post 'externalcontact/batch/get_by_user', JSON.generate(userid_list: userid_list, cursor: cursor, limit:)
     end
 
     def agent_list
