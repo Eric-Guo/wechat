@@ -111,7 +111,7 @@ module Wechat
         data = file
 
       when :json
-        data = JSON.parse response.body.to_s.gsub(/[\u0000-\u001f]+/, '')
+        data = JSON.parse response.body
       when :xml
         data = Hash.from_xml(response.body.to_s)
       else
