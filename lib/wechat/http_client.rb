@@ -88,7 +88,7 @@ module Wechat
         %r{^voice/.*} => :file,
         %r{^text/html} => :xml,
         %r{^text/plain} => :probably_json
-      }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || as_type || :text
+      }.each_with_object([]) { |match, memo| memo << match[1] if content_type.match?(match[0]) }.first || as_type || :text
 
       # try to parse response as json, fallback to user-specified format or text if failed
       if parse_as == :probably_json
