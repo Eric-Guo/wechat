@@ -8,6 +8,7 @@ loader.setup
 
 require 'base64'
 require 'openssl/cipher'
+require 'ostruct'
 
 module Wechat
   class AccessTokenExpiredError < StandardError; end
