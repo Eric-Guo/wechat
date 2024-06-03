@@ -29,14 +29,14 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activesupport', '>= 6.0'
   s.add_runtime_dependency 'http', '>= 1.0.4', '< 6'
-  s.add_runtime_dependency 'nokogiri', '>=1.6.0'
+  s.add_runtime_dependency 'nokogiri', '>= 1.6.0'
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'rexml'
   s.add_runtime_dependency 'zeitwerk', '~> 2.4'
 
-  s.add_development_dependency 'rubocop', '~> 1.9'
+  s.add_development_dependency 'rubocop', '~> 1.64.1'
   s.add_development_dependency 'rails', '>= 7.0.0'
   s.add_development_dependency 'rspec-rails', '~> 6.0'
-  s.add_development_dependency 'rspec-mocks', '~> 3.12'
-  s.add_development_dependency 'sqlite3', '~> 1.5'
+  s.add_development_dependency 'rspec-mocks', '~> 3.13'
+  s.add_development_dependency 'sqlite3', '~> 1.7'
 end
