@@ -15,7 +15,7 @@ blocks:
         - name: Run test
           commands:
             - checkout
-            - sem-version ruby 3.0.4
+            - sem-version ruby 3.1.6
             - cache restore
             - bundle install --path vendor/bundle
             - cache store
