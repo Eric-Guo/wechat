@@ -145,7 +145,7 @@ module Wechat
       end
 
       def material(media_id)
-        ActiveSupport::Deprecation.warn('material is deprecated. use get_material instead.')
+        ActiveSupport::Deprecation.new.warn('material is deprecated. use get_material instead.')
 
         post 'material/get_material', JSON.generate(media_id: media_id), as: :file
       end

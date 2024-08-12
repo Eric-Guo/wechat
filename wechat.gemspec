@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
     'rubygems_mfa_required' => 'true'
   }
 
-  s.add_runtime_dependency 'activesupport', '>= 6.0'
+  s.add_runtime_dependency 'activesupport', '>= 6.0', '< 8'
   s.add_runtime_dependency 'http', '>= 1.0.4', '< 6'
   s.add_runtime_dependency 'nokogiri', '>= 1.6.0'
   s.add_runtime_dependency 'thor'
