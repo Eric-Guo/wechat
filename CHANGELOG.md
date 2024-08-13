@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.17.4 (released at 2024-08-13)
+
+* Fix private API ActiveSupport::Deprecation.warn called in Rails 7.2
+
 ## v0.17.3 (released at 2024-01-04)
 
 * Add New CorpApi batch_get_by_user and follow_user_list. by @leepood #321
