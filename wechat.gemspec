@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'rexml'
   s.add_runtime_dependency 'zeitwerk', '~> 2.4'
 
-  s.add_development_dependency 'rubocop', '~> 1.64.1'
+  s.add_development_dependency 'rubocop', '~> 1.65.1'
   s.add_development_dependency 'rails', '>= 7.2.0'
   s.add_development_dependency 'rspec-rails', '~> 6.1'
   s.add_development_dependency 'rspec-mocks', '~> 3.13'

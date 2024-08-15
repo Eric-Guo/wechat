@@ -1,4 +1,5 @@
 AllCops:
+  SuggestExtensions: false
   Include:
   - 'lib/**/*.rb'
   Exclude:
