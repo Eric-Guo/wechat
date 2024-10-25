@@ -859,6 +859,27 @@ end
 
 注意设置了[多客服消息转发](http://dkf.qq.com/)后，不能再添加默认文字信息 `responder`，否则文字消息将得不到转发。
 
+
+### 无法处理给一个默认回答，一周内不要重复
+
+```ruby
+class WechatsController < ActionController::Base
+  on :fallback do |message|
+    Rails.logger.debug "YouApp_ToUserName: #{message.message_hash["FromUserName"]}"
+    session = WechatSession.find_by openid: message.message_hash["FromUserName"]
+    return message.reply.success if session.present? && session.greating_time.present? && session.greating_time >= 1.week.ago
+
+    images_path = Rails.root.join("public", "images", "default_help.jpg")
+    media_id = Wechat.api.media_create("image", images_path)["media_id"]
+    if session.present? && session.reload
+      # generate migration: add_column :wechat_sessions, :greating_time, :datetime
+      session.update(greating_time: Time.current)
+    end
+    message.reply.image(media_id)
+  end
+end
+```
+
 ### 通知
 
 现支持以下通知：

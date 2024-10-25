@@ -894,6 +894,26 @@ end
 
 Caution: do not set default text responder if you want to use [multiply human customer service](http://dkf.qq.com/), other will lead text message can not transfer.
 
+### Give a default answer, do not repeat within a week
+
+```ruby
+class WechatsController < ActionController::Base
+  on :fallback do |message|
+    Rails.logger.debug "YouApp_ToUserName: #{message.message_hash["FromUserName"]}"
+    session = WechatSession.find_by openid: message.message_hash["FromUserName"]
+    return message.reply.success if session.present? && session.greating_time.present? && session.greating_time >= 1.week.ago
+
+    images_path = Rails.root.join("public", "images", "default_help.jpg")
+    media_id = Wechat.api.media_create("image", images_path)["media_id"]
+    if session.present? && session.reload
+      # generate migration: add_column :wechat_sessions, :greating_time, :datetime
+      session.update(greating_time: Time.current)
+    end
+    message.reply.image(media_id)
+  end
+end
+```
+
 ### Notifications
 
 * `wechat.responder.after_create` data includes request <Wechat::Message> and response <Wechat::Message>.
