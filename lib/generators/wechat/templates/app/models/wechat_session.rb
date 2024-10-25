@@ -4,6 +4,8 @@
 # Feel free to inherit from other class like ActiveModel::Model
 class WechatSession < ActiveRecord::Base
   validates :openid, presence: true, uniqueness: true
+  # don't using serialize if possible, see README `on :fallback`
+  serialize :hash_store, type: Hash, coder: YAML, yaml: { permitted_classes: [String] }
 
   # called by wechat gems when user request session
   def self.find_or_initialize_session(request_message)
