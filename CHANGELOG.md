@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.17.5 (released at 2024-10-25)
+
+* Remove `serialize :hash_store` in template as it's cause too many issue in different rails version.
+
 ## v0.17.4 (released at 2024-08-13)
 
 * Fix private API ActiveSupport::Deprecation.warn called in Rails 7.2
