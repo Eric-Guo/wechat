@@ -1,5 +1,5 @@
 ---
-image: "ruby:3.1"
+image: "ruby:3.2"
 
 variables:
   RAILS_ENV: test
