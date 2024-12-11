@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.17.6 (released at 2024-10-25)
+
+* Support Rails 8.0 now
+
 ## v0.17.5 (released at 2024-10-25)
 
 * Remove `serialize :hash_store` in template as it's cause too many issue in different rails version.
