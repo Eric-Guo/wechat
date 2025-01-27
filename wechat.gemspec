@@ -30,11 +30,12 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activesupport', '>= 6.0', '< 9'
   s.add_runtime_dependency 'http', '>= 1.0.4', '< 6'
   s.add_runtime_dependency 'nokogiri', '>= 1.6.0'
+  s.add_runtime_dependency 'ostruct'
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'rexml'
   s.add_runtime_dependency 'zeitwerk', '~> 2.4'
 
-  s.add_development_dependency 'rubocop', '~> 1.68.0'
+  s.add_development_dependency 'rubocop', '~> 1.70.0'
   s.add_development_dependency 'rails', '>= 8.0.0'
   s.add_development_dependency 'rspec-rails', '~> 7.1'
   s.add_development_dependency 'rspec-mocks', '~> 3.13'
