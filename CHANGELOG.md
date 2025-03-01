@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.17.7 (released at 2025-03-02)
+
+* Adding ostruct into its gemspec. Fix #323
+
 ## v0.17.6 (released at 2024-10-25)
 
 * Support Rails 8.0 now
