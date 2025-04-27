@@ -238,7 +238,7 @@ module Wechat
         key = key.to_s
         [TO_JSON_KEY_MAP[key] || (keep_camel_case_key ? key : key.downcase), value]
       end
-      json_hash = json_hash.transform_keys(&:downcase).select { |k, _v| TO_JSON_ALLOWED.include? k }
+      json_hash = json_hash.transform_keys(&:downcase).slice(*TO_JSON_ALLOWED)
 
       case json_hash['msgtype']
       when 'text'
