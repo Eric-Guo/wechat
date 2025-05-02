@@ -377,23 +377,23 @@ RSpec.describe Wechat::Message do
       specify 'can convert to mass text message' do
         request = Wechat::Message.to_mass(tag_id: 1).text('mass text content')
 
-        expect(request.to_json).to eq({
+        expect(JSON.parse(request.to_json)).to eq(JSON.parse({
           filter: { is_to_all: false, tag_id: 1 },
           send_ignore_reprint: 0,
           msgtype: 'text',
           text: { content: 'mass text content' }
-        }.to_json)
+        }.to_json))
       end
 
       specify 'can convert to mass mpnews message' do
         request = Wechat::Message.to_mass(send_ignore_reprint: 1).ref_mpnews('mpnews_media_id')
 
-        expect(request.to_json).to eq({
+        expect(JSON.parse(request.to_json)).to eq(JSON.parse({
           filter: { is_to_all: true },
           send_ignore_reprint: 1,
           msgtype: 'mpnews',
           mpnews: { media_id: 'mpnews_media_id' }
-        }.to_json)
+        }.to_json))
       end
 
       specify 'can convert template message' do
