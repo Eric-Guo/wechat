@@ -266,9 +266,9 @@ RSpec.describe Wechat::Api do
       expect(subject.message_mass_preview(Wechat::Message.to('OPENID').ref_mpnews('123dsdajkasd231jhksad'))).to eq(result)
     end
     specify 'will post message/mass/preview with access_token, towxname and mpnews media id in json' do
-      ref_mpnews_to_openid = { towxname: '示例的微信号',
-                               msgtype: 'mpnews',
-                               mpnews: { media_id: '123dsdajkasd231jhksad' } }
+      ref_mpnews_to_openid = { msgtype: 'mpnews',
+                               mpnews: { media_id: '123dsdajkasd231jhksad' },
+                               towxname: '示例的微信号' }
       result = { errcode: 0, errmsg: 'preview success', msg_id: 34182 }
       expect(subject.client).to receive(:post).with('message/mass/preview', ref_mpnews_to_openid.to_json, hash_including(params: { access_token: 'access_token' })).and_return(result)
       expect(subject.message_mass_preview(Wechat::Message.to(towxname: '示例的微信号').ref_mpnews('123dsdajkasd231jhksad'))).to eq(result)
@@ -836,7 +836,7 @@ RSpec.describe Wechat::Api do
           title: '领取奖金提醒',
           primary_industry: 'IT 科技',
           deputy_industry: '互联网 | 电子商务',
-          content: "{ {result.DATA} }\n\n领奖金额:{ {withdrawMoney.DATA} }\n领奖  时间:{ {withdrawTime.DATA} }\n银行信息:{ {cardInfo.DATA} }\n到账时间:  { {arrivedTime.DATA} }\n{ {remark.DATA} }",
+          content: "{ {result.DATA} }\n\n领奖金额:{ {withdrawMoney.DATA} }\n领奖  时间:{ {withdrawTime.DATA} }\n银行信息:{ {cardInfo.DATA} }\n到账时间： { {arrivedTime.DATA} }\n{ {remark.DATA} }",
           example: "您已提交领奖申请\n\n领奖金额：xxxx 元\n领奖时间：2013-10-10 12:22:22\n银行信息：xx 银行 (尾号 xxxx)\n到账时间：预计 xxxxxxx\n\n预计将于 xxxx 到达您的银行卡"
         }]
       }
