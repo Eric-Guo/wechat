@@ -215,9 +215,9 @@ RSpec.describe Wechat::Api do
 
   describe '#message_mass_sendall' do
     specify 'will post message/mass/sendall with access_token and mpnews media_id in json' do
-      ref_mpnews = { filter: { is_to_all: false, tag_id: 2 },
+      ref_mpnews = { msgtype: 'mpnews',
+                     filter: { is_to_all: false, tag_id: 2 },
                      send_ignore_reprint: 0,
-                     msgtype: 'mpnews',
                      mpnews: { media_id: '123dsdajkasd231jhksad' } }
       result = { errcode: 0, errmsg: 'send job submission success',
                  msg_id: 34182, msg_data_id: 206227730 }
@@ -225,10 +225,10 @@ RSpec.describe Wechat::Api do
       expect(subject.message_mass_sendall(Wechat::Message.to_mass(tag_id: 2).ref_mpnews('123dsdajkasd231jhksad'))).to eq(result)
     end
     specify 'will post message/mass/sendall with access_token and image media_id in json' do
-      ref_mpnews = { filter: { is_to_all: false, tag_id: 2 },
-                     send_ignore_reprint: 0,
-                     msgtype: 'image',
-                     image: { media_id: '123dsdajkasd231jhksad' } }
+      ref_mpnews = { msgtype: 'image',
+                     image: { media_id: '123dsdajkasd231jhksad' },
+                     filter: { is_to_all: false, tag_id: 2 },
+                     send_ignore_reprint: 0 }
       result = { errcode: 0, errmsg: 'send job submission success',
                  msg_id: 34182, msg_data_id: 206227730 }
       expect(subject.client).to receive(:post).with('message/mass/sendall', ref_mpnews.to_json, hash_including(params: { access_token: 'access_token' })).and_return(result)
@@ -236,8 +236,8 @@ RSpec.describe Wechat::Api do
     end
     specify 'will post message/mass/sendall with access_token, openid and mpnews media id in json' do
       ref_mpnews_to_openid = { touser: %w(OPENID1 OPENID2),
-                               send_ignore_reprint: 1,
                                msgtype: 'mpnews',
+                               send_ignore_reprint: 1,
                                mpnews: { media_id: '123dsdajkasd231jhksad' } }
       result = { errcode: 0, errmsg: 'send job submission success',
                  msg_id: 34182, msg_data_id: 206227730 }
