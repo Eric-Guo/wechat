@@ -41,7 +41,6 @@ module ActionController
       self.skip_verify_ssl = opts.key?(:skip_verify_ssl) ? opts[:skip_verify_ssl] : cfg.skip_verify_ssl
 
       proxy_url = opts.key?(:proxy_url) ? opts[:proxy_url] : cfg.proxy_url
-      proxy_port = opts.key?(:proxy_port) ? opts[:proxy_port] : cfg.proxy_port
       proxy_username = opts.key?(:proxy_username) ? opts[:proxy_username] : cfg.proxy_username
       proxy_password = opts.key?(:proxy_password) ? opts[:proxy_password] : cfg.proxy_password
 
@@ -56,7 +55,7 @@ module ActionController
       api_type = opts[:type] || cfg.type
       secret = corpid.present? ? opts[:corpsecret] || cfg.corpsecret : opts[:secret] || cfg.secret
 
-      network_setting = Wechat::NetworkSetting.new(timeout, skip_verify_ssl, proxy_url, proxy_port, proxy_username, proxy_password)
+      network_setting = Wechat::NetworkSetting.new(timeout, skip_verify_ssl, proxy_url, proxy_username, proxy_password)
       qcloud_setting = Wechat::Qcloud::Setting.new(qcloud_env, qcloud_token, qcloud_token_lifespan)
       get_wechat_api(api_type, corpid, appid, secret, access_token, agentid, network_setting, jsapi_ticket, qcloud_setting)
     end

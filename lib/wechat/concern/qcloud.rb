@@ -102,7 +102,7 @@ module Wechat
                                             'x-cos-security-token': x_cos_security_token,
                                             'x-cos-meta-fileid': x_cos_meta_fileid,
                                             file: form_file })
-        client.httprb.post(upload_url, form: form_data, ssl_context: client.ssl_context)
+        client.httpx.post(upload_url, form: form_data)
       end
 
       def tcb_upload_file(q_path, file)

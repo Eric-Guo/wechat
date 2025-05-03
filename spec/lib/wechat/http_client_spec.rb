@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Wechat::HttpClient do
   subject do
-    Wechat::HttpClient.new('http://host/', Wechat::NetworkSetting.new(20, false, nil, nil, nil, nil))
+    Wechat::HttpClient.new('http://host/', Wechat::NetworkSetting.new(20, false, nil, nil, nil))
   end
 
   let(:response_params) do
@@ -28,14 +28,14 @@ RSpec.describe Wechat::HttpClient do
 
   describe '#get' do
     specify 'Will use http get method to request data' do
-      allow(subject.httprb).to receive_message_chain('headers.get') { response_json }
+      allow(subject.httpx).to receive_message_chain('headers.get') { response_json }
       subject.get('token')
     end
   end
 
   describe '#post' do
     specify 'Will use http post method to request data' do
-      allow(subject.httprb).to receive_message_chain('headers.post') { response_json }
+      allow(subject.httpx).to receive_message_chain('headers.post') { response_json }
       subject.post('token', 'some_data')
     end
   end

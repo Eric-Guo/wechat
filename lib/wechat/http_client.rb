@@ -1,51 +1,51 @@
 # frozen_string_literal: true
 
-require 'http'
+require 'httpx'
 
 module Wechat
   class HttpClient
-    attr_reader :base, :ssl_context, :httprb
+    attr_reader :base, :httpx
 
     def initialize(base, network_setting)
       @base = base
-      @httprb = if HTTP::VERSION.to_i >= 4
-                  HTTP.timeout(write: network_setting.timeout, connect: network_setting.timeout, read: network_setting.timeout)
-                else
-                  HTTP.timeout(:global, write: network_setting.timeout, connect: network_setting.timeout, read: network_setting.timeout)
-                end
+      @httpx = HTTPX.with(timeout: { connect_timeout: network_setting.timeout, request_timeout: network_setting.timeout })
 
-      unless network_setting.proxy_url.nil?
-        @httprb = @httprb.via(network_setting.proxy_url, network_setting.proxy_port.to_i, network_setting.proxy_username, network_setting.proxy_password)
+      if network_setting.proxy_url.present?
+        @httpx = @httpx.with_proxy(uri: network_setting.proxy_url,
+                                   username: network_setting.proxy_username,
+                                   password: network_setting.proxy_password)
       end
 
-      @ssl_context = OpenSSL::SSL::SSLContext.new
-      @ssl_context.ssl_version = 'TLSv1_2'
-      @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE if network_setting.skip_verify_ssl
+      return unless network_setting.skip_verify_ssl
+
+      @httpx = @httpx.with(ssl: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
     end
 
     def get(path, get_header = {})
-      request(path, get_header) do |url, header|
-        params = header.delete(:params)
-        httprb.headers(header).get(url, params: params, ssl_context: ssl_context)
+      request(path, get_header) do |url, headers|
+        params = headers.delete(:params)
+        httpx.with(headers: headers)
+             .get(url, params: params)
       end
     end
 
     def post(path, payload, post_header = {})
-      request(path, post_header) do |url, header|
-        params = header.delete(:params)
-        httprb.headers(header).post(url, params: params, body: payload, ssl_context: ssl_context)
+      request(path, post_header) do |url, headers|
+        params = headers.delete(:params)
+        httpx.with(headers: headers)
+             .post(url, params: params, body: payload)
       end
     end
 
     def post_file(path, file, post_header = {})
-      request(path, post_header) do |url, header|
-        params = header.delete(:params)
+      request(path, post_header) do |url, headers|
+        params = headers.delete(:params)
         form_file = file.is_a?(HTTP::FormData::File) ? file : HTTP::FormData::File.new(file)
-        httprb.headers(header)
-              .post(url, params: params,
-                         form: { media: form_file,
-                                 hack: 'X' }, # Existing here for http-form_data 1.0.1 handle single param improperly
-                         ssl_context: ssl_context)
+        httpx.with(headers: headers)
+             .post(url, params: params,
+                        form: { media: form_file,
+                                 hack: 'X' } # Existing here for http-form_data 1.0.1 handle single param improperly
+                  )
       end
     end
 
@@ -80,7 +80,7 @@ module Wechat
     end
 
     def parse_response(response, as_type)
-      content_type = response.headers[:content_type]
+      content_type = response.headers['content-type']
       parse_as = {
         %r{^application/json} => :json,
         %r{^image/.*} => :file,

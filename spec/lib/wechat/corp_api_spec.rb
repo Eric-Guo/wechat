@@ -5,7 +5,7 @@ RSpec.describe Wechat::CorpApi do
   let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket') }
 
   subject do
-    network_setting = Wechat::NetworkSetting.new(20, false, nil, nil, nil, nil)
+    network_setting = Wechat::NetworkSetting.new(20, false, nil, nil, nil)
     Wechat::CorpApi.new('corpid', 'corpsecret', token_file, '1', network_setting, jsapi_ticket_file)
   end
 

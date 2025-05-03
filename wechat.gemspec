@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   }
 
   s.add_runtime_dependency 'activesupport', '>= 6.0', '< 9'
-  s.add_runtime_dependency 'http', '>= 1.0.4', '< 6'
+  s.add_runtime_dependency 'httpx', '>= 1.3.4'
   s.add_runtime_dependency 'nokogiri', '>= 1.6.0'
   s.add_runtime_dependency 'ostruct'
   s.add_runtime_dependency 'thor'
