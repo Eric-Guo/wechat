@@ -43,9 +43,7 @@ module Wechat
         form_file = file.is_a?(HTTP::FormData::File) ? file : HTTP::FormData::File.new(file)
         httpx.with(headers: headers)
              .post(url, params: params,
-                        form: { media: form_file,
-                                 hack: 'X' } # Existing here for http-form_data 1.0.1 handle single param improperly
-                  )
+                        form: { media: form_file })
       end
     end
 
