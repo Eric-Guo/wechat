@@ -5,6 +5,8 @@ class CreateWechatConfigs < ActiveRecord::Migration<%= migration_version %>
       t.string :environment, null: false, default: 'development'
       # account name
       t.string :account, null: false
+      # account type, "mp" is short for mini program
+      t.string :account_type
       # whether this config is activated
       t.boolean :enabled, default: true
 

@@ -254,6 +254,7 @@ Attribute | Type | Annotation
 ---- | ---- | ----
 environment | string | Required. Environment of account configuration. Typical values are: `production`, `development` and `test`. For example, a `production` config will only be available in `production`. Default to `development`.
 account | string | Required. Custom wechat account name. Account names must be unique within each environment.
+account_type | string | account type, only support `mp` which is short for `mini program` currently
 enabled | boolean | Required. Whether this configuration is activated. Default to `true`.
 appid | string | Public account id. Either this attribute or `corpid` must be specified.
 secret | string | Public account configuration. Required when `appid` exists.

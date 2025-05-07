@@ -30,6 +30,7 @@ ActiveRecord::Schema.define do
   create_table :wechat_configs do |t|
     t.string :environment, null: false, default: 'development'
     t.string :account, null: false
+    t.string :account_type
     t.boolean :enabled, default: true
     t.string :appid
     t.string :secret

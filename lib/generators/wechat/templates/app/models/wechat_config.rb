@@ -9,10 +9,11 @@ class WechatConfig < ActiveRecord::Base
   validates :access_token, presence: true
   validates :jsapi_ticket, presence: true
   validates :encoding_aes_key, presence: { if: :encrypt_mode? }
+  validates :account_type, inclusion: { in: %w[mp] }, if: -> { account_type.present? }
 
   validate :app_config_is_valid
 
-  ATTRIBUTES_TO_REMOVE = %w[environment account created_at updated_at enabled].freeze
+  ATTRIBUTES_TO_REMOVE = %w[environment account created_at updated_at enabled account_type].freeze
 
   def self.get_all_configs(environment)
     WechatConfig.where(environment: environment, enabled: true).each_with_object({}) do |config, hash|
@@ -21,7 +22,9 @@ class WechatConfig < ActiveRecord::Base
   end
 
   def build_config_hash
-    as_json(except: ATTRIBUTES_TO_REMOVE)
+    config_hash = as_json(except: ATTRIBUTES_TO_REMOVE)
+    config_hash[:type] = account_type if account_type.present?
+    config_hash
   end
 
   private
