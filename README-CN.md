@@ -227,6 +227,7 @@ test:
 environment | 字串 | 必填。配置对应的运行环境，一般有：`production`、`development`、`test`。比如  `production`  配置仅在生产环境有效。默认为  `development`。 
 account | 字串 | 必填。自定义的微信账户名称。同一  `environment`  下，账户名称不允许重复。 
 enabled | 布尔 | 必填。配置是否生效。默认  `true`。 
+account_type | 字串 | 非必填。当前只支持`mp`,表示小程序。
 appid | 字串 | 公众号 id ，此字段和  `corpid`  两者必填其一。 
 secret | 字串 | 公众号相关配置。当公众号  `appid`  存在时必填。 
 corpid | 字串 | 企业号 id。此字段和 `appid` 两者必填其一。

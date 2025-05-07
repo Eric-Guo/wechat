@@ -5,6 +5,7 @@ RSpec.describe WechatConfig, type: :model do
     described_class.new(
         environment: 'test',
         account: 'account',
+        account_type: 'mp',
         enabled: true,
 
         appid: 'appid',
@@ -157,6 +158,10 @@ RSpec.describe WechatConfig, type: :model do
       WechatConfig::ATTRIBUTES_TO_REMOVE.each do |attribute|
         expect(config_hash).to_not have_key attribute
       end
+    end
+
+    it 'has account_type set to "mp"' do
+      expect(test_account.account_type).to eq 'mp'
     end
   end
 
