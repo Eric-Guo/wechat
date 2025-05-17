@@ -897,6 +897,5 @@ end
 
 ## 已知问题
 
-* 企业微信接受菜单消息时，Wechat 腾讯服务器无法解析部分域名，请使用 iP 绑定回调 URL，用户的普通消息目前不受影响。
 * 企业微信全量覆盖成员使用的 CSV 通讯录格式，直接将下载的模板导入[是不工作的](http://qydev.weixin.qq.com/qa/index.php?qa=13978)，必须使用 Excel 打开，然后另存为 CSV 格式才会变成合法格式。
-* 如果使用 Nginx + Unicron 部署方案，并且使用了 Https，必须设置 `trusted_domain_fullname` 为 Https，否则会导致 JS-SDK 签名失效。
+* 在开发模式上使用外部反响代理 https 回调，可能需要设置 `trusted_domain_fullname` 为 https，否则会导致 JS-SDK 签名失效。

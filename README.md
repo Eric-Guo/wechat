@@ -929,6 +929,5 @@ end
 
 ## Known Issues
 
-* Sometimes, enterprise account can not receive the menu message due to Tencent server unable to resolve DNS, so using IP as a callback URL is more stable, but it never happens for user sent text messages.
 * Enterprise batch "replace users" uses a CSV format file, but if you are using the downloaded template directly, it's [not working](http://qydev.weixin.qq.com/qa/index.php?qa=13978), must open the CSV file in Excel first, then save as CSV format again, seems Tencent only supports Excel "Save as CSV" file format.
-* If you using unicorn behind nginx and https, you need to set `trusted_domain_fullname` and point it to https, otherwise it will be http and will lead to invalid signature in the JS-SDK.
+* Using an external feedback proxy HTTPS callback in development mode may require setting `trusted_domain_fullname` to HTTPS, otherwise the JS-SDK signature will be invalid.
