@@ -170,12 +170,6 @@ module Wechat
       post 'material/batchget', JSON.generate(type: type, agentid: agentid, offset: offset, count: count)
     end
 
-    def material(media_id)
-      ActiveSupport::Deprecation.new.warn('material is deprecated. use get_material instead.')
-
-      post 'material/get_material', JSON.generate(media_id: media_id), params: { agentid: agentid }, as: :file
-    end
-
     def get_material(media_id)
       post 'material/get_material', JSON.generate(media_id: media_id), params: { agentid: agentid }, as: :file
     end

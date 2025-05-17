@@ -144,12 +144,6 @@ module Wechat
         post 'menu/delconditional', JSON.generate(menuid: menuid)
       end
 
-      def material(media_id)
-        ActiveSupport::Deprecation.new.warn('material is deprecated. use get_material instead.')
-
-        post 'material/get_material', JSON.generate(media_id: media_id), as: :file
-      end
-
       def get_material(media_id)
         post 'material/get_material', JSON.generate(media_id: media_id), as: :file
       end

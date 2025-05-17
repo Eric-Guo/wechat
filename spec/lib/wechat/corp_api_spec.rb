@@ -450,17 +450,6 @@ RSpec.describe Wechat::CorpApi do
     end
   end
 
-  describe '#material' do
-    specify 'will post material/get_material with access_token, agentid and media_id as payload at file based api endpoint as file' do
-      material_result = 'material_tmp_file'
-
-      expect(subject.client).to receive(:post)
-        .with('material/get_material', { media_id: 'media_id' }.to_json, hash_including(params: { access_token: 'access_token', agentid: '1' },
-                              as: :file)).and_return(material_result)
-      expect(subject.material('media_id')).to eq(material_result)
-    end
-  end
-
   describe '#get_material' do
     specify 'will post material/get_material with access_token, agentid and media_id as payload at file based api endpoint as file' do
       material_result = 'material_tmp_file'
