@@ -78,9 +78,9 @@ RSpec.describe Wechat::Message do
                          Scale: 'scale', Label: 'label')
     end
 
-    specify 'will raise error when parse message as an unkonwn type' do
+    specify 'will raise error when parse message as an unknown type' do
       message = Wechat::Message.from_hash(text_request)
-      expect { message.as(:unkown) }.to raise_error
+      expect { message.as(:unknown) }.to raise_error
     end
 
     specify 'will get text content' do

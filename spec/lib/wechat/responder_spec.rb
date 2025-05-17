@@ -72,7 +72,7 @@ RSpec.describe WechatController, type: :controller do
 
   describe 'responders' do
     specify 'responders only accept :text, :image, :voice, :video, :shortvideo, :location, :link, :event, :fallback message type' do
-      [:text, :image, :voice, :video, :location, :link, :event, :fallback, :unkonwn].each do |message_type|
+      [:text, :image, :voice, :video, :location, :link, :event, :fallback, :unknown].each do |message_type|
         controller.class.on message_type, respond: 'response'
       end
     end
