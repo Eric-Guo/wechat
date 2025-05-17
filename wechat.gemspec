@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.licenses    = ['MIT']
   s.summary     = 'DSL for wechat message handling and API'
   s.description = 'API, command and message handling for WeChat in Rails'
+  s.post_install_message = "\nBREAKING changes: WECHAT_PROXY_URL should be written with port now, like `export WECHAT_PROXY_URL=http://127.0.0.1:6152`, since WECHAT_PROXY_PORT removed.\n"
   s.required_ruby_version = '>= 2.7'
   s.required_rubygems_version = ">= 3.1.6"
 

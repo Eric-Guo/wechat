@@ -1,5 +1,12 @@
 # Changelog
 
+
+## v1.0.0 (released at 2025-05-17)
+
+* WECHAT_PROXY_URL should be writen with port, like `export WECHAT_PROXY_URL=http://127.0.0.1:6152`, since WECHAT_PROXY_PORT removed.
+* Replace http with httpx, [reason](https://honeyryderchuck.gitlab.io/2023/10/15/state-of-ruby-http-clients-use-httpx.html)
+* Feat: add account_type to WechatConfig. by @leepood #324
+
 ## v0.17.7 (released at 2025-03-02)
 
 * Adding ostruct into its gemspec. Fix #323
