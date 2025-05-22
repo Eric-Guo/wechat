@@ -1,13 +1,16 @@
 require 'spec_helper'
+require 'wechat/api_config'
 
 RSpec.describe Wechat::MpApi do
   let(:token_file) { Rails.root.join('tmp/access_token') }
   let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket') }
   let(:qcloud_token_file) { Rails.root.join('tmp/qcloud_token') }
+  let(:network_setting) { Wechat::NetworkSetting.new(20, false, nil, nil, nil) }
+  let(:api_config) { Wechat::ApiConfig.new('appid', 'secret', token_file, jsapi_ticket_file, network_setting) }
+  let(:qcloud_setting) { Wechat::Qcloud::Setting.new('dev', qcloud_token_file, 7200) }
 
   subject do
-    network_setting = Wechat::NetworkSetting.new(20, false, nil, nil, nil)
-    Wechat::MpApi.new('appid', 'secret', token_file, network_setting, jsapi_ticket_file, Wechat::Qcloud::Setting.new('dev', qcloud_token_file, 7200))
+    Wechat::MpApi.new(api_config, qcloud_setting)
   end
 
   before :each do

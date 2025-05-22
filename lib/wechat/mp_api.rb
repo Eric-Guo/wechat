@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
+require 'wechat/api_config'
+
 module Wechat
   class MpApi < ApiBase
-    def initialize(appid, secret, token_file, network_setting, jsapi_ticket_file, qcloud_setting)
+    def initialize(api_config, qcloud_setting)
       super()
-      @client = HttpClient.new(Wechat::Api::API_BASE, network_setting)
-      @access_token = Token::PublicAccessToken.new(@client, appid, secret, token_file)
-      @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
+      @client = HttpClient.new(Wechat::Api::API_BASE, api_config.network_setting)
+      @access_token = Token::PublicAccessToken.new(@client, api_config.appid, api_config.secret, api_config.token_file)
+      @jsapi_ticket = Ticket::PublicJsapiTicket.new(@client, @access_token, api_config.jsapi_ticket_file)
       @qcloud = Qcloud::Token.new(@client, @access_token, qcloud_setting)
     end
 
