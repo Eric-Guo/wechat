@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
+require 'wechat/api_config'
+
 module Wechat
   class CorpApi < ApiBase
     attr_reader :agentid
 
-    def initialize(appid, secret, token_file, agentid, network_setting, jsapi_ticket_file)
+    def initialize(api_config, agentid)
       super()
-      @client = HttpClient.new(QYAPI_BASE, network_setting)
-      @access_token = Token::CorpAccessToken.new(@client, appid, secret, token_file)
+      @client = HttpClient.new(QYAPI_BASE, api_config.network_setting)
+      @access_token = Token::CorpAccessToken.new(@client, api_config.appid, api_config.secret, api_config.token_file)
       @agentid = agentid
-      @jsapi_ticket = Ticket::CorpJsapiTicket.new(@client, @access_token, jsapi_ticket_file)
+      @jsapi_ticket = Ticket::CorpJsapiTicket.new(@client, @access_token, api_config.jsapi_ticket_file)
       @qcloud = nil
     end
 
