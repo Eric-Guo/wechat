@@ -2,6 +2,7 @@
 
 require 'digest/sha1'
 require 'securerandom'
+require 'active_support/time_with_zone'
 
 module Wechat
   module Ticket
@@ -41,7 +42,7 @@ module Wechat
       def signature(url)
         params = {
           noncestr: SecureRandom.base64(16),
-          timestamp: Time.now.to_i,
+          timestamp: Time.zone.now.to_i,
           jsapi_ticket: ticket,
           url: url
         }
@@ -65,7 +66,7 @@ module Wechat
       end
 
       def write_ticket_to_store(ticket_hash)
-        ticket_hash['got_ticket_at'] = Time.now.to_i
+        ticket_hash['got_ticket_at'] = Time.zone.now.to_i
         ticket_hash['ticket_expires_in'] = ticket_hash.delete('expires_in')
         write_ticket(ticket_hash)
       end
@@ -79,7 +80,7 @@ module Wechat
       end
 
       def remain_life_seconds
-        ticket_life_in_seconds - (Time.now.to_i - got_ticket_at)
+        ticket_life_in_seconds - (Time.zone.now.to_i - got_ticket_at)
       end
     end
   end

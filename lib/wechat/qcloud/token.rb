@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/time_with_zone'
+
 module Wechat
   module Qcloud
     FILE_TYPE_JSON = 1
@@ -59,7 +61,7 @@ module Wechat
       end
 
       def remain_life_seconds
-        qcloud_token_expired_time - Time.now.to_i
+        qcloud_token_expired_time - Time.zone.now.to_i
       end
     end
   end
