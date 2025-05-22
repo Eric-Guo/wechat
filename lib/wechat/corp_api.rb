@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'wechat/api_config'
-
 module Wechat
   class CorpApi < ApiBase
     attr_reader :agentid
