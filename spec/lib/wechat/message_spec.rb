@@ -461,7 +461,7 @@ RSpec.describe Wechat::Message do
                 create_time: message[:CreateTime])).and_return(model)
         expect(model).to receive(:save!).and_return(true)
 
-        expect(message.text('text message').save_to!(model_class)).to eq(message)
+        expect(message.text('text message').send(:save_to!, model_class)).to eq(message)
       end
     end
   end

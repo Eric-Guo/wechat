@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/time_with_zone'
+
 module Wechat
   module Token
     class AccessTokenBase
@@ -35,7 +37,7 @@ module Wechat
       def write_token_to_store(token_hash)
         raise InvalidCredentialError unless token_hash.is_a?(Hash) && token_hash['access_token']
 
-        token_hash['got_token_at'] = Time.now.to_i
+        token_hash['got_token_at'] = Time.zone.now.to_i
         token_hash['token_expires_in'] = token_hash.delete('expires_in')
         write_token(token_hash)
       end
@@ -63,7 +65,7 @@ module Wechat
       end
 
       def remain_life_seconds
-        token_life_in_seconds - (Time.now.to_i - got_token_at)
+        token_life_in_seconds - (Time.zone.now.to_i - got_token_at)
       end
 
       private
@@ -77,7 +79,7 @@ module Wechat
 
         record.access_token = token_hash['access_token']
         record.token_expires_in = token_hash['token_expires_in']
-        record.got_token_at = Time.now
+        record.got_token_at = Time.zone.now
         record.save || record.save(validate: false)
       end
 

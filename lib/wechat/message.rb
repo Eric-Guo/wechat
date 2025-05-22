@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/time_with_zone'
+
 module Wechat
   class Message
     class << self
@@ -9,16 +11,16 @@ module Wechat
 
       def to(to_users = '', towxname: nil, send_ignore_reprint: 0)
         if towxname.present?
-          new(ToWxName: towxname, CreateTime: Time.now.to_i)
+          new(ToWxName: towxname, CreateTime: Time.zone.now.to_i)
         elsif send_ignore_reprint == 1
-          new(ToUserName: to_users, CreateTime: Time.now.to_i, send_ignore_reprint: send_ignore_reprint)
+          new(ToUserName: to_users, CreateTime: Time.zone.now.to_i, send_ignore_reprint: send_ignore_reprint)
         else
-          new(ToUserName: to_users, CreateTime: Time.now.to_i)
+          new(ToUserName: to_users, CreateTime: Time.zone.now.to_i)
         end
       end
 
       def to_party(party)
-        new(ToPartyName: party, CreateTime: Time.now.to_i)
+        new(ToPartyName: party, CreateTime: Time.zone.now.to_i)
       end
 
       def to_mass(tag_id: nil, send_ignore_reprint: 0)
@@ -65,7 +67,7 @@ module Wechat
       Message.new(
         ToUserName: message_hash[:FromUserName],
         FromUserName: message_hash[:ToUserName],
-        CreateTime: Time.now.to_i,
+        CreateTime: Time.zone.now.to_i,
         WechatSession: session
       )
     end
@@ -239,7 +241,13 @@ module Wechat
         [TO_JSON_KEY_MAP[key] || (keep_camel_case_key ? key : key.downcase), value]
       end
       json_hash = json_hash.transform_keys(&:downcase).slice(*TO_JSON_ALLOWED)
+      json_hash = transform_json_hash_by_msgtype(json_hash)
+      JSON.generate(json_hash)
+    end
 
+    private
+
+    def transform_json_hash_by_msgtype(json_hash)
       case json_hash['msgtype']
       when 'text'
         json_hash['text'] = { 'content' => json_hash.delete('content') }
@@ -255,7 +263,7 @@ module Wechat
       when 'template'
         json_hash = { 'touser' => json_hash['touser'] }.merge!(json_hash['template'])
       end
-      JSON.generate(json_hash)
+      json_hash
     end
 
     def save_to!(model_class)
@@ -263,8 +271,6 @@ module Wechat
       model.save!
       self
     end
-
-    private
 
     def camelize_hash_keys(hash)
       deep_recursive(hash) { |key, value| [key.to_s.camelize.to_sym, value] }
