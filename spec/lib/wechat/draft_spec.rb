@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'wechat/api_config'
-
 RSpec.describe Wechat::Api do
   let(:token_file) { Rails.root.join('tmp/access_token') }
   let(:jsapi_ticket_file) { Rails.root.join('tmp/jsapi_ticket') }

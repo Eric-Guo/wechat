@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'wechat/api_config'
-require 'wechat/network_setting' # Needed if NetworkSetting is used directly
 
 RSpec.describe Wechat::ApiConfig do
   describe '#initialize' do

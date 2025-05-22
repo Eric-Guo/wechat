@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'wechat/api_config'
 
 RSpec.describe Wechat::MpApi do
   let(:token_file) { Rails.root.join('tmp/access_token') }

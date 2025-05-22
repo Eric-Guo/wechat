@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'wechat/api_config'
-
 module Wechat
   class MpApi < ApiBase
     def initialize(api_config, qcloud_setting)
