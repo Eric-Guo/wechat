@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'active_support/time_with_zone'
-
 module Wechat
   class Message
     class << self

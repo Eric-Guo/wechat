@@ -2,7 +2,6 @@
 
 require 'digest/sha1'
 require 'securerandom'
-require 'active_support/time_with_zone'
 
 module Wechat
   module Ticket
