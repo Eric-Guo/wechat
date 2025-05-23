@@ -17,21 +17,21 @@ module Wechat
       current_appid = c.corpid.presence || c.appid
       current_secret = c.corpsecret.presence || c.secret
 
-      if current_appid && current_secret && token_file.present?
-        api_config = Wechat::ApiConfig.new(current_appid, current_secret, token_file, js_token_file, network_setting)
-        if type == 'mp'
-          qcloud_env = options[:qcloud_env] || c.qcloud_env
-          qcloud_token_file = options[:qcloud_token_file] || c.qcloud_token_file.presence || '/var/tmp/qcloud_access_token'
-          qcloud_token_lifespan = options[:qcloud_token_lifespan] || c.qcloud_token_lifespan
-          qcloud_setting = Wechat::Qcloud::Setting.new(qcloud_env, qcloud_token_file, qcloud_token_lifespan)
-          Wechat::MpApi.new(api_config, qcloud_setting)
-        elsif c.corpid.present? # CorpApi needs agentid
-          Wechat::CorpApi.new(api_config, c.agentid)
-        else # Regular Public Api
-          Wechat::Api.new(api_config)
-        end
-      else
+      unless current_appid && current_secret && token_file.present?
         raise 'Need create ~/.wechat.yml with wechat appid and secret or corpid and corpsecret, or running at rails root folder so wechat can read config/wechat.yml'
+      end
+
+      api_config = Wechat::ApiConfig.new(current_appid, current_secret, token_file, js_token_file, network_setting)
+      if type == 'mp'
+        qcloud_env = options[:qcloud_env] || c.qcloud_env
+        qcloud_token_file = options[:qcloud_token_file] || c.qcloud_token_file.presence || '/var/tmp/qcloud_access_token'
+        qcloud_token_lifespan = options[:qcloud_token_lifespan] || c.qcloud_token_lifespan
+        qcloud_setting = Wechat::Qcloud::Setting.new(qcloud_env, qcloud_token_file, qcloud_token_lifespan)
+        Wechat::MpApi.new(api_config, qcloud_setting)
+      elsif c.corpid.present? # CorpApi needs agentid
+        Wechat::CorpApi.new(api_config, c.agentid)
+      else # Regular Public Api
+        Wechat::Api.new(api_config)
       end
     end
 
