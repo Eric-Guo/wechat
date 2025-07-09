@@ -55,7 +55,7 @@ module Wechat
       header['Accept'] ||= 'application/json'
       response = yield("#{url_base}#{path}", header)
 
-      raise "Request not OK, response status #{response.status}" if response.status != 200
+      raise "Request not OK, response #{response}" if response.status != 200
 
       parse_response(response, as || :json) do |parse_as, data|
         break data unless parse_as == :json && data['errcode'].present?
