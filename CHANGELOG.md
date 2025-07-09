@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.1 (released at 2025-07-09)
+
+* Fix after introduce httpx, status method not available for HTTPX::ErrorResponse bug
+* Some Google Jules Refactor
 
 ## v1.0.0 (released at 2025-05-17)
 
