@@ -55,7 +55,18 @@ module Wechat
       header['Accept'] ||= 'application/json'
       response = yield("#{url_base}#{path}", header)
 
-      raise "Request not OK, response #{response}" if response.status != 200
+      # Error responses (network failures, DNS errors, etc.) are returned as
+      # `HTTPX::ErrorResponse` objects which **do not** implement `#status`.
+      # Attempting to access that method would raise a `NoMethodError`.
+      # Instead, surface the underlying error immediately so that callers can
+      # handle it using the existing error-handling flow.
+      if defined?(HTTPX::ErrorResponse) && response.is_a?(HTTPX::ErrorResponse)
+        # `response.error` returns the wrapped exception (e.g. Errno::ECONNREFUSED)
+        # Fallback to raising the response itself if no wrapped error exists.
+        raise(response.error || StandardError.new(response.inspect))
+      end
+
+      raise "Request not OK, response #{response}" if response.respond_to?(:status) && response.status != 200
 
       parse_response(response, as || :json) do |parse_as, data|
         break data unless parse_as == :json && data['errcode'].present?
