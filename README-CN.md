@@ -1,4 +1,4 @@
-WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.org/gems/wechat) [![Build Status](https://mixtint.semaphoreci.com/badges/wechat/branches/main.svg?style=shields)](https://mixtint.semaphoreci.com/projects/wechat) [![Maintainability](https://api.codeclimate.com/v1/badges/12885358487c13e91e00/maintainability)](https://codeclimate.com/github/Eric-Guo/wechat/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/12885358487c13e91e00/test_coverage)](https://codeclimate.com/github/Eric-Guo/wechat/test_coverage)
+WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.org/gems/wechat) [![Build Status](https://mixtint.semaphoreci.com/badges/wechat/branches/main.svg?style=shields)](https://mixtint.semaphoreci.com/projects/wechat)
 ======
 
 [![Join the chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
