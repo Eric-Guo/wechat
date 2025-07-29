@@ -1,4 +1,4 @@
-WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.org/gems/wechat) [![Build Status](https://mixtint.semaphoreci.com/badges/wechat/branches/main.svg?style=shields)](https://mixtint.semaphoreci.com/projects/wechat)
+WeChat [![Gem Version](https://badge.fury.io/rb/wechat.svg)](https://rubygems.org/gems/wechat) [![Build Status](https://mixtint.semaphoreci.com/badges/wechat/branches/main.svg?style=shields)](https://mixtint.semaphoreci.com/projects/wechat)[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Eric-Guo/wechat)
 ======
 
 [![Join the chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Eric-Guo/wechat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
