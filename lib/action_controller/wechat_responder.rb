@@ -4,6 +4,7 @@ module ActionController
   module WechatResponder
     def wechat_api(opts = {})
       include Wechat::ControllerApi
+
       account = opts.delete(:account)
       self.wechat_cfg_account = account ? account.to_sym : :default
       self.wechat_api_client = load_controller_wechat(wechat_cfg_account, opts)
@@ -11,6 +12,7 @@ module ActionController
 
     def wechat_responder(opts = {})
       include Wechat::Responder
+
       account = opts.delete(:account)
       self.account_from_request = opts.delete(:account_from_request)
       self.wechat_cfg_account = account ? account.to_sym : :default
