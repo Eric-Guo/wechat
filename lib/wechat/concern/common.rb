@@ -93,6 +93,12 @@ module Wechat
         post 'business/getuserphonenumber', JSON.generate(code: code), base: Wechat::Api::WXA_BASE
       end
 
+      def wxa_get_user_risk_rank(openid, scene, **payload)
+        # https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/sec-center/safety-control-capability/getUserRiskRank.html
+        request_body = { appid: access_token.appid, openid: openid, scene: scene }.merge(payload)
+        post 'getuserriskrank', JSON.generate(request_body), base: Wechat::Api::WXA_BASE
+      end
+
       def wxa_get_wxacode(path, width = 430)
         post 'getwxacode', JSON.generate(path: path, width: width), base: Wechat::Api::WXA_BASE
       end
@@ -158,7 +164,7 @@ module Wechat
 
       def material_add(type, file, opts = {})
         params = { type: type }
-        params.merge!(description: opts.slice(:title, :introduction).to_json) if type == 'video'
+        params[:description] = opts.slice(:title, :introduction).to_json if type == 'video'
 
         post_file 'material/add_material', file, params: params
       end
