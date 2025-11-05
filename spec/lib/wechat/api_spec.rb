@@ -950,4 +950,15 @@ RSpec.describe Wechat::Api do
 
   end
 
+  describe '#wxa_get_user_risk_rank' do
+    specify 'will post payload with access_token to get user risk rank' do
+      response_result = { errcode: 0, errmsg: 'ok', risk_rank: 0 }
+      expect(subject.client).to receive(:post)
+        .with('getuserriskrank', JSON.generate(appid: 'appid', openid: 'openid', scene: 0, client_ip: '127.0.0.1'),
+              hash_including(params: { access_token: 'access_token', }, base: Wechat::Api::WXA_BASE))
+        .and_return(response_result)
+      expect(subject.wxa_get_user_risk_rank('openid', 0, client_ip: '127.0.0.1')).to eq response_result
+    end
+  end
+
 end
