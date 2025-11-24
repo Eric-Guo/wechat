@@ -1,32 +1,26 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `lib/` holds the gem source; keep entrypoints like `lib/wechat.rb` lean and delegate to domain modules.
-- `lib/wechat/` includes API clients (`api.rb`, `http_client.rb`), token helpers, and responders—group new features here by domain.
-- `lib/action_controller/` and `lib/generators/` provide Rails integrations; mirror their structure when adding framework glue.
-- `spec/` contains RSpec suites with a `spec/dummy/` Rails app for integration fixtures; keep new specs beside the code they verify.
-- `bin/` hosts Bundler-generated executables; `pkg/` and `coverage/` are build outputs and should stay out of commits.
+- `lib/` holds the gem code: `lib/wechat` contains HTTP clients (`api.rb`, `mp_api.rb`, `corp_api.rb`, `http_client.rb`) plus crypto/responder helpers; `lib/action_controller` provides the Rails responder DSL; `lib/generators` ships installer templates.
+- `bin/` contains executable stubs; `spec/` has RSpec suites with the Rails `spec/dummy` app and `spec/support` helpers; coverage output lives in `coverage/`; built gems land in `pkg/`.
+- Configuration samples and usage notes are in `README.md` and `README-CN.md`; test certificates sit in `certs/`.
 
 ## Build, Test, and Development Commands
-- `bundle install` prepares dependencies defined in the `Gemfile`.
-- `bundle exec rake` runs the default suite (`spec` + `rubocop`) and serves as the pre-push gate.
-- `bundle exec rake spec` executes all RSpec examples; add `SPEC=spec/lib/wechat/http_client_spec.rb` to target a subset.
-- `bundle exec rubocop` enforces the shared style guide; fix or justify any deviations before review.
-- `bundle exec rspec spec/lib/wechat/http_client_spec.rb` is a typical focused run—swap in the file you are modifying.
+- `bundle install` to sync gems.
+- `bundle exec rake` runs the default task (`rspec` then `rubocop`).
+- `bundle exec rspec spec/lib/wechat/api_spec.rb` for targeted specs; run from repo root so `spec/examples.txt` is respected.
+- `bundle exec rubocop` lints `lib/` (specs are excluded by config).
 
 ## Coding Style & Naming Conventions
-- Follow standard Ruby style: two-space indents, `snake_case` methods, `CamelCase` classes/modules, and predicate methods ending in `?`.
-- Keep public API files grouped under `lib/wechat/` and prefer descriptive suffixes such as `_api.rb`, `_client.rb`, or `_responder.rb`.
-- RuboCop (TargetRuby 2.5, 180-column limit) is authoritative; run it before committing and accept auto-corrections only when they stay readable.
-- Add frozen-string literals to new files and align constants/messages with existing naming patterns.
+- Target Ruby 2.6; use 2-space indentation, snake_case file names, CamelCase classes/modules; prefer frozen string literals and single quotes.
+- Keep lines under 180 chars; break long argument lists; avoid deep nesting (max 4 levels).
+- Follow RuboCop (`.rubocop.yml` enables new cops, disables documentation cop). Keep production code lint-clean; use inline disables only with justification.
 
 ## Testing Guidelines
-- Use RSpec with shared helpers from `spec/support/`; mimic existing example structure when introducing new contexts.
-- Name specs after the source file (`wechat/http_client_spec.rb`) and place integration scenarios inside `spec/dummy/` when they depend on Rails wiring.
-- Aim to keep SimpleCov coverage steady; re-run `bundle exec rake spec` after major refactors and inspect `coverage/index.html` locally.
+- Use RSpec; place tests as `spec/.../*_spec.rb`. Describe behavior in present tense and rely on explicit matchers.
+- Specs boot the `spec/dummy` Rails app with an in-memory sqlite schema; avoid real network calls—mock HTTP interactions.
+- SimpleCov runs via `spec/spec_helper.rb`; aim to keep coverage steady and clean up generated artifacts from version control.
 
 ## Commit & Pull Request Guidelines
-- Write concise, imperative commit subjects similar to `Bump rubocop.` or `Add corp API timeout guard`; add a blank line before body details.
-- Reference related issues with `#123` and note any breaking changes explicitly in the message body.
-- Before opening a PR, run `bundle exec rake`, update relevant docs, and include a short testing checklist plus screenshots for UI-facing changes.
-- Provide context for maintainers: summarize motivation, list follow-up steps if work is staged, and keep PRs focused on a single feature or fix.
+- Write concise, imperative commit messages; conventional prefixes (`feat:`, `fix:`, `chore:`) are welcome and present in history.
+- Keep commits focused; update docs/examples when APIs or configuration change.

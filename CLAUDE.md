@@ -86,7 +86,7 @@ SimpleCov coverage reports are generated in `coverage/index.html`.
 
 ## Code Style
 
-- **Ruby 2.5+** (TargetRubyVersion in .rubocop.yml)
+- **Ruby 2.6+**
 - **Line length**: 180 characters
 - **RuboCop** is authoritative - run before commits
 - **Frozen string literals** in all new files
