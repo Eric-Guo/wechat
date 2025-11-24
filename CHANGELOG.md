@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.0 (released at 2025-11-24)
+
+* Feat: api wxa_get_user_risk_rank. by @leepood #327
+
 ## v1.0.1 (released at 2025-07-09)
 
 * Fix after introduce httpx, status method not available for HTTPX::ErrorResponse bug
