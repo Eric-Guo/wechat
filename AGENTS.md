@@ -24,3 +24,11 @@
 ## Commit & Pull Request Guidelines
 - Write concise, imperative commit messages; conventional prefixes (`feat:`, `fix:`, `chore:`) are welcome and present in history.
 - Keep commits focused; update docs/examples when APIs or configuration change.
+
+## Cursor Cloud specific instructions
+
+- **System dependencies**: Ruby 3.2, `libsqlite3-dev`, `libyaml-dev`, and `build-essential` are installed via the update script. Gems are installed to `vendor/bundle` (bundler path config is set locally).
+- **Running tests + lint**: `bundle exec rake` runs RSpec then RuboCop in one step. See "Build, Test, and Development Commands" above for targeted test/lint commands.
+- **CLI usage**: The `wechat` CLI (`bundle exec wechat help`) requires a `~/.wechat.yml` with at least `appid` and `secret` keys. Without valid WeChat credentials, API commands will fail with HTTP errors, but `help` works fine with dummy values.
+- **No external services required**: All tests mock HTTP and use in-memory SQLite. No Redis, Docker, or real WeChat API access is needed.
+- **Coverage**: SimpleCov output goes to `coverage/index.html`; currently at ~96.5% line coverage.
