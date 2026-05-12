@@ -3,8 +3,8 @@ version: v1.0
 name: wechat gems
 agent:
   machine:
-    type: e1-standard-2
-    os_image: ubuntu2004
+    type: f1-standard-2
+    os_image: ubuntu2204
 blocks:
   - name: Test
     task:
