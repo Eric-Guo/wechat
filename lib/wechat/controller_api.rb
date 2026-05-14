@@ -22,9 +22,11 @@ module Wechat
       if account
         config = Wechat.config(account)
         appid = config.corpid || config.appid
+        agentid = config.agentid
         is_crop_account = config.corpid.present?
       else
         appid = self.class.corpid || self.class.appid
+        agentid = self.class.agentid
         is_crop_account = self.class.corpid.present?
       end
 
@@ -37,6 +39,7 @@ module Wechat
         response_type: 'code',
         state: api.jsapi_ticket.oauth2_state
       }
+      oauth2_params[:agentid] = agentid if is_crop_account
 
       return generate_oauth2_url(oauth2_params) unless block_given?
 

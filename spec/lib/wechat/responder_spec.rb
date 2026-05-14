@@ -441,6 +441,7 @@ RSpec.describe WechatController, type: :controller do
     it 'will redirect_to tencent page at first visit' do
       get :oauth2_page
       expect(response).to redirect_to(controller.wechat_oauth2)
+      expect(response.location).not_to include('agentid=')
     end
 
     it 'will record cookites when tecent oauth2 success' do
