@@ -131,6 +131,11 @@ class App < Thor
       puts wechat_api.invite_user(userid)
     end
 
+    desc 'getuserid [MOBILE]', '通过手机号获取userid'
+    def getuserid(mobile)
+      puts wechat_api.getuserid(mobile)
+    end
+
     desc 'tag_add_department [TAG_ID, PARTY_IDS]', '增加标签部门'
     def tag_add_department(tagid, partyids)
       puts wechat_api.tag_add_user(tagid, nil, partyids.split(','))

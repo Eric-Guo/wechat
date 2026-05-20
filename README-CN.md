@@ -443,6 +443,7 @@ Wechat Enterprise Account commands:
   wechat department_update [DEPARTMENT_ID, NAME]           # 更新部门
   wechat getusercumulate [BEGIN_DATE, END_DATE]            # 获取累计用户数据
   wechat getusersummary [BEGIN_DATE, END_DATE]             # 获取用户增减数据
+  wechat getuserid [MOBILE]                                # 通过手机号获取 userid
   wechat invite_user [USER_ID]                             # 邀请成员关注
   wechat material [MEDIA_ID, PATH]                         # 永久媒体下载
   wechat material_add [MEDIA_TYPE, PATH]                   # 永久媒体上传
