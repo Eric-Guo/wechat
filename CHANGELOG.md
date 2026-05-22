@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.0 (released at 2026-05-22)
+
+* Feat: api getuserid.
+* Fix: wechat_oauth2 in corp now need agentid.
+
 ## v1.1.0 (released at 2025-11-24)
 
 * Feat: api wxa_get_user_risk_rank. by @leepood #327
