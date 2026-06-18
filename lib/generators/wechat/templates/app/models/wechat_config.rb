@@ -16,8 +16,8 @@ class WechatConfig < ActiveRecord::Base
   ATTRIBUTES_TO_REMOVE = %w[environment account created_at updated_at enabled account_type].freeze
 
   def self.get_all_configs(environment)
-    WechatConfig.where(environment: environment, enabled: true).each_with_object({}) do |config, hash|
-      hash[config.account] = config.build_config_hash
+    WechatConfig.where(environment: environment, enabled: true).to_h do |config|
+      [config.account, config.build_config_hash]
     end
   end
 
